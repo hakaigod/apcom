@@ -1,0 +1,4 @@
+/*flat-ui 上書き用CSS*/
+.navbar-collapse .navbar-nav.navbar-right:last-child > .dropdown:last-child > a {
+    border-radius: 0;
+}
