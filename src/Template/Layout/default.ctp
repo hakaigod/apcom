@@ -27,12 +27,7 @@
 
 	<!-- 自作JS -->
 	<?= $this->Html->script('/private/js/index.js') ?>
-
-<<<<<<< HEAD
-=======
-	<?= $this->fetch('meta') ?>
-	<?= $this->fetch('css') ?>
->>>>>>> e961b691b7afd360df7615655f9e3b302456841d
+	
 	<?= $this->fetch('script') ?>
 
 </head>
