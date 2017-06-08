@@ -11,7 +11,7 @@ class ManagerController extends AppController
 	public function initialize(){
 		parent::initialize();
 		// $this->viewBuilder()->layout('default');
-		$this->set('headerlink', $this->request->webroot . '/Manager');
+		$this->set('headerlink', $this->request->webroot . 'Manager');
 	}
 
 	public function index()
