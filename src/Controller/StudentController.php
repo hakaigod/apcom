@@ -14,6 +14,6 @@ class StudentController extends AppController
     }
 
     public function index(){
-
+    	$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
     }
 }
