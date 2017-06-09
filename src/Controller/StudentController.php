@@ -17,4 +17,8 @@ class StudentController extends AppController
 	{
 	}
 
+
+	public function qaaSelectGenre()
+    {
+    }
 }
