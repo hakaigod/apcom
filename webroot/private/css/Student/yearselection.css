@@ -1,0 +1,39 @@
+#col-main * {
+    /*border: solid 1px black;*/
+}
+@media (min-width: 300px) {
+    #questions {
+        display: none;
+    }
+    #AMresult{
+        width: 100%;
+    }
+}
+@media (min-width: 1000px) {
+    #AMresult{
+        width: calc(100% / 12 * 5);
+    }
+    #questions {
+        display: block;
+        width: calc(100% / 12 * 7);
+        padding-left: 0;
+        overflow-x: scroll;
+    }
+    #questions table thead tr td{
+        /*min-width: 60px;*/
+        height: 30px;
+    }
+}
+#filter {
+    margin-top: 10px;
+}
+
+#AMresult{
+    padding-right: 0;
+}
+#AMresult table thead tr td{
+    height: 30px;
+}
+#AMresulttitle {
+    margin-top: 50px;
+}

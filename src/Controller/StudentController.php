@@ -16,4 +16,16 @@ class StudentController extends AppController
     public function index(){
 
     }
+
+    public function year_selection(){
+
+    }
+
+    public function scoring(){
+
+    }
+
+    public  function practice_exam(){
+
+    }
 }
