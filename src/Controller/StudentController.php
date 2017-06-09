@@ -8,12 +8,13 @@ use Cake\View\Exception\MissingTemplateException;
 
 class StudentController extends AppController
 {
-    public function initialize(){
-        parent::initialize();
+	public function initialize(){
+		parent::initialize();
+		$this->set('headerlink', $this->request->webroot . 'Student');
+	}
 
-    }
+	public function index()
+	{
+	}
 
-    public function index(){
-    	$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
-    }
 }
