@@ -1,0 +1,57 @@
+#qaa-title{
+    font-size:50px;
+    font-weight: bold;
+    float:left;
+}
+
+#qaa-sub{
+    text-align: right;
+    border-bottom: solid 1px #aeb6bf;
+    padding-top: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+#qaa-explanation{
+    margin-top: 10px;
+    margin-left: 20px;
+    text-align: left;
+    font-size: 20px;
+}
+
+.caption-box{
+    position: relative;
+    margin-top: 20px;
+    padding: 25px 20px 10px 20px;
+    border: 1px solid #aeb6bf;
+}
+
+.caption{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0px 20px;
+    font-size: inherit;
+    background-color: ghostwhite;
+    transform: translateY(-35%) translateX(1em);
+    font-weight: bold;
+}
+
+.checkbox {
+    height : 20px;
+}
+.checkbox label{
+    max-height : 20px;
+    margin-top: -10px;
+}
+
+
+.btn{
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+
+
+
+

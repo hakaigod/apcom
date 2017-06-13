@@ -1,11 +1,11 @@
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
-管理者メニュー
+ジャンル選択
 <?= $this->end(); ?>
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/qaa_select_ganre.css') ?>
+<?= $this->Html->css('/private/css/Student/qaa_select_genre.css') ?>
 <?= $this->end(); ?>
 
 <!-- jsセット -->
@@ -40,9 +40,36 @@ Student
     </div>
 
     <div class = "row">
-        <div class = "col-md-8">
+        <div class = "col-md-12">
             <!--explanation-->
+            <p id="qaa-explanation">
+                試験ジャンルを設定すると、一問一答形式で対応ジャンルの設問が出題されます。<br>
+                [詳細]を押すことで現在の総合回答数とジャンル別の正答率を確認することができます。<br>
+                なお、一問一答での回答結果は結果一覧には登録されません。<br>
+            </p>
+        </div>
+    </div>
 
+    <div class= "row">
+        <div class = "col-md-12">
+            <div class= "genre-container">
+                <!--select genre-->
+                <div class = "caption-box">
+                    <!--枠線の上に重ねる文字-->
+                    <div class = "caption"><p>ジャンル一覧</p></div>
+                    <!--form-->
+                    <?php
+                        echo $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa_question']]);
+                        $options = ['Value 1' => 'テクノロジ','Value 2' => 'マネジメント','Value 3' => 'ストラテジ'];
+                        echo $this->Form->select('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
+                    ?>
+                </div>
+                <!--決定ボタン-->
+                <div class = "center">
+                    <?= $this -> Form -> button('問題開始',array('type' => 'submit',  'class' => 'btn btn-info')); ?>
+                </div>
+                <?= $this -> Form -> end(); ?>
+            </div>
         </div>
     </div>
 
