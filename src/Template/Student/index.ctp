@@ -37,8 +37,9 @@ student1
                 fill: false,
                 lineTension: 0
             }]
-        
-            
-    }
+        },
+        options:{
+            responsive:true
+        }
     });
 </script>
