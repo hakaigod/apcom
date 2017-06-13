@@ -21,22 +21,39 @@ class ManagerController extends AppController
 	public function strmanager()
 	{
 
-		//mf_stuテーブルの読み込み
-		$this->loadModel('mf_stu');
+		$mf_dep = TableRegistry::get('mf_dep');
+		// 学科一覧
+		$query = $mf_dep
+			->find();
+		$this->set('deps', $query);
 
-		$whereConditions = ['and' => [
-				['deleted_flg' => false]
-			]
-		];
-		// $order = (['payment_date' => 'ASC']);
+		$mf_stu = TableRegistry::get('mf_stu');
+		// 学生一覧
+		$query = $mf_stu->find();
+		$query
+			->select([
+				'regnum',
+				'stuname',
+				'mf_dep.depname',
+				'stuyear'
+			])
+			->join([
+				'table' => 'mf_dep',
+				'type' => 'INNER',
+				'conditions' => 'mf_stu.depnum = mf_dep.depnum'
+			])
+			->where(['mf_stu.deleted_flg' => false])
+			->order(['regnum' => 'DESC']);
 
-		//SELECTのSQL文オブジェクト
-		$sqlObject = $this->mf_stu->find()
-			// ->order($order)
-			->where($whereConditions);
+		$this->set('records', $query);
 
-		//$recordsに検索結果をセットする
-		$this->set('records', $sqlObject->all());
+		// 在学中学生学年一覧
+		$query = $mf_stu
+			->find()
+			->select('stuyear')
+			->where(['deleted_flg' => false])
+			->group('stuyear');
+		$this->set('years', $query);
 
 	}
 	public function addstr()
