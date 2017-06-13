@@ -58,6 +58,10 @@
 .navbar-text {
 	margin-left: 5px
 }
+.nabvar-img {
+	height: 100%;
+	width: auto;
+}
 /*ヘッダーナビゲーション終わり*/
 
 /*その他*/

@@ -71,16 +71,18 @@ managerrrrr
 		<td></td><td>学籍番号</td><td>氏名</td><td>学科</td><td>学年</td>
 	</thead>
 	<tbody>
-		<tr>
-			<td class="col-xs-1">
-				<label class="checkbox">
-					<input type="checkbox" data-toggle="checkbox">
-				</label>
-			</td>
-			<td class="col-xs-3">1511004</td>
-			<td class="col-xs-3">川上　貴志</td>
-			<td class="col-xs-4">情報スペシャリスト</td>
-			<td class="col-xs-1">3年</td>
-		</tr>
+		<?php foreach ($records as $key): ?>
+			<tr>
+				<td class="col-xs-1">
+					<label class="checkbox">
+						<input type="checkbox" data-toggle="checkbox">
+					</label>
+				</td>
+				<td class="col-xs-3"><?= $key->regnum; ?></td>
+				<td class="col-xs-3"><?= $key->stuname; ?></td>
+				<td class="col-xs-4"><?= $key->depnum; ?></td>
+				<td class="col-xs-1"><?= $key->stuyear . "年"; ?></td>
+			</tr>
+		<?php  endforeach;?>
 	</tbody>
 </table>
