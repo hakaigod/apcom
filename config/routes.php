@@ -43,6 +43,7 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
+
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -50,13 +51,19 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+	 $routes->connect(
+		 '/student/:id',
+		 ['controller' => 'Student', 'action'=> 'summary'],
+//		 8桁の数字に制限、0始まりに対応
+		 ['id' => '\d{8}']
+	 );
 //	$routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
 
-
+	
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+//    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     /**
      * Connect catchall routes for all controllers.
