@@ -34,13 +34,7 @@
 	<div class="navbar-header">
 		<a class="navbar-brand" href="#">応用情報 ど.com</a>
 	</div>
-<<<<<<< HEAD
-=======
-	<div class="navbar-collapse collapse">
-		<div class="nav navbar-nav navbar-right">
-		</div>
-	</div>
->>>>>>> e961b691b7afd360df7615655f9e3b302456841d
+
 </div>
 </nav>
 
