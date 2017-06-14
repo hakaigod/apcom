@@ -24,5 +24,7 @@ class StudentController extends AppController
 
     public function qaaQuestion()
     {
+        $cnt = 1;
+        $this->set('cnt',"問：".$cnt);
     }
 }

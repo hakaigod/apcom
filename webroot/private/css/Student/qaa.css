@@ -11,6 +11,15 @@
     font-size: 30px;
     font-weight: bold;
 }
+
+#qaa-detail{
+    text-align: right;
+    border-bottom: solid 1px #aeb6bf;
+    padding-top: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
 #qaa-explanation{
     margin-top: 10px;
     margin-left: 20px;
@@ -44,14 +53,36 @@
     margin-top: -10px;
 }
 
-
-.btn{
+.genre-container .btn{
     margin-top: 20px;
     text-align: center;
 }
 
+.qaa-question-no{
+    text-align: left;
+    margin-top: 20px;
+}
 
+.qaa-question{
+    text-align: center;
+    margin-top: 20px;
+}
 
+.qaa-falsehood{
+    text-align: left;
+    margin-top: 20px;
+}
+
+.qaa-select-answer .btn-embossed{
+    float: left;
+    padding: 10px 40px 10px 40px;
+    margin: 10px 20px 10px 20px;
+}
+
+.qaa-next{
+    margin-top: 30px;
+    text-align: center;
+}
 
 
 

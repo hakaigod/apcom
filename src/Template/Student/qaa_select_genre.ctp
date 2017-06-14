@@ -5,7 +5,7 @@
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/qaa_select_genre.css') ?>
+<?= $this->Html->css('/private/css/Student/qaa.css') ?>
 <?= $this->end(); ?>
 
 <!-- jsセット -->
@@ -59,16 +59,16 @@ Student
                     <div class = "caption"><p>ジャンル一覧</p></div>
                     <!--form-->
                     <?php
-                        echo $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa_question']]);
-                        $options = ['Value 1' => 'テクノロジ','Value 2' => 'マネジメント','Value 3' => 'ストラテジ'];
-                        echo $this->Form->select('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
+                    echo $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa_question']]);
+                    $options = ['Value 1' => 'テクノロジ','Value 2' => 'マネジメント','Value 3' => 'ストラテジ'];
+                    echo $this->Form->select('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
                     ?>
                 </div>
                 <!--決定ボタン-->
                 <div class = "center">
                     <?= $this -> Form -> button('問題開始',array('type' => 'submit',  'class' => 'btn btn-info')); ?>
+                    <?= $this -> Form -> end(); ?>
                 </div>
-                <?= $this -> Form -> end(); ?>
             </div>
         </div>
     </div>

@@ -1,16 +1,17 @@
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
-ジャンル選択
+一問一答
 <?= $this->end(); ?>
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/qaa_select_genre.css') ?>
+<?= $this->Html->css('/private/css/Student/qaa.css') ?>
 <?= $this->end(); ?>
 
 <!-- jsセット -->
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+<?= $this->Html->script('/private/js/Student/qaa.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -26,3 +27,61 @@ Student
 <?= $this->end(); ?>
 
 <!-- 以下content -->
+<div class = "container-fluid">
+    <!--header-->
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = col-md-12>
+                <div id = "qaa-title">
+                    一問一答
+                </div>
+                <div id = "qaa-detail">
+                    [詳細]
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ここから出題問題表示-->
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = "qaa-question-no">
+
+                <?= $cnt ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class = "qaa-question">
+                問題の文章か画像の表示
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id = "qaa-falsehood">
+                <br><!-- ○か☓の画像表示 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="qaa-select-answer">
+        <div class="row">
+            <div class="col-md-12">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "A" onclick = "SelectAns(1)">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "B" onclick = "SelectAns(2)">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "C" onclick = "SelectAns(3)">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "D" onclick = "SelectAns(4)">
+            </div>
+        </div>
+    </div>
+
+    <div class=""></div>
+    <div class = "qaa-next">
+        <?= $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa-question']]) ?>
+        <?= $this -> Form -> submit("次の問題",array('type' => 'submit',  'class' => 'btn btn-warning')) ?>
+        <?= $this -> Form -> end(); ?>
+    </div>
+</div>
