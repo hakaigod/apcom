@@ -35,14 +35,33 @@ class ManagerController extends AppController
 				'regnum',
 				'stuname',
 				'mf_dep.depname',
-				'stuyear'
+				'stuyear',
+				'graduate_flg',
+				'mf_stu.deleted_flg'
 			])
 			->join([
 				'table' => 'mf_dep',
 				'type' => 'INNER',
 				'conditions' => 'mf_stu.depnum = mf_dep.depnum'
-			])
-			->where(['mf_stu.deleted_flg' => false])
+			]);
+		// where
+		if (empty($this->request->data('regnum'))) {
+			if ($this->request->data('deleted_flg')) {
+				$query -> where(['mf_stu.deleted_flg' => true]);
+			} else {
+				$query -> where(['mf_stu.deleted_flg' => false]);
+			}
+			if ($this->request->data('graduate_flg')) {
+				$query -> where(['graduate_flg' => true]);
+			} else {
+				$query -> where(['graduate_flg' => false]);
+			}
+		}else{
+			// $whereCondition = array('regnum' => null);
+			$query -> where(['regnum' => $this->request->data('regnum')]);
+		}
+
+		$query
 			->order(['regnum' => 'DESC']);
 
 		$this->set('records', $query);
@@ -63,6 +82,10 @@ class ManagerController extends AppController
 	public function modstr()
 	{
 		$this->viewBuilder()->layout('addmod');
+
+		$mf_stu = TableRegistry::get('mf_stu');
+		$query = $mf_stu->get($_GET['id']);
+		$this->set('regnum', $query);
 	}
 	public function searchstr()
 	{
