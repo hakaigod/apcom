@@ -14,7 +14,7 @@ managerrrrr
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><a href="">トップページ</a></td></tr>
+	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
 	<tr><td><a href="" onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
 	<tr><td><a href="">学生パスワード再発行</a></td></tr>
 
@@ -77,7 +77,7 @@ managerrrrr
 		<?php foreach ($records as $record): ?>
 			<tr>
 				<td>
-					<a href="" class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=400,scrollbars=yes');">
+					<a href="" class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450,scrollbars=yes');">
 						修正
 					</a>
 				</td>

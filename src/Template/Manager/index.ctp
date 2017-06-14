@@ -22,7 +22,7 @@
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
 	<tr><td><a href="Manager/strmanager">学生情報管理</a></td></tr>
-	<tr><td><a href="#">管理者管理</a></td></tr>
+	<tr><td><a href="Manager/adminmanager">管理者管理</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->

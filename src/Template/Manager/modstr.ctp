@@ -4,7 +4,7 @@
 <?= $this->end(); ?>
 
 <?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/strmanagers.css') ?>
+	<?= $this->Html->css('/private/css/Manager/addmod.css') ?>
 <?= $this->end(); ?>
 
 <div class="container-fluid">
@@ -14,14 +14,24 @@
 	<form action="" method="post">
 		<input type="text" name="strno" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
 		<input type="text" name="strname" class="form-control" placeholder="氏名" value="<?= $regnum->stuname; ?>">
-		<input type="text" name="old" class="form-control" placeholder="学年" value="<?= $regnum->stuyear; ?>">
+		<select class="form-control select select-primary full" data-toggle="select">
+			<?php foreach ($deps as $dep): ?>
+				<option value="<?= $dep->depnum; ?>" <?= $dep->depnum == $regnum->depnum ? "selected" : ""; ?>><?= $dep->depname; ?></option>
+			<?php endforeach; ?>
+		</select>
+		<select class="form-control select select-primary full" data-toggle="select">
+			<?php for ($i = 1; $i <= 3; $i++): ?>
+				<option value="<?= $i; ?>" <?= $i == $regnum->stuyear ? "selected" : ""; ?>><?= $i . "年"; ?></option>
+			<?php endfor; ?>
+		</select>
+
 		<div class="row">
 			<label class="checkbox col-xs-6">
 				削除
 				<input type="checkbox" data-toggle="checkbox" name="deleted_flg" <?= $regnum->deleted_flg ? 'checked="checked"' : ""; ?>>
 			</label>
 			<label class="checkbox col-xs-6">
-				合格
+				卒業
 				<input type="checkbox" data-toggle="checkbox" name="graduate_flg" <?= $regnum->graduate_flg ? 'checked="checked"' : ""; ?>>
 			</label>
 		</div>

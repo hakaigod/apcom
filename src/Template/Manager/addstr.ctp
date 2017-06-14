@@ -5,7 +5,7 @@
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/strmanagers.css') ?>
+	<?= $this->Html->css('/private/css/Manager/addmod.css') ?>
 <?= $this->end(); ?>
 
 

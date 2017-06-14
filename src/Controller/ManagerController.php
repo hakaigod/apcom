@@ -18,9 +18,9 @@ class ManagerController extends AppController
 	public function index()
 	{
 	}
+
 	public function strmanager()
 	{
-
 		$mf_dep = TableRegistry::get('mf_dep');
 		// 学科一覧
 		$query = $mf_dep
@@ -84,10 +84,51 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		$mf_stu = TableRegistry::get('mf_stu');
+		$mf_dep = TableRegistry::get('mf_dep');
+		// 学生情報
 		$query = $mf_stu->get($_GET['id']);
 		$this->set('regnum', $query);
+		// 学科一覧
+		$query = $mf_dep->find();
+		$this->set('deps', $query);
+
+		// $query ->update()
+		// 	->set([
+		// 		'regnum' => $_POST['strno'],
+		// 		'stuname' => $_POST['strname'],
+		// 		'stuyear' => $_POST['old'],
+		// 		'depnum' => $_POST['old']
+		// 	])
+		// 	->where(['regnum' => $_GET['id']]);
 	}
-	public function searchstr()
+
+	public function adminmanager()
+	{
+		$mf_adm = TableRegistry::get('mf_adm');
+		// 管理者一覧
+		$query = $mf_adm->find();
+		// where
+		if (empty($this->request->data('admnum'))) {
+			if ($this->request->data('deleted_flg')) {
+				$query -> where(['deleted_flg' => true]);
+			} else {
+				$query -> where(['deleted_flg' => false]);
+			}
+		}else{
+			$query -> where(['admnum' => $this->request->data('admnum')]);
+		}
+
+		$this->set('admins', $query);
+	}
+	public function modadmin()
+	{
+		$this->viewBuilder()->layout('addmod');
+
+		$mf_adm = TableRegistry::get('mf_adm');
+		$query = $mf_adm->get($_GET['id']);
+		$this->set('admnum', $query);
+	}
+	public function addadmin()
 	{
 	}
 
