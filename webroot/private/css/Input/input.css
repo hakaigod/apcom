@@ -1,0 +1,14 @@
+.btn.btn-info {
+    margin-right: 5px;
+    border-radius: 6px;
+}
+
+/*.btn-info:hover{*/
+    /*background: lightskyblue;*/
+/*}*/
+/*.btn-info {*/
+    /*background: skyblue;*/
+/*}*/
+.btn-info.active {
+    background: midnightblue;
+}

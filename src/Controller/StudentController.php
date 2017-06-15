@@ -42,4 +42,11 @@ class StudentController extends AppController
 		    ->first();
 	    $this->set(compact('name'));
     }
+    public function input(){
+	    //回答モデル読み込み
+	    $this->loadModel('TfAns');
+
+	    //左上のロゴのURL設定
+	    $this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
+    }
 }
