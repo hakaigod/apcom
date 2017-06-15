@@ -12,6 +12,7 @@
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?= $this->Html->script('/private/js/Student/qaa.js') ?>
+<?= $this->Html->script('/private/js/Student/cnt_qu_no.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -44,9 +45,11 @@ Student
     <!--ここから出題問題表示-->
     <div class = "row">
         <div class = "col-md-12">
-            <div class = "qaa-question-no">
-
-                <?= $cnt ?>
+            <div id = "qaa-question-toi">
+                問：
+            </div>
+            <div id = "qaa-question-no">
+                <!--ここに問題番号を表示-->
             </div>
         </div>
     </div>
@@ -77,11 +80,11 @@ Student
             </div>
         </div>
     </div>
-
     <div class=""></div>
+
     <div class = "qaa-next">
-        <?= $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa-question']]) ?>
-        <?= $this -> Form -> submit("次の問題",array('type' => 'submit',  'class' => 'btn btn-warning')) ?>
+        <?= $this -> Form -> create(null,['type' => 'get','url' => ['action' => 'qaa-question']]) ?>
+        <?= $this -> Form -> submit("次の問題",array('type' => 'submit',  'class' => 'btn btn-warning','name' => 'cnt')) ?>
         <?= $this -> Form -> end(); ?>
     </div>
 </div>

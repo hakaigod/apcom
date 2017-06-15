@@ -58,9 +58,15 @@
     text-align: center;
 }
 
-.qaa-question-no{
+#qaa-question-no{
+    text-align: right;
+    margin-top: 20px;
+}
+
+#qaa-question-toi{
     text-align: left;
     margin-top: 20px;
+    float: left;
 }
 
 .qaa-question{

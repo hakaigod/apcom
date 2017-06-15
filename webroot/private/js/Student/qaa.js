@@ -11,6 +11,6 @@ function SelectAns(btnNo) {
         // 誤り
         document.getElementById("qaa-falsehood").innerHTML = "不正解";
         document.getElementById("qaa-falsehood").style.color("blue");
-
     }
 }
+
