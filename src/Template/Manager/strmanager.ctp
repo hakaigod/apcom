@@ -34,7 +34,7 @@ managerrrrr
 		<tr>
 			<td class="col-xs-3">学科</td>
 			<td class="col-xs-3">
-				<select class="form-control select select-primary full" data-toggle="select">
+				<select class="form-control select select-primary" data-toggle="select">
 					<?php foreach ($deps as $dep): ?>
 						<option value="<?= $dep->depnum; ?>"><?= $dep->depname; ?></option>
 					<?php endforeach; ?>
@@ -77,7 +77,9 @@ managerrrrr
 		<?php foreach ($records as $record): ?>
 			<tr>
 				<td>
-					<button class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450');">修正</button>
+					<a href="" class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450,scrollbars=yes');">
+						修正
+					</a>
 				</td>
 				<td class="col-xs-2"><?= $record->regnum; ?></td>
 				<td class="col-xs-3"><?= $record->stuname; ?></td>
