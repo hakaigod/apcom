@@ -14,7 +14,7 @@ managerrrrr
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><a href="">トップページ</a></td></tr>
+	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
 	<tr><td><a href="" onclick="window.open('addadmin','管理者情報追加','width=500,height=400,scrollbars=yes');">管理者情報追加</a></td></tr>
 <?= $this->end(); ?>
 
@@ -50,10 +50,10 @@ managerrrrr
 	<tbody>
 		<?php foreach ($admins as $admin): ?>
 			<tr>
-				<td class="center">
-					<a href="" class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=400,scrollbars=yes');">
+				<td class="col-xs-1 center">
+					<button class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=400');">
 						修正
-					</a>
+					</button>
 				</td>
 				<td class="col-xs-2"><?= $admin->admnum; ?></td>
 				<td class="col-xs-7"><?= $admin->admname; ?></td>

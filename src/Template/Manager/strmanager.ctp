@@ -76,10 +76,10 @@ managerrrrr
 	<tbody>
 		<?php foreach ($records as $record): ?>
 			<tr>
-				<td>
-					<a href="" class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450,scrollbars=yes');">
+				<td class="col-xs-1 center">
+					<button class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450');">
 						修正
-					</a>
+					</button>
 				</td>
 				<td class="col-xs-2"><?= $record->regnum; ?></td>
 				<td class="col-xs-3"><?= $record->stuname; ?></td>
