@@ -15,9 +15,9 @@ managerrrrr
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
+	<tr><td><a href="">学生情報閲覧</a></td></tr>
 	<tr><td><a href="" onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
 	<tr><td><a href="">学生パスワード再発行</a></td></tr>
-
 <?= $this->end(); ?>
 
 <!-- 以下content -->
@@ -34,19 +34,19 @@ managerrrrr
 		<tr>
 			<td class="col-xs-3">学科</td>
 			<td class="col-xs-3">
-				<select class="form-control select select-primary" data-toggle="select" name="depnum">
+				<select class="form-control select select-primary full" data-toggle="select" name="depnum">
 					<option value="0">全学科</option>
 					<?php foreach ($deps as $dep): ?>
-						<option value="<?= $dep->depnum; ?>"><?= $dep->depname; ?></option>
+						<option value="<?= $dep->depnum; ?>" <?= @$_POST['depnum'] == $dep->depnum ? 'selected' : ''; ?>><?= $dep->depname; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</td>
 			<td class="col-xs-3">学年</td>
 			<td class="col-xs-3">
-				<select class="form-control select select-primary" data-toggle="select" name="stuyear">
+				<select class="form-control select select-primary full" data-toggle="select" name="stuyear">
 					<option value="0">全学年</option>
 					<?php foreach ($years as $year): ?>
-						<option value="<?= $year->stuyear; ?>"><?= $year->stuyear . "年"; ?></option>
+						<option value="<?= $year->stuyear; ?>" <?= @$_POST['stuyear'] == $year->stuyear ? 'selected' : ''; ?>><?= $year->stuyear . "年"; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</td>
