@@ -57,19 +57,22 @@ class ManagerController extends AppController
 		}else{
 			$query -> where(['regnum' => $this->request->data('regnum')]);
 		}
-		if (isset($_POST) && $_POST['depnum'] != '0') {
-			$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
+		if (!empty($_POST)) {
+			if ($_POST['depnum'] != '0'){
+				$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
+			}
+			if ($_POST['stuyear'] != '0') {
+				$query -> where(['stuyear' => $_POST['stuyear']]);
+			}
 		}
 
 		$query ->order(['regnum' => 'DESC']);
 		$this->set('records', $query);
 
 		// 在学中学生学年一覧
-		$query = $mf_stu
-			->find()
+		$query = $mf_stu->find()
 			->select('stuyear')
-			->where(['deleted_flg' => false])
-			->group('stuyear');
+			->distinct('stuyear');
 		$this->set('years', $query);
 
 	}

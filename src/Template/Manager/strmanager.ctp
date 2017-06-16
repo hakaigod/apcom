@@ -43,7 +43,8 @@ managerrrrr
 			</td>
 			<td class="col-xs-3">学年</td>
 			<td class="col-xs-3">
-				<select class="form-control select select-primary" data-toggle="select">
+				<select class="form-control select select-primary" data-toggle="select" name="stuyear">
+					<option value="0">全学年</option>
 					<?php foreach ($years as $year): ?>
 						<option value="<?= $year->stuyear; ?>"><?= $year->stuyear . "年"; ?></option>
 					<?php endforeach; ?>
