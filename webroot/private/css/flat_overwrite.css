@@ -2,3 +2,7 @@
 .navbar-collapse .navbar-nav.navbar-right:last-child > .dropdown:last-child > a {
     border-radius: 0;
 }
+.dropdown-menu,
+.select2-drop {
+  /*background-color: #eeeeee;*/
+}

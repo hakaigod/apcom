@@ -23,9 +23,7 @@ class ManagerController extends AppController
 	{
 		$mf_dep = TableRegistry::get('mf_dep');
 		// 学科一覧
-		$query = $mf_dep
-			->find();
-		$this->set('deps', $query);
+		$this->set('deps', $mf_dep->find());
 
 		$mf_stu = TableRegistry::get('mf_stu');
 		// 学生一覧
@@ -57,13 +55,13 @@ class ManagerController extends AppController
 				$query -> where(['graduate_flg' => false]);
 			}
 		}else{
-			// $whereCondition = array('regnum' => null);
 			$query -> where(['regnum' => $this->request->data('regnum')]);
 		}
+		if (isset($_POST) && $_POST['depnum'] != '0') {
+			$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
+		}
 
-		$query
-			->order(['regnum' => 'DESC']);
-
+		$query ->order(['regnum' => 'DESC']);
 		$this->set('records', $query);
 
 		// 在学中学生学年一覧
@@ -86,11 +84,9 @@ class ManagerController extends AppController
 		$mf_stu = TableRegistry::get('mf_stu');
 		$mf_dep = TableRegistry::get('mf_dep');
 		// 学生情報
-		$query = $mf_stu->get($_GET['id']);
-		$this->set('regnum', $query);
+		$this->set('regnum', $mf_stu->get($_GET['id']));
 		// 学科一覧
-		$query = $mf_dep->find();
-		$this->set('deps', $query);
+		$this->set('deps', $mf_dep->find());
 
 		// $query ->update()
 		// 	->set([

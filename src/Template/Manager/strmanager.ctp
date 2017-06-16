@@ -34,7 +34,8 @@ managerrrrr
 		<tr>
 			<td class="col-xs-3">学科</td>
 			<td class="col-xs-3">
-				<select class="form-control select select-primary" data-toggle="select">
+				<select class="form-control select select-primary" data-toggle="select" name="depnum">
+					<option value="0">全学科</option>
 					<?php foreach ($deps as $dep): ?>
 						<option value="<?= $dep->depnum; ?>"><?= $dep->depname; ?></option>
 					<?php endforeach; ?>
