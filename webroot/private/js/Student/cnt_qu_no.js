@@ -2,12 +2,32 @@
  * Created by 15110014 on 2017/06/15.
  */
 
+var count1;
+
 window.onload = function () {
     "use strict";
-    var count1 = load();
+    count1 = load();
     count1 ++;
     save(count1);
-    document.getElementById("qaa-question-no").innerHTML = count1;
+    document.getElementById("qaa-question-no").innerHTML =  ('問：' + count1);
+
+
+    // 次の問題に遷移するボタン以外で画面遷移した場合、問題番号をリセットする
+    if(!(document.getElementsByClassName("qaa-next"))){
+        clear();
+    }
+};
+
+location.reload = function () {
+    "use strict";
+    count1 = 10;
+    save(count1);
+};
+
+history.back = function () {
+    "use strict";
+    clear();
+    save(count1);
 };
 
 function load() {

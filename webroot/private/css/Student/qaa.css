@@ -59,14 +59,9 @@
 }
 
 #qaa-question-no{
-    text-align: right;
     margin-top: 20px;
-}
-
-#qaa-question-toi{
-    text-align: left;
-    margin-top: 20px;
-    float: left;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .qaa-question{
@@ -80,15 +75,16 @@
 }
 
 .qaa-select-answer .btn-embossed{
-    float: left;
+    display: inline-block;
     padding: 10px 40px 10px 40px;
     margin: 10px 20px 10px 20px;
+}
+
+.qaa-select-answer {
+    text-align: center;
 }
 
 .qaa-next{
     margin-top: 30px;
     text-align: center;
 }
-
-
-

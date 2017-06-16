@@ -37,17 +37,31 @@ Student
                     一問一答
                 </div>
                 <div id = "qaa-detail">
-                    [詳細]
+                    [<a onclick = " " data-toggle = "modal" data-target = "#myModal"> 詳細 </a>]
                 </div>
+
+                <!-- モーダルウィンドウの中身 -->
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">一問一答  現在の成績</h4>
+                            </div>
+                            <div class="modal-body">Modal内容</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
     <!--ここから出題問題表示-->
     <div class = "row">
         <div class = "col-md-12">
-            <div id = "qaa-question-toi">
-                問：
-            </div>
             <div id = "qaa-question-no">
                 <!--ここに問題番号を表示-->
             </div>
