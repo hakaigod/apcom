@@ -52,11 +52,23 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
 	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
 	 $routes->connect(
-		 '/student/:id',
-		 ['controller' => 'Student', 'action'=> 'summary'],
+		 '/:student/:id',
+		 ['controller' => 'student', 'action'=> 'summary'],
 //		 8桁の数字に制限、0始まりに対応
-		 ['id' => '\d{8}']
+		 ['student' => '(?i:student)','id' => '\d{8}']
 	 );
+	$routes->connect(
+		'/:student/:input/:season',
+		['controller' => 'student', 'action'=> 'input',1 ],
+		['student' => '(?i:student)','input' =>'(?:input)',
+			'season' => '\d{2}_(haru|aki)']
+	);
+	$routes->connect(
+		'/:student/:input/:season/:qnum',
+		['controller' => 'student', 'action'=> 'input'],
+		['student' => '(?i:student)','input' =>'(?:input)',
+			'season' => '\d{2}_(haru|aki)','qnum' => '[1-8]{1}']
+	);
 //	$routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
 
 	

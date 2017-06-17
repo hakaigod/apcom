@@ -22,7 +22,9 @@ class StudentController extends AppController
 	    $regnum = $this->request->getParam('id');
 	    //左上のロゴのURL設定
 	    $this->set("headerlink", $this->request->getAttribute('webroot') . "Student/" . $regnum);
-	    
+		$session =     $this->request->session();
+	    $session->write('StudentID', $regnum);
+	    $this->set(compact('session'));
 	    //回答モデル読み込み
 	    $this->loadModel('TfAns');
 	    //回答取得
@@ -45,8 +47,20 @@ class StudentController extends AppController
     public function input(){
 	    //回答モデル読み込み
 	    $this->loadModel('TfAns');
-
 	    //左上のロゴのURL設定
 	    $this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
+	    
+	    $season = $this->request->getParam('season');
+	    if (isset($season)) {
+		    $this->set(compact('season'));
+		
+		    $qnum = $this->request->getParam('qnum') ? : 1;
+		    $this->set(compact('qnum'));
+	    }
+	    if ($this->request->is('post')) {
+		   
+	    }else{
+	    
+	    }
     }
 }

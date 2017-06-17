@@ -25,7 +25,7 @@ $this->end();
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?= $this->end(); ?>
 
-
+<?= $session->read('StudentID'); ?>
 <!--グラフを表示する要素-->
 <canvas id="myChart"></canvas>
 <!--canvasにグラフを設定するスクリプト-->
@@ -59,7 +59,6 @@ $this->end();
         }
     });
 </script>
-
 <table class="table table-bordered table-striped table-hover">
 	<?php
 	foreach ($answers as $answer): ?>
