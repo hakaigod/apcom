@@ -15,40 +15,38 @@
                 <td>
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
-                            <input type="radio" name="<?= "answer_" . ($i - 1) ?>" autocomplete="off" value="1"> ア
+                            <input type="radio" name="<?= "answer_" . $i ?>" autocomplete="off" value="1"> ア
                         </label>
                         <label class="btn btn-info">
-                            <input type="radio" name="<?= "answer_" . ($i - 1) ?>" autocomplete="off" value="2"> イ
+                            <input type="radio" name="<?= "answer_" . $i ?>" autocomplete="off" value="2"> イ
                         </label>
                         <label class="btn btn-info">
-                            <input type="radio" name="<?= "answer_" . ($i - 1) ?>" autocomplete="off" value="3"> ウ
+                            <input type="radio" name="<?= "answer_" . $i ?>" autocomplete="off" value="3"> ウ
                         </label>
                         <label class="btn btn-info">
-                            <input type="radio"  name="<?= "answer_" . ($i - 1) ?>" autocomplete="off" value="4"> エ
+                            <input type="radio"  name="<?= "answer_" . $i ?>" autocomplete="off" value="4"> エ
                         </label>
                         <label class="btn btn-info active">
-                            <input type="radio"  name="<?= "answer_" . ($i - 1) ?>" autocomplete="off" checked value="0"> 未記入
+                            <input type="radio"  name="<?= "answer_" . $i ?>" autocomplete="off" checked value="0"> 未記入
                         </label>
                     </div>
                 </td>
                 <td>
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
-                            <input type="radio" name="<?= "confidence_" . ($i - 1) ?>" autocomplete="off" value="1"> o
+                            <input type="radio" name="<?= "confidence_" . $i ?>" autocomplete="off" value="1"> o
                         </label>
                         <label class="btn btn-info active">
-                            <input type="radio" name="<?= "confidence_" . ($i - 1) ?>" autocomplete="off" checked value="2"> △
+                            <input type="radio" name="<?= "confidence_" . $i ?>" autocomplete="off" checked value="2"> △
                         </label>
                         <label class="btn btn-info">
-                            <input type="radio" name="<?= "confidence_" . ($i - 1) ?>" autocomplete="off" value="3"> x
+                            <input type="radio" name="<?= "confidence_" . $i ?>" autocomplete="off" value="3"> x
                         </label>
                     </div>
                 </td>
             </tr>
 		<?php endforeach; ?>
     </table>
-    <button type="submit" class="btn btn-success">登録</button>
-</form>
 <br>
 <?php
 foreach (range(1, 8) as $linkNum ) {
@@ -56,8 +54,10 @@ foreach (range(1, 8) as $linkNum ) {
     if ( $linkNum == $qnum ) {
         $btnClass .= "active";
     }
-    echo $this->Html->link( $linkNum, ['action' => 'input', $season , $linkNum],["class" => $btnClass]);
+    echo "<button type='submit' name='linkNum' value='{$linkNum}' formaction= '{$linkNum}' class='{$btnClass}'>{$linkNum}</button>";
+//    echo $this->Html->link( $linkNum, ['action' => 'input', $season , $linkNum],["class" => $btnClass]);
 }
 ?>
+</form>
 
 <br><br><br><br><br><br><br><br>

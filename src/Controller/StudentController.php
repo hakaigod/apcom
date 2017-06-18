@@ -50,17 +50,32 @@ class StudentController extends AppController
 	    //左上のロゴのURL設定
 	    $this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
 	    
-	    $season = $this->request->getParam('season');
-	    if (isset($season)) {
-		    $this->set(compact('season'));
-		
-		    $qnum = $this->request->getParam('qnum') ? : 1;
-		    $this->set(compact('qnum'));
-	    }
-	    if ($this->request->is('post')) {
-		   
+	    //模擬試験テーブルの主キー
+	    $imiNum = $this->request->getParam('imiNum');
+	    //1-8の番号
+	    $getLinkNum = $this->request->getParam('linkNum');
+	    if (isset($imiNum) && isset($getLinkNum)) {
+		    $this->loadModel('TfImi');
+		    $imitation = $this->TfImi->find()
+			    ->contain(['MfExa'])
+			    ->where(['TfImi.imicode = ' => $imiNum] )
+			    ->first();
+		    
+		    
+		    //模擬試験コードから試験実施年度と季節を取得しビューにセット
+		    $this->set(compact('imitation'));
+		    $this->set(compact('getLinkNum'));
+		    //POSTメソッドであるときは回答を入力している
+		    if ($this->request->is('post')) {
+//
+//			    $qnum = $this->request->getData('linkNum');
+//			    $session = $this->request->session();
+//			    $session->write('answers.' . ,2);
+		    }else{
+				
+		    }
 	    }else{
 	    
 	    }
-    }
+	  }
 }

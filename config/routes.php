@@ -57,18 +57,32 @@ Router::scope('/', function (RouteBuilder $routes) {
 //		 8桁の数字に制限、0始まりに対応
 		 ['student' => '(?i:student)','id' => '\d{8}']
 	 );
+	 
+//	$routes->connect(
+//		'/:student/:input/:season',
+//		['controller' => 'student', 'action'=> 'input',1 ],
+//		['student' => '(?i:student)','input' =>'(?:input)',
+//			'season' => '\d{2}_(haru|aki)']
+//	);
 	$routes->connect(
-		'/:student/:input/:season',
-		['controller' => 'student', 'action'=> 'input',1 ],
+		'/:student/:input/:imiNum',
+		['controller' => 'student', 'action'=> 'input', 1],
 		['student' => '(?i:student)','input' =>'(?:input)',
-			'season' => '\d{2}_(haru|aki)']
+			'imiNum' => '\d{1-3}']
 	);
 	$routes->connect(
-		'/:student/:input/:season/:qnum',
+		'/:student/:input/:imiNum/:linkNum',
 		['controller' => 'student', 'action'=> 'input'],
 		['student' => '(?i:student)','input' =>'(?:input)',
-			'season' => '\d{2}_(haru|aki)','qnum' => '[1-8]{1}']
+			'imiNum' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
 	);
+	
+//	$routes->connect(
+//		'/:student/:input/:season/:qnum',
+//		['controller' => 'student', 'action'=> 'input'],
+//		['student' => '(?i:student)','input' =>'(?:input)',
+//			'season' => '\d{2}_(haru|aki)','qnum' => '[1-8]{1}']
+//	);
 //	$routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
 
 	
@@ -93,7 +107,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-    $routes->fallbacks(DashedRoute::class);
+//    $routes->fallbacks(DashedRoute::class);
 });
 
 /**
