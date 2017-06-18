@@ -68,7 +68,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 		'/:student/:input/:imiNum',
 		['controller' => 'student', 'action'=> 'input', 1],
 		['student' => '(?i:student)','input' =>'(?:input)',
-			'imiNum' => '\d{1-3}']
+			'imiNum' => '\d{1,3}']
 	);
 	$routes->connect(
 		'/:student/:input/:imiNum/:linkNum',
@@ -107,6 +107,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+    //デフォルトのcontroller/actionを無効にする
 //    $routes->fallbacks(DashedRoute::class);
 });
 

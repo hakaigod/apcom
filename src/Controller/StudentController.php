@@ -53,20 +53,33 @@ class StudentController extends AppController
 	    //模擬試験テーブルの主キー
 	    $imiNum = $this->request->getParam('imiNum');
 	    //1-8の番号
-	    $getLinkNum = $this->request->getParam('linkNum');
-	    if (isset($imiNum) && isset($getLinkNum)) {
+	    $curNum = $this->request->getParam('linkNum') ?: 1;
+	    if (isset($imiNum) && isset($curNum)) {
+	    	
+		    //模擬試験コードから試験実施年度と季節を取得
 		    $this->loadModel('TfImi');
 		    $imitation = $this->TfImi->find()
 			    ->contain(['MfExa'])
 			    ->where(['TfImi.imicode = ' => $imiNum] )
 			    ->first();
 		    
-		    
-		    //模擬試験コードから試験実施年度と季節を取得しビューにセット
+		    $year = $imitation['mf_exa']->jap_year;
+		    $this->set(compact('year'));
+		    //デバッグ用
 		    $this->set(compact('imitation'));
-		    $this->set(compact('getLinkNum'));
-		    //POSTメソッドであるときは回答を入力している
+		    $season = $imitation['mf_exa']['exaname'];
+		    $this->set(compact('season'));
+		    //現在のページ番号をセット
+		    $this->set(compact('curNum'));
+		    
+		    //POSTメソッドであるときは回答を入力しているので
 		    if ($this->request->is('post')) {
+		    	$answers = [];
+			    foreach (range(1,10) as $qNum ){
+				    $answer = $this->request->getData("answer_{$qNum}");
+				    array_push($answers, $answer);
+			    }
+			    $this->set(compact('answers'));
 //
 //			    $qnum = $this->request->getData('linkNum');
 //			    $session = $this->request->session();
