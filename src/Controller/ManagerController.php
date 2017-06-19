@@ -46,23 +46,27 @@ class ManagerController extends AppController
 				'regnum' => 'DESC'
 			]);
 		// where
-		$del_flg = $gra_flg = FALSE;
 		if (!empty($_POST)) {
 			if (!empty($_POST['regnum'])) {
 				$query -> where(['regnum' => $this->request->data('regnum')]);
 			} else {
-				$del_flg = !empty($_POST['deleted_flg']);
-				$gra_flg= !empty($_POST['graduate_flg']);
 				if ($_POST['depnum'] != '0'){
 					$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
 				}
 				if ($_POST['stuyear'] != '0') {
 					$query -> where(['stuyear' => $_POST['stuyear']]);
 				}
+				if (empty($_POST['deleted_flg'])) {
+					$query -> where(['mf_stu.deleted_flg' => FALSE]);
+				}
+				if (empty($_POST['graduate_flg'])) {
+					$query -> where(['graduate_flg' => FALSE]);
+				}
 			}
+		} else {
+			$query -> where(['mf_stu.deleted_flg' => FALSE]);
+			$query -> where(['graduate_flg' => FALSE]);
 		}
-		$query -> where(['mf_stu.deleted_flg' => $del_flg]);
-		$query -> where(['graduate_flg' => $gra_flg]);
 
 		// $query ;
 		$this->set('records', $query);
