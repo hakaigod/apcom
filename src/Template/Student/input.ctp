@@ -18,7 +18,8 @@
                     <?= ($curNum - 1) * 10 + $i ?>
                 </td>
                 <td class="col-xs-3">
-                    <?= mb_substr($questions[ $i - 1 ]['question'], 0, 10)?>...
+                    <?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10)
+                    ?>...
                 </td>
                 <td class="col-xs-5">
                     <div data-toggle="buttons">
