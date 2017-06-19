@@ -14,9 +14,10 @@ class StudentController extends AppController
 
     }
 
-    public function index(){
-    	$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
-    }
+//    public function index(){
+//    	$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
+//    }
+    //ユーザマイページに表示される画面
     public function summary(){
     	//URLから学籍番号取得
 	    $regnum = $this->request->getParam('id');
@@ -44,6 +45,7 @@ class StudentController extends AppController
 		    ->first();
 	    $this->set(compact('name'));
     }
+    //模擬試験結果入力画面
     public function input(){
 	    //回答モデル読み込み
 	    $this->loadModel('TfAns');
@@ -74,21 +76,23 @@ class StudentController extends AppController
 		    $this->set(compact('season'));
 
 		    $this->loadModel('MfQes');
-		    $questions = $this->MfQes->find()
-			    ->where(['MfQes.exanum' => $imitation['mf_exa']->exanum])
-			    ->offset( ($curNum - 1) * 10 )
-			    ->limit( 10 )
+		    $questions = $this->MfQes
+			    ->getTexts(['MfQes.exanum' => $imitation['mf_exa']->exanum],10,$curNum)
 			    ->toArray();
 		    $this->set(compact('questions'));
 
 		    //POSTメソッドであるときは回答を入力しているので
 		    if ($this->request->is('post')) {
-		    	$answers = [];
+		    	$answers = $confidences = [];
 			    foreach (range(1,10) as $qNum ){
 				    $answer = $this->request->getData("answer_{$qNum}");
+				    $confidence = $this->request->getData("confidence_{$qNum}");
 				    array_push($answers, $answer);
+				    array_push($confidences, $confidence);
 			    }
 			    $this->set(compact('answers'));
+			    $this->set(compact('confidences'));
+
 //
 //			    $qnum = $this->request->getData('linkNum');
 //			    $session = $this->request->session();

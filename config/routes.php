@@ -51,6 +51,13 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+	 //ユーザマイページ
+	$routes->connect(
+		'/:student',
+		['controller' => 'student', 'action'=> 'summary'],
+		['student' => '(?i:student)']
+	);
+	//ユーザIDを指定した際のユーザマイページ(先生向け)
 	 $routes->connect(
 		 '/:student/:id',
 		 ['controller' => 'student', 'action'=> 'summary'],
@@ -109,7 +116,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
     //デフォルトのcontroller/actionを無効にする
-    $routes->fallbacks(DashedRoute::class);
+//    $routes->fallbacks(DashedRoute::class);
 });
 
 /**
