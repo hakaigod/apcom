@@ -80,7 +80,7 @@ class MfQesTable extends Table
     }
     public function getTexts($conditions, $mass = 10, $offset = 1){
 	    return $this->find()
-		    ->select(['question'])
+		    ->select(['qesnum','question'])
 		    ->where($conditions)
 		    ->limit($mass)
 		    ->page($offset);

@@ -11,17 +11,17 @@
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
 <form action="" method="post">
     <table class="table table-bordered table-striped table-hover">
-		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度']); ?>
+		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
-                <td class="col-xs-1">
-                    <?= ($curNum - 1) * 10 + $i ?>
+                <td class="col-xs-1 center">
+                    <?= $questions[ $i - 1 ]['qesnum'] ?>
                 </td>
                 <td class="col-xs-3">
-                    <?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10)
-                    ?>...
+                    <?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
+                    ...
                 </td>
-                <td class="col-xs-5">
+                <td class="col-xs-5 center">
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
                             <input type="radio" name="<?= $answerTag ="answer_{$i}" ?>" autocomplete="off" value="1"> ア
@@ -40,7 +40,7 @@
                         </label>
                     </div>
                 </td>
-                <td class="col-xs-3">
+                <td class="col-xs-3 center">
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
                             <input type="radio" name="<?= $confTag = "confidence_{$i}" ?>" autocomplete="off" value="1"> o
