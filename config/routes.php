@@ -64,12 +64,13 @@ Router::scope('/', function (RouteBuilder $routes) {
 //		['student' => '(?i:student)','input' =>'(?:input)',
 //			'season' => '\d{2}_(haru|aki)']
 //	);
-	$routes->connect(
-		'/:student/:input/:imiNum',
-		['controller' => 'student', 'action'=> 'input', 1],
-		['student' => '(?i:student)','input' =>'(?:input)',
-			'imiNum' => '\d{1,3}']
-	);
+//このルートを有効にすると、form actionで相対パスを指定しているので面倒になる
+//	$routes->connect(
+//		'/:student/:input/:imiNum',
+//		['controller' => 'student', 'action'=> 'input', 1],
+//		['student' => '(?i:student)','input' =>'(?:input)',
+//			'imiNum' => '\d{1,3}']
+//	);
 	$routes->connect(
 		'/:student/:input/:imiNum/:linkNum',
 		['controller' => 'student', 'action'=> 'input'],
@@ -108,7 +109,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
     //デフォルトのcontroller/actionを無効にする
-//    $routes->fallbacks(DashedRoute::class);
+    $routes->fallbacks(DashedRoute::class);
 });
 
 /**

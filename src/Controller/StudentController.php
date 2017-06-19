@@ -55,23 +55,32 @@ class StudentController extends AppController
 	    //1-8の番号
 	    $curNum = $this->request->getParam('linkNum') ?: 1;
 	    if (isset($imiNum) && isset($curNum)) {
-	    	
+
+		    //現在のページ番号をセット
+		    $this->set(compact('curNum'));
 		    //模擬試験コードから試験実施年度と季節を取得
 		    $this->loadModel('TfImi');
 		    $imitation = $this->TfImi->find()
 			    ->contain(['MfExa'])
-			    ->where(['TfImi.imicode = ' => $imiNum] )
+			    ->where(['TfImi.imicode' => $imiNum] )
 			    ->first();
-		    
+		    //和暦セット
 		    $year = $imitation['mf_exa']->jap_year;
 		    $this->set(compact('year'));
 		    //デバッグ用
 		    $this->set(compact('imitation'));
+		    //季節セット
 		    $season = $imitation['mf_exa']['exaname'];
 		    $this->set(compact('season'));
-		    //現在のページ番号をセット
-		    $this->set(compact('curNum'));
-		    
+
+		    $this->loadModel('MfQes');
+		    $questions = $this->MfQes->find()
+			    ->where(['MfQes.exanum' => $imitation['mf_exa']->exanum])
+			    ->offset( ($curNum - 1) * 10 )
+			    ->limit( 10 )
+			    ->toArray();
+		    $this->set(compact('questions'));
+
 		    //POSTメソッドであるときは回答を入力しているので
 		    if ($this->request->is('post')) {
 		    	$answers = [];

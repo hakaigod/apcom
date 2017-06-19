@@ -1,18 +1,26 @@
-<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
-<?= $this->Html->script('video.js') ?>
-<?= $this->Html->script('flat-ui.min.js') ?>
-
-<?= $this->Html->css('bootstrap.min.css') ?>
-<?= $this->Html->css('flat-ui.css') ?>
+<?= $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
+<?= $this->end(); ?>
+
+<?= $this->start('sidebar'); ?>
+<tr class="info"><td><a href="<?= $this->request->webroot ?>/Manager">トップページ</a></td></tr>
+<tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
+<tr><td><a href="#">管理者管理</a></td></tr>
+<?= $this->end(); ?>
+
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
 <form action="" method="post">
     <table class="table table-bordered table-striped table-hover">
-		<?= $this->Html->tableHeaders(['問題番号', '解答','自信度']); ?>
+		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
-                <td><?= ($curNum - 1) * 10 + $i ?></td>
-                <td>
+                <td class="col-xs-1">
+                    <?= ($curNum - 1) * 10 + $i ?>
+                </td>
+                <td class="col-xs-3">
+                    <?= mb_substr($questions[ $i - 1 ]['question'], 0, 10)?>...
+                </td>
+                <td class="col-xs-5">
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
                             <input type="radio" name="<?= $answerTag ="answer_{$i}" ?>" autocomplete="off" value="1"> ア
@@ -31,7 +39,7 @@
                         </label>
                     </div>
                 </td>
-                <td>
+                <td class="col-xs-3">
                     <div data-toggle="buttons">
                         <label class="btn btn-info">
                             <input type="radio" name="<?= $confTag = "confidence_{$i}" ?>" autocomplete="off" value="1"> o

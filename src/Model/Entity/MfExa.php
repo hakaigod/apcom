@@ -29,4 +29,7 @@ class MfExa extends Entity
 	public function _getJapYear () {
 		return $this->get('exa_year')->format('Y') - 2000 + 12;
 	}
+	public function _getAdYear () {
+		return $this->get('exa_year')->format('Y');
+	}
 }
