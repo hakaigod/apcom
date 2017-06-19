@@ -12,14 +12,18 @@
 		<label><?= $this->fetch('title')?></label>
 	</div>
 	<form action="" method="post">
+		<!-- 学籍番号 -->
 		<input type="text" name="strno" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
+		<!-- 名前 -->
 		<input type="text" name="strname" class="form-control" placeholder="氏名" value="<?= $regnum->stuname; ?>">
-		<select class="form-control select select-primary full" data-toggle="select">
+		<!-- 学科 -->
+		<select class="form-control select select-primary full" data-toggle="select" name="depnum">
 			<?php foreach ($deps as $dep): ?>
 				<option value="<?= $dep->depnum; ?>" <?= $dep->depnum == $regnum->depnum ? "selected" : ""; ?>><?= $dep->depname; ?></option>
 			<?php endforeach; ?>
 		</select>
-		<select class="form-control select select-primary full" data-toggle="select">
+		<!-- 学年 -->
+		<select class="form-control select select-primary full" data-toggle="select" name="old">
 			<?php for ($i = 1; $i <= 3; $i++): ?>
 				<option value="<?= $i; ?>" <?= $i == $regnum->stuyear ? "selected" : ""; ?>><?= $i . "年"; ?></option>
 			<?php endfor; ?>

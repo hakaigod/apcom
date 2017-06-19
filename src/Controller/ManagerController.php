@@ -41,6 +41,9 @@ class ManagerController extends AppController
 				'table' => 'mf_dep',
 				'type' => 'INNER',
 				'conditions' => 'mf_stu.depnum = mf_dep.depnum'
+			])
+			->order([
+				'regnum' => 'DESC'
 			]);
 		// where
 		$del_flg = $gra_flg = FALSE;
@@ -48,12 +51,8 @@ class ManagerController extends AppController
 			if (!empty($_POST['regnum'])) {
 				$query -> where(['regnum' => $this->request->data('regnum')]);
 			} else {
-				if (!empty($_POST['deleted_flg'])) {
-					$del_flg = TRUE;
-				}
-				if (!empty($_POST['graduate_flg'])) {
-					$gra_flg= TRUE;
-				}
+				$del_flg = !empty($_POST['deleted_flg']);
+				$gra_flg= !empty($_POST['graduate_flg']);
 				if ($_POST['depnum'] != '0'){
 					$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
 				}
@@ -65,7 +64,7 @@ class ManagerController extends AppController
 		$query -> where(['mf_stu.deleted_flg' => $del_flg]);
 		$query -> where(['graduate_flg' => $gra_flg]);
 
-		$query ->order(['regnum' => 'DESC']);
+		// $query ;
 		$this->set('records', $query);
 
 		// 在学中学生学年一覧
@@ -90,14 +89,23 @@ class ManagerController extends AppController
 		// 学科一覧
 		$this->set('deps', $mf_dep->find());
 
-		// $query ->update()
-		// 	->set([
-		// 		'regnum' => $_POST['strno'],
-		// 		'stuname' => $_POST['strname'],
-		// 		'stuyear' => $_POST['old'],
-		// 		'depnum' => $_POST['old']
-		// 	])
-		// 	->where(['regnum' => $_GET['id']]);
+		if (!empty($_POST)) {
+			$query = $mf_stu->query();
+			$query->update();
+			$query->set([
+				'regnum' => $_POST['strno'],
+				'stuname' => $_POST['strname'],
+				'stuyear' => $_POST['old'],
+				'depnum' => $_POST['depnum']
+			]);
+			$query->where(['regnum' => $_GET['id']]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+			}
+		}
 	}
 
 	public function adminmanager()
