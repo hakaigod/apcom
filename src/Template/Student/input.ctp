@@ -15,10 +15,10 @@
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
                 <td class="col-xs-1 center">
-                    <?= $questions[ $i - 1 ]['qesnum'] ?>
+					<?= $questions[ $i - 1 ]['qesnum'] ?>
                 </td>
                 <td class="col-xs-3">
-                    <?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
+					<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
                     ...
                 </td>
                 <td class="col-xs-5 center">
@@ -56,20 +56,22 @@
             </tr>
 		<?php endforeach; ?>
     </table>
-<br>
-<?php
-foreach (range(1, 8) as $buttonNum ) {
-    $btnClass =  "btn btn-info ";
-    //現在のページのボタンの色を濃くする
-    if ( $buttonNum == $curNum ) {
-        $btnClass .= "active";
-    }
-    //formactionは遷移先
-    echo "<button type='submit' name='buttonNum' value='{$buttonNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
-    echo "{$buttonNum}</button>";
+    <br>
+	<div class="center">
+	<?php
+	foreach (range(1, 8) as $buttonNum ) {
+		$btnClass =  "btn btn-info ";
+		//現在のページのボタンの色を濃くする
+		if ( $buttonNum == $curNum ) {
+			$btnClass .= "active";
+		}
+		//formactionは遷移先
+		echo "<button type='submit' name='buttonNum' value='{$buttonNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
+		echo "{$buttonNum}</button>";
 //    echo $this->Html->link( $linkNum, ['action' => 'input', $season , $linkNum],["class" => $btnClass]);
-}
-?>
+	}
+	?>
+    </div>
 </form>
 
 <br><br><br><br><br><br><br><br>
