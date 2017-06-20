@@ -35,84 +35,88 @@
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
+<!--                問題番号-->
                 <td class="col-xs-1 center">
 					<?= $qNum = $questions[ $i - 1 ]['qesnum'] ?>
                 </td>
+<!--                問題文(最初の10文字のみ)-->
                 <td class="col-xs-3">
 					<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
                     ...
                 </td>
+<!--                解答-->
                 <td class="col-xs-5 center">
                     <div data-toggle="buttons">
-	                    <?php
-	                    $ansChoices = ['ア','イ','ウ','エ','未記入'];
-                        $answerTag = 'answer_' . $qNum;
-                        //前回入力されていた答え
-	                    $inputtedAns = $inputtedLog['answers'][$qNum];
-	                    for($x = 0; $x < sizeof($ansChoices); $x++ ) {
-	                        //未入力は0にするため
-		                    $value = ($x + 1) % sizeof($ansChoices);
-		                    //もし選択されていたら見た目に反映するためクラスを変更する
-		                    if ($inputtedAns == $value) {
-		                        $active = 'active ';
-		                        $checked = 'checked ';
-                            }else{
-		                        $active = $checked ="";
-                            }
-                            
-	                        echo "<label class=\"btn btn-info {$active}\">";
-		                    echo "<input type=\"radio\" name=\"{$answerTag}\" "
-                                .$checked ."autocomplete=\"off\" value=\"{$value}\">"
-                                . $ansChoices[$x];
-		                    echo '</label>';
-	                    }
-	                    ?>
+						<?php
+						$ansChoices = ['ア','イ','ウ','エ','未記入'];
+						$answerTag = 'answer_' . $qNum;
+						//前回入力されていた答え
+						$inputtedAns = $inputtedLog['answers'][$qNum];
+						for($x = 0; $x < sizeof($ansChoices); $x++ ) {
+							//未入力は0にするため
+							$value = ($x + 1) % sizeof($ansChoices);
+							//もし選択されていたら見た目に反映するためクラスを変更する
+							if ($inputtedAns == $value) {
+								$active = 'active ';
+								$checked = 'checked ';
+							}else{
+								$active = $checked ="";
+							}
+							
+							echo "<label class=\"btn btn-info {$active}\">";
+							echo "<input type=\"radio\" name=\"{$answerTag}\" "
+								.$checked ."autocomplete=\"off\" value=\"{$value}\">"
+								. $ansChoices[$x];
+							echo '</label>';
+						}
+						?>
                     </div>
                 </td>
+<!--                自信度-->
                 <td class="col-xs-3 center">
                     <div data-toggle="buttons">
-                        <?php
-                        $confChoices = ['o','△','X'];
-                        $confTag = "confidence_{$qNum}";
-                        //前回入力されていた自信度
-                        $inputtedConf = $inputtedLog['confidences'][$qNum];
-                        //1,2,3の範囲
-                        foreach ( range(1,sizeof($confChoices)) as $y ) {
-                            //前回入力されていた値の場合はボタンをアクティブにする
-                            if ($y == $inputtedConf) {
-                                $checked = 'checked';
-                                $active = 'active';
-                            }else{
-                                $checked = '';
-                                $active = '';
-                            }
-	                        echo "<label class=\"btn btn-info {$active}\" >";
-                            echo "<input type=\"radio\" name=\"{$confTag}\" "
-                            ."autocomplete=\"off\" {$checked} value=\"{$y}\">";
-                            echo $confChoices[$y - 1];
-	                        echo '</label>';
-                        }
-                        
-                        ?>
+						<?php
+						$confChoices = ['o','△','X'];
+						$confTag = "confidence_{$qNum}";
+						//前回入力されていた自信度
+						$inputtedConf = $inputtedLog['confidences'][$qNum];
+						//1,2,3の範囲
+						foreach ( range(1,sizeof($confChoices)) as $y ) {
+							//前回入力されていた値の場合はボタンをアクティブにする
+							if ($y == $inputtedConf) {
+								$checked = 'checked';
+								$active = 'active';
+							}else{
+								$checked = '';
+								$active = '';
+							}
+							echo "<label class=\"btn btn-info {$active}\" >";
+							echo "<input type=\"radio\" name=\"{$confTag}\" "
+								."autocomplete=\"off\" {$checked} value=\"{$y}\">";
+							echo $confChoices[$y - 1];
+							echo '</label>';
+						}
+						
+						?>
                     </div>
                 </td>
             </tr>
 		<?php endforeach; ?>
     </table>
     <br>
-	<div class="center">
-	<?php
-	foreach (range(1, 8) as $buttonNum ) {
-		$btnClass =  "btn btn-info ";
-		//現在のページのボタンの色を濃くする
-		if ( $buttonNum == $curNum ) {
-			$btnClass .= "active";
+    <div class="center">
+		<?php
+		foreach (range(1, 8) as $buttonNum ) {
+			$btnClass =  "btn btn-info ";
+			//現在のページのボタンの色を濃くする
+			if ( $buttonNum == $curNum ) {
+				$btnClass .= "active";
+			}
+			//formactionは遷移先
+			echo "<button type='submit' name='curNum' value='{$curNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
+			echo "{$buttonNum}</button>";
 		}
-		//formactionは遷移先
-		echo "<button type='submit' name='curNum' value='{$curNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
-		echo "{$buttonNum}</button>";
-	}
-	?>
+		?>
     </div>
 </form>
 
