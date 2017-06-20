@@ -1,29 +1,37 @@
+
+<?php
+/**
+ * @var \App\View\AppView $this
+ *
+ */
+?>
+
 <!-- タイトルセット -->
-<?= $this->start('title'); ?>
+<?php $this->start('title'); ?>
 学生メニュー
-<?= $this->end(); ?>
+<?php $this->end(); ?>
 
 <!-- CSSセット -->
-<?= $this->start('css'); ?>
+<?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Manager/index.css') ?>
-<?= $this->end(); ?>
+<?php $this->end(); ?>
 
 <!-- jsセット -->
-<?= $this->start('script'); ?>
+<?php $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<?= $this->end(); ?>
+<?php $this->end(); ?>
 
 <!-- ユーザーネームセット -->
-<?= $this->start('username');
+<?php $this->start('username');
 echo $name->stuname;
 $this->end();
 ?>
 
 <!-- サイドバーセット -->
-<?= $this->start('sidebar'); ?>
+<?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request->webroot ?>/Student">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
-<?= $this->end(); ?>
+<?php $this->end(); ?>
 
 <?= $session->read('StudentID'); ?>
 <!--グラフを表示する要素-->

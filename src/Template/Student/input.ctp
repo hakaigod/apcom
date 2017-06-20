@@ -1,12 +1,33 @@
-<?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Input/input.css') ?>
-<?= $this->end(); ?>
 
-<?= $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->webroot ?>/Manager">トップページ</a></td></tr>
+<?php
+/**
+ * [模擬試験結果の入力を行う]
+ *
+ * @var \App\View\AppView $this
+ * この模擬試験の基が行われた年
+ * @var Integer $year
+ * この模擬試験の基が行われた季節
+ * @var String $season
+ * DBから取得した問題一覧
+ * @var \App\Model\Entity\MfQe[][] $questions
+ * 過去に入力されていた解答と自信度
+ * @var array $inputtedLog
+ * 現在表示しているページ番号 currentNum
+ * @var Integer $curNum
+ *
+ */
+?>
+
+<?php $this->start('css'); ?>
+
+<?= $this->Html->css('/private/css/Input/input.css') ?>
+<?php $this->end(); ?>
+
+<?php $this->start('sidebar'); ?>
+<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <tr><td><a href="#">管理者管理</a></td></tr>
-<?= $this->end(); ?>
+<?php $this->end(); ?>
 
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
 <form action="" method="post">
@@ -52,11 +73,12 @@
                     <div data-toggle="buttons">
                         <?php
                         $confChoices = ['o','△','X'];
-                        $inputtedConf = $inputtedLog['confidences'][$qNum];
-                        //前回入力されていた自信度
                         $confTag = "confidence_{$qNum}";
-                        //1,2,3
+                        //前回入力されていた自信度
+                        $inputtedConf = $inputtedLog['confidences'][$qNum];
+                        //1,2,3の範囲
                         foreach ( range(1,sizeof($confChoices)) as $y ) {
+                            //前回入力されていた値の場合はボタンをアクティブにする
                             if ($y == $inputtedConf) {
                                 $checked = 'checked';
                                 $active = 'active';
@@ -89,7 +111,6 @@
 		//formactionは遷移先
 		echo "<button type='submit' name='curNum' value='{$curNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
 		echo "{$buttonNum}</button>";
-//    echo $this->Html->link( $linkNum, ['action' => 'input', $season , $linkNum],["class" => $btnClass]);
 	}
 	?>
     </div>
