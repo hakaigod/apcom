@@ -23,7 +23,7 @@ class StudentController extends AppController
 	    $regnum = $this->request->getParam('id');
 	    //左上のロゴのURL設定
 	    $this->set("headerlink", $this->request->getAttribute('webroot') . "Student/" . $regnum);
-		$session =     $this->request->session();
+		$session = $this->request->session();
 	    $session->write('StudentID', $regnum);
 	    $this->set(compact('session'));
 	    //回答モデル読み込み
@@ -87,16 +87,17 @@ class StudentController extends AppController
 			    foreach (range(1,10) as $qNum ){
 				    $answer = $this->request->getData("answer_{$qNum}");
 				    $confidence = $this->request->getData("confidence_{$qNum}");
+				    
+				    
+				    
 				    array_push($answers, $answer);
 				    array_push($confidences, $confidence);
 			    }
 			    $this->set(compact('answers'));
 			    $this->set(compact('confidences'));
-
-//
-//			    $qnum = $this->request->getData('linkNum');
-//			    $session = $this->request->session();
-//			    $session->write('answers.' . ,2);
+			    $qnum = $this->request->getData('linkNum');
+			    $session = $this->request->session();
+			    $session->write('answers.' . ,2);
 		    }else{
 				
 		    }
