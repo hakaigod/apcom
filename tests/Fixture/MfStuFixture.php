@@ -24,7 +24,7 @@ class MfStuFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'regnum' => ['type' => 'string', 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'stuname' => ['type' => 'string', 'length' => 20, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'stuyear' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'stupass' => ['type' => 'string', 'length' => 40, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -49,12 +49,12 @@ class MfStuFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '6ffef49e-5c6d-49db-a17b-d91f8db91bc4',
+            'regnum' => '225113d0-be9c-45a9-9056-1fb8500baca0',
             'stuname' => 'Lorem ipsum dolor ',
             'stuyear' => 1,
             'stupass' => 'Lorem ipsum dolor sit amet',
             'depnum' => 'Lorem ipsum dolor sit ame',
-            'last_update' => 1497331217,
+            'last_update' => 1497923674,
             'graduate_flg' => 1,
             'deleted_flg' => 1
         ],

@@ -16,7 +16,7 @@ managerrrrr
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
 	<tr><td><a href="">学生情報閲覧</a></td></tr>
-	<tr><td><a href="" onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
+	<tr><td><a onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
 	<tr><td><a href="">学生パスワード再発行</a></td></tr>
 <?= $this->end(); ?>
 
@@ -45,20 +45,20 @@ managerrrrr
 			<td class="col-xs-3">
 				<select class="form-control select select-primary full" data-toggle="select" name="stuyear">
 					<option value="0">全学年</option>
-					<?php foreach ($years as $year): ?>
-						<option value="<?= $year->stuyear; ?>" <?= @$_POST['stuyear'] == $year->stuyear ? 'selected' : ''; ?>><?= $year->stuyear . "年"; ?></option>
-					<?php endforeach; ?>
+					<?php for ($i=1; $i <= 3; $i++): ?>
+						<option value="<?= $i; ?>" <?= @$_POST['stuyear'] == $i ? 'selected' : ''; ?>><?= $i . "年"; ?></option>
+					<?php endfor; ?>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class="col-xs-3">卒業フラグ</td>
+			<td class="col-xs-3">卒業フラグ含む</td>
 			<td class="col-xs-3">
 				<label class="checkbox">
 					<input type="checkbox" data-toggle="checkbox" name="graduate_flg">
 				</label>
 			</td>
-			<td class="col-xs-3">削除済み</td>
+			<td class="col-xs-3">削除済み含む</td>
 			<td class="col-xs-3">
 				<label class="checkbox">
 					<input type="checkbox" data-toggle="checkbox" name="deleted_flg">

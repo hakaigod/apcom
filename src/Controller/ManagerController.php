@@ -6,6 +6,7 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
+use \Exception;
 
 class ManagerController extends AppController
 {
@@ -13,6 +14,12 @@ class ManagerController extends AppController
 		parent::initialize();
 		// $this->viewBuilder()->layout('default');
 		$this->set('headerlink', $this->request->webroot . 'Manager');
+		$this->loadmodel('MfDep');
+		$this->loadmodel('MfStu');
+		$this->loadmodel('MfAdm');
+	}
+	public function depset() {
+
 	}
 
 	public function index()
@@ -21,80 +28,73 @@ class ManagerController extends AppController
 
 	public function strmanager()
 	{
-		$mf_dep = TableRegistry::get('mf_dep');
 		// 学科一覧
-		$this->set('deps', $mf_dep->find());
+		$this->set('deps', $this->MfDep->find());
 
-		$mf_stu = TableRegistry::get('mf_stu');
 		// 学生一覧
-		$query = $mf_stu->find();
-		$query
-			->select([
-				'regnum',
-				'stuname',
-				'mf_dep.depname',
-				'stuyear',
-				'graduate_flg',
-				'mf_stu.deleted_flg'
-			])
-			->join([
-				'table' => 'mf_dep',
-				'type' => 'INNER',
-				'conditions' => 'mf_stu.depnum = mf_dep.depnum'
-			])
-			->order([
-				'regnum' => 'DESC'
-			]);
+		$query = $this->MfStu->find()->contain(['MfDep']);
+		$query ->order(['regnum' => 'DESC']);
+
 		// where
 		if (!empty($_POST)) {
 			if (!empty($_POST['regnum'])) {
 				$query -> where(['regnum' => $this->request->data('regnum')]);
 			} else {
 				if ($_POST['depnum'] != '0'){
-					$query -> where(['mf_stu.depnum' => $_POST['depnum']]);
+					$query -> where(['MfStu.depnum' => $_POST['depnum']]);
 				}
 				if ($_POST['stuyear'] != '0') {
 					$query -> where(['stuyear' => $_POST['stuyear']]);
 				}
 				if (empty($_POST['deleted_flg'])) {
-					$query -> where(['mf_stu.deleted_flg' => FALSE]);
+					$query -> where(['MfStu.deleted_flg' => FALSE]);
 				}
 				if (empty($_POST['graduate_flg'])) {
 					$query -> where(['graduate_flg' => FALSE]);
 				}
 			}
 		} else {
-			$query -> where(['mf_stu.deleted_flg' => FALSE]);
+			$query -> where(['MfStu.deleted_flg' => FALSE]);
 			$query -> where(['graduate_flg' => FALSE]);
 		}
 
 		// $query ;
 		$this->set('records', $query);
-
-		// 在学中学生学年一覧
-		$query = $mf_stu->find()
-			->select('stuyear')
-			->distinct('stuyear');
-		$this->set('years', $query);
-
 	}
 	public function addstr()
 	{
 		$this->viewBuilder()->layout('addmod');
+
+		$this->set('deps', $this->MfDep->find());
+		if (!empty($_POST)) {
+			$query = $this->MfStu->query();
+			$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
+			$query->values([
+				'regnum' => $_POST['strno'],
+				'stuname' => $_POST['strname'],
+				'stuyear' => $_POST['old'],
+				'depnum' => $_POST['depnum'],
+				'stupass' => ""
+			]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+			}
+		}
 	}
 	public function modstr()
 	{
 		$this->viewBuilder()->layout('addmod');
 
-		$mf_stu = TableRegistry::get('mf_stu');
-		$mf_dep = TableRegistry::get('mf_dep');
 		// 学生情報
-		$this->set('regnum', $mf_stu->get($_GET['id']));
+		$this->set('regnum', $this->MfStu->get($_GET['id']));
 		// 学科一覧
-		$this->set('deps', $mf_dep->find());
+		$this->set('deps', $this->MfDep->find());
 
 		if (!empty($_POST)) {
-			$query = $mf_stu->query();
+			$query = $this->MfStu->query();
 			$query->update();
 			$query->set([
 				'regnum' => $_POST['strno'],
@@ -114,9 +114,8 @@ class ManagerController extends AppController
 
 	public function adminmanager()
 	{
-		$mf_adm = TableRegistry::get('mf_adm');
 		// 管理者一覧
-		$query = $mf_adm->find();
+		$query = $this->MfAdm->find();
 		// where
 		if (empty($this->request->data('admnum'))) {
 			if ($this->request->data('deleted_flg')) {
@@ -134,8 +133,7 @@ class ManagerController extends AppController
 	{
 		$this->viewBuilder()->layout('addmod');
 
-		$mf_adm = TableRegistry::get('mf_adm');
-		$query = $mf_adm->get($_GET['id']);
+		$query = $this->MfAdm->get($_GET['id']);
 		$this->set('admnum', $query);
 	}
 	public function addadmin()
