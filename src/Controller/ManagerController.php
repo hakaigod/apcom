@@ -40,6 +40,9 @@ class ManagerController extends AppController
 			if (!empty($_POST['regnum'])) {
 				$query -> where(['regnum' => $this->request->data('regnum')]);
 			} else {
+				if (!empty($_POST['admname'])) {
+					$query -> where(['admname LIKE' => '%'.$_POST['admname'].'%']);
+				}
 				if ($_POST['depnum'] != '0'){
 					$query -> where(['MfStu.depnum' => $_POST['depnum']]);
 				}
@@ -89,7 +92,13 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// 学生情報
-		$this->set('regnum', $this->MfStu->get($_GET['id']));
+		try {
+			$this->set('regnum', $this->MfStu->get($_GET['id']));
+		} catch (Exception $e) {
+			// 学籍番号更新後、画面更新せずに編集ボタンを押した場合エラーが起きる
+			die('Student Not Found.');
+		}
+
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find());
 
@@ -107,9 +116,11 @@ class ManagerController extends AppController
 			$query->where(['regnum' => $_GET['id']]);
 			try {
 				$query->execute();
+				$this->redirect('/Manager/modstr?id='.$_POST['strno']);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing');
+				$this->set('regnum', $this->MfStu->get($_GET['id']));
 			}
 		}
 	}

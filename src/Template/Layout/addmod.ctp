@@ -31,7 +31,9 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
 <div class="container-fluid">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="#">応用情報 ど.com</a>
+		<a class="navbar-brand" href="<?= $headerlink; ?>">
+			<img src="<?= $this->request->webroot ?>img/logo.png" class="nabvar-img">
+		</a>
 	</div>
 </div>
 </nav>
