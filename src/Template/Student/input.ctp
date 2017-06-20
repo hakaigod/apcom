@@ -62,7 +62,6 @@
 							}else{
 								$active = $checked ="";
 							}
-							
 							echo "<label class=\"btn btn-info {$active}\">";
 							echo "<input type=\"radio\" name=\"{$answerTag}\" "
 								.$checked ."autocomplete=\"off\" value=\"{$value}\">"
@@ -87,8 +86,7 @@
 								$checked = 'checked';
 								$active = 'active';
 							}else{
-								$checked = '';
-								$active = '';
+								$checked = $active = '';
 							}
 							echo "<label class=\"btn btn-info {$active}\" >";
 							echo "<input type=\"radio\" name=\"{$confTag}\" "
@@ -96,7 +94,6 @@
 							echo $confChoices[$y - 1];
 							echo '</label>';
 						}
-						
 						?>
                     </div>
                 </td>
