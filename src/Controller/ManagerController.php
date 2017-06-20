@@ -23,7 +23,8 @@ class ManagerController extends AppController
 	public function index()
 	{
 		$query = $this->TfSum->find()->contain(['MfStu']);
-		$query ->order(['TfSum.regnum' => 'DESC']);
+		$query ->order(['TfSum.regnum' => 'DESC'])
+		->where(['imicode' => 2]);
 		$this->set('students', $query);
 
 		$queryAvg = $this->TfSum->find();
@@ -37,20 +38,24 @@ class ManagerController extends AppController
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
 
-		$ansers = array();
-		$i=0;
+		$answers = array();
+		$i=0; $work = null;
 		foreach ($ans as $key) {
-			$ansers += array($key->regnum =>
-					array('ans'.$i => $key->rejoinder)
-			);
+			switch ($key->rejoinder) {
+				case 1: $ansJa = 'ア';break;
+				case 2: $ansJa = 'イ';break;
+				case 3: $ansJa = 'ウ';break;
+				default: $ansJa = 'エ';break;
+			}
+			if ($work == $key->regnum) {
+				$answers[$key->regnum] += array('ans'. $i++ => $ansJa);
+			} else {
+				$answers += array($key->regnum => array('ans'. $i++ => $ansJa));
+			}
+			$work = $key->regnum;
 		}
-		print_r($ansers);
 
-		// $this->set('answers', $ansers);
-
-
-
-
+		$this->set('answers', $answers);
 
 	}
 

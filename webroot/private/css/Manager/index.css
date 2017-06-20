@@ -20,7 +20,7 @@
 		overflow-x: scroll;
 	}
 	#questions table thead tr td{
-		/*min-width: 60px;*/
+		min-width: 60px;
 		height: 30px;
 	}
 }

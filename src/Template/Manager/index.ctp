@@ -93,13 +93,13 @@
 			<tbody>
 				<?php foreach ($answers as $answer): ?>
 					<tr>
-						<?php foreach ($answers as $answer): ?>
-							<td><?= $answer->rejoinder; ?></td>
+						<?php foreach ($answer as $ans): ?>
+							<td><?= $ans; ?></td>
 						<?php endforeach; ?>
 					</tr>
 				<?php endforeach; ?>
 				<tr>
-					<?php for($j = 1; $j <= 10 ;$j++): ?>
+					<?php for($j = 1; $j <= 80 ;$j++): ?>
 						<td>平均</td>
 					<?php endfor;?>
 				</tr>
