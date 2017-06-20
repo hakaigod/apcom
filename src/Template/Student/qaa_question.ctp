@@ -63,7 +63,8 @@ Student
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
-                <!--ここに問題番号を表示-->
+            問：
+            <?= $num ?>
             </div>
         </div>
     </div>
@@ -97,7 +98,7 @@ Student
     <div class=""></div>
 
     <div class = "qaa-next">
-        <?= $this -> Form -> create(null,['type' => 'get','url' => ['action' => 'qaa-question']]) ?>
+        <?= $this -> Form -> create(null,['type' => 'post','url' => ['action' => '']]) ?>
         <?= $this -> Form -> submit("次の問題",array('type' => 'submit',  'class' => 'btn btn-warning','name' => 'cnt')) ?>
         <?= $this -> Form -> end(); ?>
     </div>
