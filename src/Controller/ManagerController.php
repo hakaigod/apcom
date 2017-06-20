@@ -100,7 +100,9 @@ class ManagerController extends AppController
 				'regnum' => $_POST['strno'],
 				'stuname' => $_POST['strname'],
 				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum']
+				'depnum' => $_POST['depnum'],
+				'deleted_flg' => !empty($_POST['deleted_flg']),
+				'graduate_flg' => !empty($_POST['graduate_flg'])
 			]);
 			$query->where(['regnum' => $_GET['id']]);
 			try {
@@ -117,14 +119,19 @@ class ManagerController extends AppController
 		// 管理者一覧
 		$query = $this->MfAdm->find();
 		// where
-		if (empty($this->request->data('admnum'))) {
-			if ($this->request->data('deleted_flg')) {
-				$query -> where(['deleted_flg' => true]);
+		if (!empty($_POST)) {
+			if (!empty($_POST['admnum'])) {
+				$query -> where(['admnum' => $this->request->data('admnum')]);
 			} else {
-				$query -> where(['deleted_flg' => false]);
+				if (!empty($_POST['admname'])) {
+					$query -> where(['admname LIKE' => '%'.$_POST['admname'].'%']);
+				}
+				if (empty($_POST['deleted_flg'])) {
+					$query -> where(['deleted_flg' => FALSE]);
+				}
 			}
-		}else{
-			$query -> where(['admnum' => $this->request->data('admnum')]);
+		} else {
+			$query -> where(['deleted_flg' => FALSE]);
 		}
 
 		$this->set('admins', $query);

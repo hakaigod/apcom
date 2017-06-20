@@ -15,7 +15,7 @@ managerrrrr
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a href="" onclick="window.open('addadmin','管理者情報追加','width=500,height=400,scrollbars=yes');">管理者情報追加</a></td></tr>
+	<tr><td><a href="" onclick="window.open('addadmin','管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->
@@ -30,7 +30,7 @@ managerrrrr
 			<td><input type="text" class="form-control" name="admname"></td>
 		</tr>
 		<tr>
-			<td class="col-xs-3">削除済み</td>
+			<td class="col-xs-3">削除済み含む</td>
 			<td class="col-xs-3">
 				<label class="checkbox">
 					<input type="checkbox" data-toggle="checkbox" name="deleted_flg">
