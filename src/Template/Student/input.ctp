@@ -28,11 +28,13 @@
                         $answerTag = 'answer_' . $qNum;
 	                    $inputted = $inputtedLog['answers'][$qNum];
 	                    for($x = 0; $x < sizeof($choices); $x++ ) {
-		                    
-	                        echo '<label class="btn btn-info">';
-		                    
-	                        $checked = ($inputted == $x) ? 'checked ' :"";
+	                     
 		                    $value = ($x + 1) % sizeof($choices);
+		                    $active = ($inputted == $value) ? 'active ' :"";
+	                        
+	                        echo "<label class=\"btn btn-info {$active}\">";
+		                    
+	                        $checked = ($inputted == $value) ? 'checked ' :"";
 	                     
 		                    echo '<input type="radio" '
                                 ."name=\"{$answerTag}\" "
