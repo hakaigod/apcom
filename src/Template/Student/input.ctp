@@ -24,25 +24,25 @@
                 <td class="col-xs-5 center">
                     <div data-toggle="buttons">
 	                    <?php
-	                    $choices = ['ア','イ','ウ','エ','未記入'];
+	                    $ansChoices = ['ア','イ','ウ','エ','未記入'];
                         $answerTag = 'answer_' . $qNum;
-	                    $inputted = $inputtedLog['answers'][$qNum];
-	                    for($x = 0; $x < sizeof($choices); $x++ ) {
-	                     
-		                    $value = ($x + 1) % sizeof($choices);
-		                    $active = ($inputted == $value) ? 'active ' :"";
-	                        
+                        //前回入力されていた答え
+	                    $inputtedAns = $inputtedLog['answers'][$qNum];
+	                    for($x = 0; $x < sizeof($ansChoices); $x++ ) {
+	                        //未入力は0にするため
+		                    $value = ($x + 1) % sizeof($ansChoices);
+		                    //もし選択されていたら見た目に反映するためクラスを変更する
+		                    if ($inputtedAns == $value) {
+		                        $active = 'active ';
+		                        $checked = 'checked ';
+                            }else{
+		                        $active = $checked ="";
+                            }
+                            
 	                        echo "<label class=\"btn btn-info {$active}\">";
-		                    
-	                        $checked = ($inputted == $value) ? 'checked ' :"";
-	                     
-		                    echo '<input type="radio" '
-                                ."name=\"{$answerTag}\" "
-                                .$checked
-                                ."autocomplete=\"off\" " .
-			                    //未記入は0
-                                "value=\"{$value}\">"
-                                . $choices[$x];
+		                    echo "<input type=\"radio\" name=\"{$answerTag}\" "
+                                .$checked ."autocomplete=\"off\" value=\"{$value}\">"
+                                . $ansChoices[$x];
 		                    echo '</label>';
 	                    }
 	                    ?>
@@ -50,15 +50,28 @@
                 </td>
                 <td class="col-xs-3 center">
                     <div data-toggle="buttons">
-                        <label class="btn btn-info">
-                            <input type="radio" name="<?= $confTag = "confidence_{$qNum}" ?>" autocomplete="off" value="1"> o
-                        </label>
-                        <label class="btn btn-info active">
-                            <input type="radio" name="<?= $confTag ?>" autocomplete="off" checked value="2"> △
-                        </label>
-                        <label class="btn btn-info">
-                            <input type="radio" name="<?= $confTag ?>" autocomplete="off" value="3"> x
-                        </label>
+                        <?php
+                        $confChoices = ['o','△','X'];
+                        $inputtedConf = $inputtedLog['confidences'][$qNum];
+                        //前回入力されていた自信度
+                        $confTag = "confidence_{$qNum}";
+                        //1,2,3
+                        foreach ( range(1,sizeof($confChoices)) as $y ) {
+                            if ($y == $inputtedConf) {
+                                $checked = 'checked';
+                                $active = 'active';
+                            }else{
+                                $checked = '';
+                                $active = '';
+                            }
+	                        echo "<label class=\"btn btn-info {$active}\" >";
+                            echo "<input type=\"radio\" name=\"{$confTag}\" "
+                            ."autocomplete=\"off\" {$checked} value=\"{$y}\">";
+                            echo $confChoices[$y - 1];
+	                        echo '</label>';
+                        }
+                        
+                        ?>
                     </div>
                 </td>
             </tr>
