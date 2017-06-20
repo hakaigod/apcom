@@ -68,11 +68,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php for ($i=0; $i < 20 ; $i++): ?>
+				<?php foreach ($students as $student): ?>
 					<tr>
-						<td>15110004</td><td>一二三　一二三</td><td>10</td>
+						<td><?= $student->regnum; ?></td>
+						<td><?= $student->mf_stu['stuname']; ?></td>
+						<td><?= $student->imisum; ?></td>
 					</tr>
-				<?php endfor; ?>
+				<?php endforeach; ?>
 				<tr>
 					<td colspan="2">平均</td><td>平均</td>
 				</tr>

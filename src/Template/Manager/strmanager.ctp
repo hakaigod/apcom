@@ -71,7 +71,7 @@ managerrrrr
 	</button>
 </form>
 
-<table class="table table-bordered table-hover" id="strlist">
+<table class="table table-bordered table-hover table-striped" id="strlist">
 	<thead>
 		<td></td><td>学籍番号</td><td>氏名</td><td>学科</td><td>学年</td><td>卒業</td><td>削除</td>
 	</thead>

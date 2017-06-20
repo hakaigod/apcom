@@ -12,18 +12,19 @@ class ManagerController extends AppController
 {
 	public function initialize(){
 		parent::initialize();
-		// $this->viewBuilder()->layout('default');
 		$this->set('headerlink', $this->request->webroot . 'Manager');
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
-	}
-	public function depset() {
-
+		$this->loadmodel('TfSum');
 	}
 
 	public function index()
 	{
+		$query = $this->TfSum->find()->contain(['MfStu']);
+		$query ->order(['TfSum.regnum' => 'DESC']);
+
+		$this->set('students', $query);
 	}
 
 	public function strmanager()
@@ -151,11 +152,46 @@ class ManagerController extends AppController
 	{
 		$this->viewBuilder()->layout('addmod');
 
-		$query = $this->MfAdm->get($_GET['id']);
-		$this->set('admnum', $query);
+		// 管理者情報
+		$this->set('admnum', $this->MfAdm->get($_GET['id']));
+
+		if (!empty($_POST)) {
+			$query = $this->MfAdm->query();
+			$query->update();
+			$query->set([
+				'admname' => $_POST['admname'],
+				'deleted_flg' => !empty($_POST['deleted_flg'])
+			]);
+			$query->where(['admnum' => $_GET['id']]);
+			try {
+				$query->execute();
+				$this->redirect('/Manager/modadmin?id='.$_POST['admno']);
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+				$this->set('admnum', $this->MfAdm->get($_GET['id']));
+			}
+		}
 	}
 	public function addadmin()
 	{
+		$this->viewBuilder()->layout('addmod');
+
+		if (!empty($_POST)) {
+			$query = $this->MfAdm->query();
+			$query->insert(['admnum', 'admname', 'admpass']);
+			$query->values([
+				'admnum' => NULL,
+				'admname' => $_POST['admname'],
+				'admpass' => ""
+			]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+			}
+		}
 	}
 
 }
