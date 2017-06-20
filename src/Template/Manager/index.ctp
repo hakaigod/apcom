@@ -76,7 +76,7 @@
 					</tr>
 				<?php endforeach; ?>
 				<tr>
-					<td colspan="2">平均</td><td>平均</td>
+					<td colspan="2">平均</td><td><?= $average['average']; ?></td>
 				</tr>
 			</tbody>
 		</table>
@@ -85,19 +85,19 @@
 		<table class="table table-bordered center" >
 			<thead>
 				<tr>
-					<?php for($i = 1; $i <= 10 ;$i++): ?>
-						<td><?= $i; ?></td>
+					<?php for($i = 1; $i <= 80 ;$i++): ?>
+						<td><?= "問" . $i; ?></td>
 					<?php endfor;?>
 				</tr>
 			</thead>
 			<tbody>
-				<?php for ($i=0; $i < 20 ; $i++): ?>
+				<?php foreach ($answers as $answer): ?>
 					<tr>
-						<?php for($j = 1; $j <= 10 ;$j++): ?>
-							<td>イ</td>
-						<?php endfor;?>
+						<?php foreach ($answers as $answer): ?>
+							<td><?= $answer->rejoinder; ?></td>
+						<?php endforeach; ?>
 					</tr>
-				<?php endfor; ?>
+				<?php endforeach; ?>
 				<tr>
 					<?php for($j = 1; $j <= 10 ;$j++): ?>
 						<td>平均</td>

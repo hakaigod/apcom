@@ -17,14 +17,41 @@ class ManagerController extends AppController
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
 		$this->loadmodel('TfSum');
+		$this->loadmodel('TfAns');
 	}
 
 	public function index()
 	{
 		$query = $this->TfSum->find()->contain(['MfStu']);
 		$query ->order(['TfSum.regnum' => 'DESC']);
-
 		$this->set('students', $query);
+
+		$queryAvg = $this->TfSum->find();
+		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')]);
+		$aveArr = $queryAvg->toArray();
+		$this->set('average', array_shift ($aveArr));
+
+		$ans = $this->TfAns->find();
+		$ans ->select(['imicode', 'regnum', 'qesnum', 'rejoinder'])
+		->where(['imicode' => 2])
+		->group(['imicode', 'regnum', 'qesnum'])
+		->order(['regnum' =>'DESC','qesnum']);
+
+		$ansers = array();
+		$i=0;
+		foreach ($ans as $key) {
+			$ansers += array($key->regnum =>
+					array('ans'.$i => $key->rejoinder)
+			);
+		}
+		print_r($ansers);
+
+		// $this->set('answers', $ansers);
+
+
+
+
+
 	}
 
 	public function strmanager()
