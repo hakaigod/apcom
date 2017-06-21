@@ -37,6 +37,9 @@
 #AMresulttitle {
 	/*margin-top: 50px;*/
 }
+#answershead div div {
+	margin-top: -5px;
+}
 
 .select {
 	min-width: 0;
@@ -47,6 +50,7 @@
 }
 .font {
 	font-size: 45px;
+	margin: -40px 0 -40px 0;
 }
 .qno {
 	font-size: 30px;
@@ -59,4 +63,9 @@
 	position:relative;min-height:1px;padding-right:15px;padding-left:15px;
 	float:left;
 	width: 20%;
+	border: solid 1px #ddd;
+}
+.col-par-5 #question {
+	height: 60px;
+	font-size: 15px;
 }

@@ -13,6 +13,7 @@ class ManagerController extends AppController
 	public function initialize(){
 		parent::initialize();
 		$this->set('headerlink', $this->request->webroot . 'Manager');
+
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
@@ -20,11 +21,13 @@ class ManagerController extends AppController
 		$this->loadmodel('TfAns');
 		$this->loadmodel('MfExa');
 		$this->loadmodel('TfImi');
+		$this->loadmodel('MfQes');
 	}
 
 	// マネージャートップ画面
 	public function index()
 	{
+		//直近の模擬コード取得
 		$query = $this->TfImi->find();
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
 
@@ -46,7 +49,6 @@ class ManagerController extends AppController
 		->where(['imicode' => $nearimi])
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
-
 		// 回答データを連想配列に格納
 		$answers = array();
 		$i=0; $work = null;
@@ -66,6 +68,15 @@ class ManagerController extends AppController
 			$work = $key->regnum;
 		}
 		$this->set('answers', $answers);
+
+		$ans = $this->MfQes->find();
+		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
+		$ans ->select(['exanum', 'qesnum', 'question'])
+		->where(['exanum' => $exanum])
+		->order(['qesnum'])->toArray();
+
+		$this->set('questions', $ans);
+
 
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum', 'imp_date']);

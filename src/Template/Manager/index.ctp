@@ -11,6 +11,7 @@
 <!-- jsセット -->
 <?= $this->start('script'); ?>
 	<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+	<?= $this->Html->script('/private/js/Manager/autoload.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -27,9 +28,19 @@
 <?= $this->end(); ?>
 
 <!-- 以下content -->
-<h5 id="AMresulttitle">直近一回分試験結果</h5>
-※空白は回答なし
-<div class="row">
+<h5 id="answerstitle">直近一回分試験結果</h5>
+<div class="row" id="answershead">
+	<div class="col-xs-6">
+		※空白は回答なし
+	</div>
+	<div class="col-xs-6 right">
+		<div class="bootstrap-switch-square">
+			30秒更新
+			<input type="checkbox" data-toggle="switch" name="square-switch" id="load_switch" />
+		</div>
+	</div>
+</div>
+<div class="row" id="answers">
 	<div class="col-xs-6" id="AMresult">
 		<table class="table table-bordered full">
 			<thead>
@@ -75,27 +86,32 @@
 			</tbody>
 		</table>
 	</div>
+	<div class="right">
+		<button class="btn btn-info">CSV出力</button>
+	</div>
 </div>
 
 <div class="row">
-	<?php for ($qno=1; $qno <= 10; $qno++): ?>
+	<h6>正答率一覧</h6>
+	<?php foreach ($questions as $key): ?>
 		<div class="col-par-5">
-			<div class="qno">問 <?= $qno ?></div>
-			<div>問題文</div>
+			<div class="qno">問 <?= $key->qesnum; ?></div>
+			<div id="question"><?= mb_strimwidth(strip_tags($key->question), 0, 40, "..."); ?></div>
 			<div class="font"><b class="oooo">50</b>%</div>
 		</div>
-	<?php endfor; ?>
+	<?php endforeach; ?>
 </div>
 <div class="row">
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<td class="col-xs-6">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
+				<td class="col-xs-2">回数</td><td class="col-xs-4">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
 			</tr>
 		</thead>
 		<tbody>
 			<?php foreach ($imidata as $key => $value): ?>
 				<tr>
+					<td><?= $value['imi'];?></td>
 					<td><?= $value['name'] . ' ' .$value['num'] . '回目';?></td>
 					<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
 					<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'], 2);?></td>
