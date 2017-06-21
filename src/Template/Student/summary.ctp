@@ -35,8 +35,10 @@ $this->end();
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 
+<h3>学生メニュー</h3>
+
 <!--グラフを表示する要素-->
-<!--<canvas id="myChart"></canvas>-->
+<canvas id="myChart"></canvas>
 <!--canvasにグラフを設定するスクリプト-->
 <script>
 
@@ -47,13 +49,13 @@ $this->end();
             labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
             datasets: [{
                 label: 'apples',
-                data: [12, 19, 3, 17, 6, 3, 0],
+                data: <?= json_safe_encode(trimRow($sums, 'imisum'))?>,
                 backgroundColor: "rgba(0,0,0,1)",
                 fill: false,
                 lineTension: 0
             }, {
                 label: 'oranges',
-                data: [2, 29, 5, 5, 2, 3, 10],
+                data: <?= json_safe_encode(trimRow($sums, 'imisum'))?>,
                 backgroundColor: "rgba(0,0,0,1)",
                 fill: false,
                 lineTension: 0
@@ -77,3 +79,16 @@ $this->end();
         </tr>
 	<?php endforeach; ?>
 </table>
+<?php
+function trimRow($data,$rowName) {
+    $result=[];
+    foreach ($data as $item) {
+        $result[] = $item->get($rowName);
+    }
+    return $result;
+    
+}
+function json_safe_encode($data){
+	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+}
+?>
