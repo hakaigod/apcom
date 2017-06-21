@@ -99,7 +99,11 @@ Student
 
     <div class = "qaa-next">
         <?= $this -> Form -> create(null,['type' => 'post','url' => ['action' => '']]) ?>
-        <?= $this -> Form -> submit("次の問題",array('type' => 'submit',  'class' => 'btn btn-warning','name' => 'cnt')) ?>
+        <?= $this -> Form -> submit('次の問題',
+                ['type' => 'submit',
+                'class' => 'btn btn-warning',
+                'formaction' => '']) ?>
         <?= $this -> Form -> end(); ?>
     </div>
 </div>
+

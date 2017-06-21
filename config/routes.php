@@ -84,3 +84,5 @@ Router::scope('/', function (RouteBuilder $routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
+
+Router::connect('/student/:question_num',['Controller' => 'Student','action' => 'qaaQuestion'],['question_num' => '\d+']);
