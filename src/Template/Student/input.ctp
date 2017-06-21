@@ -144,18 +144,21 @@
 		}
         ?>
     </div>
+    <br>
+    <div class="center">
     <?php
     //完了ボタン
     if ($curNum == 8 ) {
 	    echo $this->Form->button('完了',[
 		    'type'=>'submit',
 		    'name'=>'curNum',
-		    'value'=>'confirm',
+		    'value'=>$curNum,
 		    'formaction'=>'confirm',
-		    'class'=>'btn btn-info end-btn fui-arrow-right'
+		    'class'=>'btn btn-success end-btn'
 	    ]);
     }
     ?>
+    </div>
 </form>
 
 <br><br><br><br><br><br><br><br>
