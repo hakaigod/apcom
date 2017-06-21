@@ -15,6 +15,7 @@
 	<!-- 自作CSS -->
 	<?= $this->Html->css('/private/css/default.css') ?>
 	<?= $this->Html->css('/private/css/flat_overwrite.css') ?>
+	<?= $this->Html->css('/private/css/Manager/addmod.css') ?>
 	<?= $this->fetch('css') ?>
 
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>

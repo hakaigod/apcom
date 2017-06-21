@@ -7,11 +7,6 @@
 managerrrrr
 <?= $this->end(); ?>
 
-<!-- CSSセット -->
-<?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/adminmanager.css') ?>
-<?= $this->end(); ?>
-
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>

@@ -3,10 +3,6 @@
 	学生情報修正
 <?= $this->end(); ?>
 
-<?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/addmod.css') ?>
-<?= $this->end(); ?>
-
 <div class="container-fluid">
 	<div class="center" id="label">
 		<label><?= $this->fetch('title')?></label>

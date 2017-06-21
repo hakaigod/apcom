@@ -3,11 +3,6 @@
 	管理者情報追加
 <?= $this->end(); ?>
 
-<!-- CSSセット -->
-<?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/addmod.css') ?>
-<?= $this->end(); ?>
-
 <div class="container-fluid">
 	<div class="center" id="label">
 		<label><?= $this->fetch('title')?></label>

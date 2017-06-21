@@ -35,7 +35,7 @@
 	height: 30px;
 }
 #AMresulttitle {
-	margin-top: 50px;
+	/*margin-top: 50px;*/
 }
 
 .select {
@@ -54,4 +54,9 @@
 
 *{
 	font-weight: 500;
+}
+.col-par-5 {
+	position:relative;min-height:1px;padding-right:15px;padding-left:15px;
+	float:left;
+	width: 20%;
 }

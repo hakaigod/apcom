@@ -18,30 +18,42 @@ class ManagerController extends AppController
 		$this->loadmodel('MfAdm');
 		$this->loadmodel('TfSum');
 		$this->loadmodel('TfAns');
+		$this->loadmodel('MfExa');
+		$this->loadmodel('TfImi');
 	}
 
+	// マネージャートップ画面
 	public function index()
 	{
+		//フィルタ　試験一覧・模擬試験一覧
+		$this->set('year', $this->MfExa->find('all'));
+		$this->set('imiexas', $this->TfImi->find()->select(['imicode'])->order(['imicode']));
+
+		// 受験済み学生表示用
 		$query = $this->TfSum->find()->contain(['MfStu']);
 		$query ->order(['TfSum.regnum' => 'DESC'])
 		->where(['imicode' => 2]);
 		$this->set('students', $query);
 
+		// 受験者平均点
 		$queryAvg = $this->TfSum->find();
-		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')]);
+		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => 2]);
 		$aveArr = $queryAvg->toArray();
 		$this->set('average', array_shift ($aveArr));
 
+		// 模擬試験ごとの回答データ取得
 		$ans = $this->TfAns->find();
 		$ans ->select(['imicode', 'regnum', 'qesnum', 'rejoinder'])
 		->where(['imicode' => 2])
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
 
+		// 回答データを連想配列に格納
 		$answers = array();
 		$i=0; $work = null;
 		foreach ($ans as $key) {
 			switch ($key->rejoinder) {
+				case 0: $ansJa = '';break;
 				case 1: $ansJa = 'ア';break;
 				case 2: $ansJa = 'イ';break;
 				case 3: $ansJa = 'ウ';break;
@@ -54,11 +66,25 @@ class ManagerController extends AppController
 			}
 			$work = $key->regnum;
 		}
-
 		$this->set('answers', $answers);
 
+		// 模擬試験一覧
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum', 'imp_date']);
+		$arrayimis = array();$work = null;
+		foreach ($imidata as $key) {
+			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
+			if($key->exanum == $work) {
+				$arrayimis += array($key->imicode => array('name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+			} else {
+				$i = 0;
+				$arrayimis += array($key->imicode => array('name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+			}
+			$work = $key->exanum;
+		}
+		$this->set('imidata', $arrayimis);
 	}
 
+	// 学生管理
 	public function strmanager()
 	{
 		// 学科一覧
@@ -110,7 +136,7 @@ class ManagerController extends AppController
 				'stuname' => $_POST['strname'],
 				'stuyear' => $_POST['old'],
 				'depnum' => $_POST['depnum'],
-				'stupass' => ""
+				'stupass' => ''
 			]);
 			try {
 				$query->execute();
@@ -158,6 +184,7 @@ class ManagerController extends AppController
 		}
 	}
 
+	// 管理者管理
 	public function adminmanager()
 	{
 		// 管理者一覧
@@ -179,6 +206,26 @@ class ManagerController extends AppController
 		}
 
 		$this->set('admins', $query);
+	}
+	public function addadmin()
+	{
+		$this->viewBuilder()->layout('addmod');
+
+		if (!empty($_POST)) {
+			$query = $this->MfAdm->query();
+			$query->insert(['admnum', 'admname', 'admpass']);
+			$query->values([
+				'admnum' => NULL,
+				'admname' => $_POST['admname'],
+				'admpass' => ''
+			]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+			}
+		}
 	}
 	public function modadmin()
 	{
@@ -205,25 +252,12 @@ class ManagerController extends AppController
 			}
 		}
 	}
-	public function addadmin()
-	{
+
+	public function imiCodeIssue() {
 		$this->viewBuilder()->layout('addmod');
 
-		if (!empty($_POST)) {
-			$query = $this->MfAdm->query();
-			$query->insert(['admnum', 'admname', 'admpass']);
-			$query->values([
-				'admnum' => NULL,
-				'admname' => $_POST['admname'],
-				'admpass' => ""
-			]);
-			try {
-				$query->execute();
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing');
-			}
-		}
+		$this->set('exams', $this->MfExa->find());
+
 	}
 
 }
