@@ -8,7 +8,6 @@
 ?>
 
 <?php $this->start('css'); ?>
-
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>
 

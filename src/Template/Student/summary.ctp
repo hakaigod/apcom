@@ -29,11 +29,10 @@ $this->end();
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->webroot ?>/Student">トップページ</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ?>/Student">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 
-<?= $session->read('StudentID'); ?>
 <!--グラフを表示する要素-->
 <canvas id="myChart"></canvas>
 <!--canvasにグラフを設定するスクリプト-->
