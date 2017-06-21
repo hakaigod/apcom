@@ -1,7 +1,6 @@
-
 <?php
 /**
- * [模擬試験結果の入力を行う]
+ * [模擬試験結果(各解答)の入力ページ]
  *
  * @var \App\View\AppView $this
  * この模擬試験の基が行われた年
@@ -93,7 +92,7 @@
 							}else{
 								$checked = $active = '';
 							}
-							if ($y == sizeof($confChoices) - 1) {
+							if ($y == sizeof($confChoices)) {
 							    $endBtn = 'end-btn';
                             }else{
 							    $endBtn = '';
