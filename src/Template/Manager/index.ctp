@@ -23,7 +23,7 @@
 	<tr class="info"><td><a href="">トップページ</a></td></tr>
 	<tr><td><a href="Manager/strmanager">学生情報管理</a></td></tr>
 	<tr><td><a href="Manager/adminmanager">管理者管理</a></td></tr>
-	<tr><td><a href="Manager" onclick="window.open('Manager/imicodeissue','模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a></td></tr>
+	<tr><td><a onclick="window.open('Manager/imicodeissue','模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->

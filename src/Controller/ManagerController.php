@@ -25,26 +25,25 @@ class ManagerController extends AppController
 	// マネージャートップ画面
 	public function index()
 	{
-		//フィルタ　試験一覧・模擬試験一覧
-		$this->set('year', $this->MfExa->find('all'));
-		$this->set('imiexas', $this->TfImi->find()->select(['imicode'])->order(['imicode']));
+		$query = $this->TfImi->find();
+		$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
 
 		// 受験済み学生表示用
 		$query = $this->TfSum->find()->contain(['MfStu']);
 		$query ->order(['TfSum.regnum' => 'DESC'])
-		->where(['imicode' => 2]);
+		->where(['imicode' => $nearimi]);
 		$this->set('students', $query);
 
 		// 受験者平均点
 		$queryAvg = $this->TfSum->find();
-		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => 2]);
+		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => $nearimi]);
 		$aveArr = $queryAvg->toArray();
 		$this->set('average', array_shift ($aveArr));
 
 		// 模擬試験ごとの回答データ取得
 		$ans = $this->TfAns->find();
 		$ans ->select(['imicode', 'regnum', 'qesnum', 'rejoinder'])
-		->where(['imicode' => 2])
+		->where(['imicode' => $nearimi])
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
 
@@ -74,13 +73,14 @@ class ManagerController extends AppController
 		foreach ($imidata as $key) {
 			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
 			if($key->exanum == $work) {
-				$arrayimis += array($key->imicode => array('name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+				$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
 			} else {
 				$i = 0;
-				$arrayimis += array($key->imicode => array('name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+				$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
 			}
 			$work = $key->exanum;
 		}
+		array_multisort($arrayimis, SORT_DESC);
 		$this->set('imidata', $arrayimis);
 	}
 
@@ -99,8 +99,8 @@ class ManagerController extends AppController
 			if (!empty($_POST['regnum'])) {
 				$query -> where(['regnum' => $this->request->data('regnum')]);
 			} else {
-				if (!empty($_POST['admname'])) {
-					$query -> where(['admname LIKE' => '%'.$_POST['admname'].'%']);
+				if (!empty($_POST['stuname'])) {
+					$query -> where(['stuname LIKE' => '%'.$_POST['stuname'].'%']);
 				}
 				if ($_POST['depnum'] != '0'){
 					$query -> where(['MfStu.depnum' => $_POST['depnum']]);
@@ -136,7 +136,7 @@ class ManagerController extends AppController
 				'stuname' => $_POST['strname'],
 				'stuyear' => $_POST['old'],
 				'depnum' => $_POST['depnum'],
-				'stupass' => ''
+				'stupass' => $_POST['strno']
 			]);
 			try {
 				$query->execute();
@@ -195,7 +195,7 @@ class ManagerController extends AppController
 				$query -> where(['admnum' => $this->request->data('admnum')]);
 			} else {
 				if (!empty($_POST['admname'])) {
-					$query -> where(['admname LIKE' => '%'.$_POST['admname'].'%']);
+					$query -> where(['admname LIKE' => '%' . $_POST['admname'] . '%']);
 				}
 				if (empty($_POST['deleted_flg'])) {
 					$query -> where(['deleted_flg' => FALSE]);
@@ -257,7 +257,21 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		$this->set('exams', $this->MfExa->find());
-
 	}
+	public function reIssueStuPass() {
+		$this->viewBuilder()->layout('addmod');
 
+		if (!empty($_POST['strno'])) {
+			$query = $this->MfStu->query();
+			$query->update();
+			$query->set(['stupass' => $_POST['strno']]);
+			$query->where(['regnum' => $_POST['strno']]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing');
+			}
+		}
+	}
 }

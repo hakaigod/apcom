@@ -17,7 +17,7 @@ managerrrrr
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
 	<tr><td><a href="">学生情報閲覧</a></td></tr>
 	<tr><td><a onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
-	<tr><td><a href="">学生パスワード再発行</a></td></tr>
+	<tr><td><a onclick="window.open('reissuestupass','学生パスワード再発行','width=500,height=400');">学生パスワード再発行</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->
@@ -25,11 +25,11 @@ managerrrrr
 	<table class="table table-bordered" id="filter">
 		<tr>
 			<td class="col-xs-3">学籍番号</td>
-			<td colspan="3"><input type="text" class="form-control" name="regnum"></td>
+			<td colspan="3"><input type="text" class="form-control" name="regnum" value="<?= empty(@$_POST['regnum']) ? '' : $_POST['regnum']; ?>"></td>
 		</tr>
 		<tr>
 			<td class="col-xs-3">名前</td>
-			<td colspan="3"><input type="text" class="form-control" name="stuname"></td>
+			<td colspan="3"><input type="text" class="form-control" name="stuname" value="<?= empty(@$_POST['stuname']) ? '' : $_POST['stuname']; ?>"></td>
 		</tr>
 		<tr>
 			<td class="col-xs-3">学科</td>
@@ -55,13 +55,13 @@ managerrrrr
 			<td class="col-xs-3">卒業フラグ含む</td>
 			<td class="col-xs-3">
 				<label class="checkbox">
-					<input type="checkbox" data-toggle="checkbox" name="graduate_flg">
+					<input type="checkbox" data-toggle="checkbox" name="graduate_flg"<?= empty(@$_POST['graduate_flg']) ? '' : 'checked="checked"'; ?>>
 				</label>
 			</td>
 			<td class="col-xs-3">削除済み含む</td>
 			<td class="col-xs-3">
 				<label class="checkbox">
-					<input type="checkbox" data-toggle="checkbox" name="deleted_flg">
+					<input type="checkbox" data-toggle="checkbox" name="deleted_flg"<?= empty(@$_POST['deleted_flg']) ? '' : 'checked="checked"'; ?>>
 				</label>
 			</td>
 		</tr>
@@ -73,7 +73,7 @@ managerrrrr
 
 <table class="table table-bordered table-hover table-striped" id="strlist">
 	<thead>
-		<td></td><td>学籍番号</td><td>氏名</td><td>学科</td><td>学年</td><td>卒業</td><td>削除</td>
+		<td></td><td>学籍番号</td><td>名前</td><td>学科</td><td>学年</td><td>卒業</td><td>削除</td>
 	</thead>
 	<tbody>
 		<?php foreach ($records as $record): ?>
