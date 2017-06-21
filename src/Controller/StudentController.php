@@ -87,9 +87,9 @@ class StudentController extends AppController
 		$inputtedLog = [];
 		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + 10; $qNum++ ) {
 			$inputtedLog['answers'][$qNum] =
-				$session->read($this->genSsnTag(['answers',$imicode,$qNum])) ?: 0;
+				$session->read($this->genSsnTag(['answers',$imicode,$qNum]));
 			$inputtedLog['confidences'][$qNum] =
-				$session->read($this->genSsnTag(['confidences',$imicode,$qNum])) ?: 2;
+				$session->read($this->genSsnTag(['confidences',$imicode,$qNum]));
 		}
 		$this->set(compact('inputtedLog'));
 		

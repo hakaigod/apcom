@@ -1,7 +1,8 @@
 .btn.btn-info {
     /*font-size: 1px;*/
     /*padding: 6px 11px;*/
-    margin-right: 5px;
+    margin-right: 3px;
+    margin-left: 3px;
     border-radius: 5px;
 }
 .end-btn {

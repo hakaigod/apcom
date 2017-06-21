@@ -55,18 +55,10 @@
 							//未入力は0にするため
 							$value = ($x + 1) % sizeof($ansChoices);
 							//もし選択されていたら見た目に反映するためクラスを変更する
-							if ($inputtedAns == $value) {
-								$active = 'active ';
-								$checked = 'checked ';
-							}else{
-								$active = $checked ="";
-							}
-							if ($x == sizeof($ansChoices) - 1) {
-							    $endBtn = 'end-btn';
-                            }else{
-							    $endBtn ='';
-                            }
-							echo "<label class=\"btn btn-info {$active} {$endBtn}\">";
+                            $isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
+							$active = $isChosen ? 'active ' :'';
+							$checked = $isChosen ? 'checked ':'';
+							echo "<label class=\"btn btn-info {$active}\">";
 							echo "<input type=\"radio\" name=\"{$answerTag}\" "
 								.$checked ."autocomplete=\"off\" value=\"{$value}\">"
 								. $ansChoices[$x];
@@ -84,23 +76,16 @@
 						//前回入力されていた自信度
 						$inputtedConf = $inputtedLog['confidences'][$qNum];
 						//1,2,3の範囲
-						foreach ( range(1,sizeof($confChoices)) as $y ) {
+						for ( $y = 0; $y < sizeof($confChoices) ;$y++ ) {
+							$value = $y + 1;
 							//前回入力されていた値の場合はボタンをアクティブにする
-							if ($y == $inputtedConf) {
-								$checked = 'checked';
-								$active = 'active';
-							}else{
-								$checked = $active = '';
-							}
-							if ($y == sizeof($confChoices)) {
-							    $endBtn = 'end-btn';
-                            }else{
-							    $endBtn = '';
-                            }
-							echo "<label class=\"btn btn-info {$active} {$endBtn}\" >";
+                            $isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
+							$checked = $isChosen ? 'checked':'';
+							$active = $isChosen ? 'active':'';
+							echo "<label class=\"btn btn-info {$active}\" >";
 							echo "<input type=\"radio\" name=\"{$confTag}\" "
-								."autocomplete=\"off\" {$checked} value=\"{$y}\">";
-							echo $confChoices[$y - 1];
+								."autocomplete=\"off\" {$checked} value=\"{$value}\">";
+							echo $confChoices[$y];
 							echo '</label>';
 						}
 						?>
