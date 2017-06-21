@@ -84,7 +84,5 @@ class MfQesTable extends Table
 		    ->where($conditions)
 		    ->limit($mass)
 		    ->page($offset);
-    	
-    	
     }
 }

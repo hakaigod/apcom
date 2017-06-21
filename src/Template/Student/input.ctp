@@ -62,7 +62,12 @@
 							}else{
 								$active = $checked ="";
 							}
-							echo "<label class=\"btn btn-info {$active}\">";
+							if ($x == sizeof($ansChoices) - 1) {
+							    $endBtn = 'end-btn';
+                            }else{
+							    $endBtn ='';
+                            }
+							echo "<label class=\"btn btn-info {$active} {$endBtn}\">";
 							echo "<input type=\"radio\" name=\"{$answerTag}\" "
 								.$checked ."autocomplete=\"off\" value=\"{$value}\">"
 								. $ansChoices[$x];
@@ -88,7 +93,12 @@
 							}else{
 								$checked = $active = '';
 							}
-							echo "<label class=\"btn btn-info {$active}\" >";
+							if ($y == sizeof($confChoices) - 1) {
+							    $endBtn = 'end-btn';
+                            }else{
+							    $endBtn = '';
+                            }
+							echo "<label class=\"btn btn-info {$active} {$endBtn}\" >";
 							echo "<input type=\"radio\" name=\"{$confTag}\" "
 								."autocomplete=\"off\" {$checked} value=\"{$y}\">";
 							echo $confChoices[$y - 1];
@@ -103,7 +113,17 @@
     <br>
     <div class="center">
 		<?php
-		foreach (range(1, 8) as $buttonNum ) {
+        //戻るボタン
+		if ($curNum > 1) {
+		    echo $this->Form->button('',[
+                'type'=>'submit',
+                'name'=>'curNum',
+                'value'=>$curNum-1,
+                'formaction'=>$curNum-1,
+			    'class'=>'btn btn-info fui-arrow-left'
+            ]);
+		}
+			foreach (range(1, 8) as $buttonNum ) {
 			$btnClass =  "btn btn-info ";
 			//現在のページのボタンの色を濃くする
 			if ( $buttonNum == $curNum ) {
@@ -113,8 +133,30 @@
 			echo "<button type='submit' name='curNum' value='{$curNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
 			echo "{$buttonNum}</button>";
 		}
-		?>
+		//次へボタン
+		if ($curNum < 8) {
+			echo $this->Form->button('',[
+				'type'=>'submit',
+				'name'=>'curNum',
+				'value'=>$curNum+1,
+				'formaction'=>$curNum+1,
+				'class'=>'btn btn-info end-btn fui-arrow-right'
+			]);
+		}
+        ?>
     </div>
+    <?php
+    //完了ボタン
+    if ($curNum == 8 ) {
+	    echo $this->Form->button('完了',[
+		    'type'=>'submit',
+		    'name'=>'curNum',
+		    'value'=>'confirm',
+		    'formaction'=>'confirm',
+		    'class'=>'btn btn-info end-btn fui-arrow-right'
+	    ]);
+    }
+    ?>
 </form>
 
 <br><br><br><br><br><br><br><br>

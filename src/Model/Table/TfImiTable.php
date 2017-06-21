@@ -59,4 +59,10 @@ class TfImiTable extends Table
 
         return $validator;
     }
+    public function getOneAndMfExam($imicode) {
+    	return $this->find()
+		    ->contain(['MfExa'])
+		    ->where(['TfImi.imicode' => $imicode] )
+		    ->first();
+    }
 }

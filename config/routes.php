@@ -79,10 +79,16 @@ Router::scope('/', function (RouteBuilder $routes) {
 //			'imiNum' => '\d{1,3}']
 //	);
 	$routes->connect(
-		'/:student/:input/:imiNum/:linkNum',
+		'/:student/:input/:imicode/:linkNum',
 		['controller' => 'student', 'action'=> 'input'],
 		['student' => '(?i:student)','input' =>'(?:input)',
-			'imiNum' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
+			'imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
+	);
+	$routes->connect(
+		'/:student/:input/:imicode/:confirm',
+		['controller' => 'student', 'action'=> 'confirm'],
+		['student' => '(?i:student)','input' =>'(?:input)',
+		 'imicode' => '\d{1,3}', 'confirm' => '(?:confirm)']
 	);
 	
 //	$routes->connect(
