@@ -33,7 +33,6 @@ class TfImiTable extends Table
         $this->setTable('tf_imi');
         $this->setDisplayField('imicode');
         $this->setPrimaryKey('imicode');
-        $this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**
@@ -54,15 +53,17 @@ class TfImiTable extends Table
             ->notEmpty('exanum');
 
         $validator
+            ->numeric('imisum')
+            ->allowEmpty('imisum');
+
+        $validator
+            ->integer('imipepnum')
+            ->allowEmpty('imipepnum');
+
+        $validator
             ->dateTime('imp_date')
             ->allowEmpty('imp_date');
 
         return $validator;
-    }
-    public function getOneAndMfExam($imicode) {
-    	return $this->find()
-		    ->contain(['MfExa'])
-		    ->where(['TfImi.imicode' => $imicode] )
-		    ->first();
     }
 }

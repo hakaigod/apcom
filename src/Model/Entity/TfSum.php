@@ -4,15 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * TfImi Entity
+ * TfSum Entity
  *
+ * @property string $regnum
  * @property int $imicode
- * @property int $exanum
  * @property float $imisum
- * @property int $imipepnum
- * @property \Cake\I18n\FrozenTime $imp_date
  */
-class TfImi extends Entity
+class TfSum extends Entity
 {
 
     /**
@@ -26,6 +24,7 @@ class TfImi extends Entity
      */
     protected $_accessible = [
         '*' => true,
+        'regnum' => false,
         'imicode' => false
     ];
 }

@@ -3,6 +3,8 @@
 /**
  * @var \App\View\AppView $this
  *
+ * @var String $stuName
+ * @var \App\Model\Entity\TfSum[] $sums
  */
 ?>
 
@@ -23,7 +25,7 @@
 
 <!-- ユーザーネームセット -->
 <?php $this->start('username');
-echo $name->stuname;
+echo $stuName;
 $this->end();
 ?>
 
@@ -34,7 +36,7 @@ $this->end();
 <?php $this->end(); ?>
 
 <!--グラフを表示する要素-->
-<canvas id="myChart"></canvas>
+<!--<canvas id="myChart"></canvas>-->
 <!--canvasにグラフを設定するスクリプト-->
 <script>
 
@@ -68,10 +70,10 @@ $this->end();
 </script>
 <table class="table table-bordered table-striped table-hover">
 	<?php
-	foreach ($answers as $answer): ?>
+	foreach ($sums as $sum): ?>
         <tr>
-            <td><?= $answer->imicode ?></td>
-            <td><?= $answer->qesnum ?></td>
+            <td><?= $sum->imicode ?></td>
+            <td><?= $sum->imisum ?></td>
         </tr>
 	<?php endforeach; ?>
 </table>

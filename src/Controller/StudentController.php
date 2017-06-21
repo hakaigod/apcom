@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\TfSum;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
+use App\Model\Table\TfSumTable;
 use App\Test\TestCase\Model\Table\TfAnsTableTest;
 
 /**
@@ -12,6 +14,7 @@ use App\Test\TestCase\Model\Table\TfAnsTableTest;
  * @property MfStuTable MfStu
  * @property TfImiTable TfImi
  * @property MfQesTable MfQes
+ * @property TfSumTable TfSum
  */
 class StudentController extends AppController
 {
@@ -37,27 +40,29 @@ class StudentController extends AppController
 	public function summary(){
 		
 		//回答モデル読み込み
-		$this->loadModel('TfAns');
+		$this->loadModel('TfSum');
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
 		
 		$session = $this->request->session();
 		
 		//TODO:この行はセッションが実装されたら消す
-		$session->write('StudentID', '15110007');
+		$session->write('StudentID', '13110025');
 		
 		$regnum = $session->read('StudentID');
-		//回答取得
-		$answers = $this->TfAns->find()
-			->where(['TfAns.regnum = ' => $regnum])
-			->toArray();
-		$this->set(compact('answers'));
 		
 		//生徒名取得
-		$name = $this->MfStu->find()
+		$stuName = $this->MfStu->find()
 			->where(['MfStu.regnum = ' => $regnum])
-			->first();
-		$this->set(compact('name'));
+			->first()
+			->get('name');
+		$this->set(compact('stuName'));
+		
+		//回答取得
+		$sums = $this->TfSum->find()
+			->where(['TfSum.regnum' => $regnum])
+			->toArray();
+		$this->set(compact('sums'));
 	}
 	//模擬試験結果入力画面
 	public function input(){
