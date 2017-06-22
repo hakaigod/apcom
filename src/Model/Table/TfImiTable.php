@@ -33,6 +33,8 @@ class TfImiTable extends Table
 		$this->setTable('tf_imi');
 		$this->setDisplayField('imicode');
 		$this->setPrimaryKey('imicode');
+		//書いた
+		$this->belongsTo('MfExa')->setForeignKey('exanum');
 	}
 	
 	/**
@@ -66,6 +68,7 @@ class TfImiTable extends Table
 		
 		return $validator;
 	}
+	//書いた
 	public function getOneAndMfExam($imicode) {
 		return $this->find()
 			->contain(['MfExa'])

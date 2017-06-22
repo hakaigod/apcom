@@ -2,7 +2,6 @@
 <?php
 /**
  * @var \App\View\AppView $this
- *
  * @var String $stuName
  * @var \App\Model\Entity\TfSum[] $sums
  */

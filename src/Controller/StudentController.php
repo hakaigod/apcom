@@ -1,13 +1,11 @@
 <?php
 namespace App\Controller;
 
-use App\Model\Entity\TfSum;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
-use App\Test\TestCase\Model\Table\TfAnsTableTest;
 
 /**
  * @property TfAnsTable TfAns
