@@ -77,7 +77,6 @@ class ManagerController extends AppController
 
 		$this->set('questions', $ans);
 
-
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum', 'imp_date']);
 		$arrayimis = array();$work = null;
