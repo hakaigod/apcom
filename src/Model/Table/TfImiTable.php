@@ -19,51 +19,57 @@ use Cake\Validation\Validator;
  */
 class TfImiTable extends Table
 {
-
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
-
-        $this->setTable('tf_imi');
-        $this->setDisplayField('imicode');
-        $this->setPrimaryKey('imicode');
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('imicode')
-            ->allowEmpty('imicode', 'create');
-
-        $validator
-            ->integer('exanum')
-            ->requirePresence('exanum', 'create')
-            ->notEmpty('exanum');
-
-        $validator
-            ->numeric('imisum')
-            ->allowEmpty('imisum');
-
-        $validator
-            ->integer('imipepnum')
-            ->allowEmpty('imipepnum');
-
-        $validator
-            ->dateTime('imp_date')
-            ->allowEmpty('imp_date');
-
-        return $validator;
-    }
+	
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
+		
+		$this->setTable('tf_imi');
+		$this->setDisplayField('imicode');
+		$this->setPrimaryKey('imicode');
+	}
+	
+	/**
+	 * Default validation rules.
+	 *
+	 * @param \Cake\Validation\Validator $validator Validator instance.
+	 * @return \Cake\Validation\Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('imicode')
+			->allowEmpty('imicode', 'create');
+		
+		$validator
+			->integer('exanum')
+			->requirePresence('exanum', 'create')
+			->notEmpty('exanum');
+		
+		$validator
+			->numeric('imisum')
+			->allowEmpty('imisum');
+		
+		$validator
+			->integer('imipepnum')
+			->allowEmpty('imipepnum');
+		
+		$validator
+			->dateTime('imp_date')
+			->allowEmpty('imp_date');
+		
+		return $validator;
+	}
+	public function getOneAndMfExam($imicode) {
+		return $this->find()
+			->contain(['MfExa'])
+			->where(['TfImi.imicode' => $imicode] )
+			->first();
+	}
 }
