@@ -6,6 +6,7 @@ use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
+use Cake\Http\ServerRequest;
 
 /**
  * @property TfAnsTable TfAns
@@ -98,44 +99,44 @@ class StudentController extends AppController
 		
 		//回答入力時
 		if ($this->request->is('post')) {
-			$this->writeAnsToSsn();
+			$this->writeAnsToSsn($this->request);
 		}
 	}
-	private function setYearAndSeason($imitation){
+	private function setYearAndSeason(\Cake\Datasource\EntityInterface $imitation){
 		//和暦セット
-		$year = $imitation['mf_exa']->jap_year;
-		$this->set(compact('year'));
-		//デバッグ用
-		$this->set(compact('imitation'));
+		$this->set('year',$imitation['mf_exa']->jap_year);
 		//季節セット
-		$season = $imitation['mf_exa']['exaname'];
-		$this->set(compact('season'));
+		$this->set('season',$imitation['mf_exa']['exaname']);
 		
 	}
-	private function writeAnsToSsn(){
-		$session = $this->request->session();
-		$imicode = $this->request->getParam('imicode');
+	private function writeAnsToSsn(ServerRequest $request){
+		$imicode = $request->getParam('imicode');
 		//遷移元ページのリンク番号
-		$befNum = $this->request->getData("curNum");
+		$befNum = $request->getData("curNum");
+		if (!isset($imicode) or !isset($befNum)) return;
+		$session = $request->session();
+		//すでに書いたページ番号にtrueを設定
+		$session->write($this->genSsnTag(['inputtedPages',$befNum]),true);
 		//遷移元ページの一番最初の問題番号
 		$iniQueBefNum = ( $befNum - 1 ) * 10 + 1;
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + 10; $qNum++ ){
 			//POSTされた回答と自信度を取得
-			$answer = $this->request->getData("answer_{$qNum}");
+			$answer = $request->getData("answer_{$qNum}");
 			$confidence = $this->request->getData("confidence_{$qNum}");
 			//解答と自信度をセッションに書き込む
 			$session->write($this->genSsnTag(['answers',$imicode,$qNum]), $answer);
 			$session->write($this->genSsnTag(['confidences',$imicode, $qNum]), $confidence);
 		}
 	}
-	public function confirm() {
+	
+	public function result() {
 		//回答入力時
+		//TODO:セッションかなんかでPOST元が解答画面かチェック
 		if ($this->request->is('post')) {
-			$this->writeAnsToSsn();
+			$this->writeAnsToSsn($this->request);
 		}
 	}
 	private function genSsnTag( array $children): String{
 		return implode(".", $children);
 	}
-
 }

@@ -58,8 +58,9 @@
                             $isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
 							$active = $isChosen ? 'active ' :'';
 							$checked = $isChosen ? 'checked ':'';
+//							$required = $x==0?"required=\"required\"":"";
 							echo "<label class=\"btn btn-info {$active}\">";
-							echo "<input type=\"radio\" name=\"{$answerTag}\" "
+							echo "<input type=\"radio\"  name=\"{$answerTag}\" "
 								.$checked ."autocomplete=\"off\" value=\"{$value}\">"
 								. $ansChoices[$x];
 							echo '</label>';
@@ -82,8 +83,9 @@
                             $isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 							$checked = $isChosen ? 'checked':'';
 							$active = $isChosen ? 'active':'';
+//							$required = $y==0?"required=\"required\"":"";
 							echo "<label class=\"btn btn-info {$active}\" >";
-							echo "<input type=\"radio\" name=\"{$confTag}\" "
+							echo "<input type=\"radio\"  name=\"{$confTag}\" "
 								."autocomplete=\"off\" {$checked} value=\"{$value}\">";
 							echo $confChoices[$y];
 							echo '</label>';
