@@ -128,7 +128,6 @@ class StudentController extends AppController
 			$session->write($this->genSsnTag(['confidences',$imicode, $qNum]), $confidence);
 		}
 	}
-	
 	public function result() {
 		//回答入力時
 		//TODO:セッションかなんかでPOST元が解答画面かチェック

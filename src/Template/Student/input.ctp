@@ -18,10 +18,21 @@
 ?>
 
 <?php $this->start('css'); ?>
-
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>
-
+<script type="text/javascript">
+//    var inputtedPages = <?//= $this->request->session()->read('inputtedPages')?>//;
+    $('#end_answer').on('submit',
+        function () {
+            if(window.confirm('送信してよろしいですか？')){ // 確認ダイアログを表示
+                return true;
+            } else{ // 「キャンセル」時の処理
+                window.alert('キャンセルされました'); // 警告ダイアログを表示
+                return false;
+            }
+        }
+    })
+</script>
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
@@ -34,16 +45,16 @@
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
-<!--                問題番号-->
+                <!--                問題番号-->
                 <td class="col-xs-1 center">
 					<?= $qNum = $questions[ $i - 1 ]['qesnum'] ?>
                 </td>
-<!--                問題文(最初の10文字のみ)-->
+                <!--                問題文(最初の10文字のみ)-->
                 <td class="col-xs-3">
 					<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
                     ...
                 </td>
-<!--                解答-->
+                <!--                解答-->
                 <td class="col-xs-5 center">
                     <div data-toggle="buttons">
 						<?php
@@ -55,7 +66,7 @@
 							//未入力は0にするため
 							$value = ($x + 1) % sizeof($ansChoices);
 							//もし選択されていたら見た目に反映するためクラスを変更する
-                            $isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
+							$isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
 							$active = $isChosen ? 'active ' :'';
 							$checked = $isChosen ? 'checked ':'';
 //							$required = $x==0?"required=\"required\"":"";
@@ -68,7 +79,7 @@
 						?>
                     </div>
                 </td>
-<!--                自信度-->
+                <!--                自信度-->
                 <td class="col-xs-3 center">
                     <div data-toggle="buttons">
 						<?php
@@ -80,7 +91,7 @@
 						for ( $y = 0; $y < sizeof($confChoices) ;$y++ ) {
 							$value = $y + 1;
 							//前回入力されていた値の場合はボタンをアクティブにする
-                            $isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
+							$isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 							$checked = $isChosen ? 'checked':'';
 							$active = $isChosen ? 'active':'';
 //							$required = $y==0?"required=\"required\"":"";
@@ -99,17 +110,17 @@
     <br>
     <div class="center">
 		<?php
-        //戻るボタン
+		//戻るボタン
 		if ($curNum > 1) {
-		    echo $this->Form->button('',[
-                'type'=>'submit',
-                'name'=>'curNum',
-                'value'=>$curNum-1,
-                'formaction'=>$curNum-1,
-			    'class'=>'btn btn-info fui-arrow-left'
-            ]);
+			echo $this->Form->button('',[
+				'type'=>'submit',
+				'name'=>'curNum',
+				'value'=>$curNum-1,
+				'formaction'=>$curNum-1,
+				'class'=>'btn btn-info fui-arrow-left'
+			]);
 		}
-			foreach (range(1, 8) as $buttonNum ) {
+		foreach (range(1, 8) as $buttonNum ) {
 			$btnClass =  "btn btn-info ";
 			//現在のページのボタンの色を濃くする
 			if ( $buttonNum == $curNum ) {
@@ -129,22 +140,23 @@
 				'class'=>'btn btn-info end-btn fui-arrow-right'
 			]);
 		}
-        ?>
+		?>
     </div>
     <br>
     <div class="center">
-    <?php
-    //完了ボタン
-    if ($curNum == 8 ) {
-	    echo $this->Form->button('完了',[
-		    'type'=>'submit',
-		    'name'=>'curNum',
-		    'value'=>$curNum,
-		    'formaction'=>'confirm',
-		    'class'=>'btn btn-success end-btn'
-	    ]);
-    }
-    ?>
+		<?php
+		//完了ボタン
+		if ($curNum == 8 ) {
+			echo $this->Form->button('完了',[
+				'type'=>'submit',
+				'name'=>'curNum',
+				'value'=>$curNum,
+				'formaction'=>'result',
+				'class'=>'btn btn-success',
+                'id' => 'end_answer'
+			]);
+		}
+		?>
     </div>
 </form>
 
