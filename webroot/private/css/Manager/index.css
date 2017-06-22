@@ -11,27 +11,24 @@
 }
 @media (min-width: 1000px) {
 	#AMresult{
-		width: calc(100% / 12 * 5);
+		/*width: calc(100% / 12 * 4);*/
+		/*overflow-x: scroll;*/
 	}
-	#questions {
-		display: block;
-		width: calc(100% / 12 * 7);
-		padding-left: 0;
-		overflow-x: scroll;
-	}
+
 	#questions table thead tr td{
 		min-width: 60px;
 		height: 30px;
 	}
-}
-#filter {
-	margin-top: 10px;
+	.stusum{
+		width: calc(100% / 24 * 6);
+	}
 }
 
 #AMresult{
 	padding-right: 0;
+	padding-left: 0;
 }
-#AMresult table thead tr td{
+#answers table thead tr td{
 	height: 30px;
 }
 #AMresulttitle {

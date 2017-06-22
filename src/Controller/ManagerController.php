@@ -14,6 +14,7 @@ class ManagerController extends AppController
 		parent::initialize();
 		$this->set('headerlink', $this->request->webroot . 'Manager');
 
+		$this->loadComponent('Paginator');
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
@@ -49,6 +50,7 @@ class ManagerController extends AppController
 		->where(['imicode' => $nearimi])
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
+		// ->limit(10);
 		// 回答データを連想配列に格納
 		$answers = array();
 		$i=0; $work = null;
@@ -69,11 +71,13 @@ class ManagerController extends AppController
 		}
 		$this->set('answers', $answers);
 
+		$this->set('answerPage', $this->paginate($ans));
+
 		$ans = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
 		$ans ->select(['exanum', 'qesnum', 'question'])
 		->where(['exanum' => $exanum])
-		->order(['qesnum'])->toArray();
+		->order(['qesnum'])->limit(10)->toArray();
 
 		$this->set('questions', $ans);
 
@@ -93,6 +97,10 @@ class ManagerController extends AppController
 		array_multisort($arrayimis, SORT_DESC);
 		$this->set('imidata', $arrayimis);
 	}
+
+	public $paginate = [
+		'limit' => 10
+	];
 
 	// 学生管理
 	public function strmanager()

@@ -45,41 +45,28 @@
 		<table class="table table-bordered full">
 			<thead>
 				<tr>
-					<td class="col-xs-9">名前</td><td class="col-xs-3">合計</td>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($students as $student): ?>
-					<tr>
-						<td><?= $student->mf_stu['stuname']; ?></td>
-						<td><?= $student->imisum . '点'; ?></td>
-					</tr>
-				<?php endforeach; ?>
-				<tr>
-					<td colspan="">平均</td><td><?= number_format($average['average'],2) . '点'; ?></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="col-xs-6" id="questions">
-		<table class="table table-bordered center" >
-			<thead>
-				<tr>
-					<?php for($i = 1; $i <= 80 ;$i++): ?>
+					<td class="col-xs-3">名前</td><td class="stusum">合計</td>
+					<?php for($i = 1; $i <= 10 ;$i++): ?>
 						<td><?= "問" . $i; ?></td>
 					<?php endfor;?>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($answers as $answer): ?>
-					<tr>
-						<?php foreach ($answer as $ans): ?>
-							<td><?= $ans; ?></td>
+				<?php foreach ($students as $student): ?>
+					<?php foreach ($answers as $answer): ?>
+							<tr>
+								<td><?= $student->mf_stu['stuname']; ?></td>
+								<td><?= $student->imisum . '点'; ?></td>
+								<?php foreach ($answer as $ans): ?>
+									<td><?= $ans; ?></td>
+								<?php endforeach; break 2; ?>
+							</tr>
 						<?php endforeach; ?>
-					</tr>
 				<?php endforeach; ?>
 				<tr>
-					<?php for($j = 1; $j <= 80 ;$j++): ?>
+					<td>平均</td>
+					<td><?= number_format($average['average'],2) . '点'; ?></td>
+					<?php for($j = 1; $j <= 10 ;$j++): ?>
 						<td>平均</td>
 					<?php endfor;?>
 				</tr>
@@ -89,6 +76,9 @@
 	<div class="right">
 		<button class="btn btn-info">CSV出力</button>
 	</div>
+
+	<?php $answerPage; ?>
+
 </div>
 
 <div class="row">
