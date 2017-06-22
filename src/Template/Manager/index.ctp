@@ -36,7 +36,7 @@
 	<div class="col-xs-6 right">
 		<div class="bootstrap-switch-square">
 			30秒更新
-			<input type="checkbox" data-toggle="switch" name="square-switch" id="load_switch" />
+			<input type="checkbox" data-toggle="switch" id="load_switch" value="load_switch" <?= !empty($_GET['autoload']) ? 'checked' : '';?>/>
 		</div>
 	</div>
 </div>
@@ -46,22 +46,22 @@
 			<thead>
 				<tr>
 					<td class="col-xs-3">名前</td><td class="stusum">合計</td>
-					<?php for($i = 1; $i <= 10 ;$i++): ?>
-						<td><?= "問" . $i; ?></td>
-					<?php endfor;?>
+					<?php foreach ($questions as $key): ?>
+						<td><?= "問" . $key->qesnum; ?></td>
+					<?php endforeach; ?>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ($students as $student): ?>
-					<?php foreach ($answers as $answer): ?>
-							<tr>
-								<td><?= $student->mf_stu['stuname']; ?></td>
-								<td><?= $student->imisum . '点'; ?></td>
-								<?php foreach ($answer as $ans): ?>
-									<td><?= $ans; ?></td>
-								<?php endforeach; break 2; ?>
-							</tr>
-						<?php endforeach; ?>
+				<?php foreach ($answers as $answer): ?>
+						<tr>
+							<td><?= $student->mf_stu['stuname']; ?></td>
+							<td><?= $student->imisum . '点'; ?></td>
+							<?php foreach ($answer as $ans): ?>
+								<td class="center"><?= $ans; ?></td>
+							<?php endforeach; break 2; ?>
+						</tr>
+					<?php endforeach; ?>
 				<?php endforeach; ?>
 				<tr>
 					<td>平均</td>
@@ -76,9 +76,20 @@
 	<div class="right">
 		<button class="btn btn-info">CSV出力</button>
 	</div>
-
-	<?php $answerPage; ?>
-
+	<!-- ページネーター -->
+	<div class="center">
+		<?= $this->Paginator->counter(['format' => '{{page}} / {{pages}}']); ?>
+		<ul class="pagination-plain">
+			<!-- 最初,次へ ボタン設置 -->
+			<?= $this->Paginator->first('<<'); ?>
+			<?= $this->Paginator->prev('<') ?>
+			<!-- 途中ページ　ボタン設置 -->
+			<?= $this->Paginator->numbers(); ?>
+			<!-- 次へ,最後　ボタン設置 -->
+			<?= $this->Paginator->next('>') ?>
+			<?= $this->Paginator->last('>>'); ?>
+		</ul>
+	</div>
 </div>
 
 <div class="row">

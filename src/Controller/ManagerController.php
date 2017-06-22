@@ -50,7 +50,11 @@ class ManagerController extends AppController
 		->where(['imicode' => $nearimi])
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
-		// ->limit(10);
+		if (!empty($_GET['page'])) {
+			$ans ->offset($_GET['page'] * 10  - 10);
+		}
+		$ans->limit(10);
+		$this->set('answerPage', $this->paginate($ans));
 		// 回答データを連想配列に格納
 		$answers = array();
 		$i=0; $work = null;
@@ -71,13 +75,14 @@ class ManagerController extends AppController
 		}
 		$this->set('answers', $answers);
 
-		$this->set('answerPage', $this->paginate($ans));
-
 		$ans = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
 		$ans ->select(['exanum', 'qesnum', 'question'])
-		->where(['exanum' => $exanum])
-		->order(['qesnum'])->limit(10)->toArray();
+		->where(['exanum' => $exanum]);
+		if (!empty($_GET['page'])) {
+			$ans ->offset($_GET['page'] * 10 - 10);
+		}
+		$ans ->order(['qesnum'])->limit(10)->toArray();
 
 		$this->set('questions', $ans);
 
@@ -99,7 +104,10 @@ class ManagerController extends AppController
 	}
 
 	public $paginate = [
-		'limit' => 10
+		'limit' => 10,
+		'order' => [
+			'TfAns.qesnum' => 'asc'
+		]
 	];
 
 	// 学生管理

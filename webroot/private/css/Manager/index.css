@@ -54,7 +54,7 @@
 }
 
 *{
-	font-weight: 500;
+	/*font-weight: 500;*/
 }
 .col-par-5 {
 	position:relative;min-height:1px;padding-right:15px;padding-left:15px;
@@ -68,4 +68,7 @@
 }
 #examdata {
 	margin-top: 20px;
+}
+.pagination-plain * {
+	font-size: 20px;
 }
