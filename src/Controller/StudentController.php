@@ -8,24 +8,32 @@ use Cake\View\Exception\MissingTemplateException;
 
 class StudentController extends AppController
 {
-    public function initialize(){
+    public function initialize()
+    {
         parent::initialize();
+        $this->set('headerlink', $this->request->webroot . 'Student');
 
     }
 
-    public function index(){
+    public function index()
+    {
 
     }
 
-    public function year_selection(){
+    public function yearSelection()
+    {
+        $this->loadModel('mf_exa');
+        $exams=$this->mf_exa->find();
+        $this->set(compact('exams'));
+    }
+
+    public function scoring()
+    {
 
     }
 
-    public function scoring(){
-
-    }
-
-    public  function practice_exam(){
+    public function practice_exam()
+    {
 
     }
 }
