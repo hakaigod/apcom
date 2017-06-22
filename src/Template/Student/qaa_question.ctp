@@ -63,8 +63,7 @@ Student
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
-            問：
-            <?= $num ?>
+            問：<!-- 問題番号 -->
             </div>
         </div>
     </div>
@@ -72,7 +71,12 @@ Student
     <div class="row">
         <div class="col-md-12">
             <div class = "qaa-question">
-                問題の文章か画像の表示
+                <!--問題文-->
+                <?php foreach ($questions as $question): ?>
+                    <div>
+                        <?=  ($question -> question) ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -88,10 +92,30 @@ Student
     <div class="qaa-select-answer">
         <div class="row">
             <div class="col-md-12">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "A" onclick = "SelectAns(1)">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "B" onclick = "SelectAns(2)">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "C" onclick = "SelectAns(3)">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "D" onclick = "SelectAns(4)">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
+                <div class="select-a">
+                    <?php foreach ($choices as $choice): ?>
+                        <?= ($choice -> choice1) ?>
+                    <?php endforeach; ?>
+                </div>
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
+                <div class="select-a">
+                    <?php foreach ($choices as $choice): ?>
+                        <?= ($choice -> choice2) ?> <br>
+                    <?php endforeach; ?>
+                </div>
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
+                <div class="select-a">
+                    <?php foreach ($choices as $choice): ?>
+                        <?= ($choice -> choice3) ?>
+                    <?php endforeach; ?>
+                </div>
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
+                <div class="select-a">
+                    <?php foreach ($choices as $choice): ?>
+                        <?= ($choice -> choice4) ?> <br>
+                    <?php endforeach; ?> <br>
+                </div>
             </div>
         </div>
     </div>
