@@ -28,6 +28,7 @@ function json_safe_encode($data){
 <?php $this->end(); ?>
 
 <?php $this->start('script'); ?>
+<!--http://qiita.com/cither/items/b98cc4e237dcc8f7e51f-->
 <script id="script" src="<?= $this->request-> getAttribute('webroot') ?>/private/js/Input/input.js"
         isAnsed = <?= json_safe_encode($isAnsed)?>
         curNum = <?= json_safe_encode($curNum)?>
