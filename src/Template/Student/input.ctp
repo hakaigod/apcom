@@ -20,19 +20,20 @@
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>
+
+<?php $this->start('script'); ?>
 <script type="text/javascript">
-//    var inputtedPages = <?//= $this->request->session()->read('inputtedPages')?>//;
-    $('#end_answer').on('submit',
-        function () {
-            if(window.confirm('送信してよろしいですか？')){ // 確認ダイアログを表示
-                return true;
-            } else{ // 「キャンセル」時の処理
-                window.alert('キャンセルされました'); // 警告ダイアログを表示
-                return false;
-            }
-        }
-    })
+    
+    $(function(){
+        $('#end_answer').click(function () {
+        
+        
+        });
+    });
 </script>
+<?php $this->end(); ?>
+
+
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
@@ -148,7 +149,7 @@
 		//完了ボタン
 		if ($curNum == 8 ) {
 			echo $this->Form->button('完了',[
-				'type'=>'submit',
+				'type'=>'button',
 				'name'=>'curNum',
 				'value'=>$curNum,
 				'formaction'=>'result',

@@ -1,6 +1,5 @@
 <?php
 /**
- * [模擬試験結果(各解答)の確認ページ]
  *
  * @var \App\View\AppView $this
  *

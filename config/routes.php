@@ -85,10 +85,10 @@ Router::scope('/', function (RouteBuilder $routes) {
 			'imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
 	);
 	$routes->connect(
-		'/:student/:input/:imicode/:confirm',
-		['controller' => 'student', 'action'=> 'confirm'],
+		'/:student/:input/:imicode/:result',
+		['controller' => 'student', 'action'=> 'result'],
 		['student' => '(?i:student)','input' =>'(?:input)',
-		 'imicode' => '\d{1,3}', 'confirm' => '(?:confirm)']
+		 'imicode' => '\d{1,3}', 'result' => '(?:result)']
 	);
 	
 //	$routes->connect(

@@ -7,6 +7,7 @@ use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * @property TfAnsTable TfAns
@@ -66,8 +67,6 @@ class StudentController extends AppController
 	//模擬試験結果入力画面
 	public function input(){
 		
-		$session = $this->request->session();
-		
 		//模擬試験テーブルの主キー
 		$imicode = $this->request->getParam('imicode');
 		//模擬試験コードから試験実施年度と季節を取得
@@ -90,10 +89,8 @@ class StudentController extends AppController
 		$iniQueAfNum = ( $curNum - 1 ) * 10 + 1;
 		$inputtedLog = [];
 		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + 10; $qNum++ ) {
-			$inputtedLog['answers'][$qNum] =
-				$session->read($this->genSsnTag(['answers',$imicode,$qNum]));
-			$inputtedLog['confidences'][$qNum] =
-				$session->read($this->genSsnTag(['confidences',$imicode,$qNum]));
+			$inputtedLog['answers'][$qNum] = $this->readSession([ 'answers', $imicode, $qNum ]);
+			$inputtedLog['confidences'][$qNum] = $this->readSession(['confidences',$imicode,$qNum]);
 		}
 		$this->set(compact('inputtedLog'));
 		
@@ -102,7 +99,7 @@ class StudentController extends AppController
 			$this->writeAnsToSsn($this->request);
 		}
 	}
-	private function setYearAndSeason(\Cake\Datasource\EntityInterface $imitation){
+	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット
 		$this->set('year',$imitation['mf_exa']->jap_year);
 		//季節セット
@@ -114,9 +111,8 @@ class StudentController extends AppController
 		//遷移元ページのリンク番号
 		$befNum = $request->getData("curNum");
 		if (!isset($imicode) or !isset($befNum)) return;
-		$session = $request->session();
 		//すでに書いたページ番号にtrueを設定
-		$session->write($this->genSsnTag(['inputtedPages',$befNum]),true);
+		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
 		$iniQueBefNum = ( $befNum - 1 ) * 10 + 1;
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + 10; $qNum++ ){
@@ -124,17 +120,52 @@ class StudentController extends AppController
 			$answer = $request->getData("answer_{$qNum}");
 			$confidence = $this->request->getData("confidence_{$qNum}");
 			//解答と自信度をセッションに書き込む
-			$session->write($this->genSsnTag(['answers',$imicode,$qNum]), $answer);
-			$session->write($this->genSsnTag(['confidences',$imicode, $qNum]), $confidence);
+			$this->writeSession(['answers',$imicode,$qNum], $answer);
+			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
+	//結果表示
 	public function result() {
 		//回答入力時
 		//TODO:セッションかなんかでPOST元が解答画面かチェック
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
+		$imicode = $this->request->getParam('imicode');
+		//もしどれか未入力の場合はリダイレクト
+		if ( !($this->isAnsweredAll($imicode)) ) {
+			$this->redirect(
+				[ 'action' => 'input' ,
+					'imicode' => $imicode,
+					
+				]
+			);
+		}
 	}
+	//回答欄が全て入力されているか
+	private function isAnsweredAll(int $imicode) :bool {
+		foreach (range(1,80) as $value){
+			$answer = $this->readSession(['answers',$imicode,$value]);
+			$conf = $this->readSession([ 'confidence', $imicode, $value ]);
+			if (!(isset($answer) or isset($conf))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	//セッションから値を読み込む
+	//引数は値の場所の配列
+	private function readSession(array $tagArray) {
+		$session = $this->request->session();
+		return $session->read($this->genSsnTag($tagArray));
+	}
+	//セッションに値を書き込む
+	//引数は値の場所の配列と書き込むデータ
+	private function writeSession(array $tagArray,$data) {
+		$session = $this->request->session();
+		$session->write($this->genSsnTag($tagArray), $data);
+	}
+	//配列からセッションの場所(文字列)を生成
 	private function genSsnTag( array $children): String{
 		return implode(".", $children);
 	}
