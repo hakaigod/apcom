@@ -98,6 +98,7 @@ class StudentController extends AppController
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
+		$this->set('isAnsed',$this->isAnsweredAll($imicode));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット
@@ -169,4 +170,5 @@ class StudentController extends AppController
 	private function genSsnTag( array $children): String{
 		return implode(".", $children);
 	}
+	
 }

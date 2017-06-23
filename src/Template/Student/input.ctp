@@ -13,8 +13,14 @@
  * @var array $inputtedLog
  * 現在表示しているページ番号 currentNum
  * @var Integer $curNum
+ * @var bool $isAnsed
  *
  */
+?>
+<?php
+function json_safe_encode($data){
+	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+}
 ?>
 
 <?php $this->start('css'); ?>
@@ -22,15 +28,10 @@
 <?php $this->end(); ?>
 
 <?php $this->start('script'); ?>
-<script type="text/javascript">
-    
-    $(function(){
-        $('#end_answer').click(function () {
-        
-        
-        });
-    });
-</script>
+<script id="script" src="<?= $this->request-> getAttribute('webroot') ?>/private/js/Input/input.js"
+        isAnsed = <?= json_safe_encode($isAnsed)?>
+        curNum = <?= json_safe_encode($curNum)?>
+></script>
 <?php $this->end(); ?>
 
 
@@ -41,7 +42,7 @@
 <?php $this->end(); ?>
 
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
-<form action="" method="post">
+<form action="" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
