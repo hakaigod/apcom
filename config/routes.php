@@ -51,6 +51,13 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
 	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
 
+	$routes->connect('/student/practiceExam/:exanum',
+        ['controller' => 'Student', 'action' => 'practiceExam'],
+    [
+        'exanum' => '\d{1-3}'
+    ]
+    );
+
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

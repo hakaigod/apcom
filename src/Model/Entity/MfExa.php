@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $exanum
  * @property string $exaname
  * @property \Cake\I18n\FrozenTime $exa_year
+ *
  */
 class MfExa extends Entity
 {
@@ -26,4 +27,14 @@ class MfExa extends Entity
         '*' => true,
         'exanum' => false
     ];
+
+//    jap_year
+    public function _getJapYear () {
+        return $this->get('exa_year')->format('Y') - 2000 + 12;
+    }
+//      ad_year
+    public function _getAdYear () {
+        return $this->get('exa_year')->format('Y');
+    }
+
 }

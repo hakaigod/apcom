@@ -30,7 +30,7 @@
 	<tr>
 		<td class="col-xs-3">年度</td>
 		<td class="col-xs-3">
-			<select class="form-control select select-primary full" data-toggle="select">
+			<select class="form-control select se0lect-primary full" data-toggle="select">
 				<option value="0">平成23年春</option>
 				<option value="1">平成23年秋</option>
 			</select>

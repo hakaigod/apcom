@@ -6,7 +6,6 @@
         display: none;
     }
     #AMresult{
-        width: 100%;
     }
 }
 @media (min-width: 1000px) {
@@ -36,4 +35,46 @@
 }
 #AMresulttitle {
     margin-top: 50px;
+}
+
+.exam-title{
+    font-size: 50px;
+    border-bottom: 1px solid #148d75;
+}
+
+
+.yearBox{
+    border: solid;
+    margin: 2px 50px 0px 10px;
+}
+
+
+/* 年度ボタン */
+a{
+    color: #e7e7e7;
+    display: inline-block;
+}
+
+a:hover,a:focus{
+    color: #e7e7e7;
+}
+
+.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,.table>thead:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,.table>thead:first-child>tr:first-child>td{
+    text-align: center;
+}
+
+
+button{
+    float: right;
+    color: #ffffff;
+    background-color: #1aa889;
+    border-color: #148d75;
+    margin-right: 400px;
+    text-align: center;
+}
+
+button:hover{
+    transition: all .6s;
+    background-color: #1bcaaa;
+
 }

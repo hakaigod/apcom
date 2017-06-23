@@ -1,83 +1,99 @@
+<?php
+/**
+ *
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\MfExa[] $exams
+ * @var array $averages
+ */
+?>
+
 <!-- タイトルセット -->
-<?= $this->start('title'); ?>
-    試験年度選択
-<?= $this->end(); ?>
+<?php $this->start('title'); ?>
+試験年度選択
+<?php $this->end(); ?>
 
 
-    <!-- CSSセット -->
-<?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Student/yearSelection.css') ?>
-<?= $this->end(); ?>
+<!-- CSSセット -->
+<?php $this->start('css'); ?>
+<?= $this->Html->css('/private/css/Student/yearSelection.css') ?>
+<?php $this->end(); ?>
 
 
-    <!-- jsセット -->
-<?= $this->start('script'); ?>
-	<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<?= $this->end(); ?>
+<!-- jsセット -->
+<?php $this->start('script'); ?>
+<?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+<?php $this->end(); ?>
 
 
-    <!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-    managerrrrr
-<?= $this->end(); ?>
+<!-- ユーザーネームセット -->
+<?php $this->start('username'); ?>
+managerrrrr
+<?php $this->end(); ?>
 
 
-    <!-- サイドバーセット -->
-<?= $this->start('sidebar'); ?>
-    <tr class="info"><td><a>トップページ</a></td></tr>
-    <tr><td><a>一問一答</a></td></tr>
-    <tr><td><a>結果閲覧</a></td></tr>
-    <tr><td><a>点数入力</a></td></tr>
-    <tr><td><a>設定</a></td></tr>
-<?= $this->end(); ?>
+<!-- サイドバーセット -->
+<?php $this->start('sidebar'); ?>
+<tr class="info"><td><a>トップページ</a></td></tr>
+<tr><td><a>一問一答</a></td></tr>
+<tr><td><a>結果閲覧</a></td></tr>
+<tr><td><a>点数入力</a></td></tr>
+<tr><td><a>設定</a></td></tr>
+<?php $this->end(); ?>
 
 
 <div>
 
     <!-- header -->
-    <hi class="exam-title">模擬試験</hi>
+    <h1 class="exam-title">模擬試験</h1>
     <p class="message">過去の午前問題が解けます。<br/>
+        受けたい試験の年度を選択してください。
     </p>
 
-<!--    <form method="post" class="radio">-->
-<!--         <input type="radio" name="Annual" value="h29h" disabled><a id="year">平成29年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h29h"><a id="year">平成29年度 春 午前</a><br/>-->
-<!--        <input type="radio" name="Annual" value="h28a"><a id="year">平成28年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h28h"><a id="year">平成28年度 春 午前</a><br/>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成27年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成27年度 春 午前</a><br/>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成26年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成26年度 春 午前</a><br/>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成25年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成25年度 春 午前</a><br/>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成24年度 秋 午前</a>-->
-<!--        <input type="radio" name="Annual" value="h27a"><a id="year">平成24年度 春 午前</a><br/>-->
-<!--    </form>-->
 
+    <!-- テーブル   -->
 
-    <?php $i = 0; foreach($exams as $exam): ?>
-            <input class="radio" type="radio" name="Annual" value="">
-            <div id="year" class="col-lg--4" ><?= $exam->exaname; ?></div>
-            <?php $i++; ?>
-            <?php if($i % 2==0): ?>
-               <br/>
-            <?php endif; ?>
-    <?php endforeach; ?>
+    <div class="yearBox">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered ful">
+                    <!--                   <colgroup style="background-color: #66afe9;" span="1"></colgroup>-->
+                    <thead id="tableTitle">
+                    <tr><th>試験年度</th><th>受験回数</th><th>前回の点数</th><th>全体の平均点</th></tr>
+                    </thead>
+                    <tbody>
 
+                    <!--   行の要素   -->
+                    <tr>
+                        <?php $i = 0; foreach($exams as $exam): ?>
+                        <td>
+                            <div class="btn btn-info full">
+                            <?= $this->Html->link("平成".$exam->jap_year . "年度 ". $exam->exaname ,
+                                [
+                                    'action'=>'practiceExam',
+                                ])
+                             ?>
+                            </div>
+                        </td>
+                        <td>0</td>
+                        <td>76</td>
 
-    <?php
-        if(isset($_POST["frm"])&&(isset($_POST["Annual"]))){
-            header("practice_exam.ctp");
-         }
-    ?>
-
-    <form name="frm" method="post" action="" class="ok">
-            <input type="button" onclick="location.href='practice_exam.ctp'" value="決定" />
-    </form>
-
-
-
+                        <td><?= $averages[$exam->exanum]; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
+<br/><br/>
 
+<button id="d" type="button">
 
+    <?= $this->Html->link("TOPへ戻る" ,
+        [
+            'action'=>'',
+        ])
+    ?>
+</button>
