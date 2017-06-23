@@ -75,19 +75,26 @@
 }
 
 .qaa-select-answer .btn-embossed{
-    display: inline-block;
-    padding: 10px 40px 10px 40px;
-    margin: 10px 20px 10px 20px;
+    /*display: inline-block;*/
+    padding: 10px 20px 10px 20px;
+    margin: 15px 20px 15px 20px;
 }
 
 .qaa-select-answer {
-    text-align: justify;
+    border: solid 1px #aeb6bf;
+    /*text-align: center;*/
 }
 
 .qaa-next{
     margin-top: 30px;
+    margin-bottom: 30px;
     text-align: center;
 }
-#col-main * {
-    border: solid 1px black;
+
+.select-choice{
+    text-align: justify;
 }
+
+/*#col-main * {*/
+    /*border: solid 1px black;*/
+/*}*/

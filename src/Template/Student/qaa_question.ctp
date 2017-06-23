@@ -1,3 +1,9 @@
+
+
+<!--問題表示画面-->
+
+
+
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
 一問一答
@@ -29,6 +35,7 @@ Student
 
 <!-- 以下content -->
 <div class = "container-fluid">
+    <?= $aa ?>
     <!--header-->
     <div class = "row">
         <div class = "col-md-12">
@@ -63,7 +70,8 @@ Student
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
-            問：<!-- 問題番号 -->
+                問：
+                <?php $num ?>
             </div>
         </div>
     </div>
@@ -89,45 +97,61 @@ Student
         </div>
     </div>
 
-    <div class="qaa-select-answer">
-        <div class="row">
-            <div class="col-md-12">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
-                <div class="select-a">
+    <div class="col-md-12">
+        <div class="qaa-select-answer">
+            <div class="row">
+                <ul style="list-style:none;">
+                    <li>
+                        <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
+                        <span class="select-choice">
                     <?php foreach ($choices as $choice): ?>
                         <?= ($choice -> choice1) ?>
                     <?php endforeach; ?>
-                </div>
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
-                <div class="select-a">
+                </span>
+                    </li>
+                    <li>
+                        <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
+                        <span class="select-choice">
                     <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice2) ?> <br>
+                        <?= ($choice -> choice2) ?>
                     <?php endforeach; ?>
-                </div>
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
-                <div class="select-a">
+                </span>
+                    </li>
+                    <li>
+                        <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
+                        <span class="select-choice">
                     <?php foreach ($choices as $choice): ?>
                         <?= ($choice -> choice3) ?>
                     <?php endforeach; ?>
-                </div>
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
-                <div class="select-a">
+                </span>
+                    </li>
+                    <li>
+                        <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
+                        <span class="select-choice">
                     <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice4) ?> <br>
-                    <?php endforeach; ?> <br>
-                </div>
+                        <?= ($choice -> choice4) ?>
+                    <?php endforeach; ?>
+                </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class=""></div>
 
-    <div class = "qaa-next">
-        <?= $this -> Form -> create(null,['type' => 'post','url' => ['action' => '']]) ?>
-        <?= $this -> Form -> submit('次の問題',
-                ['type' => 'submit',
-                'class' => 'btn btn-warning',
-                'formaction' => '']) ?>
-        <?= $this -> Form -> end(); ?>
+    <div class="col-md-12">
+        <div class="row">
+            <div class = "qaa-next">
+                <?php
+                    echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' => '']]);
+                    echo $this->Form->submit('次の問題',
+                        ['type' => 'submit',
+                            'class' => 'btn btn-warning',
+                            'formaction' => ''
+                    ]);
+                    echo $this->Form->end();
+                ?>
+            </div>
+        </div>
     </div>
 </div>
 

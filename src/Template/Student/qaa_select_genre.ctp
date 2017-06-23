@@ -59,9 +59,16 @@ Student
                     <div class = "caption"><p>ジャンル一覧</p></div>
                     <!--form-->
                     <?php
-                    echo $this -> Form -> create(null,['type' => 'post','url' => ['action' => 'qaa_question']]);
-                    $options = ['Value 1' => 'テクノロジ','Value 2' => 'マネジメント','Value 3' => 'ストラテジ'];
-                    echo $this->Form->select('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
+                    echo $this -> Form -> create
+                            ('genre',
+                            ['type' => 'get',
+                            'url' => ['action' => 'qaa_question']]);
+                    $options =
+                            ['technology' => 'テクノロジ',
+                            'management' => 'マネジメント',
+                            'strategy' => 'ストラテジ'];
+                    echo $this -> Form -> select
+                            ('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
                     ?>
                 </div>
                 <!--決定ボタン-->
