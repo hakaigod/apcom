@@ -7,6 +7,10 @@
 managerrrrr
 <?= $this->end(); ?>
 
+<?= $this->start('css'); ?>
+	<?= $this->Html->css('/private/css/Manager/adminmanager.css') ?>
+<?= $this->end(); ?>
+
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
@@ -33,12 +37,19 @@ managerrrrr
 			</td>
 		</tr>
 	</table>
-	<button type="submit" class="btn btn-primary full" id="search">
-		検索実行 <span class="caret"></span>
-	</button>
+	<div class="row">
+		<div class="col-xs-3">
+			<a href="" class="btn btn-warning full">クリア</a>
+		</div>
+		<div class="col-xs-offset-4 col-xs-5">
+			<button type="submit" class="btn btn-primary full" id="search">
+				検索実行 <span class="fui-arrow-right"></span>
+			</button>
+		</div>
+	</div>
 </form>
 
-<table class="table table-bordered table-hover" id="strlist">
+<table class="table table-bordered table-hover table-striped" id="strlist">
 	<thead>
 		<td></td><td>管理者連番</td><td>名前</td><td>削除</td>
 	</thead>

@@ -111,7 +111,7 @@ class ManagerController extends AppController
 	];
 
 	// 学生管理
-	public function strmanager()
+	public function stumanager()
 	{
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find());
@@ -149,7 +149,7 @@ class ManagerController extends AppController
 		// $query ;
 		$this->set('records', $query);
 	}
-	public function addstr()
+	public function addstu()
 	{
 		$this->viewBuilder()->layout('addmod');
 
@@ -158,11 +158,11 @@ class ManagerController extends AppController
 			$query = $this->MfStu->query();
 			$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
 			$query->values([
-				'regnum' => $_POST['strno'],
-				'stuname' => $_POST['strname'],
+				'regnum' => $_POST['stuno'],
+				'stuname' => $_POST['stuname'],
 				'stuyear' => $_POST['old'],
 				'depnum' => $_POST['depnum'],
-				'stupass' => $_POST['strno']
+				'stupass' => $_POST['stuno']
 			]);
 			try {
 				$query->execute();
@@ -172,7 +172,7 @@ class ManagerController extends AppController
 			}
 		}
 	}
-	public function modstr()
+	public function modstu()
 	{
 		$this->viewBuilder()->layout('addmod');
 
@@ -191,8 +191,8 @@ class ManagerController extends AppController
 			$query = $this->MfStu->query();
 			$query->update();
 			$query->set([
-				'regnum' => $_POST['strno'],
-				'stuname' => $_POST['strname'],
+				'regnum' => $_POST['stuno'],
+				'stuname' => $_POST['stuname'],
 				'stuyear' => $_POST['old'],
 				'depnum' => $_POST['depnum'],
 				'deleted_flg' => !empty($_POST['deleted_flg']),
@@ -201,7 +201,7 @@ class ManagerController extends AppController
 			$query->where(['regnum' => $_GET['id']]);
 			try {
 				$query->execute();
-				$this->redirect('/Manager/modstr?id='.$_POST['strno']);
+				$this->redirect('/Manager/modstu?id='.$_POST['stuno']);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing');
@@ -287,11 +287,11 @@ class ManagerController extends AppController
 	public function reIssueStuPass() {
 		$this->viewBuilder()->layout('addmod');
 
-		if (!empty($_POST['strno'])) {
+		if (!empty($_POST['stuno'])) {
 			$query = $this->MfStu->query();
 			$query->update();
-			$query->set(['stupass' => $_POST['strno']]);
-			$query->where(['regnum' => $_POST['strno']]);
+			$query->set(['stupass' => $_POST['stuno']]);
+			$query->where(['regnum' => $_POST['stuno']]);
 			try {
 				$query->execute();
 				$this->Flash->success('success');

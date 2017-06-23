@@ -9,10 +9,10 @@
 	</div>
 	<form action="" method="post">
 		<!-- 学籍番号 -->
-		<input type="text" name="strno" class="form-control" placeholder="学籍番号">
-		<div class="row">
-			<button type="submit" class="col-xs-5 btn btn-success">再発行</button>
-			<a onclick="window.close()" class="col-xs-offset-2 col-xs-5 btn btn-warning">キャンセル</a>
+		<input type="text" name="stuno" class="form-control" placeholder="学籍番号">
+		<div class="full">
+			<button onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
+			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>
 	</form>
 </div>

@@ -9,9 +9,9 @@
 	</div>
 	<form action="" method="post">
 		<!-- 学籍番号 -->
-		<input type="text" name="strno" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
+		<input type="text" name="stuno" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
 		<!-- 名前 -->
-		<input type="text" name="strname" class="form-control" placeholder="氏名" value="<?= $regnum->stuname; ?>">
+		<input type="text" name="stuname" class="form-control" placeholder="氏名" value="<?= $regnum->stuname; ?>">
 		<!-- 学科 -->
 		<select class="form-control select select-primary full" data-toggle="select" name="depnum">
 			<?php foreach ($deps as $dep): ?>
@@ -25,19 +25,19 @@
 			<?php endfor; ?>
 		</select>
 
-		<div class="row">
-			<label class="checkbox col-xs-6">
+		<div class="full">
+			<label class="checkbox col-xs-5">
 				削除
 				<input type="checkbox" data-toggle="checkbox" name="deleted_flg" <?= $regnum->deleted_flg ? 'checked="checked"' : ""; ?>>
 			</label>
-			<label class="checkbox col-xs-6">
+			<label class="checkbox col-xs-offset-2 col-xs-5">
 				卒業
 				<input type="checkbox" data-toggle="checkbox" name="graduate_flg" <?= $regnum->graduate_flg ? 'checked="checked"' : ""; ?>>
 			</label>
 		</div>
-		<div class="row">
-			<button type="submit" class="col-xs-5 btn btn-success">修正</button>
-			<a onclick="window.close()" class="col-xs-offset-2 col-xs-5 btn btn-warning">キャンセル</a>
+		<div class="full">
+			<button type="reset" onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
+			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>
 	</form>
 </div>

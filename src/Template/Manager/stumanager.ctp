@@ -9,14 +9,13 @@ managerrrrr
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-	<?= $this->Html->css('/private/css/Manager/strmanager.css') ?>
+	<?= $this->Html->css('/private/css/Manager/stumanager.css') ?>
 <?= $this->end(); ?>
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a href="">学生情報閲覧</a></td></tr>
-	<tr><td><a onclick="window.open('addstr','学生情報追加','width=500,height=400,scrollbars=yes');">学生情報追加</a></td></tr>
+	<tr><td><a onclick="window.open('addstu','学生情報追加','width=500,height=500,scrollbars=yes');">学生情報追加</a></td></tr>
 	<tr><td><a onclick="window.open('reissuestupass','学生パスワード再発行','width=500,height=400');">学生パスワード再発行</a></td></tr>
 <?= $this->end(); ?>
 
@@ -66,9 +65,16 @@ managerrrrr
 			</td>
 		</tr>
 	</table>
-	<button type="submit" class="btn btn-primary full" id="search">
-		検索実行 <span class="caret"></span>
-	</button>
+	<div class="row">
+		<div class="col-xs-3">
+			<a href="" class="btn btn-warning full">クリア</a>
+		</div>
+		<div class="col-xs-offset-4 col-xs-5">
+			<button type="submit" class="btn btn-primary full" id="search">
+				検索実行 <span class="fui-arrow-right"></span>
+			</button>
+		</div>
+	</div>
 </form>
 
 <table class="table table-bordered table-hover table-striped" id="strlist">
@@ -79,7 +85,7 @@ managerrrrr
 		<?php foreach ($records as $record): ?>
 			<tr>
 				<td class="col-xs-1 center">
-					<button class="btn btn-primary" onclick="window.open('modstr?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450');">
+					<button class="btn btn-primary" onclick="window.open('modstu?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>

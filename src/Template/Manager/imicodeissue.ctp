@@ -15,9 +15,9 @@
 				<option value="<?= $exam->exanum; ?>"><?= '平成' . $exam->jap_year . '年' . $exam->exaname;?></option>
 			<?php endforeach; ?>
 		</select>
-		<div class="row">
-			<button type="submit" class="col-xs-5 btn btn-success">発行</button>
-			<a onclick="window.close()" class="col-xs-offset-2 col-xs-5 btn btn-warning">キャンセル</a>
+		<div class="full">
+			<button onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
+			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>
 	</form>
 </div>
