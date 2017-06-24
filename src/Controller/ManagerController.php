@@ -7,6 +7,7 @@ use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
 use \Exception;
+use \SplFileObject;
 
 class ManagerController extends AppController
 {
@@ -42,7 +43,7 @@ class ManagerController extends AppController
 		$queryAvg = $this->TfSum->find();
 		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => $nearimi]);
 		$aveArr = $queryAvg->toArray();
-		$this->set('average', array_shift ($aveArr));
+		$this->set('average', array_shift($aveArr));
 
 		// 模擬試験ごとの回答データ取得
 		$ans = $this->TfAns->find();
@@ -51,7 +52,7 @@ class ManagerController extends AppController
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
 		if (!empty($_GET['page'])) {
-			$ans ->offset($_GET['page'] * 10  - 10);
+			$ans ->offset($_GET['page'] * 10	- 10);
 		}
 		$ans->limit(10);
 		$this->set('answerPage', $this->paginate($ans));
@@ -154,6 +155,8 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		$this->set('deps', $this->MfDep->find());
+
+		// 個別追加
 		if (!empty($_POST)) {
 			$query = $this->MfStu->query();
 			$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
@@ -171,7 +174,46 @@ class ManagerController extends AppController
 				$this->Flash->error('missing');
 			}
 		}
+		// 一括追加
+		if (!empty($_FILES)) {
+			// $this->Flash->success($_FILES["studata"]["name"]);
+
+			// 読み込んだSJISのデータをUTF-8に変換して保存
+			file_put_contents($_FILES["studata"]["tmp_name"], mb_convert_encoding(file_get_contents($_FILES["studata"]["tmp_name"]), 'UTF-8', 'SJIS'));
+			// UTF-8に変換したデータをSplFileObjectでCSVとして読み込み
+			$file = new SplFileObject($_FILES["studata"]["tmp_name"]);
+			$file->setFlags(SplFileObject::READ_CSV);
+			// 配列に格納
+			foreach ($file as $line) {
+				$records[] = $line;
+			}
+
+			$querystu = $this->MfStu->query();
+			$querystu->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
+
+			foreach ($records as $key) {
+				if (!empty($key[0]) && $key[0] != '学籍番号'){
+					$querydep = $this->MfDep->find();
+					$depnum = $querydep ->select('depnum')->where(['depname LIKE' => '%' . $key[2] . '%']);
+
+					$querystu->values([
+						'regnum' => $key[0],
+						'stuname' => $key[1],
+						'stuyear' => $key[3],
+						'depnum' => $depnum,
+						'stupass' => $key[0]
+					]);
+				}
+			}
+			try {
+				$querystu->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing ' . $e->getMessage());
+			}
+		}
 	}
+	
 	public function modstu()
 	{
 		$this->viewBuilder()->layout('addmod');

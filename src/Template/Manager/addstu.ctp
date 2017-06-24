@@ -35,9 +35,8 @@
 	<a href="<?= $this->request->webroot ?>private/addstu.csv" class="btn btn-info full" id="download">一括追加用テンプレートダウンロード</a>
 
 	<div class="full" id="upload">
-		<form method="post" enctype="" >
-			<input type="file" name="studata" size="10">
-			<br>
+		<form method="post" enctype="multipart/form-data" action="">
+			<input type="file" name="studata">
 			<button type="submit" class="btn btn-success">送信</button>
 		</form>
 
