@@ -10,7 +10,8 @@
 	</div>
 	<form action="" method="post">
 		<!-- 学年 -->
-		<select class="form-control select select-primary full" data-toggle="select" name="old">
+		<select class="form-control select select-primary full" data-toggle="select" name="exanum">
+			<option value="0" selected>試験選択</option>
 			<?php foreach ($exams as $exam): ?>
 				<option value="<?= $exam->exanum; ?>"><?= '平成' . $exam->jap_year . '年' . $exam->exaname;?></option>
 			<?php endforeach; ?>

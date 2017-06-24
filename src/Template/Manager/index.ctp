@@ -22,8 +22,9 @@
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="">トップページ</a></td></tr>
-	<tr><td><a href="Manager/stumanager">学生情報管理</a></td></tr>
-	<tr><td><a href="Manager/adminmanager">管理者管理</a></td></tr>
+	<tr><td><a href="Manager/StuManager">学生情報管理</a></td></tr>
+	<tr><td><a href="Manager/depManager">学科管理</a></td></tr>
+	<tr><td><a href="Manager/adminManager">管理者管理</a></td></tr>
 	<tr><td><a onclick="window.open('Manager/imicodeissue','模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a></td></tr>
 <?= $this->end(); ?>
 

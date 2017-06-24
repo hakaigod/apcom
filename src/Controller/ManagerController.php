@@ -16,6 +16,7 @@ class ManagerController extends AppController
 		$this->set('headerlink', $this->request->webroot . 'Manager');
 
 		$this->loadComponent('Paginator');
+
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
@@ -112,7 +113,7 @@ class ManagerController extends AppController
 	];
 
 	// 学生管理
-	public function stumanager()
+	public function stuManager()
 	{
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find());
@@ -213,7 +214,7 @@ class ManagerController extends AppController
 			}
 		}
 	}
-	
+
 	public function modstu()
 	{
 		$this->viewBuilder()->layout('addmod');
@@ -246,14 +247,14 @@ class ManagerController extends AppController
 				$this->redirect('/Manager/modstu?id='.$_POST['stuno']);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing');
+				$this->Flash->error('missing ' . $e->getMessage());
 				$this->set('regnum', $this->MfStu->get($_GET['id']));
 			}
 		}
 	}
 
 	// 管理者管理
-	public function adminmanager()
+	public function adminManager()
 	{
 		// 管理者一覧
 		$query = $this->MfAdm->find();
@@ -291,7 +292,7 @@ class ManagerController extends AppController
 				$query->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing');
+				$this->Flash->error('missing ' . $e->getMessage());
 			}
 		}
 	}
@@ -315,31 +316,95 @@ class ManagerController extends AppController
 				$this->redirect('/Manager/modadmin?id='.$_POST['admno']);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing');
+				$this->Flash->error('missing ' . $e->getMessage());
 				$this->set('admnum', $this->MfAdm->get($_GET['id']));
 			}
 		}
 	}
-
+	// 模擬試験コード発行画面
 	public function imiCodeIssue() {
 		$this->viewBuilder()->layout('addmod');
 
 		$this->set('exams', $this->MfExa->find());
+
+		if (!empty($_POST)) {
+			$query = $this->TfImi->query();
+			$query->insert(['imicode', 'exanum']);
+			$query->values([
+				'imicode' => NULL,
+				'exanum' => $_POST['exanum']
+			]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing ' . $e->getMessage());
+			}
+		}
 	}
+	// 学生パスワード再発行画面
 	public function reIssueStuPass() {
 		$this->viewBuilder()->layout('addmod');
 
 		if (!empty($_POST['stuno'])) {
 			$query = $this->MfStu->query();
 			$query->update();
-			$query->set(['stupass' => $_POST['stuno']]);
-			$query->where(['regnum' => $_POST['stuno']]);
+			$query->set(['stupass' => $_POST['stuno']])
+			->where(['regnum' => $_POST['stuno']]);
 			try {
 				$query->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing');
+				$this->Flash->error('missing ' . $e->getMessage());
 			}
 		}
 	}
+	// 学科管理画面
+	public function depManager() {
+		$this->set('deps', $this->MfDep->find());
+	}
+	public function adddep() {
+		$this->viewBuilder()->layout('addmod');
+
+		if (!empty($_POST)) {
+			$query = $this->MfDep->query();
+			$query->insert(['depnum', 'depname']);
+			$query->values([
+				'depnum' => NULL,
+				'depname' => $_POST['depname']
+			]);
+			try {
+				$query->execute();
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing ' . $e->getMessage());
+			}
+		}
+	}
+	public function moddep() {
+		$this->viewBuilder()->layout('addmod');
+
+		// 学科情報
+		$this->set('dep', $this->MfDep->get($_GET['id']));
+
+		if (!empty($_POST)) {
+			$query = $this->MfDep->query()->update();
+			$query->set([
+				'depname' => $_POST['depname'],
+				'deleted_flg' => !empty($_POST['deleted_flg'])
+			])
+			->where(['depnum' => $_POST['depnum']]);
+			try {
+				$query->execute();
+				//直前のページにリダイレクト
+				$this->redirect($this->referer());
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing ' . $e->getMessage());
+				$this->redirect($this->referer());
+			}
+		}
+	}
+
+
 }
