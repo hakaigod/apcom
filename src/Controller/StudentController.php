@@ -8,6 +8,7 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
+use Cake\Network\Session;
 
 /**
  * @property TfAnsTable TfAns
@@ -94,11 +95,14 @@ class StudentController extends AppController
 		}
 		$this->set(compact('inputtedLog'));
 		
-		//回答入力時
+		//回答入力時(=POST)
 		if ($this->request->is('post')) {
+			//セッションに解答を書き込む
 			$this->writeAnsToSsn($this->request);
 		}
+		//
 		$this->set('isAnsed',$this->isAnsweredAll($imicode));
+		$this->set('notAnsedPages',$this->getNotAnsed($imicode));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット
@@ -111,6 +115,7 @@ class StudentController extends AppController
 		$imicode = $request->getParam('imicode');
 		//遷移元ページのリンク番号
 		$befNum = $request->getData("curNum");
+		//模擬試験コードか遷移元のページ番号がセットされていない場合何もしない
 		if (!isset($imicode) or !isset($befNum)) return;
 		//すでに書いたページ番号にtrueを設定
 		$this->writeSession(['inputtedPages',$befNum],true);
@@ -137,22 +142,32 @@ class StudentController extends AppController
 		if ( !($this->isAnsweredAll($imicode)) ) {
 			$this->redirect(
 				[ 'action' => 'input' ,
-					'imicode' => $imicode,
-					
+					'imicode' => $imicode
 				]
 			);
 		}
 	}
-	//回答欄が全て入力されているか
-	private function isAnsweredAll(int $imicode) :bool {
-		foreach (range(1,80) as $value){
-			$answer = $this->readSession(['answers',$imicode,$value]);
-			$conf = $this->readSession([ 'confidence', $imicode, $value ]);
-			if (!(isset($answer) or isset($conf))) {
-				return false;
+	//入力されていないページ一覧を取得
+	private function getNotAnsed (int $imicode):array{
+		$notAnsedPages = array_fill(0,8,true);
+		//1-10,11-20などの範囲でどれか一問でも未入力のとき、
+		//ページ番号=>falseが配列に入る
+		foreach (range(0,7) as $pageNum){
+			foreach (range(1,10) as $lowNum) {
+				$qNum = $pageNum * 10 + $lowNum;
+				$answer = $this->readSession(['answers',$imicode,$qNum]);
+				$conf = $this->readSession([ 'confidences', $imicode, $qNum ]);
+				if (!(isset($answer)) || !(isset($conf))) {
+					$notAnsedPages[$pageNum] = false;
+					break;
+				}
 			}
 		}
-		return true;
+		return $notAnsedPages;
+	}
+	//回答が全てのページで入力されているか
+	private function isAnsweredAll(int $imicode) :bool {
+		return in_array(false,$this->getNotAnsed($imicode));
 	}
 	//セッションから値を読み込む
 	//引数は値の場所の配列

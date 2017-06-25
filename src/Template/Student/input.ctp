@@ -14,6 +14,7 @@
  * 現在表示しているページ番号 currentNum
  * @var Integer $curNum
  * @var bool $isAnsed
+ * @var bool[] $notAnsedPages
  *
  */
 ?>
@@ -124,11 +125,18 @@ function json_safe_encode($data){
 			]);
 		}
 		foreach (range(1, 8) as $buttonNum ) {
-			$btnClass =  "btn btn-info ";
+			$btnClassAry =  ["btn"];
+			if ($notAnsedPages[$buttonNum-1]) {
+				$btnClassAry[] = "btn-success";
+            }else{
+				$btnClassAry[] = "btn-default";
+			}
 			//現在のページのボタンの色を濃くする
 			if ( $buttonNum == $curNum ) {
-				$btnClass .= "active";
+				$btnClassAry[] = "active";
 			}
+			//クラス一覧の配列をスペースでつなげて文字列にする
+			$btnClass = implode(" ", $btnClassAry);
 			//formactionは遷移先
 			echo "<button type='submit' name='curNum' value='{$curNum}' formaction= '{$buttonNum}' class='{$btnClass}'>";
 			echo "{$buttonNum}</button>";
