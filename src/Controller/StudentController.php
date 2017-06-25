@@ -2,13 +2,16 @@
 namespace App\Controller;
 
 use App\Model\Entity\MfExa;
+use App\Model\Entity\MfQe;
 use App\Model\Table\MfExaTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
+use App\Model\Table\MfQesTable;
 
 /**
  * @property MfExaTable MfExa
  * @property TfImiTable TfImi
+ * @property MfQesTable MfQes
  */
 
 class StudentController extends AppController
@@ -17,55 +20,89 @@ class StudentController extends AppController
     {
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
-
     }
 
     public function index()
     {
-
     }
 
     public function yearSelection()
     {
+        //このコントローラからMfExaモデルを扱うためにloadModelする
         $this->loadModel('MfExa');
+        //実施された本番一覧を取得
         $exams=$this->MfExa->find()->toArray();
         $this->set(compact('exams'));
 
+        //このコントローラからTfImiモデルを扱うためにloadModelする
         $this->loadModel('TfImi');
-        $sum=$this->TfImi->find()->toArray();
+        $imitations=$this->TfImi->find()->toArray();
 
-
-        //全体の平均点
+        //本番試験番号がキー、その平均点がバリューの要素を追加していく
         $averages=[];
-        foreach($exams as $key) {   //試験テーブル
-            $avg = 0;
-            $count = 0;
-            foreach ($sum as $sum_value) {                     //模擬試験テーブル
-                If (($key->exanum) == ($sum_value->exanum)) {   //試験会番号が一致した場合
-                    $count += $sum_value->imipepnum;            //合計人数
-                    $avg += $sum_value->imisum;                 //合計点数
+        //本番1つにつき、授業模擬はゼロから複数回実施されているので、
+        //複数の場合はその平均をとる
+        foreach($exams as $exam_value) {   //本番テーブル
+            //試験を受けた合計人数
+            $people_sum = 0;
+            //試験の全体での合計点数
+            $point_sum = 0;
+            foreach ($imitations as $imi_value) {                     //模擬試験テーブル
+                if (($exam_value->exanum) == ($imi_value->exanum)) {   //試験回番号が一致した場合
+                    //合計人数を更新
+                    $people_sum += $imi_value->imipepnum;
+                    //合計点数を更新
+                    $point_sum += $imi_value->imisum;
                 }
             }
-            if ($count == 0) {  //0で割らないため
-                $averages[$key->exanum] = '[まだ受験者がいません]';
+            //0で割るとエラーになるため
+            if ($people_sum == 0) {
+                $averages[$exam_value->exanum] = '[まだ受験者がいません]';
             } else {
-                $averages[$key->exanum] = floor(intval($avg) / $count);
+                //小数点を切り捨てるためにfloor関数を使う
+                $averages[$exam_value->exanum] = floor(intval($point_sum) / $people_sum);
             }
         }
         $this->set(compact('averages'));
+    }
+
+
+
+    //URLからパラメータ(試験番号)を受け取るので引数がある(practiceExam/1の右端の部分)
+    //何も指定されなかったときnull
+    //このexanumの宣言はconfig/routes.phpの$routes->connect('/student/practiceExam/:exanum'にある
+    public function practiceExam($exanum = null,$qesnum=null)
+    {
+        $this->set(compact('exanum'));
+
+
+        //このコントローラからMfExaモデルを扱うためにloadModelする
+        $this->loadModel('MfExa');
+        //実施された本番一覧を取得
+        $exams=$this->MfExa->find()
+            //テーブル内のexanumから抽出する
+            ->where(['MfExa.exanum' => $exanum])
+            //配列として返されるので単数として受け取る
+            ->first();
+        $this->set(compact('exams'));
+
+
+        //このコントローラからMfQesモデルを扱うためにloadModelする
+        $this->loadModel('MfQes');
+
+        $qes=$this->MfQes->find()
+            ->where(['MfQes.qesnum' => $qesnum , 'MfQes.exanum'=>$exanum])
+            ->first();
+        $this->set(compact('qes'));
+
 
     }
 
 
 
-
-    public function scoring()
+    public function score()
     {
 
     }
 
-    public function practiceExam()
-    {
-
-    }
 }

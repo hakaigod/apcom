@@ -1,0 +1,59 @@
+#exam-title{
+    font-size: 30px;
+    border-bottom: 1px solid #148d75;
+}
+
+#qaa-question-no{
+    margin-top: 18px;
+    font-size: 20px;
+}
+
+.qaa-question{
+    text-align: left;
+    margin: 3px 0px 10px;
+}
+
+.qaa-falsehood{
+    text-align: left;
+    margin-top: 20px;
+}
+
+.qaa-select-answer .btn-embossed{
+    display: inline-block;
+    padding: 10px 20px 10px 20px;
+    margin: 15px 20px 15px 20px;
+}
+
+.qaa-select-answer {
+    border: solid 1px #aeb6bf;
+    /*text-align: center;*/
+}
+
+.qaa-back{
+}
+
+.qaa-score{
+}
+
+.qaa-score a{
+    background-color: #3278b3;
+}
+
+.qaa-score a:hover{
+    background-color: #3d8bd4;
+}
+
+
+.qaa-next{
+}
+
+
+.qaa{
+    margin: 48px 0px 70px 0px;
+    display: flex;
+    justify-content: space-between;
+    padding:0;
+}
+
+.select-choice {
+}

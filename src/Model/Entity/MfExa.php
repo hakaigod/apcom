@@ -9,7 +9,6 @@ use Cake\ORM\Entity;
  * @property int $exanum
  * @property string $exaname
  * @property \Cake\I18n\FrozenTime $exa_year
- *
  */
 class MfExa extends Entity
 {

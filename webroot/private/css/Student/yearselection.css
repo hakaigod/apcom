@@ -1,80 +1,58 @@
-#col-main * {
-    /*border: solid 1px black;*/
-}
-@media (min-width: 300px) {
-    #questions {
-        display: none;
-    }
-    #AMresult{
-    }
-}
-@media (min-width: 1000px) {
-    #AMresult{
-        width: calc(100% / 12 * 5);
-    }
-    #questions {
-        display: block;
-        width: calc(100% / 12 * 7);
-        padding-left: 0;
-        overflow-x: scroll;
-    }
-    #questions table thead tr td{
-        /*min-width: 60px;*/
-        height: 30px;
-    }
-}
-#filter {
-    margin-top: 10px;
-}
-
-#AMresult{
-    padding-right: 0;
-}
-#AMresult table thead tr td{
-    height: 30px;
-}
-#AMresulttitle {
-    margin-top: 50px;
-}
-
 .exam-title{
     font-size: 50px;
     border-bottom: 1px solid #148d75;
 }
 
+.message{
+    margin-bottom: 20px;
+}
 
-.yearBox{
+
+.year-box{
     border: solid;
     margin: 2px 50px 0px 10px;
 }
 
-
-/* 年度ボタン */
-a{
-    color: #e7e7e7;
-    display: inline-block;
-}
-
-a:hover,a:focus{
+/* 年度選択ボタンの文字色を変更する */
+.year-btn a{
     color: #e7e7e7;
 }
+
+.table-bordered{
+    margin-bottom:  0px;
+}
+
+
+/*サイドバーのリンク一覧の文字色が見づらくなるためコメントアウト*/
+/*!* 年度ボタン *!*/
+/*a{*/
+    /*color: #e7e7e7;*/
+    /*display: inline-block;*/
+/*}*/
+
+/*a:hover,a:focus{*/
+    /*color: #e7e7e7;*/
+/*}*/
 
 .table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,.table>thead:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,.table>thead:first-child>tr:first-child>td{
     text-align: center;
 }
 
 
-button{
-    float: right;
-    color: #ffffff;
-    background-color: #1aa889;
-    border-color: #148d75;
-    margin-right: 400px;
-    text-align: center;
-}
+/*サイドバーを開閉するボタンが見づらくなるためコメントアウト*/
+/*button{*/
+    /*!*float: right;*!*/
+    /*color: #ffffff;*/
+    /*align-items: center;*/
+    /*background-color: #1aa889;*/
+    /*border-color: #148d75;*/
+    /*!*margin-right: 400px;*!*/
+    /*text-align: center;*/
+/*}*/
 
-button:hover{
-    transition: all .6s;
-    background-color: #1bcaaa;
+/*button:hover{*/
+    /*transition: all .6s;*/
+    /*background-color: #1bcaaa;*/
 
-}
+/*}*/
+

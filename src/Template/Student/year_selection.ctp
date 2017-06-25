@@ -45,6 +45,7 @@ managerrrrr
 
     <!-- header -->
     <h1 class="exam-title">模擬試験</h1>
+	<br/>
     <p class="message">過去の午前問題が解けます。<br/>
         受けたい試験の年度を選択してください。
     </p>
@@ -52,33 +53,41 @@ managerrrrr
 
     <!-- テーブル   -->
 
-    <div class="yearBox">
+    <div class="year-box">
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-bordered ful">
-                    <!--                   <colgroup style="background-color: #66afe9;" span="1"></colgroup>-->
+                <table class="table table-bordered ">
                     <thead id="tableTitle">
                     <tr><th>試験年度</th><th>受験回数</th><th>前回の点数</th><th>全体の平均点</th></tr>
                     </thead>
                     <tbody>
 
                     <!--   行の要素   -->
-                    <tr>
-                        <?php $i = 0; foreach($exams as $exam): ?>
-                        <td>
-                            <div class="btn btn-info full">
-                            <?= $this->Html->link("平成".$exam->jap_year . "年度 ". $exam->exaname ,
-                                [
-                                    'action'=>'practiceExam',
-                                ])
-                             ?>
-                            </div>
-                        </td>
-                        <td>0</td>
-                        <td>76</td>
-
-                        <td><?= $averages[$exam->exanum]; ?></td>
-                    </tr>
+                    <?php foreach($exams as $exam): ?>
+                        <tr>
+                            <td>
+                                <!-- 試験名とそのリンク-->
+                                <div>
+                                    <?=
+                                    //個人模擬試験へのリンクを生成
+                                    //タイトルは平成27年度春のように出力
+                                    $this->Html->link("平成".$exam->jap_year . "年度 ". $exam->exaname ,
+                                        //practiceExamアクションに飛ぶリンクを生成
+                                        //コントローラを指定していないので、今と同じコントローラ
+                                        //['action' => 'practiceExam', 'exanum' => $exam->exanum]のように名前を付けた場合は
+                                        //practiceExam?exanum=1のようにハテナの方になる
+                                        //TODO:URLに問題番号を追加する
+                                        ['action' => 'practiceExam', $exam->exanum,1],
+                                        [ 'class'=>" year-btn btn btn-info full" ]
+                                    )
+                                    ?>
+                                </div>
+                            </td>
+                            <td>0</td>
+                            <td>76</td>
+                            <!-- 各回の平均点-->
+                            <td><?= $averages[$exam->exanum]; ?></td>
+                        </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -87,13 +96,19 @@ managerrrrr
     </div>
 </div>
 
-<br/><br/>
+<br/>
 
-<button id="d" type="button">
-
+<!---->
+<div>
     <?= $this->Html->link("TOPへ戻る" ,
         [
-            'action'=>'',
+            'action'=>'practiceExam'
+        ],[
+//                真ん中に持っていくためにcol-xs-offset-5で余白を取る
+            'class' =>'btn btn-warning col-xs-offset-5 col-xs-2'
         ])
     ?>
-</button>
+</div>
+<br/><br/>
+<br/><br/>
+
