@@ -11,6 +11,7 @@
 <!-- jsセット -->
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+<?= $this->Html->script('/private/js/Student/check.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -58,23 +59,26 @@ Student
                     <!--枠線の上に重ねる文字-->
                     <div class = "caption"><p>ジャンル一覧</p></div>
                     <!--form-->
-                    <?php
-                    echo $this -> Form -> create
-                            ('genre',
+                    <?= $this -> Form -> create
+                            ('',
                             ['type' => 'get',
-                            'url' => ['action' => 'qaa_question']]);
-                    $options =
-                            ['technology' => 'テクノロジ',
-                            'management' => 'マネジメント',
-                            'strategy' => 'ストラテジ'];
-                    echo $this -> Form -> select
-                            ('field', $options, ['multiple' => 'checkbox','data-toggle' => "checkbox"]);
-                    ?>
+                            'url' => ['action' => 'qaa_question']])?>
+                    <label class="checkbox">
+                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>テクノロジ <br>
+                    </label>
+                    <label class="checkbox">
+                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>ストラテジ <br>
+                    </label>
+                    <label class="checkbox">
+                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>マネジメント
+                    </label>
                 </div>
                 <!--決定ボタン-->
                 <div class = "center">
-                    <?= $this -> Form -> button('問題開始',array('type' => 'submit',  'class' => 'btn btn-info')); ?>
-                    <?= $this -> Form -> end(); ?>
+                    <?php
+                    echo $this -> Form -> button('問題開始',array('type' => 'submit','class' => 'btn btn-info'));
+                    echo $this -> Form -> end();
+                    ?>
                 </div>
             </div>
         </div>

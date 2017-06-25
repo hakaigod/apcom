@@ -1,4 +1,8 @@
-
+<?php
+/**
+ * @var \App\Model\Entity\MfQe $question
+*/
+?>
 
 <!--問題表示画面-->
 
@@ -18,7 +22,7 @@
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?= $this->Html->script('/private/js/Student/qaa.js') ?>
-<?= $this->Html->script('/private/js/Student/cnt_qu_no.js') ?>
+<?= $this->Html->script('/private/js/Student/check.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -35,7 +39,6 @@ Student
 
 <!-- 以下content -->
 <div class = "container-fluid">
-    <?= $aa ?>
     <!--header-->
     <div class = "row">
         <div class = "col-md-12">
@@ -71,7 +74,7 @@ Student
         <div class = "col-md-12">
             <div id = "qaa-question-no">
                 問：
-                <?php $num ?>
+<!--                --><?php //$num ?>
             </div>
         </div>
     </div>
@@ -80,11 +83,9 @@ Student
         <div class="col-md-12">
             <div class = "qaa-question">
                 <!--問題文-->
-                <?php foreach ($questions as $question): ?>
                     <div>
-                        <?=  ($question -> question) ?>
+                        <?=  $question->question ?>
                     </div>
-                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -104,33 +105,26 @@ Student
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
                         <span class="select-choice">
-                    <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice1) ?>
-                    <?php endforeach; ?>
+                            <?= $question->choice1 ?>
+
                 </span>
                     </li>
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
                         <span class="select-choice">
-                    <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice2) ?>
-                    <?php endforeach; ?>
+                            <?= $question->choice2 ?>
                 </span>
                     </li>
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
                         <span class="select-choice">
-                    <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice3) ?>
-                    <?php endforeach; ?>
+                            <?= $question->choice3 ?>
                 </span>
                     </li>
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
                         <span class="select-choice">
-                    <?php foreach ($choices as $choice): ?>
-                        <?= ($choice -> choice4) ?>
-                    <?php endforeach; ?>
+                            <?= $question->choice4 ?>
                 </span>
                     </li>
                 </ul>
