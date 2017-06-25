@@ -52,7 +52,7 @@ class StudentController extends AppController
 //        ルートから番号の取得
         $qnum = $this -> request -> getParam('question_num');
 
-//        問題内容
+//        問題内容の表示
         $this->set('question',$question);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\Model\Entity\MfQe $question
-*/
+ */
 ?>
 
 <!--問題表示画面-->
@@ -39,7 +39,6 @@ Student
 
 <!-- 以下content -->
 <div class = "container-fluid">
-    <!--header-->
     <div class = "row">
         <div class = "col-md-12">
             <div class = col-md-12>
@@ -50,7 +49,7 @@ Student
                     [<a onclick = " " data-toggle = "modal" data-target = "#myModal"> 詳細 </a>]
                 </div>
 
-                <!-- モーダルウィンドウの中身 -->
+<!--                                 モーダルウィンドウの中身 -->
                 <div class="modal fade" id="myModal">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -69,12 +68,12 @@ Student
             </div>
         </div>
     </div>
-    <!--ここから出題問題表示-->
+<!--        ここから出題問題表示-->
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
                 問：
-<!--                --><?php //$num ?>
+                <!--                --><?php //$num ?>
             </div>
         </div>
     </div>
@@ -82,10 +81,10 @@ Student
     <div class="row">
         <div class="col-md-12">
             <div class = "qaa-question">
-                <!--問題文-->
-                    <div>
-                        <?=  $question->question ?>
-                    </div>
+                <!--                問題文-->
+                <div>
+                    <?=  $question->question ?>
+                </div>
             </div>
         </div>
     </div>
@@ -106,8 +105,7 @@ Student
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
                         <span class="select-choice">
                             <?= $question->choice1 ?>
-
-                </span>
+                        </span>
                     </li>
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
@@ -119,13 +117,13 @@ Student
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
                         <span class="select-choice">
                             <?= $question->choice3 ?>
-                </span>
+                        </span>
                     </li>
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
                         <span class="select-choice">
                             <?= $question->choice4 ?>
-                </span>
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -136,13 +134,13 @@ Student
         <div class="row">
             <div class = "qaa-next">
                 <?php
-                    echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' => '']]);
-                    echo $this->Form->submit('次の問題',
-                        ['type' => 'submit',
-                            'class' => 'btn btn-warning',
-                            'formaction' => ''
+                echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' => '']]);
+                echo $this->Form->submit('次の問題',
+                    ['type' => 'submit',
+                        'class' => 'btn btn-warning',
+                        'formaction' => ''
                     ]);
-                    echo $this->Form->end();
+                echo $this->Form->end();
                 ?>
             </div>
         </div>
