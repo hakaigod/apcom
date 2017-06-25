@@ -10,11 +10,6 @@
 	}
 }
 @media (min-width: 1000px) {
-	#AMresult{
-		/*width: calc(100% / 12 * 4);*/
-		/*overflow-x: scroll;*/
-	}
-
 	#questions table thead tr td{
 		min-width: 60px;
 		height: 30px;
@@ -24,10 +19,6 @@
 	}
 }
 
-#AMresult{
-	/*padding-right: 0;
-	padding-left: 0;*/
-}
 #answers table thead tr td{
 	height: 30px;
 }
@@ -67,7 +58,7 @@
 	font-size: 15px;
 }
 #examdata {
-	margin-top: 20px;
+	margin-top: 40px;
 }
 .pagination-plain * {
 	font-size: 20px;

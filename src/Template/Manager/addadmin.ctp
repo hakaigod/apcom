@@ -10,7 +10,7 @@
 	<form action="" method="post">
 		<input type="text" name="admname" class="form-control" placeholder="氏名">
 		<input type="text" name="admpass" class="form-control" placeholder="パスワード">
-		<div class="full">
+		<div class="full buttons">
 			<button type="reset" onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
 			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>

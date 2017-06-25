@@ -35,7 +35,7 @@
 				<input type="checkbox" data-toggle="checkbox" name="graduate_flg" <?= $regnum->graduate_flg ? 'checked="checked"' : ""; ?>>
 			</label>
 		</div>
-		<div class="full">
+		<div class="full buttons">
 			<button type="reset" onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
 			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>

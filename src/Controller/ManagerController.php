@@ -125,7 +125,7 @@ class ManagerController extends AppController
 		// where
 		if (!empty($_POST)) {
 			if (!empty($_POST['regnum'])) {
-				$query -> where(['regnum' => $this->request->data('regnum')]);
+				$query -> where(['regnum' => $_POST['regnum']]);
 			} else {
 				if (!empty($_POST['stuname'])) {
 					$query -> where(['stuname LIKE' => '%'.$_POST['stuname'].'%']);
@@ -261,7 +261,7 @@ class ManagerController extends AppController
 		// where
 		if (!empty($_POST)) {
 			if (!empty($_POST['admnum'])) {
-				$query -> where(['admnum' => $this->request->data('admnum')]);
+				$query -> where(['admnum' => $_POST['admnum']]);
 			} else {
 				if (!empty($_POST['admname'])) {
 					$query -> where(['admname LIKE' => '%' . $_POST['admname'] . '%']);
@@ -361,7 +361,24 @@ class ManagerController extends AppController
 	}
 	// 学科管理画面
 	public function depManager() {
-		$this->set('deps', $this->MfDep->find());
+		$query = $this->MfDep->find();
+		// where
+		if (!empty($_POST)) {
+			if (!empty($_POST['depnum'])) {
+				$query -> where(['depnum' => $_POST['depnum']]);
+			} else {
+				if (!empty($_POST['admname'])) {
+					$query -> where(['admname LIKE' => '%' . $_POST['depnum'] . '%']);
+				}
+				if (empty($_POST['deleted_flg'])) {
+					$query -> where(['deleted_flg' => FALSE]);
+				}
+			}
+		} else {
+			$query -> where(['deleted_flg' => FALSE]);
+		}
+
+		$this->set('deps', $query);
 	}
 	public function adddep() {
 		$this->viewBuilder()->layout('addmod');

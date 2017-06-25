@@ -26,7 +26,7 @@
 				<option value="<?= $i; ?>"><?= $i . "年"; ?></option>
 			<?php endfor; ?>
 		</select>
-		<div class="full">
+		<div class="full buttons">
 			<button type="reset" onclick="window.close();" class="col-xs-5 btn btn-warning">キャンセル</button>
 			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>

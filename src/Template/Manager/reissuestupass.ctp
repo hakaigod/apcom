@@ -10,7 +10,7 @@
 	<form action="" method="post">
 		<!-- 学籍番号 -->
 		<input type="text" name="stuno" class="form-control" placeholder="学籍番号">
-		<div class="full">
+		<div class="full buttons">
 			<button onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
 			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>

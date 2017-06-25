@@ -41,8 +41,8 @@
 		</div>
 	</div>
 </div>
-<div class="row" id="answers">
-	<div class="col-xs-6" id="AMresult">
+<div id="answers">
+	<div id="AMresult">
 		<table class="table table-bordered full">
 			<thead>
 				<tr>
@@ -92,34 +92,38 @@
 		</ul>
 	</div>
 </div>
+<div class="row">
+	<div class="col-xs-12">
+		<h6>正答率一覧</h6>
+		<?php foreach ($questions as $key): ?>
+			<div class="col-par-5">
+				<div class="qno">問 <?= $key->qesnum; ?></div>
+				<div id="question"><?= mb_strimwidth(strip_tags($key->question), 0, 40, "..."); ?></div>
+				<div class="font"><b class="oooo">50</b>%</div>
+			</div>
+		<?php endforeach; ?>
+	</div>
+</div>
 
 <div class="row">
-	<h6>正答率一覧</h6>
-	<?php foreach ($questions as $key): ?>
-		<div class="col-par-5">
-			<div class="qno">問 <?= $key->qesnum; ?></div>
-			<div id="question"><?= mb_strimwidth(strip_tags($key->question), 0, 40, "..."); ?></div>
-			<div class="font"><b class="oooo">50</b>%</div>
-		</div>
-	<?php endforeach; ?>
-</div>
-<div class="row" id="examdata">
-	<h5>過去試験データ</h5>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<td class="col-xs-2">回数</td><td class="col-xs-4">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ($imidata as $key => $value): ?>
+	<div class="col-xs-12" id="examdata">
+		<h5>過去試験データ</h5>
+		<table class="table table-bordered">
+			<thead>
 				<tr>
-					<td><?= $value['imi'];?></td>
-					<td><?= $value['name'] . ' ' .$value['num'] . '回目';?></td>
-					<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
-					<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'], 2);?></td>
+					<td class="col-xs-2">回数</td><td class="col-xs-4">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
 				</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				<?php foreach ($imidata as $key => $value): ?>
+					<tr>
+						<td><?= $value['imi'];?></td>
+						<td><?= $value['name'] . ' ' .$value['num'] . '回目';?></td>
+						<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
+						<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'], 2);?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
 </div>
