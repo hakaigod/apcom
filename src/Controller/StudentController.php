@@ -85,6 +85,12 @@ class StudentController extends AppController
 			->toArray();
 		$this->set(compact('questions'));
 		
+		//回答入力時(=POST)
+		if ($this->request->is('post')) {
+			//セッションに解答を書き込む
+			$this->writeAnsToSsn($this->request);
+		}
+		
 		//過去入力した選択肢、自信度がセッションに存在する場合
 		//既定値としてビューにセットする
 		$iniQueAfNum = ( $curNum - 1 ) * 10 + 1;
@@ -95,13 +101,9 @@ class StudentController extends AppController
 		}
 		$this->set(compact('inputtedLog'));
 		
-		//回答入力時(=POST)
-		if ($this->request->is('post')) {
-			//セッションに解答を書き込む
-			$this->writeAnsToSsn($this->request);
-		}
-		//
+		//すべてのページが解答されているか
 		$this->set('isAnsed',$this->isAnsweredAll($imicode));
+		//未解答のページ一覧
 		$this->set('notAnsedPages',$this->getNotAnsed($imicode));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
@@ -139,13 +141,13 @@ class StudentController extends AppController
 		}
 		$imicode = $this->request->getParam('imicode');
 		//もしどれか未入力の場合はリダイレクト
-		if ( !($this->isAnsweredAll($imicode)) ) {
-			$this->redirect(
-				[ 'action' => 'input' ,
-					'imicode' => $imicode
-				]
-			);
-		}
+//		if ( !($this->isAnsweredAll($imicode)) ) {
+//			$this->redirect(
+//				[ 'action' => 'input' ,
+//					'imicode' => $imicode
+//				]
+//			);
+//		}
 	}
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
@@ -167,7 +169,9 @@ class StudentController extends AppController
 	}
 	//回答が全てのページで入力されているか
 	private function isAnsweredAll(int $imicode) :bool {
-		return in_array(false,$this->getNotAnsed($imicode));
+		$notAnsedPages = $this->getNotAnsed($imicode);
+		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
+		return !(in_array(false,$notAnsedPages));
 	}
 	//セッションから値を読み込む
 	//引数は値の場所の配列

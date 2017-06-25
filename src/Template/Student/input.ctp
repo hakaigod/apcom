@@ -119,7 +119,7 @@ function json_safe_encode($data){
 			echo $this->Form->button('',[
 				'type'=>'submit',
 				'name'=>'curNum',
-				'value'=>$curNum-1,
+				'value'=>$curNum,
 				'formaction'=>$curNum-1,
 				'class'=>'btn btn-info fui-arrow-left'
 			]);
@@ -146,7 +146,7 @@ function json_safe_encode($data){
 			echo $this->Form->button('',[
 				'type'=>'submit',
 				'name'=>'curNum',
-				'value'=>$curNum+1,
+				'value'=>$curNum,
 				'formaction'=>$curNum+1,
 				'class'=>'btn btn-info end-btn fui-arrow-right'
 			]);
@@ -161,6 +161,7 @@ function json_safe_encode($data){
 			echo $this->Form->button('完了',[
 				'type'=>'button',
 				'name'=>'curNum',
+				//常に8
 				'value'=>$curNum,
 				'formaction'=>'result',
 				'class'=>'btn btn-success',
