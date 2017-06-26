@@ -3,9 +3,8 @@ $(function() {
     "use strict";
     // submit()に関数をバインド
     $('form').submit(function() {
-        // もしテキストボックスが空欄だったら…
-        // console.log($('#technology:checked').val());?
-        if($('.genre:checked').val() !== '1' ) {
+        // もしチェックボックスにチェックがついていない場合
+        if($('.genre:checked').val() === '0' ) {
             // 警告を出す
             window.alert('ジャンルを選択してください。');
             // 処理を中断

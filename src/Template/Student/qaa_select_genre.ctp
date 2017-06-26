@@ -53,22 +53,21 @@ Student
         <div class = "col-md-12">
             <div class= "genre-container">
                 <div class = "caption-box">
-<!--                    枠線の上に重ねる文字-->
+                    <!--枠線の上に重ねる文字-->
                     <div class = "caption"><p>ジャンル一覧</p></div>
-<!--                    form-->
-<!--                    ジャンル選択フォーム-->
+                    <!--ジャンル選択フォーム-->
                     <?= $this -> Form -> create('',['type' => 'get', 'url' => ['action' => 'qaa_question']])?>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>テクノロジ <br>
+                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 1)) ?>テクノロジ <br>
                     </label>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>ストラテジ <br>
+                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 2)) ?>ストラテジ <br>
                     </label>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'genre')) ?>マネジメント
+                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 3)) ?>マネジメント
                     </label>
                 </div>
-<!--                決定ボタン-->
+                <!--決定ボタン-->
                 <div class = "center">
                     <?php
                     echo $this -> Form -> button('問題開始',array('type' => 'submit','class' => 'btn btn-info'));

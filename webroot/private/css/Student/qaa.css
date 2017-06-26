@@ -85,6 +85,14 @@
     /*text-align: center;*/
 }
 
+.qaa-select-answer .row{
+    margin: 10px 10px 0 10px;
+}
+
+.qaa-select-answer .btn{
+    vertical-align: middle;
+}
+
 .qaa-next{
     margin-top: 30px;
     margin-bottom: 30px;
@@ -94,6 +102,15 @@
 .select-choice{
     text-align: justify;
 }
+
+ul {
+    list-style-position: inside;
+}
+ul li {
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
 
 /*#col-main * {*/
     /*border: solid 1px black;*/

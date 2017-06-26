@@ -3,11 +3,6 @@
  * @var \App\Model\Entity\MfQe $question
  */
 ?>
-
-<!--問題表示画面-->
-
-
-
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
 一問一答
@@ -48,8 +43,7 @@ Student
                 <div id = "qaa-detail">
                     [<a onclick = " " data-toggle = "modal" data-target = "#myModal"> 詳細 </a>]
                 </div>
-
-<!--                                 モーダルウィンドウの中身 -->
+                <!--モーダルウィンドウの中身 -->
                 <div class="modal fade" id="myModal">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -64,31 +58,27 @@ Student
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-<!--        ここから出題問題表示-->
+    <!--ここから出題問題表示-->
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
-                問：
-                <!--                --><?php //$num ?>
+                問：<?php $num ?>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class = "qaa-question">
-                <!--                問題文-->
+                <!--問題文-->
                 <div>
-                    <?=  $question->question ?>
+                    <?=  $question -> question ?>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div id = "qaa-falsehood">
@@ -96,10 +86,11 @@ Student
             </div>
         </div>
     </div>
-
-    <div class="col-md-12">
-        <div class="qaa-select-answer">
-            <div class="row">
+    <!--選択肢-->
+    <div class="qaa-select-answer">
+        <!--選択肢１-->
+        <div class="row">
+            <div class="col-md-12">
                 <ul style="list-style:none;">
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
@@ -107,18 +98,39 @@ Student
                             <?= $question->choice1 ?>
                         </span>
                     </li>
+                </ul>
+            </div>
+        </div>
+        <!--選択肢２-->
+        <div class="row">
+            <div class="col-md-12">
+                <ul style="list-style:none;">
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
                         <span class="select-choice">
                             <?= $question->choice2 ?>
-                </span>
+                        </span>
                     </li>
+                </ul>
+            </div>
+        </div>
+        <!--選択肢３-->
+        <div class="row">
+            <div class="col-md-12">
+                <ul style="list-style:none;">
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
                         <span class="select-choice">
                             <?= $question->choice3 ?>
                         </span>
                     </li>
+                </ul>
+            </div>
+        </div>
+        <!--選択肢４-->
+        <div class="row">
+            <div class="col-md-12">
+                <ul style="list-style:none;">
                     <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
                         <span class="select-choice">
@@ -129,21 +141,16 @@ Student
             </div>
         </div>
     </div>
-
+    <!--送信ボタン-->
     <div class="col-md-12">
         <div class="row">
             <div class = "qaa-next">
                 <?php
                 echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' => '']]);
-                echo $this->Form->submit('次の問題',
-                    ['type' => 'submit',
-                        'class' => 'btn btn-warning',
-                        'formaction' => ''
-                    ]);
+                echo $this->Form->submit('次の問題', ['type' => 'submit', 'class' => 'btn btn-warning','formaction' => '']);
                 echo $this->Form->end();
                 ?>
             </div>
         </div>
     </div>
 </div>
-

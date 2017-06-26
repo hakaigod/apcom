@@ -33,26 +33,25 @@ class StudentController extends AppController
         //qaaSelectGenre 選択したジャンルの取得
         $getGenre = $this->request->getQuery('SelectGenre');
 
-//        debug($getGenre);
+        //debug($getGenre);
 
-//        指定したジャンルの問題を取得する
-        $this->loadModel('MfQes');
-        $question = $this->MfQes->find()
-//            総問題数、問題番号、問題文、選択肢1~4、正解、該当する出題ジャンル
-//                ->SELECT(['count * as total','qesnum','fienum','question','choice1','choice2','choice3','choice4','answer'])
-                ->WHERE(['MfQes.fienum IN' => $getGenre])
-                ->ORDER(['qesnum' => 'ASC'])
-//            行数の指定
-//                ->LIMIT(1)
-//            何行飛ばすか
-                ->OFFSET(4)
-//            1行だけ出力する
-                ->first();
-
-//        ルートから番号の取得
+        //ルートから番号の取得
         $qnum = $this -> request -> getParam('question_num');
 
-//        問題内容の表示
+        //指定したジャンルの問題を取得する
+        $this->loadModel('MfQes');
+        $question = $this->MfQes->find()
+            ->WHERE(['MfQes.fienum IN' => $getGenre])
+            ->ORDER(['qesnum' => 'ASC'])
+            //何行飛ばすか
+            ->OFFSET($qnum)
+            //1行だけ出力する
+            ->first();
+
+
+        $this -> set('num',$qnum);
+
+        //問題内容の表示
         $this->set('question',$question);
     }
 }
