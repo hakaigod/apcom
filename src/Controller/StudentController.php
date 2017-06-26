@@ -9,6 +9,7 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
+use Cake\ORM\TableRegistry;
 
 /**
  * @property TfAnsTable TfAns
@@ -31,7 +32,11 @@ class StudentController extends AppController
 		$this->loadModel('TfImi');
 		//問題テーブル
 		$this->loadModel('MfQes');
-
+		
+		//TODO:この行はセッションが実装されたら消す
+		$session = $this->request->session();
+		$session->write('StudentID', '13110025');
+		
 	}
 
 //    public function index(){
@@ -45,12 +50,8 @@ class StudentController extends AppController
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
 		
-		$session = $this->request->session();
 		
-		//TODO:この行はセッションが実装されたら消す
-		$session->write('StudentID', '13110025');
-		
-		$regnum = $session->read('StudentID');
+		$regnum = $this->readSession(['StudentID']);
 		
 		//生徒名取得
 		$stuName = $this->MfStu->find()
@@ -115,7 +116,11 @@ class StudentController extends AppController
 		//遷移元ページのリンク番号
 		$befNum = $request->getData("curNum");
 		//模擬試験コードか遷移元のページ番号がセットされていない場合何もしない
-		if (!isset($imicode) or !isset($befNum)) return;
+		if (!isset($imicode) or !isset($befNum)) {
+			//TODO:このせいで8からresultが書き込まれない
+			$this->log("imicode or befNum are not set");
+			return;
+		}
 		//すでに書いたページ番号にtrueを設定
 		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
@@ -137,6 +142,19 @@ class StudentController extends AppController
 			$this->writeAnsToSsn($this->request);
 		}
 		$imicode = $this->request->getParam('imicode');
+		$this->set(compact('imicode'));
+		$query = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence' ]);
+		$rejoinders = $this->readSession(['answers',$imicode]);
+		$this->set(compact('rejoinders'));
+		$regnum = $this->readSession(['StudentID']);
+		$this->set(compact('regnum'));
+		$confidences = $this->readSession([ 'confidences', $imicode ]);
+		$this->set(compact('confidences'));
+		
+//		foreach ($rejoinders as $key => $value) {
+//			$query->values([$imicode,$key,$regnum,$value,$confidences[$key]]);
+//		}
+//		$query->execute();
 		//もしどれか未入力の場合はリダイレクト
 //		if ( !($this->isAnsweredAll($imicode)) ) {
 //			$this->redirect(

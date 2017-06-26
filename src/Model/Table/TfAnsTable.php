@@ -48,6 +48,7 @@ class TfAnsTable extends Table
             ->allowEmpty('imicode', 'create');
 
         $validator
+            ->integer('qesnum')
             ->allowEmpty('qesnum', 'create');
 
         $validator

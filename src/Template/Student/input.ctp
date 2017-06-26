@@ -44,7 +44,7 @@ function json_safe_encode($data){
 <?php $this->end(); ?>
 
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
-<form action="" method="post" id="answer-form">
+<form action="result" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
@@ -163,7 +163,6 @@ function json_safe_encode($data){
 				'name'=>'curNum',
 				//常に8
 				'value'=>$curNum,
-				'formaction'=>'result',
 				'class'=>'btn btn-success',
                 'id' => 'end_answer'
 			]);

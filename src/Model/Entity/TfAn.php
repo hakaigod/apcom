@@ -7,7 +7,7 @@ use Cake\ORM\Entity;
  * TfAn Entity
  *
  * @property int $imicode
- * @property string $qesnum
+ * @property int $qesnum
  * @property string $regnum
  * @property int $rejoinder
  * @property int $confidence
