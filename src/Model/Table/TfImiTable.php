@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
@@ -68,9 +69,14 @@ class TfImiTable extends Table
 		return $validator;
 	}
 	//書いた
-	public function getOneAndMfExam($imicode):EntityInterface {
+	public function getOneAndQes(int $imicode,int $page):EntityInterface {
 		return $this->find()
-			->contain(['MfExa'])
+			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($page) {
+					          return $q->select(['exanum','qesnum','question','answer'])
+						          ->limit(10)
+						          ->page($page);
+				          }
+			          ])
 			->where(['TfImi.imicode' => $imicode] )
 			->first();
 	}

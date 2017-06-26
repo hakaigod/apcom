@@ -70,19 +70,16 @@ class StudentController extends AppController
 		
 		//模擬試験テーブルの主キー
 		$imicode = $this->request->getParam('imicode');
-		//模擬試験コードから試験実施年度と季節を取得
-		$imitation = $this->TfImi->getOneAndMfExam($imicode);
-		
-		$this->setYearAndSeason($imitation);
 		//リクエストされたページ番号 範囲は1-8
 		$curNum = $this->request->getParam('linkNum');
+		//模擬試験コードから試験実施年度と季節を取得
+		$imitation = $this->TfImi->getOneAndQes($imicode,$curNum);
+//		$this->set(compact('imitation'));
+		$this->setYearAndSeason($imitation);
 		//現在のページ番号をセット
 		$this->set(compact('curNum'));
 		//問題文セット
-		$questions = $this->MfQes
-			//問題文のみ取得、試験回と取得する問題数とOFFSETを指定
-			->getTexts(['MfQes.exanum' => $imitation['mf_exa']->exanum],10,$curNum)
-			->toArray();
+		$questions = $imitation['mf_exa']['mf_qes'];
 		$this->set(compact('questions'));
 		
 		//回答入力時(=POST)
