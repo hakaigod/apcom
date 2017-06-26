@@ -4,11 +4,11 @@ $(function() {
     // submit()に関数をバインド
     $('form').submit(function() {
         // もしチェックボックスにチェックがついていない場合
-        if($('.genre:checked').val() === '0' ) {
+        if($('.technology:checked').val() !== '1' && $('.strategy:checked').val() !== '2' && $('.management:checked').val() !== '3') {
             // 警告を出す
             window.alert('ジャンルを選択してください。');
             // 処理を中断
             return false;
         }
-    }).get();
+    });
 });

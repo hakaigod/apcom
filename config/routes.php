@@ -85,4 +85,8 @@ Router::scope('/', function (RouteBuilder $routes) {
  */
 Plugin::routes();
 
-Router::connect('/student/:question_num',['Controller' => 'Student','action' => 'qaaQuestion'],['question_num' => '\d+']);
+Router::connect(
+    '/:student/:qaaQuestion/:question_num',
+    ['controller' => 'student', 'action' => 'qaaQuestion'],
+    ['controller' => '?i:student', 'qaaQuestion' => '(?:qaaQuestion)',
+    'question_num' => '\d+']);

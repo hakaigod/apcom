@@ -75,21 +75,20 @@
 }
 
 .qaa-select-answer .btn-embossed{
-    /*display: inline-block;*/
     padding: 10px 20px 10px 20px;
-    margin: 15px 20px 15px 20px;
+    /*margin: 15px 20px 15px 20px;*/
 }
 
 .qaa-select-answer {
     border: solid 1px #aeb6bf;
     /*text-align: center;*/
 }
+.qaa-select-answer .col-md-1{
+    text-align: center;
+}
 
 .qaa-select-answer .row{
     margin: 10px 10px 0 10px;
-}
-
-.qaa-select-answer .btn{
     vertical-align: middle;
 }
 
@@ -100,7 +99,7 @@
 }
 
 .select-choice{
-    text-align: justify;
+    vertical-align: middle;
 }
 
 ul {
@@ -109,8 +108,9 @@ ul {
 ul li {
     padding-left: 1em;
     text-indent: -1em;
-}
+    vertical-align: middle;
 
+}
 
 /*#col-main * {*/
     /*border: solid 1px black;*/

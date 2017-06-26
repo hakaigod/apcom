@@ -58,13 +58,13 @@ Student
                     <!--ジャンル選択フォーム-->
                     <?= $this -> Form -> create('',['type' => 'get', 'url' => ['action' => 'qaa_question']])?>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 1)) ?>テクノロジ <br>
+                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'technology','value' => 1)) ?>テクノロジ <br>
                     </label>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 2)) ?>ストラテジ <br>
+                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'strategy','value' => 2)) ?>ストラテジ <br>
                     </label>
                     <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'genre','value' => 3)) ?>マネジメント
+                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'management','value' => 3)) ?>マネジメント
                     </label>
                 </div>
                 <!--決定ボタン-->

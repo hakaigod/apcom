@@ -1,6 +1,9 @@
 <?php
 /**
+ * 問題テーブル
  * @var \App\Model\Entity\MfQe $question
+ * 問題とページ番号　新しい問題に遷移する度インクリメント
+ * @var Integer $qNum
  */
 ?>
 <!-- タイトルセット -->
@@ -17,7 +20,6 @@
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?= $this->Html->script('/private/js/Student/qaa.js') ?>
-<?= $this->Html->script('/private/js/Student/check.js') ?>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -65,7 +67,7 @@ Student
     <div class = "row">
         <div class = "col-md-12">
             <div id = "qaa-question-no">
-                問：<?php $num ?>
+                問：<?php $qNum ?>
             </div>
         </div>
     </div>
@@ -103,28 +105,21 @@ Student
         </div>
         <!--選択肢２-->
         <div class="row">
-            <div class="col-md-12">
-                <ul style="list-style:none;">
-                    <li>
-                        <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
+            <div class="col-md-1">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
+            </div>
+            <div class="col-md-11">
                         <span class="select-choice">
                             <?= $question->choice2 ?>
                         </span>
-                    </li>
-                </ul>
             </div>
         </div>
         <!--選択肢３-->
         <div class="row">
             <div class="col-md-12">
-                <ul style="list-style:none;">
-                    <li>
                         <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
                         <span class="select-choice">
                             <?= $question->choice3 ?>
-                        </span>
-                    </li>
-                </ul>
             </div>
         </div>
         <!--選択肢４-->
@@ -146,8 +141,8 @@ Student
         <div class="row">
             <div class = "qaa-next">
                 <?php
-                echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' => '']]);
-                echo $this->Form->submit('次の問題', ['type' => 'submit', 'class' => 'btn btn-warning','formaction' => '']);
+                echo $this->Form->create(null, ['type' => 'post', 'url' => ['action' =>'']]);
+                echo $this->Form->button('次の問題', ['type' => 'submit', 'class' => 'btn btn-warning','value' => '$qNum']);
                 echo $this->Form->end();
                 ?>
             </div>

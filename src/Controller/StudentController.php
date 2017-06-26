@@ -33,10 +33,11 @@ class StudentController extends AppController
         //qaaSelectGenre 選択したジャンルの取得
         $getGenre = $this->request->getQuery('SelectGenre');
 
-        //debug($getGenre);
+//        $this->log($getGenre);
 
         //ルートから番号の取得
-        $qnum = $this -> request -> getParam('question_num');
+        $qNum = $this -> request -> getParam('question_num');
+        $this -> set('qNum',$qNum);
 
         //指定したジャンルの問題を取得する
         $this->loadModel('MfQes');
@@ -44,12 +45,9 @@ class StudentController extends AppController
             ->WHERE(['MfQes.fienum IN' => $getGenre])
             ->ORDER(['qesnum' => 'ASC'])
             //何行飛ばすか
-            ->OFFSET($qnum)
+            ->OFFSET(5)
             //1行だけ出力する
             ->first();
-
-
-        $this -> set('num',$qnum);
 
         //問題内容の表示
         $this->set('question',$question);
