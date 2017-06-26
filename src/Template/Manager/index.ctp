@@ -36,7 +36,7 @@
 	</div>
 	<div class="col-xs-6 right">
 		<div class="bootstrap-switch-square">
-			30秒更新
+			10秒更新
 			<input type="checkbox" data-toggle="switch" id="load_switch" value="load_switch" <?= !empty($_GET['autoload']) ? 'checked' : '';?>/>
 		</div>
 	</div>
@@ -53,16 +53,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($students as $student): ?>
-				<?php foreach ($answers as $answer): ?>
-						<tr>
-							<td><?= $student->mf_stu['stuname']; ?></td>
-							<td><?= $student->imisum . '点'; ?></td>
-							<?php foreach ($answer as $ans): ?>
-								<td class="center"><?= $ans; ?></td>
-							<?php endforeach; break 2; ?>
-						</tr>
-					<?php endforeach; ?>
+				<?php foreach ($answers as $answer => $value): ?>
+					<tr>
+						<td><?= $value['stuname']; ?></td>
+						<td><?= $value['imisum'] . '点'; ?></td>
+						<?php foreach ($value['answers'] as $ans): ?>
+							<td class="center"><?= $ans; ?></td>
+						<?php endforeach; ?>
+					</tr>
 				<?php endforeach; ?>
 				<tr>
 					<td>平均</td>
@@ -74,9 +72,9 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="right">
+	<!-- <div class="right">
 		<button class="btn btn-info">CSV出力</button>
-	</div>
+	</div> -->
 	<!-- ページネーター -->
 	<div class="center">
 		<?= $this->Paginator->counter(['format' => '{{page}} / {{pages}}']); ?>

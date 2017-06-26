@@ -34,12 +34,6 @@ class ManagerController extends AppController
 		$query = $this->TfImi->find();
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
 
-		// 受験済み学生表示用
-		$query = $this->TfSum->find()->contain(['MfStu']);
-		$query ->order(['TfSum.regnum' => 'DESC'])
-		->where(['imicode' => $nearimi]);
-		$this->set('students', $query);
-
 		// 受験者平均点
 		$queryAvg = $this->TfSum->find();
 		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => $nearimi]);
@@ -47,19 +41,26 @@ class ManagerController extends AppController
 		$this->set('average', array_shift($aveArr));
 
 		// 模擬試験ごとの回答データ取得
-		$ans = $this->TfAns->find();
-		$ans ->select(['imicode', 'regnum', 'qesnum', 'rejoinder'])
+		$cnt = $this->TfSum->find()->where(['imicode' => $nearimi]);
+
+		$ans = $this->TfAns->find()->contain(['MfStu']);
+		$ans ->select(['imicode', 'TfAns.regnum', 'MfStu.stuname', 'qesnum', 'rejoinder'])
 		->where(['imicode' => $nearimi])
-		->group(['imicode', 'regnum', 'qesnum'])
-		->order(['regnum' =>'DESC','qesnum']);
+		->group(['imicode', 'qesnum', 'TfAns.regnum'])
+		->order(['qesnum', 'TfAns.regnum' =>'DESC']);
 		if (!empty($_GET['page'])) {
 			$ans ->offset($_GET['page'] * 10 - 10);
 		}
-		$ans->limit(10);
-		$this->set('answerPage', $this->paginate($ans));
+		$ans->limit(($cnt->count() * 10));
+
+		$this->paginate['limit'] = $cnt->count() * 10;
+		$this->paginate($ans);
+
+
 		// 回答データを連想配列に格納
 		$answers = array();
-		$i=0; $work = null;
+		$work = null;
+		$i = 0;
 		foreach ($ans as $key) {
 			switch ($key->rejoinder) {
 				case 0: $ansJa = '';break;
@@ -68,14 +69,16 @@ class ManagerController extends AppController
 				case 3: $ansJa = 'ウ';break;
 				default: $ansJa = 'エ';break;
 			}
-			if ($work == $key->regnum) {
-				$answers[$key->regnum] += array('ans'. $i++ => $ansJa);
+			if(isset($answers[$key->regnum])){
+				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa);
 			} else {
-				$answers += array($key->regnum => array('ans'. $i++ => $ansJa));
+				$query = $this->TfSum->get([$key->regnum, $nearimi]);
+				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->imisum, 'answers'=> array('ans'. $i++ => $ansJa)));
 			}
-			$work = $key->regnum;
 		}
+		// print_r($answers);
 		$this->set('answers', $answers);
+
 
 		$ans = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
@@ -105,10 +108,7 @@ class ManagerController extends AppController
 	}
 
 	public $paginate = [
-		'limit' => 10,
-		'order' => [
-			'TfAns.qesnum' => 'asc'
-		]
+		'order' => ['TfAns.qesnum']
 	];
 
 	// 学生管理

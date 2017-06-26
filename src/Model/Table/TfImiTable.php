@@ -33,6 +33,7 @@ class TfImiTable extends Table
         $this->setTable('tf_imi');
         $this->setDisplayField('imicode');
         $this->setPrimaryKey('imicode');
+		$this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**

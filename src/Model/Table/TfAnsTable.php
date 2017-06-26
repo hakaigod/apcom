@@ -33,6 +33,7 @@ class TfAnsTable extends Table
         $this->setTable('tf_ans');
         $this->setDisplayField('imicode');
         $this->setPrimaryKey(['imicode', 'qesnum', 'regnum']);
+		$this->belongsTo('MfStu')->setForeignKey('regnum');
     }
 
     /**
