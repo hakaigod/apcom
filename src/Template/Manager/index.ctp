@@ -81,7 +81,7 @@
 	<div class="center">
 		<?= $this->Paginator->counter(['format' => '{{page}} / {{pages}}']); ?>
 		<ul class="pagination-plain">
-			<!-- 最初,次へ ボタン設置 -->
+			<!-- 最初,前へ　ボタン設置 -->
 			<?= $this->Paginator->first('<<'); ?>
 			<?= $this->Paginator->prev('<') ?>
 			<!-- 途中ページ　ボタン設置 -->

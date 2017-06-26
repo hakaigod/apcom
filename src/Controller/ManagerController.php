@@ -53,7 +53,7 @@ class ManagerController extends AppController
 		->group(['imicode', 'regnum', 'qesnum'])
 		->order(['regnum' =>'DESC','qesnum']);
 		if (!empty($_GET['page'])) {
-			$ans ->offset($_GET['page'] * 10	- 10);
+			$ans ->offset($_GET['page'] * 10 - 10);
 		}
 		$ans->limit(10);
 		$this->set('answerPage', $this->paginate($ans));
@@ -85,20 +85,19 @@ class ManagerController extends AppController
 			$ans ->offset($_GET['page'] * 10 - 10);
 		}
 		$ans ->order(['qesnum'])->limit(10)->toArray();
-
 		$this->set('questions', $ans);
 
 		// 模擬試験一覧
-		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum', 'imp_date']);
-		$arrayimis = array();$work = null;
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
+		$arrayimis = array();
+		$work = null;
+		// 模擬試験の回数を数える
 		foreach ($imidata as $key) {
 			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
-			if($key->exanum == $work) {
-				$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
-			} else {
+			if($key->exanum != $work) {
 				$i = 0;
-				$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
 			}
+			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
 			$work = $key->exanum;
 		}
 		array_multisort($arrayimis, SORT_DESC);
@@ -159,21 +158,26 @@ class ManagerController extends AppController
 
 		// 個別追加
 		if (!empty($_POST)) {
-			$query = $this->MfStu->query();
-			$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
-			$query->values([
-				'regnum' => $_POST['stuno'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'stupass' => $_POST['stuno']
-			]);
-			try {
-				$query->execute();
-				$this->Flash->success('success');
-			} catch (Exception $e) {
+			if (empty($_POST['stuno']) || empty($_POST['stuname'])) {
 				$this->Flash->error('missing');
+			} else {
+				$query = $this->MfStu->query();
+				$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
+				$query->values([
+					'regnum' => $_POST['stuno'],
+					'stuname' => $_POST['stuname'],
+					'stuyear' => $_POST['old'],
+					'depnum' => $_POST['depnum'],
+					'stupass' => $_POST['stuno']
+				]);
+				try {
+					$query->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing');
+				}
 			}
+
 		}
 		// 一括追加
 		if (!empty($_FILES)) {

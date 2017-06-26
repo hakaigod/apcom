@@ -63,3 +63,10 @@
 .pagination-plain * {
 	font-size: 20px;
 }
+
+.pagination-plain > li.next {
+	padding-left: 10px;
+}
+.pagination-plain > li.prev {
+	padding-right: 10px;
+}

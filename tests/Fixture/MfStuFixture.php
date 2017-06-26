@@ -28,12 +28,16 @@ class MfStuFixture extends TestFixture
         'stuname' => ['type' => 'string', 'length' => 20, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'stuyear' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'stupass' => ['type' => 'string', 'length' => 40, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'depnum' => ['type' => 'string', 'fixed' => true, 'length' => 1, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
+        'depnum' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'last_update' => ['type' => 'timestamp', 'length' => null, 'null' => false, 'default' => 'CURRENT_TIMESTAMP', 'comment' => '', 'precision' => null],
         'graduate_flg' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'deleted_flg' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        '_indexes' => [
+            'depnum' => ['type' => 'index', 'columns' => ['depnum'], 'length' => []],
+        ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['regnum'], 'length' => []],
+            'mf_stu_ibfk_1' => ['type' => 'foreign', 'columns' => ['depnum'], 'references' => ['mf_dep', 'depnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -49,12 +53,12 @@ class MfStuFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '225113d0-be9c-45a9-9056-1fb8500baca0',
+            'regnum' => 'f466c055-ee4b-4f6d-b7e6-2c3a24c16e30',
             'stuname' => 'Lorem ipsum dolor ',
             'stuyear' => 1,
             'stupass' => 'Lorem ipsum dolor sit amet',
-            'depnum' => 'Lorem ipsum dolor sit ame',
-            'last_update' => 1497923674,
+            'depnum' => 1,
+            'last_update' => 1498455748,
             'graduate_flg' => 1,
             'deleted_flg' => 1
         ],

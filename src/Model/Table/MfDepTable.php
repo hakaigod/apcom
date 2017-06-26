@@ -44,6 +44,7 @@ class MfDepTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
+            ->integer('depnum')
             ->allowEmpty('depnum', 'create');
 
         $validator

@@ -24,7 +24,9 @@ class TfSumTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.tf_sum'
+        'app.tf_sum',
+        'app.mf_stu',
+        'app.mf_dep'
     ];
 
     /**

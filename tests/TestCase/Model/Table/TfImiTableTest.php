@@ -24,7 +24,8 @@ class TfImiTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.tf_imi'
+        'app.tf_imi',
+        'app.mf_exa'
     ];
 
     /**

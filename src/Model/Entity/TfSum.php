@@ -9,6 +9,8 @@ use Cake\ORM\Entity;
  * @property string $regnum
  * @property int $imicode
  * @property float $imisum
+ *
+ * @property \App\Model\Entity\MfStu $mf_stu
  */
 class TfSum extends Entity
 {

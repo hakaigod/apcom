@@ -26,10 +26,4 @@ class MfExa extends Entity
         '*' => true,
         'exanum' => false
     ];
-	public function _getJapYear () {
-		return $this->get('exa_year')->format('Y') - 2000 + 12;
-	}
-	public function _getAdYear () {
-		return $this->get('exa_year')->format('Y');
-	}
 }

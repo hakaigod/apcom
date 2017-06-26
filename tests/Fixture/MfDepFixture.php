@@ -24,7 +24,7 @@ class MfDepFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'depnum' => ['type' => 'string', 'fixed' => true, 'length' => 1, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
+        'depnum' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'depname' => ['type' => 'string', 'length' => 30, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'deleted_flg' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
@@ -44,7 +44,7 @@ class MfDepFixture extends TestFixture
      */
     public $records = [
         [
-            'depnum' => 'a9f548a4-d4d3-4a5f-aef4-aee13ea7b5b7',
+            'depnum' => 1,
             'depname' => 'Lorem ipsum dolor sit amet',
             'deleted_flg' => 1
         ],

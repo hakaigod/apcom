@@ -33,7 +33,6 @@ class TfSumTable extends Table
         $this->setTable('tf_sum');
         $this->setDisplayField('regnum');
         $this->setPrimaryKey(['regnum', 'imicode']);
-		$this->belongsTo('MfStu')->setForeignKey('regnum');
     }
 
     /**

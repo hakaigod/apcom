@@ -8,9 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property int $imicode
  * @property int $exanum
- * @property \Cake\I18n\FrozenTime $imp_date
  * @property float $imisum
  * @property int $imipepnum
+ * @property \Cake\I18n\FrozenTime $imp_date
+ *
+ * @property \App\Model\Entity\MfExa $mf_exa
  */
 class TfImi extends Entity
 {

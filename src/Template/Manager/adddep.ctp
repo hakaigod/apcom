@@ -10,7 +10,7 @@
 	<form action="" method="post">
 		<input type="text" name="depname" class="form-control" placeholder="学科名">
 		<div class="full buttons">
-			<button type="reset" onclick="window.close()" class="col-xs-5 btn btn-warning">キャンセル</button>
+			<button type="button" onclick="window.close();" class="col-xs-5 btn btn-warning">キャンセル</button>
 			<button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
 		</div>
 	</form>

@@ -32,6 +32,8 @@ class TfSumFixture extends TestFixture
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['regnum', 'imicode'], 'length' => []],
+            'tf_sum_ibfk_1' => ['type' => 'foreign', 'columns' => ['imicode'], 'references' => ['tf_imi', 'imicode'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'tf_sum_ibfk_2' => ['type' => 'foreign', 'columns' => ['regnum'], 'references' => ['mf_stu', 'regnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -47,7 +49,7 @@ class TfSumFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '57e8cbc8-d1c8-40d0-99e0-c84f72fc21fe',
+            'regnum' => '4f8f40c2-93c3-4b07-b87a-07375ceb2662',
             'imicode' => 1,
             'imisum' => 1
         ],
