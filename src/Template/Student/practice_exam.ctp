@@ -8,7 +8,7 @@
 
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-模擬試験
+<?= "平成".$exams->jap_year . "年度". $exams->exaname ." 模擬試験" ?>
 <?php $this->end(); ?>
 
 
@@ -57,7 +57,7 @@ managerrrrr
 	</div>
 	
 	
-	<!--ここから出題問題表示-->
+	<!--　出題問題表示　-->
 	<div class = "row">
 		<div class = "col-md-12">
 			<div id = "qaa-question-no">
@@ -80,50 +80,70 @@ managerrrrr
 		</div>
 	</div>
 	
-	<div class="col-md-12">
-		<div class="qaa-select-answer">
-			<div class="row">
-		<!--	    ラジオボタンのチェックボックス化を直す			-->
-				<ul style="list-style:none;" data-toggle="buttons-radio" class="button-group">
-					<li>
-						<input type = "button" class = "btn btn-embossed btn-primary" value = "ア" >
+	
+	<!--  解答部分	-->
+	<div class="row" id="table" data-toggle="buttons" >
+		<table class="table table-bordered">
+				<tbody>
+				<tr>
+					<td id="button" class="col-xs-1" >
+						<label class = "btn btn-embossed btn-primary full">
+							<input type = "radio"  id="aa" value="1" formmethod="post" >ア
+						</label>
+					</td>
+					<td id="choice" class="col-xs-11">
+						<span class="select-choice" id="aa" >
+							<?= ($qes -> choice1); ?>
+						</span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td id="button">
+						<label class = "btn btn-embossed btn-primary full">
+							<input type = "radio"  id="aa"  value="2" formmethod="post">イ
+						</label>
+					</td>
+					<td id="choice">
 						<span class="select-choice">
-<!--                        --><?php
-//                            str_replace(,$qes->qesnum."a.gif",);
-                            echo ($qes -> choice1)
-//                        ?>
-                </span>
-					</li>
-					<li>
-						<input type = "button" class = "btn btn-embossed btn-primary" value = "イ" >
-						<span class="select-choice">
-<!--                        --><?php
-//                        str_replace(,$qes->qesnum."i.gif",);
-							echo ($qes -> choice2) ?>
-                </span>
-					</li>
-					<li>
-						<input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" >
-						<span class="select-choice">
-<!--                        --><?php
-//                        str_replace(,$qes->qesnum."u.gif",)
-							echo ($qes -> choice3) ?>
-                </span>
-					</li>
+							<?= ($qes -> choice2); ?>
+						</span>
+					</td>
+				</tr>
+				<tr>
 					
-					<li>
-						<input type = "button" class = "btn btn-embossed btn-primary" value = "エ" >
+					<td id="button">
+						<label class = "btn btn-embossed btn-primary full">
+							<input type = "radio"  id="aa" value="3" formmethod="post" >ウ
+						</label>
+					</td>
+					<td id="choice">
 						<span class="select-choice">
-<!--                        --><?php
-//                        str_replace(,$qes->qesnum."e.gif",)
-							echo ($qes -> choice4) ?>
-                </span>
-					</li>
-				</ul>
-			</div>
-		</div>
+							<?= ($qes -> choice3); ?>
+						</span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td id="button">
+						<label class = "btn btn-embossed btn-primary full">
+							<input type = "radio"  id="aa"  value="4" formmethod="post">エ
+						</label>
+					</td>
+					<td id="choice">
+						<span class="select-choice" >
+							<?= ($qes -> choice4); ?>
+						</span>
+					</td>
+				</tr>
+				</tbody>
+			
+		</table>
 	</div>
 	
+	
+	
+	<!--  下部のボタン3種類	-->
 	<div class="col-md-12">
 		<div class="qaa row">
 				<div class="qaa-back">
@@ -154,6 +174,17 @@ managerrrrr
 				
 				<div  class="qaa-next">
 					<?php
+					echo $this->Form->create(null,
+						['type' => 'post'],
+						['url' => ['action' =>'practiceExam', $exams->exanum,$qes->qesnum+1]]
+					);
+					echo $this->Form->button('次の問題 >>',
+						['class' => 'btn btn-warning'],
+						['value' => '$']);
+					echo $this->Form->end();
+					?>
+					
+					<?php
 					if ($qes->qesnum==80){
 						echo $this->Html->link("次の問題 >>" ,
 							['action' => 'practiceExam', $exams->exanum,$qes->qesnum+1],
@@ -162,12 +193,13 @@ managerrrrr
 					}else{
 						echo $this->Html->link("次の問題 >>" ,
 							['action' => 'practiceExam', $exams->exanum,$qes->qesnum+1],
-							[ 'class'=>"btn btn-warning" ]
+							[ 'class'=>"btn btn-warning"]
 						);
+//						$this->$_SESSION->write($qes->qesnum,$_GET);
 					}
+					
 					?>
-			</div>
-			
+				</div>
 			</div>
 		</div>
 	</div>

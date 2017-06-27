@@ -1,53 +1,64 @@
+/*　年度タイトル　*/
 #exam-title{
     font-size: 30px;
     border-bottom: 1px solid #148d75;
 }
 
+/*　問題番号　*/
 #qaa-question-no{
     margin-top: 18px;
     font-size: 20px;
 }
 
+/*　問題文の調整　*/
 .qaa-question{
     text-align: left;
     margin: 3px 0px 10px;
 }
 
-.qaa-falsehood{
-    text-align: left;
-    margin-top: 20px;
-}
 
-.qaa-select-answer .btn-embossed{
+/*　解答文の調整　*/
+.select-choice{
     display: inline-block;
-    padding: 10px 20px 10px 20px;
-    margin: 15px 20px 15px 20px;
+      /* 自動改行 */
+    word-break: keep-all;
+    margin-left: 20px;
 }
 
-.qaa-select-answer {
-    border: solid 1px #aeb6bf;
-    /*text-align: center;*/
+/*　テーブル内の最上段テーブルの位置調整　*/
+#aa{
+    margin-top: 5px;
 }
 
-.qaa-back{
+/*　テーブル内のボタン位置調整　*/
+.btn-embossed{
+    margin: 0px 0px 0px 8px;
 }
 
-.qaa-score{
-}
+/* テーブル内のボタンをラジオボタン化 */
 
-.qaa-score a{
-    background-color: #3278b3;
-}
-
-.qaa-score a:hover{
-    background-color: #3d8bd4;
-}
-
-
-.qaa-next{
+[data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=radio],
+[data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=checkbox]{
+    position: absolute;
+    z-index: -1;
+    filter: alpha(opacity=0);
+    opacity: 0;
 }
 
 
+
+/*　テーブル内部の線を消す　*/
+#table * {
+    border: none;
+}
+
+/*　テーブルを囲む線　*/
+#table {
+    border: solid 1px #b6b6b6;
+}
+
+
+/*　下部の3つのボタン　*/
 .qaa{
     margin: 48px 0px 70px 0px;
     display: flex;
@@ -55,5 +66,12 @@
     padding:0;
 }
 
-.select-choice {
+/*　下部「解答を終了する」ボタン　*/
+.qaa-score a{
+    background-color: #3278b3;
 }
+.qaa-score a:hover{
+    background-color: #3d8bd4;
+}
+
+
