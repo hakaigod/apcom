@@ -2,14 +2,14 @@
 /**
  *
  * @var \App\View\AppView $this
+ *
  * @var int $year
  * @var string $season
- * @var \App\Model\Entity\TfImi $imiQesAns
- * @var \App\Model\Entity\TfAn[] $answers
  * @var int $implNum
- * @var \App\Model\Entity\TfSum $score
- * @var \App\Model\Entity\TfImi $imitation
  * @var float $average
+ * @var \App\Model\Entity\MfQe[] $questions
+ * @var \App\Model\Entity\TfAn[] $answers
+ * @var \App\Model\Entity\TfSum $score
  */
 ?>
 
@@ -30,7 +30,7 @@
 $answersStr = ['未','ア','イ','ウ','エ'];
 $confidenceStr = ['未','○','△','×'];
 ?>
-<?php if(empty($imiQesAns) || empty($answers)): ?>
+<?php if(empty($answers)): ?>
     まだ入力されていません
 <?php else:?>
     <table class="table table-bordered table-striped table-hover">
@@ -42,7 +42,7 @@ $confidenceStr = ['未','○','△','×'];
                 </td>
                 <!--                問題文(最初の10文字のみ)-->
                 <td class="col-xs-3">
-					<?= mb_substr(strip_tags($imiQesAns['mf_exa']['mf_qes'][ $i - 1 ]->question), 0, 10) ?>
+					<?= mb_substr(strip_tags($questions[ $i - 1 ]->question), 0, 10) ?>
                     ...
                 </td>
                 <td class="col-xs-1 center">
