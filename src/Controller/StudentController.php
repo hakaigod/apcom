@@ -200,10 +200,19 @@ class StudentController extends AppController
 		//TODO:何回目、合計、平均点
 		$imicode = $this->request->getParam('imicode');
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
-		$this->set(compact('imiQesAns'));
+//		$this->set(compact('imiQesAns'));
+		
+		$average = 0;
+		if (isset($imiQesAns) && $imiQesAns->imipepnum > 0) {
+			$average = $imiQesAns->imisum / $imiQesAns->imipepnum;
+		}
+		$this->set(compact('average'));
+		
+		
 		$exanum = $imiQesAns->exanum;
 
-		$implNum = $this->TfImi->getImplNum($imicode,$exanum);
+		//同じ本番試験が模擬試験として実施された回数
+		$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
 		$this->set(compact('implNum'));
 
 		//年度
@@ -213,14 +222,17 @@ class StudentController extends AppController
 		$season = $imiQesAns['mf_exa']->exaname;
 		$this->set(compact('season'));
 
+		//学籍番号
 		$regnum = $this->readSession(['StudentID']);
 		//合計点
 		$score = $this->TfSum->find()
 			->where(['TfSum.regnum' => $regnum,
 			        'TfSum.imicode' => $imicode])
 			->first();
+		
 		$this->set(compact('score'));
 		
+		//解答
 		$answers = $this->TfAns->find()
 			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
 		$this->set(compact('answers'));
