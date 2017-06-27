@@ -38,7 +38,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('StudentID', '15120028');
+		$session->write('StudentID', '13110025');
 		
 	}
 
@@ -196,8 +196,32 @@ class StudentController extends AppController
 	}
 	
 	public function result () {
-		//TODO:年度、季節、何回目、合計、平均点、各問題の正解かどうか、などテーブル等で表示
+		//TODO:何回目、合計、平均点
+		$imicode = $this->request->getParam('imicode');
+		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
+		$this->set(compact('imiQesAns'));
+
+		//年度
+		$year = $imiQesAns['mf_exa']->jap_year;
+		$this->set(compact('year'));
+		//季節
+		$season = $imiQesAns['mf_exa']->exaname;
+		$this->set(compact('season'));
+
+		$regnum = $this->readSession(['StudentID']);
+		//合計点
+		$score = $this->TfSum->find()
+			->where(['TfSum.regnum' => $regnum,
+			        'TfSum.imicode' => $imicode])
+			->first();
+		$this->set(compact('score'));
 		
+		$questions = $imiQesAns['mf_exa']['mf_qes'];
+		$this->set(compact('questions'));
+		
+		$answers = $this->TfAns->find()
+			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
+		$this->set(compact('answers'));
 	}
 	
 	//入力されていないページ一覧を取得
