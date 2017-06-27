@@ -29,7 +29,7 @@
 <?= $this->end(); ?>
 
 <!-- 以下content -->
-<h5 id="answerstitle">直近一回分試験結果</h5>
+<h5 id="answerstitle"><?= $detaiExamName; ?>試験結果</h5>
 <div class="row" id="answershead">
 	<div class="col-xs-6">
 		※空白は回答なし
@@ -65,9 +65,11 @@
 				<tr>
 					<td>平均</td>
 					<td><?= number_format($average['average'],2) . '点'; ?></td>
-					<?php for($j = 1; $j <= 10 ;$j++): ?>
-						<td>平均</td>
-					<?php endfor;?>
+					<?php foreach ($pars as $par): ?>
+						<td>
+							<?= number_format($par['coreccts'] * 100, 1) . '%'; ?>
+						</td>
+					<?php endforeach; ?>
 				</tr>
 			</tbody>
 		</table>
@@ -116,7 +118,7 @@
 				<?php foreach ($imidata as $key => $value): ?>
 					<tr>
 						<td><?= $value['imi'];?></td>
-						<td><?= $value['name'] . ' ' .$value['num'] . '回目';?></td>
+						<td> <a href="?id=<?= $value['imi']; ?>"><?= $value['name'] . ' ' .$value['num'] . '回目';?></a></td>
 						<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
 						<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'], 2);?></td>
 					</tr>

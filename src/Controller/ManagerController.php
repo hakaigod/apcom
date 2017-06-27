@@ -31,8 +31,12 @@ class ManagerController extends AppController
 	public function index()
 	{
 		//直近の模擬コード取得
-		$query = $this->TfImi->find();
-		$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
+		if (!empty($_GET['id'])) {
+			$nearimi = $_GET['id'];
+		} else {
+			$query = $this->TfImi->find();
+			$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
+		}
 
 		// 受験者平均点
 		$queryAvg = $this->TfSum->find();
@@ -44,7 +48,7 @@ class ManagerController extends AppController
 		$cnt = $this->TfSum->find()->where(['imicode' => $nearimi]);
 
 		$ans = $this->TfAns->find()->contain(['MfStu']);
-		$ans ->select(['imicode', 'TfAns.regnum', 'MfStu.stuname', 'qesnum', 'rejoinder'])
+		$ans ->select(['imicode', 'TfAns.regnum', 'MfStu.stuname', 'qesnum', 'rejoinder', 'correct_answer'])
 		->where(['imicode' => $nearimi])
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
 		->order(['qesnum', 'TfAns.regnum' =>'DESC']);
@@ -76,9 +80,31 @@ class ManagerController extends AppController
 				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->imisum, 'answers'=> array('ans'. $i++ => $ansJa)));
 			}
 		}
-		// print_r($answers);
 		$this->set('answers', $answers);
 
+		$pars = array();
+		$corrects = array();
+		$i = 0;
+		foreach ($ans as $key) {
+			if(isset($pars[$key->qesnum])){
+				$pars[$key->qesnum]['answers'] += array('ans'. $i++ => $key->rejoinder);
+			} else {
+				$pars += array($key->qesnum => array('qesnum' => $key->qesnum, 'correct_answer' => $key->correct_answer, 'answers'=> array('ans'. $i++ => $key->rejoinder)));
+			}
+		}
+		foreach ($pars as $key) {
+			$corrects += array($key['qesnum'] => array('qesnum' => $key['qesnum'], 'coreccts' => 0));
+			foreach ($key['answers'] as $value) {
+				if($value == $key['correct_answer']){
+					$corrects[$key['qesnum']]['coreccts'] += 1;
+				}
+			}
+		}
+		foreach ($corrects as $key) {
+			$corrects[$key['qesnum']]['coreccts'] /= $cnt->count();
+		}
+
+		$this->set('pars', $corrects);
 
 		$ans = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
@@ -105,6 +131,13 @@ class ManagerController extends AppController
 		}
 		array_multisort($arrayimis, SORT_DESC);
 		$this->set('imidata', $arrayimis);
+
+
+		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
+			$this->set('detaiExamName', '直近一回分');
+		} else {
+			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
+		}
 	}
 
 	public $paginate = [
