@@ -62,6 +62,11 @@ class TfAnsTable extends Table
             ->integer('confidence')
             ->allowEmpty('confidence');
 
+        $validator
+            ->integer('correct_answer')
+            ->requirePresence('correct_answer', 'create')
+            ->notEmpty('correct_answer');
+
         return $validator;
     }
 }

@@ -10,6 +10,7 @@ use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * @property TfAnsTable TfAns
@@ -32,10 +33,12 @@ class StudentController extends AppController
 		$this->loadModel('TfImi');
 		//問題テーブル
 		$this->loadModel('MfQes');
+		//模擬試験合計テーブル
+		$this->loadModel('TfSum');
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('StudentID', '13110025');
+		$session->write('StudentID', '15120028');
 		
 	}
 
@@ -71,10 +74,11 @@ class StudentController extends AppController
 		
 		//模擬試験テーブルの主キー
 		$imicode = $this->request->getParam('imicode');
+		$this->set(compact('imicode'));
 		//リクエストされたページ番号 範囲は1-8
 		$curNum = $this->request->getParam('linkNum');
 		//模擬試験コードから試験実施年度と季節を取得
-		$imitation = $this->TfImi->getOneAndQes($imicode,$curNum);
+		$imitation = $this->TfImi->getOneAndQes($imicode,10,$curNum);
 //		$this->set(compact('imitation'));
 		$this->setYearAndSeason($imitation);
 		//現在のページ番号をセット
@@ -117,7 +121,6 @@ class StudentController extends AppController
 		$befNum = $request->getData("curNum");
 		//模擬試験コードか遷移元のページ番号がセットされていない場合何もしない
 		if (!isset($imicode) or !isset($befNum)) {
-			//TODO:このせいで8からresultが書き込まれない
 			$this->log("imicode or befNum are not set");
 			return;
 		}
@@ -134,36 +137,69 @@ class StudentController extends AppController
 			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
-	//結果表示
-	public function result() {
+	//解答をDBに送信する
+	public function sendAll() {
 		//回答入力時
-		//TODO:セッションかなんかでPOST元が解答画面かチェック
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
+		
+		//もしどれか未入力の場合はリダイレクト
+		//TODO:isAnsweredAllにlimit追加して全部を範囲にする
+//		if ( !($this->isAnsweredAll($imicode)) ) {
+//		$this->redirect(
+//			[ 'action' => 'input' ,
+//			  'imicode' => $imicode
+//			]
+//		);
+//		}
+		
 		$imicode = $this->request->getParam('imicode');
 		$this->set(compact('imicode'));
-		$query = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence' ]);
+		$corrects = $this->TfImi->getOneAndQes($imicode,80);
 		$rejoinders = $this->readSession(['answers',$imicode]);
-		$this->set(compact('rejoinders'));
 		$regnum = $this->readSession(['StudentID']);
-		$this->set(compact('regnum'));
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
-		$this->set(compact('confidences'));
 		
-//		foreach ($rejoinders as $key => $value) {
-//			$query->values([$imicode,$key,$regnum,$value,$confidences[$key]]);
-//		}
-//		$query->execute();
-		//もしどれか未入力の場合はリダイレクト
-//		if ( !($this->isAnsweredAll($imicode)) ) {
-//			$this->redirect(
-//				[ 'action' => 'input' ,
-//					'imicode' => $imicode
-//				]
-//			);
-//		}
+		//TODO:この辺をinputの方に分散する
+		//各解答のINSERTクエリを生成
+		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
+		//合計点数
+		$totalScore = 0;
+		foreach ($rejoinders as $key => $rejoinder) {
+			$answer = $corrects['mf_exa']['mf_qes'][$key - 1]->answer;
+			$insertAnsQuery->values([ 'imicode'=>$imicode,
+			                          'qesnum'=>  $key,
+			                          'regnum'=>  $regnum,
+			                          'rejoinder'=>  $rejoinder,
+			                          'confidence'=>  $confidences[$key],
+			                          'correct_answer' => $answer
+			                        ]);
+			if ($rejoinder == $answer) {
+				$totalScore ++ ;
+			}
+		}
+		$insertSumQuery = $this->TfSum->query()
+			->insert(['regnum','imicode','imisum'])
+			->values([ 'regnum' => $regnum,
+			           'imicode' => $imicode,
+			           'imisum' => $totalScore
+				]);
+		
+		$connection = ConnectionManager::get('default');
+		//解答と合計のINSERTをトランザクションで行う
+//		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
+//			$insertAnsQuery->execute();
+//			$insertSumQuery->execute();
+//		});
+		$this->redirect([ 'controller' => 'student','action' => 'result' , 'imicode' => $imicode ]);
 	}
+	
+	public function result () {
+		//TODO:年度、季節、何回目、合計、平均点、各問題の正解かどうか、などテーブル等で表示
+		
+	}
+	
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
 		$notAnsedPages = array_fill(0,8,true);

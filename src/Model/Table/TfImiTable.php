@@ -69,11 +69,11 @@ class TfImiTable extends Table
 		return $validator;
 	}
 	//書いた
-	public function getOneAndQes(int $imicode,int $page):EntityInterface {
+	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):EntityInterface {
 		return $this->find()
-			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($page) {
+			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
 					          return $q->select(['exanum','qesnum','question','answer'])
-						          ->limit(10)
+						          ->limit($limit)
 						          ->page($page);
 				          }
 			          ])

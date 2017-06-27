@@ -4,14 +4,13 @@
 
 //IDがscriptのタグのアトリビュートからデータを取得する
 //変わらないのでconst
-const $script = $("#script");
+const $script = $("#check-script");
 const isAnsed = JSON.parse($script.attr("isAnsed"));
 const pageNum = JSON.parse($script.attr("curNum"));
 $(function(){
     "use strict";
     //完了ボタンが押されたとき
     $("#end_answer").click(function () {
-        //
         if (isAnsed && isFinite(pageNum)) {
             //1や11,21など一番最初の問題番号が入る
             let firstNum = (pageNum - 1) *10 + 1;
@@ -27,7 +26,13 @@ $(function(){
                     return false;
                 }
             }
+
             if(window.confirm('解答を完了しますか？')) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'curNum',
+                    value: pageNum
+                }).appendTo('#finish-answer');
                 $("#answer-form").submit();
             }
         }else {
