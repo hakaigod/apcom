@@ -195,6 +195,7 @@ class StudentController extends AppController
 		$this->redirect([ 'controller' => 'student','action' => 'result' , 'imicode' => $imicode ]);
 	}
 	
+	//各回の詳細な結果
 	public function result () {
 		//TODO:何回目、合計、平均点
 		$imicode = $this->request->getParam('imicode');
