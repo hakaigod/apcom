@@ -93,28 +93,38 @@ class ManagerController extends AppController
 			}
 		}
 		foreach ($pars as $key) {
-			$corrects += array($key['qesnum'] => array('qesnum' => $key['qesnum'], 'coreccts' => 0));
+			$corrects += array($key['qesnum'] => array('qesnum' => $key['qesnum'], 'corrects' => 0, 'question' => ''));
 			foreach ($key['answers'] as $value) {
 				if($value == $key['correct_answer']){
-					$corrects[$key['qesnum']]['coreccts'] += 1;
+					$corrects[$key['qesnum']]['corrects'] += 1;
 				}
 			}
 		}
 		foreach ($corrects as $key) {
-			$corrects[$key['qesnum']]['coreccts'] /= $cnt->count();
+			$corrects[$key['qesnum']]['corrects'] /= $cnt->count();
 		}
 
-		$this->set('pars', $corrects);
-
-		$ans = $this->MfQes->find();
+		$questions = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
-		$ans ->select(['exanum', 'qesnum', 'question'])
+		$questions ->select(['exanum', 'qesnum', 'question'])
 		->where(['exanum' => $exanum]);
 		if (!empty($_GET['page'])) {
-			$ans ->offset($_GET['page'] * 10 - 10);
+			$questions ->offset($_GET['page'] * 10 - 10);
 		}
-		$ans ->order(['qesnum'])->limit(10)->toArray();
-		$this->set('questions', $ans);
+		$questions ->order(['qesnum'])->limit(10);
+		$this->set('questions', $questions);
+
+		$questionsdetail = array();
+		foreach ($questions as $key) {
+			$questionsdetail += array($key['qesnum'] => array('qesnum' => $key['qesnum'], 'corrects' => 0, 'question' => $key['question']));
+		}
+
+		if (!empty($corrects)) {
+			foreach ($corrects as $key) {
+				$questionsdetail[$key['qesnum']]['corrects'] += $key['corrects'];
+			}
+		}
+		$this->set('questionsdetail', $questionsdetail);
 
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);

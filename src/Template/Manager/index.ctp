@@ -46,9 +46,9 @@
 		<table class="table table-bordered full">
 			<thead>
 				<tr>
-					<td class="col-xs-3">名前</td><td class="stusum">合計</td>
+					<td class="col-xs-3" id="name">名前</td><td class="stusum">合計</td>
 					<?php foreach ($questions as $key): ?>
-						<td><?= "問" . $key->qesnum; ?></td>
+						<td id="ques"><?= "問" . $key['qesnum']; ?></td>
 					<?php endforeach; ?>
 				</tr>
 			</thead>
@@ -65,9 +65,9 @@
 				<tr>
 					<td>平均</td>
 					<td><?= number_format($average['average'],2) . '点'; ?></td>
-					<?php foreach ($pars as $par): ?>
+					<?php foreach ($questionsdetail as $par): ?>
 						<td>
-							<?= number_format($par['coreccts'] * 100, 1) . '%'; ?>
+							<?= number_format($par['corrects'] * 100, 1) . '%'; ?>
 						</td>
 					<?php endforeach; ?>
 				</tr>
@@ -95,11 +95,11 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h6>正答率一覧</h6>
-		<?php foreach ($questions as $key): ?>
+		<?php foreach ($questionsdetail as $key): ?>
 			<div class="col-par-5">
-				<div class="qno">問 <?= $key->qesnum; ?></div>
-				<div id="question"><?= mb_strimwidth(strip_tags($key->question), 0, 40, "..."); ?></div>
-				<div class="font"><b class="oooo">50</b>%</div>
+				<div class="qno">問 <?= $key['qesnum']; ?></div>
+				<div id="question"><?= mb_strimwidth(strip_tags($key['question']), 0, 40, "..."); ?></div>
+				<div class="font"><b class="oooo"><?= number_format($key['corrects'] * 100, 0); ?></b>%</div>
 			</div>
 		<?php endforeach; ?>
 	</div>

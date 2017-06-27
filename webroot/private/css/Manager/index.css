@@ -1,22 +1,19 @@
 #col-main * {
 	/*border: solid 1px black;*/
 }
-@media (min-width: 300px) {
-	#questions {
-		display: none;
-	}
-	#AMresult{
-		width: 100%;
-	}
+#questions table thead tr td{
+	min-width: 60px;
+	height: 30px;
 }
-@media (min-width: 1000px) {
-	#questions table thead tr td{
-		min-width: 60px;
-		height: 30px;
-	}
-	.stusum{
-		width: calc(100% / 24 * 6);
-	}
+
+#AMresult table thead tr #name {
+	min-width: 20%;
+}
+#AMresult table thead tr .stusum {
+	min-width: 10%;
+}
+#AMresult table thead tr #ques {
+	min-width: 7%;
 }
 
 #answers table thead tr td{
@@ -34,11 +31,11 @@
 }
 
 .oooo {
-	font-size: 100px;
+	font-size: 70px;
 }
 .font {
 	font-size: 45px;
-	margin: -40px 0 -40px 0;
+	margin: -20px 0 -20px 0;
 }
 .qno {
 	font-size: 30px;
