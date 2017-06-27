@@ -80,4 +80,13 @@ class TfImiTable extends Table
 			->where(['TfImi.imicode' => $imicode] )
 			->first();
 	}
+	public function getImplNum(int $imicode,int $exanum = null) {
+		if ( $exanum == null) {
+		}
+		return $this->find()
+			->where([
+				        'TfImi.imicode < ' => $imicode,
+				        'TfImi.exanum' => $exanum ])
+			->count();
+	}
 }

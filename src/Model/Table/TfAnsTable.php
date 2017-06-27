@@ -69,4 +69,5 @@ class TfAnsTable extends Table
 
         return $validator;
     }
+    
 }

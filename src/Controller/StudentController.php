@@ -38,7 +38,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('StudentID', '13110025');
+		$session->write('StudentID', '15110009');
 		
 	}
 
@@ -201,6 +201,10 @@ class StudentController extends AppController
 		$imicode = $this->request->getParam('imicode');
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
 		$this->set(compact('imiQesAns'));
+		$exanum = $imiQesAns->exanum;
+
+		$implNum = $this->TfImi->getImplNum($imicode,$exanum);
+		$this->set(compact('implNum'));
 
 		//年度
 		$year = $imiQesAns['mf_exa']->jap_year;
@@ -217,12 +221,11 @@ class StudentController extends AppController
 			->first();
 		$this->set(compact('score'));
 		
-		$questions = $imiQesAns['mf_exa']['mf_qes'];
-		$this->set(compact('questions'));
-		
 		$answers = $this->TfAns->find()
 			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
 		$this->set(compact('answers'));
+
+		
 	}
 	
 	//入力されていないページ一覧を取得

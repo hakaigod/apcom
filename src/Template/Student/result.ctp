@@ -2,10 +2,6 @@
 /**
  *
  * @var \App\View\AppView $this
- * @var int $year
- * @var string $season
- * @var \App\Model\Entity\MfQe[] $questions
- * @var \App\Model\Entity\TfAn[] $answers
  *
  *
  */
@@ -37,21 +33,21 @@ $confidenceStr = ['未','○','△','×'];
             </td>
             <!--                問題文(最初の10文字のみ)-->
             <td class="col-xs-3">
-		        <?= mb_substr(strip_tags($questions[ $i - 1 ]->question), 0, 10) ?>
+		        <?= mb_substr(strip_tags($imiQesAns['mf_exa']['mf_qes'][ $i - 1 ]->question), 0, 10) ?>
                 ...
             </td>
             <td class="col-xs-1 center">
-                <?= $ans = $answersStr[$answers[$i - 1]->rejoinder] ?>
+                <?= $answersStr[$answers[$i - 1]->rejoinder] ?>
             </td>
             <td class="col-xs-1 center">
-		        <?= $correctAns = $answersStr[$answers[$i - 1]->correct_answer] ?>
+		        <?= $answersStr[$answers[$i - 1]->correct_answer] ?>
             </td>
             <td class="col-xs-1 center">
-		        <?= $conf = $confidenceStr[$answers[$i - 1]->confidence] ?>
+		        <?=  $confidenceStr[$answers[$i - 1]->confidence] ?>
             </td>
             <td class="col-xs-1 center">
 		        <?php
-                if ($ans == $correctAns) {
+                if ($answers[$i - 1]->rejoinder == $answers[$i - 1]->correct_answer) {
                     echo "○";
                 }else{
                     echo "×";
