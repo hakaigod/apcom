@@ -50,12 +50,21 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+    $routes->connect(
+        '/student/qaaSelectGenre',
+        ['controller' => 'student', 'action' => 'qaaSelectGenre']
+    );
+
+    $routes->connect(
+        '/student/qaaQuestion/:question_num/',
+        ['controller' => 'student', 'action' => 'qaaQuestion'],
+        ['question_num' => '\d+',]
+    );
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-
+    //$routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
     /**
      * Connect catchall routes for all controllers.
      *
@@ -72,7 +81,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-    $routes->fallbacks(DashedRoute::class);
+//    $routes->fallbacks(DashedRoute::class);
 });
 
 /**
@@ -84,9 +93,3 @@ Router::scope('/', function (RouteBuilder $routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
-
-Router::connect(
-    '/:student/:qaaQuestion/:question_num',
-    ['controller' => 'student', 'action' => 'qaaQuestion'],
-    ['controller' => '?i:student', 'qaaQuestion' => '(?:qaaQuestion)',
-    'question_num' => '\d+']);

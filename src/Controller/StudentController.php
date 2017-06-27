@@ -31,21 +31,25 @@ class StudentController extends AppController
     public function qaaQuestion()
     {
         //qaaSelectGenre 選択したジャンルの取得
-        $getGenre = $this->request->getQuery('SelectGenre');
-
+        $getGenre = $this->request->getData('genre');
+        //ctpに送る
+        $this -> set('getGenre',$getGenre);
+        print_r($getGenre);
 //        $this->log($getGenre);
 
-        //ルートから番号の取得
+        //ルートから番号の取得(回答した回数になる)
         $qNum = $this -> request -> getParam('question_num');
+        debug($qNum);
         $this -> set('qNum',$qNum);
+//        $this->set(compact('qNum'));
 
-        //指定したジャンルの問題を取得する
+        //指定したジャンルのクエリを取得する
         $this->loadModel('MfQes');
         $question = $this->MfQes->find()
             ->WHERE(['MfQes.fienum IN' => $getGenre])
             ->ORDER(['qesnum' => 'ASC'])
             //何行飛ばすか
-            ->OFFSET(5)
+            ->OFFSET($qNum)
             //1行だけ出力する
             ->first();
 

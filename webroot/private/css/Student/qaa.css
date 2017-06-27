@@ -1,3 +1,4 @@
+/*ヘッダー*/
 #qaa-title{
     font-size:50px;
     font-weight: bold;
@@ -44,7 +45,8 @@
     transform: translateY(-35%) translateX(1em);
     font-weight: bold;
 }
-
+/*ヘッダー*/
+/*ジャンル選択*/
 .checkbox {
     height : 20px;
 }
@@ -57,59 +59,70 @@
     margin-top: 20px;
     text-align: center;
 }
+/*ジャンル選択*/
 
+/*問番号*/
 #qaa-question-no{
     margin-top: 20px;
     font-size: 25px;
     font-weight: bold;
 }
 
+/*問題文*/
 .qaa-question{
     text-align: center;
     margin-top: 20px;
 }
 
+/*正誤*/
 .qaa-falsehood{
     text-align: left;
     margin-top: 20px;
 }
 
-.qaa-select-answer .btn-embossed{
-    padding: 10px 20px 10px 20px;
-    /*margin: 15px 20px 15px 20px;*/
-}
-
+/*選択外枠*/
 .qaa-select-answer {
     border: solid 1px #aeb6bf;
-    /*text-align: center;*/
-}
-.qaa-select-answer .col-md-1{
-    text-align: center;
 }
 
-.qaa-select-answer .row{
+/*選択肢各行のrow*/
+.qaa-select-answer .row {
     margin: 10px 10px 0 10px;
+}
+
+/*問題文とボタンのmdのサイズを統一*/
+.row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.qaa-select-answer .col-md-1{
+    display: table-cell;
     vertical-align: middle;
 }
 
-.qaa-next{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    text-align: center;
+/*選択肢ボタン*/
+.qaa-select-answer .btn-embossed{
+    padding: 10px 15px 10px 15px;
 }
 
+/*問題文とボタンのmdのサイズを統一*/
+.row-eq-height col {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+/*選択肢文章*/
 .select-choice{
     vertical-align: middle;
 }
 
-ul {
-    list-style-position: inside;
-}
-ul li {
-    padding-left: 1em;
-    text-indent: -1em;
-    vertical-align: middle;
-
+/*次の問題ボタン*/
+.qaa-next{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 /*#col-main * {*/

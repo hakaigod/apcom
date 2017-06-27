@@ -56,26 +56,30 @@ Student
                     <!--枠線の上に重ねる文字-->
                     <div class = "caption"><p>ジャンル一覧</p></div>
                     <!--ジャンル選択フォーム-->
-                    <?= $this -> Form -> create('',['type' => 'get', 'url' => ['action' => 'qaa_question']])?>
-                    <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check1",array('data-toggle' => "checkbox",'class'=> 'technology','value' => 1)) ?>テクノロジ <br>
-                    </label>
-                    <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check2",array('data-toggle' => "checkbox",'class'=> 'strategy','value' => 2)) ?>ストラテジ <br>
-                    </label>
-                    <label class="checkbox">
-                    <?= $this -> Form -> checkbox("SelectGenre.check3",array('data-toggle' => "checkbox",'class'=> 'management','value' => 3)) ?>マネジメント
-                    </label>
+                    <?php
+                    echo $this-> Form -> create('',['type' => 'post', 'url' => ['action' => 'qaaQuestion','question_num' => 1]]);
+                    $options = [
+                        //valueと表示文字の設定
+                        '1' => 'テクノロジ',
+                        '2' => 'ストラテジ',
+                        '3' => 'マネジメント'
+                    ];
+                    //name配列と対応するoptionの選択
+                    echo $this->Form->select
+                    //name
+                    ('genre',
+                        $options,
+                            ['multiple'=>'checkbox'
+                            ,'data-toggle' => "checkbox",]
+                    )
+                    ?>
                 </div>
                 <!--決定ボタン-->
                 <div class = "center">
-                    <?php
-                    echo $this -> Form -> button('問題開始',array('type' => 'submit','class' => 'btn btn-info'));
-                    echo $this -> Form -> end();
-                    ?>
+                    <?= $this -> Form -> button('問題開始',array('type' => 'submit','class' => 'btn btn-info')); ?>
+                    <?= $this -> Form -> end();?>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
