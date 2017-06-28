@@ -24,13 +24,13 @@
 <?php $this->end(); ?>
 
 <h3><?= "平成{$year}年{$season} {$implNum}回目"?></h3>
-<h4>平均点:<?= $average ?>点</h4>
+<h4>平均点:<?= round($average,1) ?>点</h4>
 <h4>合計点:<?= $score?$score->imisum:0 ?>点</h4>
 <?php
 $answersStr = ['未','ア','イ','ウ','エ'];
 $confidenceStr = ['未','○','△','×'];
 ?>
-<?php if(empty($answers)): ?>
+<?php if(empty($answers) || empty($correctRates)): ?>
     まだ入力されていません
 <?php else:?>
     <table class="table table-bordered table-striped table-hover">
@@ -63,8 +63,8 @@ $confidenceStr = ['未','○','△','×'];
 					}
 					?>
                 </td>
-                <td class="col-xs-1 center">
-		            <?= $correctRates[$i - 1] ?>
+                <td class="col-xs-2 center">
+		            <?= round($correctRates[$i - 1] * 100,1) ?>%
                 </td>
             </tr>
 		<?php endforeach;?>

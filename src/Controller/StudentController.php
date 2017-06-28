@@ -37,7 +37,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('StudentID', '17110007');
+		$session->write('StudentID', '13120023');
 		
 	}
 	
@@ -281,7 +281,9 @@ class StudentController extends AppController
 				->first()->toArray();
 			$imipepnum = $imitation['imipepnum'];
 		}
-		
+		if ($imipepnum == 0) {
+			return [];
+		}
 		//問題ごとに何人正解したか
 		//ただし0は出ない
 		$query = $this->TfAns->find();
@@ -295,7 +297,7 @@ class StudentController extends AppController
 		$k = 0;
 		for ($i = 0;$i < 80; $i++ ) {
 			$rate = 0;
-			if ( ($result[$k]['subQesnum'] - 1) == $i) {
+			if ( $k < sizeof($result) && ($result[$k]['subQesnum'] - 1) == $i) {
 				$rate = $result[$k]['rate'];
 				$k++;
 			}
