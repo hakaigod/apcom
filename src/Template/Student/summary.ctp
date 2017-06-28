@@ -4,6 +4,7 @@
  * @var \App\View\AppView $this
  * @var String $stuName
  * @var string[] $dates
+ * @var string[] $imiDetails
  * @var int[] $averages
  * @var int[] $stuScores
  */
@@ -35,16 +36,31 @@ $this->end();
 <tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."/student" ?>">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
+<br>
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        まだ入力されていない模擬試験があります
+    </div>
+    <ul  style="list-style:none;">
+		<?php for($i=0;$i<10;$i++):?>
+            <li>
+<!--                TODO:未入力模擬試験一覧を表示-->
+                aa
+            </li>
+		<?php endfor;?>
+    </ul>
+</div>
 
-<h3>学生メニュー</h3>
 
 <!--グラフを表示する要素-->
-<canvas id="myChart"></canvas>
+<div class="col-xs-offset-1 col-xs-10">
+<canvas id="myChart" ></canvas>
+</div>
 <!--canvasにグラフを設定するスクリプト-->
 <script>
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let myChart = new Chart(ctx, {
         type: 'line',
         data: {
             //模擬試験実施の日付(平成24年 春 二回目?)など
@@ -53,15 +69,23 @@ $this->end();
                 //生徒の名前
                 label: <?= json_safe_encode($stuName . "さん")?>,
                 data: <?= json_safe_encode($stuScores)?>,
-                backgroundColor: "rgba(30,20,80,1)",
                 fill: false,
+                borderWidth: 3,
+                borderColor: "rgba(201,60,58,0.8)",
+                pointBackgroundColor: "rgba(201,60,58,0.6)",
+                pointBorderColor: "rgba(201,60,58,0.4)",
+                pointBorderWidth: 8,
                 lineTension: 0
             }, {
                 //
                 label: '平均点',
                 data: <?= json_safe_encode($averages)?>,
-                backgroundColor: "rgba(200,160,90,1)",
                 fill: false,
+                borderWidth: 3,
+                borderColor: "rgba(2,63,138,0.8)",
+                pointBackgroundColor: "rgba(2,63,138,0.6)",
+                pointBorderColor: "rgba(2,63,138,0.4)",
+                pointBorderWidth: 8,
                 lineTension: 0
             }]
         },
@@ -83,14 +107,23 @@ $this->end();
     });
 </script>
 <br><br>
+<div class="col-xs-12">
+<h4>今まで受験した模擬試験</h4>
+</div>
 <table class="table table-bordered table-striped table-hover">
-	<?php
-	foreach ($sums as $sum): ?>
+<!--    TODO:順位表示-->
+	<?= $this->Html->tableHeaders(['試験名','平均', '点数'],[],['class' => 'center']); ?>
+    <tbody>
+    <?php
+	for($i = 0; $i < count($imiDetails); $i++): ?>
         <tr>
-            <td><?= $sum->imicode ?></td>
-            <td><?= $sum->imisum ?></td>
+<!--            TODO:編集へのリンクにする-->
+            <th class="center"><?= $imiDetails[$i]?></th>
+            <td class="center"><?= $averages[$i]?></td>
+            <td class="center"><?= $stuScores[$i]?></td>
         </tr>
-	<?php endforeach; ?>
+	<?php endfor; ?>
+    </tbody>
 </table>
 <?php
 function json_safe_encode($data){

@@ -26,6 +26,7 @@
 <h3><?= "平成{$year}年{$season} {$implNum}回目"?></h3>
 <h4>平均点:<?= round($average,1) ?>点</h4>
 <h4>合計点:<?= $score?$score->imisum:0 ?>点</h4>
+<!--TODO:順位表示-->
 <?php
 $answersStr = ['未','ア','イ','ウ','エ'];
 $confidenceStr = ['未','○','△','×'];
@@ -35,11 +36,12 @@ $confidenceStr = ['未','○','△','×'];
 <?php else:?>
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
+        <tbody>
 		<?php foreach (range(1, 80) as $i ): ?>
             <tr>
-                <td class="col-xs-1 center">
+                <th class="col-xs-1 center">
 					<?= $i?>
-                </td>
+                </th>
                 <!--                問題文(最初の10文字のみ)-->
                 <td class="col-xs-5">
 					<?= mb_substr(strip_tags($questions[ $i - 1 ]->question), 0, 17) ?>
@@ -68,6 +70,7 @@ $confidenceStr = ['未','○','△','×'];
                 </td>
             </tr>
 		<?php endforeach;?>
+        </tbody>
     </table>
 <?php endif; ?>
 <br><br><br><br>

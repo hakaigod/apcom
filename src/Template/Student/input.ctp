@@ -49,12 +49,13 @@ function json_safe_encode($data){
 <?= $this->Html->Url->build(['controller' => 'student', 'action' => 'sendAll','imicode' => $imicode]) ?>" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
+        <tbody>
 		<?php foreach (range(1, 10) as $i ): ?>
             <tr>
                 <!--                問題番号-->
-                <td class="col-xs-1 center">
+                <th class="col-xs-1 center">
 					<?= $qNum = $questions[ $i - 1 ]['qesnum'] ?>
-                </td>
+                </th>
                 <!--                問題文(最初の10文字のみ)-->
                 <td class="col-xs-3">
 					<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
@@ -112,6 +113,7 @@ function json_safe_encode($data){
                 </td>
             </tr>
 		<?php endforeach; ?>
+        </tbody>
     </table>
     <br>
     <div class="center">

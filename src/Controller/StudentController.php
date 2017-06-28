@@ -88,8 +88,6 @@ class StudentController extends AppController
 		$this->set(compact("imiDetails"));
 		$this->set(compact('averages'));
 		$this->set(compact('stuScores'));
-//		$this->set('averages',)
-//		trimRow($sums, 'imisum')
 		
 	
 	}
@@ -211,10 +209,10 @@ class StudentController extends AppController
 		
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
-//		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
-//			$insertAnsQuery->execute();
-//			$insertSumQuery->execute();
-//		});
+		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
+			$insertAnsQuery->execute();
+			$insertSumQuery->execute();
+		});
 		$this->redirect([ 'controller' => 'student','action' => 'result' , 'imicode' => $imicode ]);
 	}
 	
@@ -257,7 +255,7 @@ class StudentController extends AppController
 		//正答率:$correctRate
 		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
 		//平均自信度:$confAvg
-		$this->set('confAvg',$this->getConfAvg($imicode,$imiQesAns['imipepnum']));
+//		$this->set('confAvg',$this->getConfAvg($imicode,$imiQesAns['imipepnum']));
 	}
 	
 	//入力されていないページ一覧を取得
@@ -336,15 +334,14 @@ class StudentController extends AppController
 		if ($imipepnum == 0) {
 			return [];
 		}
-		
 		return $this->TfAns->find()
-			->select(['qesnum','avg' => 'sum(confidence)'])
+			->select(['qesnum','avg' => 'sum(confidence - 1) / ' . $imipepnum])
 			->where(['imicode' => $imicode])
 			->group([ 'qesnum' ])
 			->toArray();
 		
 	}
-	private function getImiPepNum (int $imicode):array {
+	private function getImiPepNum (int $imicode):int {
 			$imitation = $this->TfImi->find()
 				->where([ 'imicode' => $imicode])
 				->first()->toArray();

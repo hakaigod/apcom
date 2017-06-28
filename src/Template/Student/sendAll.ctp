@@ -14,3 +14,7 @@
 <tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <?php $this->end(); ?>
+送信中です
+<!--TODO:すでに入力されていないかチェック-->
+<br>
+<br>
