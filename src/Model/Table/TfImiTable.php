@@ -86,8 +86,10 @@ class TfImiTable extends Table
 			return null;
 		}
 	}
-	public function getImplNum(int $imicode,int $exanum = null) {
-		if ( $exanum == null) {
+	//この試験がそれまでに実施された回数 (=何回目か)を取得する
+	public function getImplNum(int $imicode,int $exanum) {
+		if ( !(isset($imicode)) || !(isset($exanum))) {
+			return null;
 		}
 		return $this->find()
 			->where([
@@ -95,4 +97,5 @@ class TfImiTable extends Table
 				        'TfImi.exanum' => $exanum ])
 			->count();
 	}
+	
 }

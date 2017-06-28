@@ -32,4 +32,7 @@ class MfExa extends Entity
 	public function _getAdYear () {
 		return $this->get('exa_year')->format('Y');
 	}
+	public function _getExamDetail () {
+		return "平成" . $this->jap_year . "年" . $this->exaname;
+	}
 }

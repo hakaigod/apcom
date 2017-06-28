@@ -3,7 +3,9 @@
 /**
  * @var \App\View\AppView $this
  * @var String $stuName
- * @var \App\Model\Entity\TfSum[] $sums
+ * @var string[] $dates
+ * @var int[] $averages
+ * @var int[] $stuScores
  */
 ?>
 
@@ -45,17 +47,20 @@ $this->end();
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            //模擬試験実施の日付(平成24年 春 二回目?)など
+            labels: <?= json_safe_encode($dates)?>,
             datasets: [{
-                label: 'apples',
-                data: <?= json_safe_encode(trimRow($sums, 'imisum'))?>,
-                backgroundColor: "rgba(0,0,0,1)",
+                //生徒の名前
+                label: <?= json_safe_encode($stuName . "さん")?>,
+                data: <?= json_safe_encode($stuScores)?>,
+                backgroundColor: "rgba(30,20,80,1)",
                 fill: false,
                 lineTension: 0
             }, {
-                label: 'oranges',
-                data: <?= json_safe_encode(trimRow($sums, 'imisum'))?>,
-                backgroundColor: "rgba(0,0,0,1)",
+                //
+                label: '平均点',
+                data: <?= json_safe_encode($averages)?>,
+                backgroundColor: "rgba(200,160,90,1)",
                 fill: false,
                 lineTension: 0
             }]
@@ -65,10 +70,19 @@ $this->end();
             animation:{
                 easing:'easeOutQuint',
                 duration:500
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        max:80,
+                        beginAtZero:true
+                    }
+                }]
             }
         }
     });
 </script>
+<br><br>
 <table class="table table-bordered table-striped table-hover">
 	<?php
 	foreach ($sums as $sum): ?>
@@ -79,18 +93,10 @@ $this->end();
 	<?php endforeach; ?>
 </table>
 <?php
-function trimRow($data,$rowName) {
-    if ($data instanceof \Cake\Datasource\EntityInterface) {
-	    $result=[];
-	    foreach ($data as $item) {
-		    $result[] = $item->get($rowName);
-	    }
-	    return $result;
-    }else{
-        return null;
-    }
-}
 function json_safe_encode($data){
 	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 ?>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>

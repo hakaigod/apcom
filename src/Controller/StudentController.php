@@ -34,6 +34,9 @@ class StudentController extends AppController
 		//模擬試験合計テーブル
 		$this->loadModel('TfSum');
 		
+		//生徒モデル読み込み
+		$this->loadModel('MfStu');
+		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
 		$session->write('StudentID', '13120023');
@@ -43,26 +46,52 @@ class StudentController extends AppController
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
-		//回答モデル読み込み
-		$this->loadModel('TfSum');
-		//生徒モデル読み込み
-		$this->loadModel('MfStu');
-		
-		
 		$regnum = $this->readSession(['StudentID']);
 		
 		//生徒名取得
 		$stuName = $this->MfStu->find()
 			->where(['MfStu.regnum = ' => $regnum])
-			->first()
-			->get('name');
+			->first()->toArray()['stuname'];
+		//生徒名:$stuName
 		$this->set(compact('stuName'));
 		
-		//回答取得
+		//模擬試験合計、模擬試験情報 取得
 		$sums = $this->TfSum->find()
+			->contain(['TfImi','TfImi.MfExa'])
 			->where(['TfSum.regnum' => $regnum])
-			->toArray();
+			->all();
 		$this->set(compact('sums'));
+		
+		// 1 模擬試験が実施された日付:$dates
+		$dates = [];
+		// 2 模擬試験が i年{春,秋} j回目:$imiDetails
+		$imiDetails = [];
+		// 3 各模擬試験の平均点:$averages
+		$averages = [];
+		// 4 各模擬試験の生徒の合計点:$stuScores
+		$stuScores = [];
+		foreach ($sums as $sum) {
+			// 1
+			$dates[] = $sum['tf_imi']['imp_date']->format("n月j日");
+			// 2
+			$imicode = $sum['imicode'];
+			$exanum = $sum['tf_imi']['exanum'];
+			$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
+			$examDetail = $sum['tf_imi']['mf_exa']->exam_detail;
+			$imiDetails[] = "{$examDetail} {$implNum}回目";
+			// 3
+			$averages[] = $sum['tf_imi']['imisum'] / $sum['tf_imi']['imipepnum'];
+			// 4
+			$stuScores[] = $sum['imisum'];
+		}
+		$this->set(compact("dates"));
+		$this->set(compact("imiDetails"));
+		$this->set(compact('averages'));
+		$this->set(compact('stuScores'));
+//		$this->set('averages',)
+//		trimRow($sums, 'imisum')
+		
+	
 	}
 	//模擬試験結果入力画面
 	public function input(){
@@ -95,11 +124,11 @@ class StudentController extends AppController
 			$inputtedLog['confidences'][$qNum] = $this->readSession(['confidences',$imicode,$qNum]);
 		}
 		$this->set(compact('inputtedLog'));
-		
-		//すべてのページが解答されているか:$isAnsed
-		$this->set('isAnsed',$this->isAnsweredAll($imicode));
+		$notAnsedPages =$this->getNotAnsed($imicode);
 		//未解答のページ一覧:$notAnsedPages
-		$this->set('notAnsedPages',$this->getNotAnsed($imicode));
+		$this->set(compact('notAnsedPages'));
+		//すべてのページが解答されているか:$isAnsed
+		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット:$year
@@ -227,6 +256,8 @@ class StudentController extends AppController
 		$this->set(compact('score'));
 		//正答率:$correctRate
 		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
+		//平均自信度:$confAvg
+		$this->set('confAvg',$this->getConfAvg($imicode,$imiQesAns['imipepnum']));
 	}
 	
 	//入力されていないページ一覧を取得
@@ -272,10 +303,7 @@ class StudentController extends AppController
 	private function getCorrectRates(int $imicode,int $imipepnum = null):array {
 		
 		if ($imipepnum == null) {
-			$imitation = $this->TfImi->find()
-				->where([ 'imicode' => $imicode])
-				->first()->toArray();
-			$imipepnum = $imitation['imipepnum'];
+			$imipepnum = $this->getImiPepNum($imicode);
 		}
 		if ($imipepnum == 0) {
 			return [];
@@ -300,5 +328,37 @@ class StudentController extends AppController
 			$resultAndZero[$i] = $rate;
 		}
 		return $resultAndZero;
+	}
+	private function getConfAvg(int $imicode,int $imipepnum = null): array{
+		if ($imipepnum == null) {
+			$imipepnum = $this->getImiPepNum($imicode);
+		}
+		if ($imipepnum == 0) {
+			return [];
+		}
+		
+		return $this->TfAns->find()
+			->select(['qesnum','avg' => 'sum(confidence)'])
+			->where(['imicode' => $imicode])
+			->group([ 'qesnum' ])
+			->toArray();
+		
+	}
+	private function getImiPepNum (int $imicode):array {
+			$imitation = $this->TfImi->find()
+				->where([ 'imicode' => $imicode])
+				->first()->toArray();
+			return $imitation['imipepnum'];
+	}
+	private function trimRow($data,$rowName) {
+		if ($data instanceof EntityInterface) {
+			$result=[];
+			foreach ($data as $item) {
+				$result[] = $item->get($rowName);
+			}
+			return $result;
+		}else{
+			return null;
+		}
 	}
 }
