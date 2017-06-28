@@ -1,17 +1,19 @@
-/**
- * Created by 15110014 on 2017/06/14.
- */
-// 正誤の表示
-function SelectAns(btnNo) {
-    "use strict";
-    if (btnNo === 1) {
-        // 正解
-        document.getElementById("qaa-falsehood").innerHTML = "正解";
-        document.getElementById("qaa-falsehood").style.color("red");
-    } else {
-        // 誤り
-        document.getElementById("qaa-falsehood").innerHTML = "不正解";
-        document.getElementById("qaa-falsehood").style.color("blue");
-    }
-}
+/* jshint esversion: 6 */
 
+// データの取得
+const $script = $("#script")
+const $select = JSON.parse($script.attr("select"));
+const $answer = JSON.parse($script.attr("answer"));
+
+$(function () {
+   "use strict";
+    //選択肢ボタンが押された時の処理
+    $(".btn-embossed").click(function () {
+        //回答があっていた場合
+        if ($select === $answer){
+            $("#qaa-falsehood").
+        } else {
+
+        }
+    });
+});

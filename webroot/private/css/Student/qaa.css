@@ -78,7 +78,8 @@
 /*正誤*/
 .qaa-falsehood{
     text-align: left;
-    margin-top: 20px;
+    margin: 30px;
+    font-size: 40px;
 }
 
 /*選択肢テーブル*/
@@ -88,6 +89,23 @@
 .table-bordered > tbody > tr >td{
     border: none;
     padding: 5px;
+}
+
+/*回答が画像の場合の設定*/
+/*画像*/
+.ans-img{
+    text-align: center;
+    margin: 20px;
+}
+/*選択肢ボタン*/
+.select-answer{
+    text-align: center;
+    margin: 10px;
+}
+
+.select-answer .btn{
+    padding: 10px 30px 10px 30px;
+    margin: 20px;
 }
 
 /*次の問題ボタン*/

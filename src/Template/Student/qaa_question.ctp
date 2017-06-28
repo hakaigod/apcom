@@ -17,9 +17,17 @@
 <?= $this->end(); ?>
 
 <!-- jsセット -->
+<?php function json_safe_encode($data){
+    return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+}
+?>
+
 <?= $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<?= $this->Html->script('/private/js/Student/qaa.js') ?>
+<script id="script" src = "<?= $this->request->getAttribute('webroot') ?>/private/js/Student/qaa.js"
+    select = <?= json_safe_encode($select) ?>
+    answer = <?= json_safe_encode($answer) ?>
+></script>
 <?= $this->end(); ?>
 
 <!-- ユーザーネームセット -->
@@ -100,7 +108,7 @@ Student
     <table class = "qaa_select_table table-bordered col-md-12">
         <tr class = "select_tr" >
             <td class = "col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ア" onclick = "SelectAns(1)">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ア" >
             </td>
             <td class = "col-md-11">
                 <?= $this -> qaa -> viewTextImg($question -> choice1) ?>
@@ -108,7 +116,7 @@ Student
         </tr>
         <tr>
             <td class = "col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary full" value = "イ" onclick = "SelectAns(2)">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "イ" >
             </td>
             <td class = "col-md-11">
                 <?= $this -> qaa -> viewTextImg($question -> choice2) ?>
@@ -116,7 +124,7 @@ Student
         </tr>
         <tr>
             <td class = "col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ウ" onclick = "SelectAns(3)">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ウ" >
             </td>
             <td class = "col-md-11">
                 <?= $this -> qaa -> viewTextImg($question -> choice3) ?>
@@ -124,7 +132,7 @@ Student
         </tr>
         <tr>
             <td class = "col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary full" value = "エ" onclick = "SelectAns(4)">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "エ" >
             </td>
             <td class = "col-md-11">
                 <?= $this -> qaa -> viewTextImg($question -> choice4) ?>
@@ -133,8 +141,21 @@ Student
     </table>
     <!--選択肢がない場合は該当する画像があるのでそれを取ってきて文字なしのチェックボックスを拾ってくる-->
     <?php else: ?>
-    <!--画像無し選択肢-->
-        <div class></div>
+        <!--画像無し選択肢-->
+        <!-- 画像表示 -->
+        <div class = row>
+            <div class = "ans-img col-md-12">
+                <?= $this -> qaa -> viewTextImg($question -> answer_pic) ?>
+            </div>
+        </div>
+        <div class = "row">
+            <div class = "select-answer">
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" >
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" >
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" >
+                <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" >
+            </div>
+        </div>
     <?php endif;?>
     <!--送信ボタン-->
     <div class="col-md-12">
