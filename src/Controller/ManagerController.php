@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+
 use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
@@ -42,7 +43,7 @@ class ManagerController extends AppController
 			$nearimi = $_GET['id'];
 		} else {
 			$query = $this->TfImi->find();
-			$nearimi = $query->select(['max' => $query->func()->max('imicode')]);
+			$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
 		}
 
 		// 受験者平均点
@@ -150,13 +151,13 @@ class ManagerController extends AppController
 		$this->set('imidata', $arrayimis);
 
 		// タイトルセット
-		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
+		if (empty($_GET['id'])) {
 			$this->set('detaiExamName', '直近一回分');
 		} else {
 			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
 		}
 	}
-
+	// ページネーター
 	public $paginate = [
 		'order' => ['TfAns.qesnum']
 	];
@@ -209,6 +210,7 @@ class ManagerController extends AppController
 	}
 	public function addstu()
 	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
 		$this->set('deps', $this->MfDep->find());
@@ -216,6 +218,7 @@ class ManagerController extends AppController
 		// 個別追加
 		if (!empty($_POST)) {
 			if (empty($_POST['stuno']) || empty($_POST['stuname'])) {
+				// 学生番号か名前が未入力の場合
 				$this->Flash->error('missing');
 			} else {
 				$query = $this->MfStu->query();
@@ -293,25 +296,31 @@ class ManagerController extends AppController
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find());
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
-			$queryStuUpdate = $this->MfStu->query();
-			$queryStuUpdate->update();
-			$queryStuUpdate->set([
-				'regnum' => $_POST['stuno'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'deleted_flg' => !empty($_POST['deleted_flg']),
-				'graduate_flg' => !empty($_POST['graduate_flg'])
-			]);
-			$queryStuUpdate->where(['regnum' => $_GET['id']]);
-			try {
-				$queryStuUpdate->execute();
-				$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stuno']]);
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
-				$this->set('regnum', $this->MfStu->get($_GET['id']));
+			if (empty($_POST['stuno']) || empty($_POST['stuname'])) {
+				// 学生番号か名前が未入力の場合
+				$this->Flash->error('missing');
+			} else {
+				$queryStuUpdate = $this->MfStu->query();
+				$queryStuUpdate->update();
+				$queryStuUpdate->set([
+					'regnum' => $_POST['stuno'],
+					'stuname' => $_POST['stuname'],
+					'stuyear' => $_POST['old'],
+					'depnum' => $_POST['depnum'],
+					'deleted_flg' => !empty($_POST['deleted_flg']),
+					'graduate_flg' => !empty($_POST['graduate_flg'])
+				]);
+				$queryStuUpdate->where(['regnum' => $_GET['id']]);
+				try {
+					$queryStuUpdate->execute();
+					$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stuno']]);
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing ' . $e->getMessage());
+					$this->set('regnum', $this->MfStu->get($_GET['id']));
+				}
 			}
 		}
 	}
@@ -341,31 +350,40 @@ class ManagerController extends AppController
 	}
 	public function addadmin()
 	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
-			$query = $this->MfAdm->query();
-			$query->insert(['admnum', 'admname', 'admpass']);
-			$query->values([
-				'admnum' => NULL,
-				'admname' => $_POST['admname'],
-				'admpass' => $this->passhash($_POST['admpass'])
-			]);
-			try {
-				$query->execute();
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+			if (empty($_POST['admnum']) || empty($_POST['admname'])) {
+				// 学生番号か名前が未入力の場合
+				$this->Flash->error('missing');
+			} else {
+				$query = $this->MfAdm->query();
+				$query->insert(['admnum', 'admname', 'admpass']);
+				$query->values([
+					'admnum' => NULL,
+					'admname' => $_POST['admname'],
+					'admpass' => $this->passhash($_POST['admpass'])
+				]);
+				try {
+					$query->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing ' . $e->getMessage());
+				}
 			}
 		}
 	}
 	public function modadmin()
 	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
 		// 管理者情報
 		$this->set('admnum', $this->MfAdm->get($_GET['id']));
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
 			$query = $this->MfAdm->query();
 			$query->update();
@@ -377,7 +395,6 @@ class ManagerController extends AppController
 			$query->where(['admnum' => $_GET['id']]);
 			try {
 				$query->execute();
-				$this->redirect(['controller' => 'Manager', 'action' => 'modadmin?id=' . $_POST['admno']]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing ' . $e->getMessage());
@@ -386,11 +403,14 @@ class ManagerController extends AppController
 		}
 	}
 	// 模擬試験コード発行画面
-	public function imiCodeIssue() {
+	public function imiCodeIssue()
+	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
 		$this->set('exams', $this->MfExa->find());
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
 			$query = $this->TfImi->query();
 			$query->insert(['imicode', 'exanum']);
@@ -407,14 +427,16 @@ class ManagerController extends AppController
 		}
 	}
 	// 学生パスワード再発行画面
-	public function reIssueStuPass() {
+	public function reIssueStuPass()
+	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST['stuno'])) {
 			$query = $this->MfStu->query();
 			$query->update();
 			$query->set(['stupass' => $this->passhash($_POST['stuno'])])
-
 			->where(['regnum' => $_POST['stuno']]);
 			try {
 				$query->execute();
@@ -445,9 +467,13 @@ class ManagerController extends AppController
 
 		$this->set('deps', $query);
 	}
-	public function adddep() {
+
+	public function adddep()
+	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
 			$query = $this->MfDep->query();
 			$query->insert(['depnum', 'depname']);
@@ -463,12 +489,15 @@ class ManagerController extends AppController
 			}
 		}
 	}
-	public function moddep() {
+	public function moddep()
+	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
 		// 学科情報
 		$this->set('dep', $this->MfDep->get($_GET['id']));
 
+		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
 			$query = $this->MfDep->query()->update();
 			$query->set([

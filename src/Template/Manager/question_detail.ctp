@@ -2,8 +2,11 @@
 	<?= $this->Html->css('/private/css/ap.css') ?>
 <?= $this->end(); ?>
 
+<!-- 問題が出題された年度と問題番号 -->
 <h4><?= '平成' . $questionDetail->mf_exa->jap_year . '年' . $questionDetail->mf_exa->exaname . '　問' . $questionDetail->qesnum; ?></h4>
+<!-- 問題文 -->
 <div><?= $questionDetail->question; ?></div>
+<!-- 問題画像があれば表示される -->
 <?= strip_tags($questionDetail->answer_pic); ?>
 
 <?php if(empty($questionDetail->answer_pic)): ?>

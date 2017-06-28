@@ -15,6 +15,10 @@
 	margin-top: -5px;
 }
 
+#ques {
+	text-align: center;
+}
+
 .select {
 	min-width: 0;
 }
