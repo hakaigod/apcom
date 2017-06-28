@@ -64,10 +64,8 @@ class TfAnsTable extends Table
 
         $validator
             ->integer('correct_answer')
-            ->requirePresence('correct_answer', 'create')
-            ->notEmpty('correct_answer');
+            ->allowEmpty('correct_answer');
 
         return $validator;
     }
-    
 }

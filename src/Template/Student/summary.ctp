@@ -30,7 +30,7 @@ $this->end();
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ?>/Student">トップページ</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."/student" ?>">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 
@@ -80,12 +80,15 @@ $this->end();
 </table>
 <?php
 function trimRow($data,$rowName) {
-    $result=[];
-    foreach ($data as $item) {
-        $result[] = $item->get($rowName);
+    if ($data instanceof \Cake\Datasource\EntityInterface) {
+	    $result=[];
+	    foreach ($data as $item) {
+		    $result[] = $item->get($rowName);
+	    }
+	    return $result;
+    }else{
+        return null;
     }
-    return $result;
-    
 }
 function json_safe_encode($data){
 	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);

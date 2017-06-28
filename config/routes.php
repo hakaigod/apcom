@@ -84,6 +84,10 @@ Router::scope('/', function (RouteBuilder $routes) {
 		['imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
 	);
 	$routes->connect(
+		'/student/index',
+		['controller' => 'student', 'action'=> 'index']
+	);
+	$routes->connect(
 		'/student/sendAll/:imicode/',
 		['controller' => 'student', 'action'=> 'sendAll'],
 		['imicode' => '\d{1,3}']

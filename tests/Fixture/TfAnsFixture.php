@@ -22,7 +22,7 @@ class TfAnsFixture extends TestFixture
         'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'rejoinder' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'confidence' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'correct_answer' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'correct_answer' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'qesnum' => ['type' => 'index', 'columns' => ['qesnum'], 'length' => []],
             'regnum' => ['type' => 'index', 'columns' => ['regnum'], 'length' => []],
@@ -49,7 +49,7 @@ class TfAnsFixture extends TestFixture
         [
             'imicode' => 1,
             'qesnum' => 1,
-            'regnum' => '2e7fd7e3-2358-4d04-9419-ace6304054de',
+            'regnum' => '12d5a5a1-ab41-4f14-a5e2-5c490893cdef',
             'rejoinder' => 1,
             'confidence' => 1,
             'correct_answer' => 1

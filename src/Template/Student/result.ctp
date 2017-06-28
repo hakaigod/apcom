@@ -10,6 +10,7 @@
  * @var \App\Model\Entity\MfQe[] $questions
  * @var \App\Model\Entity\TfAn[] $answers
  * @var \App\Model\Entity\TfSum $score
+ * @var array $correctRates
  */
 ?>
 
@@ -18,7 +19,7 @@
 <?php $this->end(); ?>
 
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <?php $this->end(); ?>
 
@@ -26,7 +27,6 @@
 <h4>平均点:<?= $average ?>点</h4>
 <h4>合計点:<?= $score?$score->imisum:0 ?>点</h4>
 <?php
-//TODO:平均点を表示する！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 $answersStr = ['未','ア','イ','ウ','エ'];
 $confidenceStr = ['未','○','△','×'];
 ?>
@@ -34,7 +34,7 @@ $confidenceStr = ['未','○','△','×'];
     まだ入力されていません
 <?php else:?>
     <table class="table table-bordered table-striped table-hover">
-		<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×'],[],['class' => 'center']); ?>
+		<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 80) as $i ): ?>
             <tr>
                 <td class="col-xs-1 center">
@@ -62,6 +62,9 @@ $confidenceStr = ['未','○','△','×'];
 						echo "×";
 					}
 					?>
+                </td>
+                <td class="col-xs-1 center">
+		            <?= $correctRates[$i - 1] ?>
                 </td>
             </tr>
 		<?php endforeach;?>

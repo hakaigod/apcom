@@ -10,7 +10,8 @@ student1
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->webroot ?>/Student">トップページ</a></td></tr>
+
+<tr class="info"><td><a href="<?= $this->request->webroot . "/student" ?>">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?= $this->end(); ?>
 

@@ -30,15 +30,16 @@ function json_safe_encode($data){
 
 <?php $this->start('script'); ?>
 <!--http://qiita.com/cither/items/b98cc4e237dcc8f7e51f-->
-<script id="check-script" src="<?= $this->request-> getAttribute('webroot') ?>/private/js/Input/input.js"
-        isAnsed = <?= json_safe_encode($isAnsed)?>
-        curNum = <?= json_safe_encode($curNum)?>
+<script id="check-script" src="<?= $this->request-> getAttribute('webroot') . "/private/js/Input/input.js" ?>"
+        
+        <?= "isAnsed = " . json_safe_encode($isAnsed)?>
+        <?= "curNum = " . json_safe_encode($curNum)?>
 ></script>
 <?php $this->end(); ?>
 
 
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <tr><td><a href="#">管理者管理</a></td></tr>
 <?php $this->end(); ?>

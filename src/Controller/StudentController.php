@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\TfImi;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
@@ -8,8 +9,6 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
-use Cake\Network\Session;
-use Cake\ORM\TableRegistry;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -41,10 +40,10 @@ class StudentController extends AppController
 		$session->write('StudentID', '17110007');
 		
 	}
-
-//    public function index(){
-//    	$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
-//    }
+	
+	public function index(){
+		$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
+	}
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
@@ -183,7 +182,7 @@ class StudentController extends AppController
 			->values([ 'regnum' => $regnum,
 			           'imicode' => $imicode,
 			           'imisum' => $totalScore
-				]);
+			         ]);
 		
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
@@ -230,6 +229,8 @@ class StudentController extends AppController
 			->where(['TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode])
 			->first();
 		$this->set(compact('score'));
+		//正答率:$correctRate
+		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
 	}
 	
 	//入力されていないページ一覧を取得
@@ -272,4 +273,34 @@ class StudentController extends AppController
 		return implode(".", $children);
 	}
 	
+	private function getCorrectRates(int $imicode,int $imipepnum = null):array {
+		
+		if ($imipepnum == null) {
+			$imitation = $this->TfImi->find()
+				->where([ 'imicode' => $imicode])
+				->first()->toArray();
+			$imipepnum = $imitation['imipepnum'];
+		}
+		
+		//問題ごとに何人正解したか
+		//ただし0は出ない
+		$query = $this->TfAns->find();
+		$result = $query
+			->select([ 'subQesnum' => 'qesnum',
+			           'rate' => "count(*) / {$imipepnum}"])
+			->where([ 'rejoinder = correct_answer', 'imicode' => $imicode])
+			->group(['qesnum'])
+			->toArray();
+		$resultAndZero = [];
+		$k = 0;
+		for ($i = 0;$i < 80; $i++ ) {
+			$rate = 0;
+			if ( ($result[$k]['subQesnum'] - 1) == $i) {
+				$rate = $result[$k]['rate'];
+				$k++;
+			}
+			$resultAndZero[$i] = $rate;
+		}
+		return $resultAndZero;
+	}
 }
