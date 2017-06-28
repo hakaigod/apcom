@@ -1,6 +1,8 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\TfImi;
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
@@ -68,10 +70,29 @@ class TfImiTable extends Table
 		return $validator;
 	}
 	//書いた
-	public function getOneAndMfExam($imicode):EntityInterface {
-		return $this->find()
-			->contain(['MfExa'])
+	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):TfImi{
+		$row =  $this->find()
+			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
+					          return $q->select(['exanum','qesnum','question','answer'])
+						          ->limit($limit)
+						          ->page($page);
+				          }
+			          ])
 			->where(['TfImi.imicode' => $imicode] )
 			->first();
+		if ($row instanceof TfImi) {
+			return $row;
+		}else{
+			return null;
+		}
+	}
+	public function getImplNum(int $imicode,int $exanum = null) {
+		if ( $exanum == null) {
+		}
+		return $this->find()
+			->where([
+				        'TfImi.imicode < ' => $imicode,
+				        'TfImi.exanum' => $exanum ])
+			->count();
 	}
 }

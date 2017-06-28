@@ -7,10 +7,11 @@ use Cake\ORM\Entity;
  * TfAn Entity
  *
  * @property int $imicode
- * @property string $qesnum
+ * @property int $qesnum
  * @property string $regnum
  * @property int $rejoinder
  * @property int $confidence
+ * @property int $correct_answer
  */
 class TfAn extends Entity
 {

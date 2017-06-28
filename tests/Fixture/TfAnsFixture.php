@@ -18,10 +18,11 @@ class TfAnsFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'imicode' => ['type' => 'integer', 'length' => 6, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'qesnum' => ['type' => 'string', 'length' => 2, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'regnum' => ['type' => 'string', 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8mb4_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'qesnum' => ['type' => 'integer', 'length' => 2, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'rejoinder' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'confidence' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'correct_answer' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'qesnum' => ['type' => 'index', 'columns' => ['qesnum'], 'length' => []],
             'regnum' => ['type' => 'index', 'columns' => ['regnum'], 'length' => []],
@@ -29,12 +30,12 @@ class TfAnsFixture extends TestFixture
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['imicode', 'qesnum', 'regnum'], 'length' => []],
             'tf_ans_ibfk_1' => ['type' => 'foreign', 'columns' => ['imicode'], 'references' => ['tf_imi', 'imicode'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'tf_ans_ibfk_2' => ['type' => 'foreign', 'columns' => ['qesnum'], 'references' => ['mf_qes', 'qesnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'tf_ans_ibfk_3' => ['type' => 'foreign', 'columns' => ['regnum'], 'references' => ['mf_stu', 'regnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'tf_ans_ibfk_2' => ['type' => 'foreign', 'columns' => ['regnum'], 'references' => ['mf_stu', 'regnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'tf_ans_ibfk_3' => ['type' => 'foreign', 'columns' => ['qesnum'], 'references' => ['mf_qes', 'qesnum'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'utf8mb4_general_ci'
+            'collation' => 'utf8_general_ci'
         ],
     ];
     // @codingStandardsIgnoreEnd
@@ -47,10 +48,11 @@ class TfAnsFixture extends TestFixture
     public $records = [
         [
             'imicode' => 1,
-            'qesnum' => 'd1834561-7982-4e8b-b4f3-b02298bd6f89',
-            'regnum' => 'ab879867-6b0d-4c22-9dd2-89de927c376a',
+            'qesnum' => 1,
+            'regnum' => '2e7fd7e3-2358-4d04-9419-ace6304054de',
             'rejoinder' => 1,
-            'confidence' => 1
+            'confidence' => 1,
+            'correct_answer' => 1
         ],
     ];
 }

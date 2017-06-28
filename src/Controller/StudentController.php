@@ -9,6 +9,8 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\Network\Session;
+use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * @property TfAnsTable TfAns
@@ -31,7 +33,13 @@ class StudentController extends AppController
 		$this->loadModel('TfImi');
 		//問題テーブル
 		$this->loadModel('MfQes');
-
+		//模擬試験合計テーブル
+		$this->loadModel('TfSum');
+		
+		//TODO:この行はセッションが実装されたら消す
+		$session = $this->request->session();
+		$session->write('StudentID', '17110007');
+		
 	}
 
 //    public function index(){
@@ -45,12 +53,8 @@ class StudentController extends AppController
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
 		
-		$session = $this->request->session();
 		
-		//TODO:この行はセッションが実装されたら消す
-		$session->write('StudentID', '13110025');
-		
-		$regnum = $session->read('StudentID');
+		$regnum = $this->readSession(['StudentID']);
 		
 		//生徒名取得
 		$stuName = $this->MfStu->find()
@@ -68,22 +72,18 @@ class StudentController extends AppController
 	//模擬試験結果入力画面
 	public function input(){
 		
-		//模擬試験テーブルの主キー
+		//模擬試験テーブルの主キー:$imicode
 		$imicode = $this->request->getParam('imicode');
-		//模擬試験コードから試験実施年度と季節を取得
-		$imitation = $this->TfImi->getOneAndMfExam($imicode);
-		
-		$this->setYearAndSeason($imitation);
+		$this->set(compact('imicode'));
 		//リクエストされたページ番号 範囲は1-8
 		$curNum = $this->request->getParam('linkNum');
-		//現在のページ番号をセット
+		//模擬試験コードから試験実施年度と季節を取得
+		$imitation = $this->TfImi->getOneAndQes($imicode,10,$curNum);
+		$this->setYearAndSeason($imitation);
+		//現在のページ番号をセット:$curNum
 		$this->set(compact('curNum'));
-		//問題文セット
-		$questions = $this->MfQes
-			//問題文のみ取得、試験回と取得する問題数とOFFSETを指定
-			->getTexts(['MfQes.exanum' => $imitation['mf_exa']->exanum],10,$curNum)
-			->toArray();
-		$this->set(compact('questions'));
+		//問題文セット:$questions
+		$this->set('questions',$imitation['mf_exa']['mf_qes']);
 		
 		//回答入力時(=POST)
 		if ($this->request->is('post')) {
@@ -92,7 +92,7 @@ class StudentController extends AppController
 		}
 		
 		//過去入力した選択肢、自信度がセッションに存在する場合
-		//既定値としてビューにセットする
+		//既定値としてビューにセットする:$inputtedLog
 		$iniQueAfNum = ( $curNum - 1 ) * 10 + 1;
 		$inputtedLog = [];
 		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + 10; $qNum++ ) {
@@ -101,17 +101,16 @@ class StudentController extends AppController
 		}
 		$this->set(compact('inputtedLog'));
 		
-		$notAnsedPages = $this->getNotAnsed($imicode);
-		//未解答のページ一覧
-		$this->set(compact('notAnsedPages'));
-		//すべてのページが解答されているか
-		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
+		//すべてのページが解答されているか:$isAnsed
+		$this->set('isAnsed',$this->isAnsweredAll($imicode));
+		//未解答のページ一覧:$notAnsedPages
+		$this->set('notAnsedPages',$this->getNotAnsed($imicode));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
-		//和暦セット
+		//和暦セット:$year
 		$this->set('year',$imitation['mf_exa']->jap_year);
-		//季節セット
-		$this->set('season',$imitation['mf_exa']['exaname']);
+		//季節セット:$season
+		$this->set('season',$imitation['mf_exa']->exaname);
 		
 	}
 	private function writeAnsToSsn(ServerRequest $request){
@@ -119,7 +118,10 @@ class StudentController extends AppController
 		//遷移元ページのリンク番号
 		$befNum = $request->getData("curNum");
 		//模擬試験コードか遷移元のページ番号がセットされていない場合何もしない
-		if (!isset($imicode) or !isset($befNum)) return;
+		if (!isset($imicode) or !isset($befNum)) {
+			$this->log("imicode or befNum are not set");
+			return;
+		}
 		//すでに書いたページ番号にtrueを設定
 		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
@@ -133,23 +135,103 @@ class StudentController extends AppController
 			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
-	//結果表示
-	public function result() {
+	//解答をDBに送信する
+	public function sendAll() {
 		//回答入力時
-		//TODO:セッションかなんかでPOST元が解答画面かチェック
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
-		$imicode = $this->request->getParam('imicode');
+		
 		//もしどれか未入力の場合はリダイレクト
+		//TODO:isAnsweredAllにlimit追加して全部を範囲にする
 //		if ( !($this->isAnsweredAll($imicode)) ) {
-//			$this->redirect(
-//				[ 'action' => 'input' ,
-//					'imicode' => $imicode
-//				]
-//			);
+//		$this->redirect(
+//			[ 'action' => 'input' ,
+//			  'imicode' => $imicode
+//			]
+//		);
 //		}
+		
+		$imicode = $this->request->getParam('imicode');
+		//模擬試験コード:$imicode
+		$this->set(compact('imicode'));
+		$corrects = $this->TfImi->getOneAndQes($imicode,80);
+		$rejoinders = $this->readSession(['answers',$imicode]);
+		$regnum = $this->readSession(['StudentID']);
+		$confidences = $this->readSession([ 'confidences', $imicode ]);
+		
+		//TODO:この辺をinputの方に分散する
+		//各解答のINSERTクエリを生成
+		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
+		//合計点数
+		$totalScore = 0;
+		foreach ($rejoinders as $key => $rejoinder) {
+			$answer = $corrects['mf_exa']['mf_qes'][$key - 1]->answer;
+			$insertAnsQuery->values([ 'imicode'=>$imicode,
+			                          'qesnum'=>  $key,
+			                          'regnum'=>  $regnum,
+			                          'rejoinder'=>  $rejoinder,
+			                          'confidence'=>  $confidences[$key],
+			                          'correct_answer' => $answer
+			                        ]);
+			if ($rejoinder == $answer) {
+				$totalScore ++ ;
+			}
+		}
+		$insertSumQuery = $this->TfSum->query()
+			->insert(['regnum','imicode','imisum'])
+			->values([ 'regnum' => $regnum,
+			           'imicode' => $imicode,
+			           'imisum' => $totalScore
+				]);
+		
+		$connection = ConnectionManager::get('default');
+		//解答と合計のINSERTをトランザクションで行う
+//		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
+//			$insertAnsQuery->execute();
+//			$insertSumQuery->execute();
+//		});
+		$this->redirect([ 'controller' => 'student','action' => 'result' , 'imicode' => $imicode ]);
 	}
+	
+	//各回の詳細な結果
+	public function result () {
+		//TODO:何回目、合計、平均点
+		//模擬試験コード
+		$imicode = $this->request->getParam('imicode');
+		//学籍番号
+		$regnum = $this->readSession(['StudentID']);
+		
+		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
+		//本番試験コード
+		$exanum = $imiQesAns->exanum;
+		
+		//年度:$year
+		$this->set('year',$imiQesAns['mf_exa']->jap_year);
+		//季節:$season
+		$this->set('season',$imiQesAns['mf_exa']->exaname);
+		//同じ本番試験が模擬試験として実施された回数
+		$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
+		$this->set(compact('implNum'));
+		//平均点:$average
+		$average = 0;
+		if (isset($imiQesAns) && $imiQesAns->imipepnum > 0) {
+			$average = $imiQesAns->imisum / $imiQesAns->imipepnum;
+		}
+		$this->set(compact('average'));
+		//問題:$questions
+		$this->set("questions",$imiQesAns['mf_exa']['mf_qes']);
+		//解答:$answers
+		$answers = $this->TfAns->find()
+			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
+		$this->set(compact('answers'));
+		//合計点:$score
+		$score = $this->TfSum->find()
+			->where(['TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode])
+			->first();
+		$this->set(compact('score'));
+	}
+	
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
 		$notAnsedPages = array_fill(0,8,true);

@@ -2,41 +2,42 @@
 //上の行はES6を使うことを明示する
 //上の行はjQueryの$の警告を抑制する
 
-//scriptIDのタグのアトリビュートからデータを取得する
+//IDがscriptのタグのアトリビュートからデータを取得する
 //変わらないのでconst
-const $script = $("#script");
+const $script = $("#check-script");
 const isAnsed = JSON.parse($script.attr("isAnsed"));
 const pageNum = JSON.parse($script.attr("curNum"));
 $(function(){
     "use strict";
     //完了ボタンが押されたとき
     $("#end_answer").click(function () {
-        //1や11,21など一番最初の問題番号が入る
-        let firstNum = (pageNum - 1) *10 + 1;
         if (isAnsed && isFinite(pageNum)) {
-            let isAllAnsed = true;
+            //1や11,21など一番最初の問題番号が入る
+            let firstNum = (pageNum - 1) *10 + 1;
+            //最後の10問がすべて選択されているかどうか
             for (let qNum = firstNum; qNum < firstNum + 10; qNum++) {
-                //各ラジオボタングループにcheckedクラスを持つ部品が存在するか確認
-                if (!($(`input[name=answer_${qNum}]`).is(':checked'))){
-                    isAllAnsed = false;
-                    break;
+                //各解答ラジオボタングループにcheckedクラスを持つものがあるか
+                let selectedAns = $(`input[name=answer_${qNum}]`).is(':checked');
+                //各自信度ラジオボタングループにcheckedクラスを持つものがあるか
+                let selectedConf = $(`input[name=confidence_${qNum}]`).is(':checked');
+                //どちらか一つでもないときは解答に不備がある
+                if (!(selectedAns) || !(selectedConf)){
+                    window.alert("このページに未解答の問題があります");
+                    return false;
                 }
             }
-            // if(){
-            //     $("#end_answer").submit();
-            // }else {
-            //     return;
-            // }
-            if (isAllAnsed) {
-                if(window.confirm('解答を完了しますか？')) {
-                    $("#answer-form").submit();
-                }
-            }else{
-                window.alert("このページに未解答の問題があります");
+
+            if(window.confirm('解答を完了しますか？')) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'curNum',
+                    value: pageNum
+                }).appendTo('#finish-answer');
+                $("#answer-form").submit();
             }
         }else {
             window.alert("未解答の問題ページがあります");
+            return false;
         }
-        return false;
     });
 });

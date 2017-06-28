@@ -15,7 +15,7 @@
  * @var Integer $curNum
  * @var bool $isAnsed
  * @var bool[] $notAnsedPages
- *
+ * @var int $imicode
  */
 ?>
 <?php
@@ -30,7 +30,7 @@ function json_safe_encode($data){
 
 <?php $this->start('script'); ?>
 <!--http://qiita.com/cither/items/b98cc4e237dcc8f7e51f-->
-<script id="script" src="<?= $this->request-> getAttribute('webroot') ?>/private/js/Input/input.js"
+<script id="check-script" src="<?= $this->request-> getAttribute('webroot') ?>/private/js/Input/input.js"
         isAnsed = <?= json_safe_encode($isAnsed)?>
         curNum = <?= json_safe_encode($curNum)?>
 ></script>
@@ -44,7 +44,8 @@ function json_safe_encode($data){
 <?php $this->end(); ?>
 
 <h3><?= '平成' . ($year) . '年 ' . $season?></h3>
-<form action="" method="post" id="answer-form">
+<form name="ansForm" action="
+<?= $this->Html->Url->build(['controller' => 'student', 'action' => 'sendAll','imicode' => $imicode]) ?>" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
 		<?php foreach (range(1, 10) as $i ): ?>
@@ -154,16 +155,12 @@ function json_safe_encode($data){
 		?>
     </div>
     <br>
-    <div class="center">
+    <div class="center" id="finish-answer">
 		<?php
 		//完了ボタン
 		if ($curNum == 8 ) {
 			echo $this->Form->button('完了',[
 				'type'=>'button',
-				'name'=>'curNum',
-				//常に8
-				'value'=>$curNum,
-				'formaction'=>'result',
 				'class'=>'btn btn-success',
                 'id' => 'end_answer'
 			]);
