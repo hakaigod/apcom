@@ -101,10 +101,11 @@ class StudentController extends AppController
 		}
 		$this->set(compact('inputtedLog'));
 		
-		//すべてのページが解答されているか
-		$this->set('isAnsed',$this->isAnsweredAll($imicode));
+		$notAnsedPages = $this->getNotAnsed($imicode);
 		//未解答のページ一覧
-		$this->set('notAnsedPages',$this->getNotAnsed($imicode));
+		$this->set(compact('notAnsedPages'));
+		//すべてのページが解答されているか
+		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット
@@ -168,8 +169,7 @@ class StudentController extends AppController
 		return $notAnsedPages;
 	}
 	//回答が全てのページで入力されているか
-	private function isAnsweredAll(int $imicode) :bool {
-		$notAnsedPages = $this->getNotAnsed($imicode);
+	private function isAnsweredAll(array $notAnsedPages) :bool {
 		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
 		return !(in_array(false,$notAnsedPages));
 	}
@@ -177,16 +177,16 @@ class StudentController extends AppController
 	//引数は値の場所の配列
 	private function readSession(array $tagArray) {
 		$session = $this->request->session();
-		return $session->read($this->genSsnTag($tagArray));
+		return $session->read($this->getSsnTag($tagArray));
 	}
 	//セッションに値を書き込む
 	//引数は値の場所の配列と書き込むデータ
 	private function writeSession(array $tagArray,$data) {
 		$session = $this->request->session();
-		$session->write($this->genSsnTag($tagArray), $data);
+		$session->write($this->getSsnTag($tagArray), $data);
 	}
 	//配列からセッションの場所(文字列)を生成
-	private function genSsnTag( array $children): String{
+	private function getSsnTag( array $children): String{
 		return implode(".", $children);
 	}
 	
