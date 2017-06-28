@@ -13,6 +13,7 @@ class StudentController extends AppController
 {
     public function initialize()
     {
+        $helpers = array('qaa');
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
         $this->loadModel('MfQes');
@@ -34,14 +35,13 @@ class StudentController extends AppController
         $getGenre = $this->request->getData('genre');
         //ctpに送る
         $this -> set('getGenre',$getGenre);
-        print_r($getGenre);
+//        print_r($getGenre);
 //        $this->log($getGenre);
 
         //ルートから番号の取得(回答した回数になる)
         $qNum = $this -> request -> getParam('question_num');
-        debug($qNum);
+//        debug($qNum);
         $this -> set('qNum',$qNum);
-//        $this->set(compact('qNum'));
 
         //指定したジャンルのクエリを取得する
         $this->loadModel('MfQes');

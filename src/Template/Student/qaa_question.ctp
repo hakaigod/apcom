@@ -1,12 +1,11 @@
 <?php
 /**
- * 問題テーブル
- * @var \App\Model\Entity\MfQe $question
  * 問題とページ番号　新しい問題に遷移する度インクリメント
  * @var Integer $qNum
  * @var array $getGenre
  */
 ?>
+
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
 一問一答
@@ -83,7 +82,7 @@ Student
             <div class = "qaa-question">
                 <!--問題文-->
                 <div>
-                    <?=  $question -> question ?>
+                    <?= $this -> qaa -> viewTextImg($question -> question) ?>
                 </div>
             </div>
         </div>
@@ -95,61 +94,55 @@ Student
             </div>
         </div>
     </div>
+    <!--選択肢ある場合-->
+    <?php if(!empty($question -> choice1)):?>
     <!--選択肢-->
-    <div class="qaa-select-answer">
-        <!--選択肢ア-->
-        <div class="row row-eq-height">
-            <div class="col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "ア" onclick = "SelectAns(1)">
-            </div>
-            <div class="col-md-11">
-                        <span class="select-choice">
-                            <?= $question -> choice1 ?>
-                        </span>
-            </div>
-        </div>
-        <!--選択肢イ-->
-        <div class="row row-eq-height">
-            <div class="col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "イ" onclick = "SelectAns(2)">
-            </div>
-            <div class="col-md-11">
-                        <span class="select-choice">
-                            <?= $question -> choice2 ?>
-                        </span>
-            </div>
-        </div>
-        <!--選択肢ウ-->
-        <div class="row row-eq-height">
-            <div class="col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "ウ" onclick = "SelectAns(3)">
-            </div>
-            <div class="col-md-11">
-                        <span class="select-choice">
-                            <?= $question -> choice3 ?>
-            </div>
-        </div>
-        <!--選択肢エ-->
-        <div class="row row-eq-height">
-            <div class="col-md-1">
-                <input type = "button" class = "btn btn-embossed btn-primary" value = "エ" onclick = "SelectAns(4)">
-            </div>
-            <div class="col-md-11">
-                        <span class="select-choice">
-                            <?= $question -> choice4 ?>
-                        </span>
-            </div>
-        </div>
-    </div>
+    <table class = "qaa_select_table table-bordered col-md-12">
+        <tr class = "select_tr" >
+            <td class = "col-md-1">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ア" onclick = "SelectAns(1)">
+            </td>
+            <td class = "col-md-11">
+                <?= $this -> qaa -> viewTextImg($question -> choice1) ?>
+            </td>
+        </tr>
+        <tr>
+            <td class = "col-md-1">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "イ" onclick = "SelectAns(2)">
+            </td>
+            <td class = "col-md-11">
+                <?= $this -> qaa -> viewTextImg($question -> choice2) ?>
+            </td>
+        </tr>
+        <tr>
+            <td class = "col-md-1">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "ウ" onclick = "SelectAns(3)">
+            </td>
+            <td class = "col-md-11">
+                <?= $this -> qaa -> viewTextImg($question -> choice3) ?>
+            </td>
+        </tr>
+        <tr>
+            <td class = "col-md-1">
+                <input type = "button" class = "btn btn-embossed btn-primary full" value = "エ" onclick = "SelectAns(4)">
+            </td>
+            <td class = "col-md-11">
+                <?= $this -> qaa -> viewTextImg($question -> choice4) ?>
+            </td>
+        </tr>
+    </table>
+    <!--選択肢がない場合は該当する画像があるのでそれを取ってきて文字なしのチェックボックスを拾ってくる-->
+    <?php else: ?>
+    <!--画像無し選択肢-->
+        <div class></div>
+    <?php endif;?>
     <!--送信ボタン-->
     <div class="col-md-12">
         <div class="row">
             <div class = "qaa-next">
                 <form action = "" method="post">
                     <?= $this->Form->button('次の問題', ['type' => 'submit', 'class' => 'btn btn-warning','value' => $qNum,'formaction' => $qNum + 1]) ?>
-                    <input type = "hidden" name = "genre[0]" value = "<?= $getGenre["0"] ?>" >
-                    <input type = "hidden" name = "genre[1]" value = "<?= $getGenre["1"] ?>" >
-                    <input type = "hidden" name = "genre[2]" value = "<?= $getGenre["2"] ?>" >
+                    <input type = "hidden" name = "genre[0]" value = "<?= $getGenre[0] ?>" >
                 </form>
             </div>
         </div>

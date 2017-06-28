@@ -61,6 +61,7 @@
 }
 /*ジャンル選択*/
 
+/*問題*/
 /*問番号*/
 #qaa-question-no{
     margin-top: 20px;
@@ -80,42 +81,13 @@
     margin-top: 20px;
 }
 
-/*選択外枠*/
-.qaa-select-answer {
-    border: solid 1px #aeb6bf;
+/*選択肢テーブル*/
+.qaa_select_table{
+    margin: 20px;
 }
-
-/*選択肢各行のrow*/
-.qaa-select-answer .row {
-    margin: 10px 10px 0 10px;
-}
-
-/*問題文とボタンのmdのサイズを統一*/
-.row-eq-height {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.qaa-select-answer .col-md-1{
-    display: table-cell;
-    vertical-align: middle;
-}
-
-/*選択肢ボタン*/
-.qaa-select-answer .btn-embossed{
-    padding: 10px 15px 10px 15px;
-}
-
-/*問題文とボタンのmdのサイズを統一*/
-.row-eq-height col {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-
-/*選択肢文章*/
-.select-choice{
-    vertical-align: middle;
+.table-bordered > tbody > tr >td{
+    border: none;
+    padding: 5px;
 }
 
 /*次の問題ボタン*/
