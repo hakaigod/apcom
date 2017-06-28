@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Model\Entity\TfImi;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
@@ -41,9 +40,6 @@ class StudentController extends AppController
 		
 	}
 	
-	public function index(){
-		$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
-	}
 	//ユーザマイページに表示される画面
 	public function summary(){
 		

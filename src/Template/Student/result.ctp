@@ -41,8 +41,8 @@ $confidenceStr = ['未','○','△','×'];
 					<?= $i?>
                 </td>
                 <!--                問題文(最初の10文字のみ)-->
-                <td class="col-xs-3">
-					<?= mb_substr(strip_tags($questions[ $i - 1 ]->question), 0, 10) ?>
+                <td class="col-xs-5">
+					<?= mb_substr(strip_tags($questions[ $i - 1 ]->question), 0, 17) ?>
                     ...
                 </td>
                 <td class="col-xs-1 center">
