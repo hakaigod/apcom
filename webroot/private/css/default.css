@@ -93,6 +93,10 @@ body {
 	margin-top: 10px;
 }
 
+a {
+	cursor: pointer;
+}
+
 /*flash用CSS*/
 div.message {
     text-align: center;

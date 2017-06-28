@@ -57,7 +57,7 @@ managerrrrr
 		<?php foreach ($admins as $admin): ?>
 			<tr>
 				<td class="col-xs-1 center">
-					<button class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=400');">
+					<button class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>

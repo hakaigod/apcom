@@ -6,6 +6,7 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
+use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
 use \SplFileObject;
 
@@ -25,6 +26,12 @@ class ManagerController extends AppController
 		$this->loadmodel('MfExa');
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
+	}
+
+	// パスワードハッシュ値返却
+	private function passhash($pass){
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->hash($pass);
 	}
 
 	// マネージャートップ画面
@@ -48,18 +55,16 @@ class ManagerController extends AppController
 		$cnt = $this->TfSum->find()->where(['imicode' => $nearimi]);
 
 		$ans = $this->TfAns->find()->contain(['MfStu']);
-		$ans ->select(['imicode', 'TfAns.regnum', 'MfStu.stuname', 'qesnum', 'rejoinder', 'correct_answer'])
-		->where(['imicode' => $nearimi])
+		$ans ->where(['imicode' => $nearimi])
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
 		->order(['qesnum', 'TfAns.regnum' =>'DESC']);
+		$ans->limit(($cnt->count() * 10));
 		if (!empty($_GET['page'])) {
 			$ans ->offset($_GET['page'] * 10 - 10);
 		}
-		$ans->limit(($cnt->count() * 10));
-
+		// ページネーターセット
 		$this->paginate['limit'] = $cnt->count() * 10;
 		$this->paginate($ans);
-
 
 		// 回答データを連想配列に格納
 		$answers = array();
@@ -82,6 +87,7 @@ class ManagerController extends AppController
 		}
 		$this->set('answers', $answers);
 
+		/* ここから正答率 */
 		$pars = array();
 		$corrects = array();
 		$i = 0;
@@ -116,7 +122,7 @@ class ManagerController extends AppController
 
 		$questionsdetail = array();
 		foreach ($questions as $key) {
-			$questionsdetail += array($key['qesnum'] => array('qesnum' => $key['qesnum'], 'corrects' => 0, 'question' => $key['question']));
+			$questionsdetail += array($key['qesnum'] => array('exanum' => $key['exanum'], 'qesnum' => $key['qesnum'], 'corrects' => 0, 'question' => $key['question']));
 		}
 
 		if (!empty($corrects)) {
@@ -125,6 +131,7 @@ class ManagerController extends AppController
 			}
 		}
 		$this->set('questionsdetail', $questionsdetail);
+		/* ここまで正答率 */
 
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
@@ -142,7 +149,7 @@ class ManagerController extends AppController
 		array_multisort($arrayimis, SORT_DESC);
 		$this->set('imidata', $arrayimis);
 
-
+		// タイトルセット
 		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
 			$this->set('detaiExamName', '直近一回分');
 		} else {
@@ -153,6 +160,13 @@ class ManagerController extends AppController
 	public $paginate = [
 		'order' => ['TfAns.qesnum']
 	];
+
+	// 問題詳細
+	public function questionDetail()
+	{
+		$this->viewBuilder()->layout('addmod');
+		$this->set('questionDetail', $this->MfQes->get([$_GET['qn'], $_GET['ex']],['contain' => ['MfExa']]));
+	}
 
 	// 学生管理
 	public function stuManager()
@@ -211,7 +225,7 @@ class ManagerController extends AppController
 					'stuname' => $_POST['stuname'],
 					'stuyear' => $_POST['old'],
 					'depnum' => $_POST['depnum'],
-					'stupass' => $_POST['stuno']
+					'stupass' => $this->passhash($_POST['stuno'])
 				]);
 				try {
 					$query->execute();
@@ -224,40 +238,42 @@ class ManagerController extends AppController
 		}
 		// 一括追加
 		if (!empty($_FILES)) {
-			// $this->Flash->success($_FILES["studata"]["name"]);
-
-			// 読み込んだSJISのデータをUTF-8に変換して保存
-			file_put_contents($_FILES["studata"]["tmp_name"], mb_convert_encoding(file_get_contents($_FILES["studata"]["tmp_name"]), 'UTF-8', 'SJIS'));
-			// UTF-8に変換したデータをSplFileObjectでCSVとして読み込み
-			$file = new SplFileObject($_FILES["studata"]["tmp_name"]);
-			$file->setFlags(SplFileObject::READ_CSV);
-			// 配列に格納
-			foreach ($file as $line) {
-				$records[] = $line;
-			}
-
-			$querystu = $this->MfStu->query();
-			$querystu->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
-
-			foreach ($records as $key) {
-				if (!empty($key[0]) && $key[0] != '学籍番号'){
-					$querydep = $this->MfDep->find();
-					$depnum = $querydep ->select('depnum')->where(['depname LIKE' => '%' . $key[2] . '%']);
-
-					$querystu->values([
-						'regnum' => $key[0],
-						'stuname' => $key[1],
-						'stuyear' => $key[3],
-						'depnum' => $depnum,
-						'stupass' => $key[0]
-					]);
+			if ($_FILES["studata"]["name"] == 'addstu') {
+				// 読み込んだSJISのデータをUTF-8に変換して保存
+				file_put_contents($_FILES["studata"]["tmp_name"], mb_convert_encoding(file_get_contents($_FILES["studata"]["tmp_name"]), 'UTF-8', 'SJIS'));
+				// UTF-8に変換したデータをSplFileObjectでCSVとして読み込み
+				$file = new SplFileObject($_FILES["studata"]["tmp_name"]);
+				$file->setFlags(SplFileObject::READ_CSV);
+				// 配列に格納
+				foreach ($file as $line) {
+					$records[] = $line;
 				}
-			}
-			try {
-				$querystu->execute();
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+
+				$querystu = $this->MfStu->query();
+				$querystu->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
+
+				foreach ($records as $key) {
+					if (!empty($key[0]) && $key[0] != '学籍番号'){
+						$querydep = $this->MfDep->find();
+						$depnum = $querydep ->select('depnum')->where(['depname LIKE' => '%' . $key[2] . '%']);
+
+						$querystu->values([
+							'regnum' => $key[0],
+							'stuname' => $key[1],
+							'stuyear' => $key[3],
+							'depnum' => $depnum,
+							'stupass' => $this->passhash($key[0])
+						]);
+					}
+				}
+				try {
+					$querystu->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing ' . $e->getMessage());
+				}
+			} else {
+				$this->Flash->error('専用テンプレートを使用してください');
 			}
 		}
 	}
@@ -278,9 +294,9 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find());
 
 		if (!empty($_POST)) {
-			$query = $this->MfStu->query();
-			$query->update();
-			$query->set([
+			$queryStuUpdate = $this->MfStu->query();
+			$queryStuUpdate->update();
+			$queryStuUpdate->set([
 				'regnum' => $_POST['stuno'],
 				'stuname' => $_POST['stuname'],
 				'stuyear' => $_POST['old'],
@@ -288,10 +304,10 @@ class ManagerController extends AppController
 				'deleted_flg' => !empty($_POST['deleted_flg']),
 				'graduate_flg' => !empty($_POST['graduate_flg'])
 			]);
-			$query->where(['regnum' => $_GET['id']]);
+			$queryStuUpdate->where(['regnum' => $_GET['id']]);
 			try {
-				$query->execute();
-				$this->redirect('/Manager/modstu?id='.$_POST['stuno']);
+				$queryStuUpdate->execute();
+				$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stuno']]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing ' . $e->getMessage());
@@ -333,7 +349,7 @@ class ManagerController extends AppController
 			$query->values([
 				'admnum' => NULL,
 				'admname' => $_POST['admname'],
-				'admpass' => ''
+				'admpass' => $this->passhash($_POST['admpass'])
 			]);
 			try {
 				$query->execute();
@@ -355,12 +371,13 @@ class ManagerController extends AppController
 			$query->update();
 			$query->set([
 				'admname' => $_POST['admname'],
-				'deleted_flg' => !empty($_POST['deleted_flg'])
+				'deleted_flg' => !empty($_POST['deleted_flg']),
+				'admpass' => $this->passhash($_POST['admpass'])
 			]);
 			$query->where(['admnum' => $_GET['id']]);
 			try {
 				$query->execute();
-				$this->redirect('/Manager/modadmin?id='.$_POST['admno']);
+				$this->redirect(['controller' => 'Manager', 'action' => 'modadmin?id=' . $_POST['admno']]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing ' . $e->getMessage());
@@ -396,7 +413,8 @@ class ManagerController extends AppController
 		if (!empty($_POST['stuno'])) {
 			$query = $this->MfStu->query();
 			$query->update();
-			$query->set(['stupass' => $_POST['stuno']])
+			$query->set(['stupass' => $this->passhash($_POST['stuno'])])
+
 			->where(['regnum' => $_POST['stuno']]);
 			try {
 				$query->execute();
@@ -469,6 +487,4 @@ class ManagerController extends AppController
 			}
 		}
 	}
-
-
 }

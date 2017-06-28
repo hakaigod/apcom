@@ -1,26 +1,15 @@
-#col-main * {
-	/*border: solid 1px black;*/
-}
-#questions table thead tr td{
-	min-width: 60px;
-	height: 30px;
-}
-
 #AMresult table thead tr #name {
-	min-width: 20%;
+	max-width: 20%;
 }
 #AMresult table thead tr .stusum {
-	min-width: 10%;
+	max-width: 10%;
 }
 #AMresult table thead tr #ques {
-	min-width: 7%;
+	max-width: 7%;
 }
 
-#answers table thead tr td{
+#AMresult table thead tr td{
 	height: 30px;
-}
-#AMresulttitle {
-	/*margin-top: 50px;*/
 }
 #answershead div div {
 	margin-top: -5px;
@@ -29,38 +18,54 @@
 .select {
 	min-width: 0;
 }
-
-.oooo {
-	font-size: 70px;
+.parnum {
+	font-size: 200%;
 }
-.font {
-	font-size: 45px;
+.par {
+	font-size: 25px;
 	margin: -20px 0 -20px 0;
 }
 .qno {
-	font-size: 30px;
+	font-size: 130%;
 }
 
 *{
-	/*font-weight: 500;*/
+	font-weight: 500;
 }
+
+#q0, #q1, #q2, #q3, #q4, #q5, #q6, #q7, #q8, #q9 {
+	border-top: solid 1px #ddd;
+	border-left: solid 1px #ddd;
+}
+#q5, #q6, #q7, #q8, #q9 {
+	border-bottom: solid 1px #ddd;
+}
+#q4, #q9{
+	border-right: solid 1px #ddd;
+}
+
 .col-par-5 {
-	position:relative;min-height:1px;padding-right:15px;padding-left:15px;
+	position:relative;
+	min-height:1px;
+	padding-right:15px;
+	padding-left:15px;
 	float:left;
 	width: 20%;
-	border: solid 1px #ddd;
 }
 .col-par-5 #question {
 	height: 90px;
 	font-size: 15px;
 }
+
 #examdata {
 	margin-top: 40px;
 }
 .pagination-plain * {
 	font-size: 20px;
 }
-
+.pagination-plain {
+	margin: 0 0 0px;
+}
 .pagination-plain > li.next {
 	padding-left: 10px;
 }
