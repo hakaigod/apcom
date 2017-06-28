@@ -88,7 +88,39 @@ class ManagerController extends AppController
 		}
 		$this->set('answers', $answers);
 
-		/* ここから正答率 */
+		// 正答率
+		$this->set('questionsdetail', $this->getCorrectRate($ans, $nearimi, $cnt));
+
+		// 模擬試験一覧
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
+		$arrayimis = array();
+		$work = null;
+		// 模擬試験の回数を数える
+		foreach ($imidata as $key) {
+			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
+			if($key->exanum != $work) {
+				$i = 0;
+			}
+			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+			$work = $key->exanum;
+		}
+		array_multisort($arrayimis, SORT_DESC);
+		$this->set('imidata', $arrayimis);
+
+		// タイトルセット
+		if (empty($_GET['id'])) {
+			$this->set('detaiExamName', '直近一回分');
+		} else {
+			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
+		}
+	}
+	// ページネーター
+	public $paginate = [
+		'order' => ['TfAns.qesnum']
+	];
+
+	// 正答率返却用
+	private function getCorrectRate($ans, $nearimi, $cnt) {
 		$pars = array();
 		$corrects = array();
 		$i = 0;
@@ -131,36 +163,14 @@ class ManagerController extends AppController
 				$questionsdetail[$key['qesnum']]['corrects'] += $key['corrects'];
 			}
 		}
-		$this->set('questionsdetail', $questionsdetail);
-		/* ここまで正答率 */
 
-		// 模擬試験一覧
-		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
-		$arrayimis = array();
-		$work = null;
-		// 模擬試験の回数を数える
-		foreach ($imidata as $key) {
-			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
-			if($key->exanum != $work) {
-				$i = 0;
-			}
-			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
-			$work = $key->exanum;
-		}
-		array_multisort($arrayimis, SORT_DESC);
-		$this->set('imidata', $arrayimis);
-
-		// タイトルセット
-		if (empty($_GET['id'])) {
-			$this->set('detaiExamName', '直近一回分');
-		} else {
-			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
-		}
+		return $questionsdetail;
 	}
-	// ページネーター
-	public $paginate = [
-		'order' => ['TfAns.qesnum']
-	];
+
+
+
+
+
 
 	// 問題詳細
 	public function questionDetail()
