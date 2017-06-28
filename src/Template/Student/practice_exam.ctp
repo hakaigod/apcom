@@ -80,15 +80,19 @@ managerrrrr
 		</div>
 	</div>
 	
-	
+<!--	-->
 	<!--  解答部分	-->
-	<div class="row" id="table" data-toggle="buttons" >
+	<form name="ansForm"  action="<?= $this->Html->Url->build(['controller'=>'student','action'=>'posAns','ansSelect'=>'$ansSelect']) ?>" method="post">
+	<div class="row" id="table" data-toggle="buttons">
 		<table class="table table-bordered">
 				<tbody>
 				<tr>
 					<td id="button" class="col-xs-1" >
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa" value="1" formmethod="post" >ア
+<!--							        nameは変数名、valueはそれに入る値        -->
+							<input type = "radio"  id="aa" name="ansSelect" value="1" >
+<!--							--><?php //echo ($ansSelect==1) ? " checked" : ""; ?><!--ア-->
+<!--							--><?php ////$this->writesession($qes->qesnum,$_GET); ?>
 						</label>
 					</td>
 					<td id="choice" class="col-xs-11">
@@ -101,7 +105,7 @@ managerrrrr
 				<tr>
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  value="2" formmethod="post">イ
+							<input type = "radio"  id="aa"  name="ansSelect"  value="2">イ
 						</label>
 					</td>
 					<td id="choice">
@@ -114,7 +118,7 @@ managerrrrr
 					
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa" value="3" formmethod="post" >ウ
+							<input type = "radio"  id="aa"  name="ansSelect" value="3">ウ
 						</label>
 					</td>
 					<td id="choice">
@@ -127,7 +131,7 @@ managerrrrr
 				<tr>
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  value="4" formmethod="post">エ
+							<input type = "radio"  id="aa"  name="ansSelect" value="4">エ
 						</label>
 					</td>
 					<td id="choice">
@@ -137,70 +141,75 @@ managerrrrr
 					</td>
 				</tr>
 				</tbody>
-			
 		</table>
 	</div>
 	
-	
-	
 	<!--  下部のボタン3種類	-->
+	
 	<div class="col-md-12">
 		<div class="qaa row">
+				<!--	前の問題ボタン	-->
 				<div class="qaa-back">
-					<?php
-						if(($qes->qesnum-1)==0){
-							echo $this->Html->link("<< 前の問題" ,
-								['action' => 'practiceExam', $exams->exanum,$qes->qesnum-1],
-								[ 'class'=>"btn btn-warning disabled" ]
-							);
-						}else{
-							echo $this->Html->link("<< 前の問題" ,
-								['action' => 'practiceExam', $exams->exanum,$qes->qesnum-1],
-								[ 'class'=>"btn btn-warning" ]
-							);
-						}
-					?>
+					<?php if(($qes->qesnum-1)==0): ?>
+						<?= $this->Html->link("<< 前の問題" ,
+							['action' => 'practiceExam', $exams->exanum,$qes->qesnum-1],
+							[ 'class' => "btn btn-warning disabled" ]
+						);
+						?>
+						<?php else: ?>
+						<?= $this->Form->button('<< 前の問題' ,
+							[
+								'class' => 'btn btn-warning',
+								'formaction' =>   $qes->qesnum - 1 ,
+								'type' => 'submit',
+								'value' => 'ansSelect'
+						]
+						);
+						?>
+					<?php endif; ?>
 				</div>
-				
+			
+			
+				<!--	解答を終了するボタン	-->
 				<div  class="qaa-score">
-					<?php
-						echo $this->Html->link("解答を終了する" ,
-							['action' => 'score'],
-							[ 'class'=>"btn btn-warning" ]
-						);
+					<?=
+						 $this->Form->button("解答を終了する" ,
+							 [
+								 'class' => 'btn btn-info',
+								 'formaction' =>  '../../score',
+								 'type' => 'submit',
+								 'value' => '' ]
+						 );
 					?>
 				</div>
-				
-				
+			
+			
+			
+			<!--	次の問題ボタン	-->
 				<div  class="qaa-next">
-					<?php
-					echo $this->Form->create(null,
-						['type' => 'post'],
-						['url' => ['action' =>'practiceExam', $exams->exanum,$qes->qesnum+1]]
-					);
-					echo $this->Form->button('次の問題 >>',
-						['class' => 'btn btn-warning'],
-						['value' => '$']);
-					echo $this->Form->end();
-					?>
-					
-					<?php
-					if ($qes->qesnum==80){
-						echo $this->Html->link("次の問題 >>" ,
-							['action' => 'practiceExam', $exams->exanum,$qes->qesnum+1],
-							[ 'class'=>"btn btn-warning disabled" ]
+					<?php if ($qes->qesnum==80): ?>
+						<?= $this->Html->link("次の問題 >>" ,
+							['action' => 'practiceExam', $exams->exanum , $qes->qesnum + 1 ],
+							[ 'class' => "btn btn-warning disabled" ]
 						);
-					}else{
-						echo $this->Html->link("次の問題 >>" ,
-							['action' => 'practiceExam', $exams->exanum,$qes->qesnum+1],
-							[ 'class'=>"btn btn-warning"]
-						);
-//						$this->$_SESSION->write($qes->qesnum,$_GET);
-					}
-					
-					?>
+						?>
+					<?PHP else: ?>
+							<?= $this->Form->button('次の問題 >>' ,
+								[
+									'class' => 'btn btn-warning',
+									'formaction' =>   $qes->qesnum + 1 ,
+									'type' => 'submit',
+//									'value' => $ansnum
+								]);
+							//		if(isset($_POST["ansSelect"])){
+							//  }
+							//	$this->writeSession()
+							?>
+							
+<!--							<input type = "hidden" name = "writeSession[$qes->qesnum]" value = "">-->
+							
+					<?PHP endif;  ?>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
+	
+	</form>

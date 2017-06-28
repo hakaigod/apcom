@@ -21,18 +21,14 @@
 .select-choice{
     display: inline-block;
       /* 自動改行 */
-    word-break: keep-all;
-    margin-left: 20px;
+    /*word-break: keep-all;  ←解答文が余りにも長文だと、文章が枠外に出てしまうため凍結  */
+    margin-left: 15px;
 }
 
-/*　テーブル内の最上段テーブルの位置調整　*/
-#aa{
-    margin-top: 5px;
-}
 
 /*　テーブル内のボタン位置調整　*/
 .btn-embossed{
-    margin: 0px 0px 0px 8px;
+    margin: 5px 0px 0px 8px;
 }
 
 /* テーブル内のボタンをラジオボタン化 */
@@ -45,6 +41,10 @@
     opacity: 0;
 }
 
+/* テーブルの空白調整 */
+.table{
+    margin-top: 10px;
+}
 
 
 /*　テーブル内部の線を消す　*/
@@ -55,6 +55,7 @@
 /*　テーブルを囲む線　*/
 #table {
     border: solid 1px #b6b6b6;
+    
 }
 
 
@@ -73,5 +74,6 @@
 .qaa-score a:hover{
     background-color: #3d8bd4;
 }
+
 
 

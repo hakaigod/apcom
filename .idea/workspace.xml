@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e046678a-65a8-4377-bfec-20e0c1af7987" name="Default" comment="Merge branch 'master' of https://github.com/hakaigod/apcom into turkey&#10;&#10;# Conflicts:&#10;#&#9;src/Controller/StudentController.php">
+    <list default="true" id="e046678a-65a8-4377-bfec-20e0c1af7987" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Template/Student/practice_exam.ctp" afterPath="$PROJECT_DIR$/src/Template/Student/practice_exam.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webroot/private/css/Student/practiceexam.css" afterPath="$PROJECT_DIR$/webroot/private/css/Student/practiceexam.css" />
     </list>
@@ -22,8 +23,8 @@
       <file leaf-file-name="StudentController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/StudentController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="92" column="33" lean-forward="true" selection-start-line="92" selection-start-column="33" selection-end-line="92" selection-end-column="33" />
+            <state relative-caret-position="-758">
+              <caret line="53" column="18" lean-forward="false" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
               <folding>
                 <element signature="e#33#60#0#PHP" expanded="true" />
               </folding>
@@ -31,17 +32,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="practice_exam.ctp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="practice_exam.ctp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Template/Student/practice_exam.ctp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="187" column="12" lean-forward="false" selection-start-line="187" selection-start-column="12" selection-end-line="187" selection-end-column="12" />
+            <state relative-caret-position="153">
+              <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
               <folding>
                 <element signature="e#6#88#0#PHP" expanded="true" />
-                <marker date="1498542185792" expanded="true" signature="1999:2012" ph="..." />
-                <marker date="1498542185792" expanded="true" signature="2308:2327" ph="..." />
-                <marker date="1498542185792" expanded="true" signature="2628:2641" ph="..." />
-                <marker date="1498542185792" expanded="true" signature="4462:4467" ph="..." />
+                <marker date="1498669586397" expanded="true" signature="1796:1809" ph="..." />
+                <marker date="1498669586397" expanded="true" signature="2346:2359" ph="..." />
+                <marker date="1498669586397" expanded="true" signature="2655:2674" ph="..." />
+                <marker date="1498669586397" expanded="true" signature="2974:2987" ph="..." />
               </folding>
             </state>
           </provider>
@@ -50,28 +51,18 @@
       <file leaf-file-name="practiceexam.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webroot/private/css/Student/practiceexam.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-411">
-              <caret line="29" column="17" lean-forward="false" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+            <state relative-caret-position="187">
+              <caret line="20" column="15" lean-forward="false" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bootstrap.min.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webroot/css/bootstrap.min.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="2425" column="0" lean-forward="false" selection-start-line="2425" selection-start-column="0" selection-end-line="2427" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="year_selection.ctp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="year_selection.ctp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Template/Student/year_selection.ctp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="84" column="33" lean-forward="true" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="33" />
+            <state relative-caret-position="1003">
+              <caret line="64" column="37" lean-forward="false" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
               <folding>
                 <element signature="e#6#113#0#PHP" expanded="true" />
               </folding>
@@ -92,18 +83,8 @@
       <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
-              <caret line="53" column="53" lean-forward="false" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MfExa.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Model/Entity/MfExa.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-34">
-              <caret line="10" column="44" lean-forward="false" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
+            <state relative-caret-position="561">
+              <caret line="53" column="45" lean-forward="false" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -126,6 +107,7 @@
       <find>table-bordered</find>
       <find>buttons</find>
       <find>type=radio</find>
+      <find>ansnum</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -143,13 +125,13 @@
         <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/config/routes.php" />
         <option value="$PROJECT_DIR$/src/Model/Entity/MfExa.php" />
-        <option value="$PROJECT_DIR$/src/Template/Student/year_selection.ctp" />
         <option value="$PROJECT_DIR$/webroot/private/css/Student/scoring.css" />
         <option value="$PROJECT_DIR$/src/Template/Student/scoring.ctp" />
-        <option value="$PROJECT_DIR$/src/Controller/StudentController.php" />
         <option value="$PROJECT_DIR$/src/Template/Student/score.ctp" />
         <option value="$PROJECT_DIR$/webroot/private/css/Student/yearselection.css" />
+        <option value="$PROJECT_DIR$/src/Template/Student/year_selection.ctp" />
         <option value="$PROJECT_DIR$/webroot/private/css/Student/practiceexam.css" />
+        <option value="$PROJECT_DIR$/src/Controller/StudentController.php" />
         <option value="$PROJECT_DIR$/src/Template/Student/practice_exam.ctp" />
       </list>
     </option>
@@ -221,6 +203,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -521,7 +504,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -531,12 +513,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\apcom\src\Controller" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\apcom\webroot\private" />
       <recent name="C:\xampp\htdocs\apcom\webroot\private\img" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\apcom\src\Controller" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -656,7 +638,8 @@
       <workItem from="1498217767797" duration="757000" />
       <workItem from="1498219105943" duration="49293000" />
       <workItem from="1498449652715" duration="10434000" />
-      <workItem from="1498522949922" duration="15117000" />
+      <workItem from="1498522949922" duration="32521000" />
+      <workItem from="1498608165929" duration="32363000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://github.com/hakaigod/apcom into turkey&#10;&#10;# Conflicts:&#10;#&#9;src/Controller/StudentController.php">
       <created>1498123803611</created>
@@ -686,11 +669,18 @@
       <option name="project" value="LOCAL" />
       <updated>1498379716377</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Merge branch 'master' of https://github.com/hakaigod/apcom into turkey&#10;&#10;# Conflicts:&#10;#&#9;src/Controller/StudentController.php">
+      <created>1498542388159</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1498542388159</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177733000" />
+    <option name="totallyTimeSpent" value="227500000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -705,16 +695,16 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20499243" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2065053" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -736,7 +726,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="22" />
+      <option name="time" value="35" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1046,15 +1036,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/routes.php">
+    <entry file="file://$PROJECT_DIR$/webroot/css/bootstrap.min.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="53" column="53" lean-forward="false" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
-          <folding />
+        <state relative-caret-position="117">
+          <caret line="2422" column="47" lean-forward="true" selection-start-line="2422" selection-start-column="47" selection-end-line="2422" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -1062,6 +1050,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-34">
           <caret line="10" column="44" lean-forward="false" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Template/Student/year_selection.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1003">
+          <caret line="64" column="37" lean-forward="false" selection-start-line="64" selection-start-column="37" selection-end-line="64" selection-end-column="37" />
+          <folding>
+            <element signature="e#6#113#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="53" column="45" lean-forward="false" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -1076,50 +1082,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/StudentController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="92" column="33" lean-forward="true" selection-start-line="92" selection-start-column="33" selection-end-line="92" selection-end-column="33" />
+        <state relative-caret-position="-758">
+          <caret line="53" column="18" lean-forward="false" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
           <folding>
             <element signature="e#33#60#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Template/Student/practice_exam.ctp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="187" column="12" lean-forward="false" selection-start-line="187" selection-start-column="12" selection-end-line="187" selection-end-column="12" />
-          <folding>
-            <element signature="e#6#88#0#PHP" expanded="true" />
-            <marker date="1498542185792" expanded="true" signature="1999:2012" ph="..." />
-            <marker date="1498542185792" expanded="true" signature="2308:2327" ph="..." />
-            <marker date="1498542185792" expanded="true" signature="2628:2641" ph="..." />
-            <marker date="1498542185792" expanded="true" signature="4462:4467" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webroot/private/css/Student/practiceexam.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-411">
-          <caret line="29" column="17" lean-forward="false" selection-start-line="29" selection-start-column="17" selection-end-line="29" selection-end-column="17" />
+        <state relative-caret-position="187">
+          <caret line="20" column="15" lean-forward="false" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webroot/css/bootstrap.min.css">
+    <entry file="file://$PROJECT_DIR$/src/Template/Student/practice_exam.ctp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="2425" column="0" lean-forward="false" selection-start-line="2425" selection-start-column="0" selection-end-line="2427" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Template/Student/year_selection.ctp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="84" column="33" lean-forward="true" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="33" />
+        <state relative-caret-position="153">
+          <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
           <folding>
-            <element signature="e#6#113#0#PHP" expanded="true" />
+            <element signature="e#6#88#0#PHP" expanded="true" />
+            <marker date="1498669586397" expanded="true" signature="1796:1809" ph="..." />
+            <marker date="1498669586397" expanded="true" signature="2346:2359" ph="..." />
+            <marker date="1498669586397" expanded="true" signature="2655:2674" ph="..." />
+            <marker date="1498669586397" expanded="true" signature="2974:2987" ph="..." />
           </folding>
         </state>
       </provider>

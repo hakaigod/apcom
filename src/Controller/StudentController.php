@@ -7,6 +7,7 @@ use App\Model\Table\MfExaTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
 use App\Model\Table\MfQesTable;
+//use Cake\Utility\String;
 
 /**
  * @property MfExaTable MfExa
@@ -20,6 +21,7 @@ class StudentController extends AppController
     {
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
+	    $session = $this->request->session();
     }
 
     public function index()
@@ -65,6 +67,7 @@ class StudentController extends AppController
         }
         $this->set(compact('averages'));
     }
+    
 
 
 
@@ -73,36 +76,70 @@ class StudentController extends AppController
     //このexanumの宣言はconfig/routes.phpの$routes->connect('/student/practiceExam/:exanum'にある
     public function practiceExam($exanum = null,$qesnum=null)
     {
-        $this->set(compact('exanum'));
-
-
-        //このコントローラからMfExaモデルを扱うためにloadModelする
-        $this->loadModel('MfExa');
-        //実施された本番一覧を取得
-        $exams=$this->MfExa->find()
-            //テーブル内のexanumから抽出する
-            ->where(['MfExa.exanum' => $exanum])
-            //配列として返されるので単数として受け取る
-            ->first();
-        $this->set(compact('exams'));
-
-
-        //このコントローラからMfQesモデルを扱うためにloadModelする
-        $this->loadModel('MfQes');
-
-        $qes=$this->MfQes->find()
-            ->where(['MfQes.qesnum' => $qesnum , 'MfQes.exanum'=>$exanum])
-            ->first();
-        $this->set(compact('qes'));
-
-
+	    
+	    $this->set(compact('exanum'));
+	    
+	    //このコントローラからMfExaモデルを扱うためにloadModelする
+	    $this->loadModel('MfExa');
+	    //実施された本番一覧を取得
+	    $exams = $this->MfExa->find()
+		    //テーブル内のexanumから抽出する
+		    ->where(['MfExa.exanum' => $exanum])
+		    //配列として返されるので単数として受け取る
+		    ->first();
+	    $this->set(compact('exams'));
+	
+	
+	    //このコントローラからMfQesモデルを扱うためにloadModelする
+	    $this->loadModel('MfQes');
+	
+	    $qes = $this->MfQes->find()
+		    ->where(['MfQes.qesnum' => $qesnum, 'MfQes.exanum' => $exanum])
+		    ->first();
+	    $this->set(compact('qes'));
+	
+	
+	
+	
+	    if (isset($_POST['ansSelect']) == true) {
+	    }
+	    
     }
-
-
-
-    public function score()
-    {
-
+	
+	public function posAns(){
+		$ansSelect = $this->request->getParam('ansSelect');
+		$this->set(compact('ansSelect'));
+		
+		//POSTで送られたデータをセッションに書き込む
+		$this->writeSession(['Ansers'],$ansSelect);
+		
+		
+	}
+	
+	
+	public function score()
+	    {
+		
+	    }
+    
+	    
+	//セッションから値を読み込む
+	//引数は値の場所の配列
+    private function readSession(array $tagArray){
+    	$session=$this->request->session();
+    	return $session->read($this->getSsnTag($tagArray));
     }
-
+    
+	//セッションに値を書き込む
+	//引数は値の場所の配列と書き込むデータ
+	private function writeSession(array  $tagArray,$data){
+    	$session=$this->request->session();
+    	$session->write($this->getSsnTag($tagArray),$data);
+	}
+	
+	//配列からセッションの場所(文字列)を生成
+	private function  getSsnTag( array $children): String{
+		return implode(".",$children);
+	}
+ 
 }
