@@ -2,6 +2,7 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Core\Exception\Exception;
 
 /**
  * Identicon component
@@ -32,26 +33,23 @@ class IdenticonComponent extends Component
 	 */
 	protected $_defaultConfig = [];
 	
-	public function doUse (string $s_code):bool
-	{
-		//ここから使用例
-		echo 'started on ' . time() . "\n";
-		if ( !( file_exists(DIR_NAME) ) ) {
-			if ( mkdir(DIR_NAME, 0777) ) {
-				echo "ディレクトリ作成　成功 \n";
-			} else {
-				echo "ディレクトリ作成　失敗 \n";
-			}
+	public function makeImage (string $s_code) {
+		
+		$array = $this->convert($s_code);
+		$image = $this->paint($array);
+		$dirArray = [ "private", "img", DIR_NAME];
+		//保存するディレクトリの存在確認
+		$dirPath = implode(DIRECTORY_SEPARATOR, $dirArray);
+		if ( !( file_exists($dirPath) ) ) {
+			throw new Exception("ディレクトリが存在しません");
 		}
-			$array = $this->convert($s_code);
-			$image = $this->paint($array);
-			if ( !( imagepng($image, DIR_NAME . DIRECTORY_SEPARATOR . "${s_code}.png") ) ) {
-				echo "画像保存　失敗 at " . $s_code . "\n";
-				return false;
-			}
-			imagedestroy($image);
-		echo 'finished on ' . time() . "\n";
-		return true;
+		//ファイル名を含めたファイルパス
+		$filePath = $dirPath . DIRECTORY_SEPARATOR . $s_code . ".png";
+		if ( !( imagepng($image, $filePath) ) ) {
+			throw new Exception("画像保存　失敗 at " . $s_code);
+		}
+		//メモリから消去
+		imagedestroy($image);
 	}
 	//ここまで使用例
 	function paint (array $array){

@@ -9,6 +9,7 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
+use Cake\Core\Exception\Exception;
 
 /**
  * @property TfAnsTable TfAns
@@ -48,6 +49,13 @@ class StudentController extends AppController
 			->first()->toArray()['stuname'];
 		//生徒名:$username
 		$this->set(compact('username'));
+		
+		//cwd
+		$idconComp = $this->loadComponent("Identicon");
+		try {
+			$this->set("aa", $idconComp->makeImage("15110033"));
+		}catch (Exception $e) {
+		}
 		
 	}
 	
