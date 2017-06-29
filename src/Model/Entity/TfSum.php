@@ -8,7 +8,12 @@ use Cake\ORM\Entity;
  *
  * @property string $regnum
  * @property int $imicode
- * @property float $imisum
+ * @property int $strategy_sum
+ * @property int $technology_sum
+ * @property int $management_sum
+ *
+ * @property \App\Model\Entity\TfImi $tf_imi
+ * @property \App\Model\Entity\MfStu $mf_stu
  */
 class TfSum extends Entity
 {
@@ -27,4 +32,7 @@ class TfSum extends Entity
         'regnum' => false,
         'imicode' => false
     ];
+    public function _getStudentSum () {
+    	return $this->management_sum + $this->strategy_sum + $this->technology_sum;
+    }
 }

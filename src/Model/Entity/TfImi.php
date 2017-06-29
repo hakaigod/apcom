@@ -32,4 +32,8 @@ class TfImi extends Entity
         '*' => true,
         'imicode' => false
     ];
+    //合計を取得
+    public function _getImiSum(){
+    	return $this->strategy_imisum + $this->technology_imisum + $this->management_imisum;
+    }
 }

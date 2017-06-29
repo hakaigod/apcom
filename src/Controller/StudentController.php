@@ -83,10 +83,11 @@ class StudentController extends AppController
 				'imicode' => $imicode,
 				'date' => $sum['tf_imi']['imp_date']->format("n月j日"),
 				'name' => "{$examDetail} {$implNum}回目",
-				'average' => $sum['tf_imi']['imisum'] / $sum['tf_imi']['imipepnum'],
-				'studentScore' => $sum['imisum']
+				'average' => $sum['tf_imi']->imi_sum / $sum['tf_imi']['imipepnum'],
+				'studentScore' => $sum->student_sum
 			];
 		}
+		$this->set(compact('sums'));
 		$this->set(compact('answeredImis'));
 	
 	}
@@ -161,6 +162,7 @@ class StudentController extends AppController
 			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
+	//TODO:ジャンルごとの合計にする
 	//解答をDBに送信する
 	public function sendAll() {
 		//回答入力時
@@ -189,8 +191,12 @@ class StudentController extends AppController
 		//TODO:この辺をinputの方に分散する
 		//各解答のINSERTクエリを生成
 		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
-		//合計点数
-		$totalScore = 0;
+		//テクノロジ合計点数
+		$techScore = 0;
+		//マネジメント
+		$manaScore = 0;
+		//ストラテジ
+		$straScore = 0;
 		foreach ($rejoinders as $key => $rejoinder) {
 			$answer = $corrects['mf_exa']['mf_qes'][$key - 1]->answer;
 			$insertAnsQuery->values([ 'imicode'=>$imicode,
@@ -200,15 +206,28 @@ class StudentController extends AppController
 			                          'confidence'=>  $confidences[$key],
 			                          'correct_answer' => $answer
 			                        ]);
+			//正解の選択肢だったら
 			if ($rejoinder == $answer) {
-				$totalScore ++ ;
+				switch ($corrects['mf_exa']['mf_qes'][$key - 1]['fienum']) {
+					case 1:
+						$techScore ++;
+						break;
+					case 2:
+						$manaScore ++;
+						break;
+					case 3:
+						$straScore ++;
+						break;
+				}
 			}
 		}
 		$insertSumQuery = $this->TfSum->query()
-			->insert(['regnum','imicode','imisum'])
+			->insert(['regnum','imicode','technology_imisum','management_imisum','strategy_imisum'])
 			->values([ 'regnum' => $regnum,
 			           'imicode' => $imicode,
-			           'imisum' => $totalScore
+			           'technology_imisum' => $techScore,
+			           'management_imisum' => $manaScore,
+				       'strategy_imisum' => $straScore
 			         ]);
 		
 		$connection = ConnectionManager::get('default');
@@ -246,7 +265,7 @@ class StudentController extends AppController
 		//平均点:$average
 		$average = 0;
 		if (isset($imiQesAns) && $imiQesAns->imipepnum > 0) {
-			$average = $imiQesAns->imisum / $imiQesAns->imipepnum;
+			$average = $imiQesAns->imi_sum / $imiQesAns->imipepnum;
 		}
 		$this->set(compact('average'));
 		//問題:$questions
