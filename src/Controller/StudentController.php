@@ -41,19 +41,20 @@ class StudentController extends AppController
 		$session = $this->request->session();
 		$session->write('StudentID', '13120023');
 		
+		$regnum = $this->readSession(['StudentID']);
+		//生徒名取得
+		$username = $this->MfStu->find()
+			->where(['MfStu.regnum = ' => $regnum])
+			->first()->toArray()['stuname'];
+		//生徒名:$username
+		$this->set(compact('username'));
+		
 	}
 	
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
 		$regnum = $this->readSession(['StudentID']);
-		
-		//生徒名取得
-		$stuName = $this->MfStu->find()
-			->where(['MfStu.regnum = ' => $regnum])
-			->first()->toArray()['stuname'];
-		//生徒名:$stuName
-		$this->set(compact('stuName'));
 		
 		//模擬試験合計、模擬試験情報 取得
 		$sums = $this->TfSum->find()
@@ -62,33 +63,23 @@ class StudentController extends AppController
 			->all();
 		$this->set(compact('sums'));
 		
-		// 1 模擬試験が実施された日付:$dates
-		$dates = [];
-		// 2 模擬試験が i年{春,秋} j回目:$imiDetails
-		$imiDetails = [];
-		// 3 各模擬試験の平均点:$averages
-		$averages = [];
-		// 4 各模擬試験の生徒の合計点:$stuScores
-		$stuScores = [];
+		$answeredImis =[];
 		foreach ($sums as $sum) {
-			// 1
-			$dates[] = $sum['tf_imi']['imp_date']->format("n月j日");
 			// 2
 			$imicode = $sum['imicode'];
 			$exanum = $sum['tf_imi']['exanum'];
 			$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
 			$examDetail = $sum['tf_imi']['mf_exa']->exam_detail;
-			$imiDetails[] = "{$examDetail} {$implNum}回目";
-			// 3
-			$averages[] = $sum['tf_imi']['imisum'] / $sum['tf_imi']['imipepnum'];
-			// 4
-			$stuScores[] = $sum['imisum'];
+			
+			$answeredImis[] = [
+				'imicode' => $imicode,
+				'date' => $sum['tf_imi']['imp_date']->format("n月j日"),
+				'name' => "{$examDetail} {$implNum}回目",
+				'average' => $sum['tf_imi']['imisum'] / $sum['tf_imi']['imipepnum'],
+				'studentScore' => $sum['imisum']
+			];
 		}
-		$this->set(compact("dates"));
-		$this->set(compact("imiDetails"));
-		$this->set(compact('averages'));
-		$this->set(compact('stuScores'));
-		
+		$this->set(compact('answeredImis'));
 	
 	}
 	//模擬試験結果入力画面
@@ -101,6 +92,9 @@ class StudentController extends AppController
 		$curNum = $this->request->getParam('linkNum');
 		//模擬試験コードから試験実施年度と季節を取得
 		$imitation = $this->TfImi->getOneAndQes($imicode,10,$curNum);
+		if (!isset($imitation)) {
+			return;
+		}
 		$this->setYearAndSeason($imitation);
 		//現在のページ番号をセット:$curNum
 		$this->set(compact('curNum'));
@@ -127,6 +121,8 @@ class StudentController extends AppController
 		$this->set(compact('notAnsedPages'));
 		//すべてのページが解答されているか:$isAnsed
 		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
+		$implNum = $this->TfImi->getImplNum($imicode,$imitation['exanum']) + 1;
+		$this->set(compact('implNum'));
 	}
 	private function setYearAndSeason(EntityInterface $imitation){
 		//和暦セット:$year
@@ -225,6 +221,10 @@ class StudentController extends AppController
 		$regnum = $this->readSession(['StudentID']);
 		
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
+		//もし実施されていない模擬試験ならば変数をセットしない
+		if ($imiQesAns == null) {
+			return;
+		}
 		//本番試験コード
 		$exanum = $imiQesAns->exanum;
 		
@@ -345,8 +345,9 @@ class StudentController extends AppController
 			$imitation = $this->TfImi->find()
 				->where([ 'imicode' => $imicode])
 				->first()->toArray();
-			return $imitation['imipepnum'];
+			return $imitation['imipepnum']?:0;
 	}
+	
 	private function trimRow($data,$rowName) {
 		if ($data instanceof EntityInterface) {
 			$result=[];

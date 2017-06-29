@@ -2,11 +2,8 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var String $stuName
- * @var string[] $dates
- * @var string[] $imiDetails
- * @var int[] $averages
- * @var int[] $stuScores
+ * @var array $answeredImis
+ *
  */
 ?>
 
@@ -25,12 +22,6 @@
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-<!-- ユーザーネームセット -->
-<?php $this->start('username');
-echo $stuName;
-$this->end();
-?>
-
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."/student" ?>">トップページ</a></td></tr>
@@ -44,7 +35,7 @@ $this->end();
     <ul  style="list-style:none;">
 		<?php for($i=0;$i<10;$i++):?>
             <li>
-<!--                TODO:未入力模擬試験一覧を表示-->
+                <!--                TODO:未入力模擬試験一覧を表示-->
                 aa
             </li>
 		<?php endfor;?>
@@ -54,7 +45,7 @@ $this->end();
 
 <!--グラフを表示する要素-->
 <div class="col-xs-offset-1 col-xs-10">
-<canvas id="myChart" ></canvas>
+    <canvas id="myChart" ></canvas>
 </div>
 <!--canvasにグラフを設定するスクリプト-->
 <script>
@@ -64,11 +55,11 @@ $this->end();
         type: 'line',
         data: {
             //模擬試験実施の日付(平成24年 春 二回目?)など
-            labels: <?= json_safe_encode($dates)?>,
+            labels: <?= json_safe_encode( array_column($answeredImis,'date'))?>,
             datasets: [{
                 //生徒の名前
-                label: <?= json_safe_encode($stuName . "さん")?>,
-                data: <?= json_safe_encode($stuScores)?>,
+                label: <?= json_safe_encode($username . "さん")?>,
+                data: <?= json_safe_encode( array_column($answeredImis,'studentScore'))?>,
                 fill: false,
                 borderWidth: 3,
                 borderColor: "rgba(201,60,58,0.8)",
@@ -79,7 +70,7 @@ $this->end();
             }, {
                 //
                 label: '平均点',
-                data: <?= json_safe_encode($averages)?>,
+                data: <?= json_safe_encode(array_column($answeredImis,'average'))?>,
                 fill: false,
                 borderWidth: 3,
                 borderColor: "rgba(2,63,138,0.8)",
@@ -108,21 +99,24 @@ $this->end();
 </script>
 <br><br>
 <div class="col-xs-12">
-<h4>今まで受験した模擬試験</h4>
+    <h4>今まで受験した模擬試験</h4>
 </div>
 <table class="table table-bordered table-striped table-hover">
-<!--    TODO:順位表示-->
+    <!--    TODO:順位表示-->
 	<?= $this->Html->tableHeaders(['試験名','平均', '点数'],[],['class' => 'center']); ?>
     <tbody>
-    <?php
-	for($i = 0; $i < count($imiDetails); $i++): ?>
+	<?php
+	foreach($answeredImis as $imi): ?>
         <tr>
-<!--            TODO:編集へのリンクにする-->
-            <th class="center"><?= $imiDetails[$i]?></th>
-            <td class="center"><?= $averages[$i]?></td>
-            <td class="center"><?= $stuScores[$i]?></td>
+            <!--            TODO:編集へのリンクにする-->
+            <th class="center"><?=
+                $this->Html->link($imi['name'],['action' => 'result','imicode' => $imi['imicode']]);
+                ?>
+            </th>
+            <td class="center"><?= round($imi['average'],1)?></td>
+            <td class="center"><?= $imi['studentScore']?></td>
         </tr>
-	<?php endfor; ?>
+	<?php endforeach; ?>
     </tbody>
 </table>
 <?php

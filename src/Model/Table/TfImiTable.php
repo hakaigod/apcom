@@ -2,10 +2,8 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\TfImi;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Datasource\EntityInterface;
 
 /**
  * TfImi Model
@@ -70,13 +68,13 @@ class TfImiTable extends Table
 		return $validator;
 	}
 	//書いた
-	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):TfImi{
+	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):?TfImi{
 		$row =  $this->find()
 			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
-					          return $q->select(['exanum','qesnum','question','answer'])
-						          ->limit($limit)
-						          ->page($page);
-				          }
+				return $q->select(['exanum','qesnum','question','answer'])
+					->limit($limit)
+					->page($page);
+			}
 			          ])
 			->where(['TfImi.imicode' => $imicode] )
 			->first();
@@ -87,7 +85,7 @@ class TfImiTable extends Table
 		}
 	}
 	//この試験がそれまでに実施された回数 (=何回目か)を取得する
-	public function getImplNum(int $imicode,int $exanum) {
+	public function getImplNum(int $imicode,int $exanum):int {
 		if ( !(isset($imicode)) || !(isset($exanum))) {
 			return null;
 		}

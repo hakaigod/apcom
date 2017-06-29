@@ -16,6 +16,7 @@
  * @var bool $isAnsed
  * @var bool[] $notAnsedPages
  * @var int $imicode
+ * @var int $implNum
  */
 ?>
 <?php
@@ -43,8 +44,13 @@ function json_safe_encode($data){
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <tr><td><a href="#">管理者管理</a></td></tr>
 <?php $this->end(); ?>
-
-<h3><?= '平成' . ($year) . '年 ' . $season?></h3>
+<?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum))):?>
+    <br><br>
+    <div class="alert alert-danger" role="alert">
+        この模擬試験は実施されていません
+    </div>
+<?php else:?>
+<h3><?= "平成{$year}年{$season} {$implNum}回目" ?></h3>
 <form name="ansForm" action="
 <?= $this->Html->Url->build(['controller' => 'student', 'action' => 'sendAll','imicode' => $imicode]) ?>" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
@@ -171,5 +177,5 @@ function json_safe_encode($data){
 		?>
     </div>
 </form>
-
+<?php endif;?>
 <br><br><br><br><br><br><br><br>

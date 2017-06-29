@@ -42,7 +42,7 @@
 			<li class="dropdown navbar-buttton">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
 					<img src="<?= $this->request->webroot ?>private/img/1312000.png" class="dropdown-img">
-					ようこそ、<?= $this->fetch('username')?>さん
+					ようこそ、<?= $username?:"ERROR!"?>さん
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
