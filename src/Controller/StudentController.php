@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\TfSum;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
@@ -40,29 +41,33 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('StudentID', '13120023');
+		$session->write('userID', '13120023');
 		
-		$regnum = $this->readSession(['StudentID']);
+		$regnumFromReq = $this->request->getParam('id');
+		$regnumFromSsn = $this->readSession(['userID']);
+		//TODO:管理者用の条件分岐
+		//TODO:ログインしていないとき、ログイン画面に飛ばす条件分岐
+		
+		//セッションの学籍番号とURLの学籍番号が違うとき、セッションの方にリダイレクト
+		if ($regnumFromReq != $regnumFromSsn) {
+			$this->redirect([ 'controller' => 'student','action' => 'summary' , 'id' => $regnumFromSsn ]);
+			return;
+		}
 		//生徒名取得
 		$username = $this->MfStu->find()
-			->where(['MfStu.regnum = ' => $regnum])
-			->first()->toArray()['stuname'];
+			->where([ 'MfStu.regnum = ' => $regnumFromSsn ])
+			->first()->toArray()[ 'stuname' ];
+		
 		//生徒名:$username
 		$this->set(compact('username'));
-		
-		//生成
-		$identiconComponent = $this->loadComponent("Identicon");
-		try {
-			$identiconComponent->makeImage("15110033");
-		}catch (Exception $e) {
-		}
-		
+		//リンクを生成するための学籍番号:$userID
+		$this->set("userID",$regnumFromSsn);
 	}
 	
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
-		$regnum = $this->readSession(['StudentID']);
+		$regnum = $this->readSession(['userID']);
 		
 		//模擬試験合計、模擬試験情報 取得
 		$sums = $this->TfSum->find()
@@ -73,23 +78,23 @@ class StudentController extends AppController
 		
 		$answeredImis =[];
 		foreach ($sums as $sum) {
-			// 2
 			$imicode = $sum['imicode'];
 			$exanum = $sum['tf_imi']['exanum'];
 			$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
 			$examDetail = $sum['tf_imi']['mf_exa']->exam_detail;
-			
+			$score = $sum->student_sum;
+			$rank = $this->TfSum->getRank($imicode, $score);
 			$answeredImis[] = [
 				'imicode' => $imicode,
 				'date' => $sum['tf_imi']['imp_date']->format("n月j日"),
 				'name' => "{$examDetail} {$implNum}回目",
-				'average' => $sum['tf_imi']->imi_sum / $sum['tf_imi']['imipepnum'],
-				'studentScore' => $sum->student_sum
+				'average' => round($sum['tf_imi']->imi_sum / $sum['tf_imi']['imipepnum'],1),
+				'studentScore' => $score,
+				'rank' => $rank
 			];
 		}
 		$this->set(compact('sums'));
 		$this->set(compact('answeredImis'));
-	
 	}
 	//模擬試験結果入力画面
 	public function input(){
@@ -162,7 +167,6 @@ class StudentController extends AppController
 			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
-	//TODO:ジャンルごとの合計にする
 	//解答をDBに送信する
 	public function sendAll() {
 		//回答入力時
@@ -185,7 +189,7 @@ class StudentController extends AppController
 		$this->set(compact('imicode'));
 		$corrects = $this->TfImi->getOneAndQes($imicode,80);
 		$rejoinders = $this->readSession(['answers',$imicode]);
-		$regnum = $this->readSession(['StudentID']);
+		$regnum = $this->readSession(['userID']);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		
 		//TODO:この辺をinputの方に分散する
@@ -236,16 +240,16 @@ class StudentController extends AppController
 			$insertAnsQuery->execute();
 			$insertSumQuery->execute();
 		});
-		$this->redirect([ 'controller' => 'student','action' => 'result' , 'imicode' => $imicode ]);
+		$this->redirect([ 'controller' => 'student','action' => 'result' ,
+		                  'id' => $regnum, 'imicode' => $imicode ]);
 	}
 	
 	//各回の詳細な結果
 	public function result () {
-		//TODO:何回目、合計、平均点
 		//模擬試験コード
 		$imicode = $this->request->getParam('imicode');
 		//学籍番号
-		$regnum = $this->readSession(['StudentID']);
+		$regnum = $this->readSession(['userID']);
 		
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
 		//もし実施されていない模擬試験ならば変数をセットしない
@@ -265,7 +269,7 @@ class StudentController extends AppController
 		//平均点:$average
 		$average = 0;
 		if (isset($imiQesAns) && $imiQesAns->imipepnum > 0) {
-			$average = $imiQesAns->imi_sum / $imiQesAns->imipepnum;
+			$average = $imiQesAns->_getImiSum() / $imiQesAns->imipepnum;
 		}
 		$this->set(compact('average'));
 		//問題:$questions
@@ -278,6 +282,14 @@ class StudentController extends AppController
 		$score = $this->TfSum->find()
 			->where(['TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode])
 			->first();
+		if (isset($score) && $score instanceof TfSum) {
+			$score = $score->_getStudentSum();
+		}else{
+			$score = 0;
+		}
+		//順位:$rank
+		$rank = $this->TfSum->getRank($imicode, $score);
+		$this->set(compact('rank'));
 		$this->set(compact('score'));
 		//正答率:$correctRate
 		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));

@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\TfSum;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -69,5 +70,12 @@ class TfSumTable extends Table
             ->notEmpty('management_sum');
 
         return $validator;
+    }
+    public function getRank(int $imicode, int $sum):int {
+    	$result = $this->find()
+		    ->select(['upper' => 'count(*)'])
+		    ->where(['imicode' => $imicode, 'technology_sum + management_sum + strategy_sum >' => $sum])
+		    ->first();
+    	return $result->upper + 1;
     }
 }

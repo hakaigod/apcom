@@ -2,6 +2,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var string $userID
  * @var array $answeredImis
  *
  */
@@ -103,18 +104,22 @@
 </div>
 <table class="table table-bordered table-striped table-hover">
     <!--    TODO:順位表示-->
-	<?= $this->Html->tableHeaders(['試験名','平均', '点数'],[],['class' => 'center']); ?>
+	<?= $this->Html->tableHeaders(['試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
     <tbody>
 	<?php
 	foreach($answeredImis as $imi): ?>
         <tr>
-            <!--            TODO:編集へのリンクにする-->
             <th class="center"><?=
-                $this->Html->link($imi['name'],['action' => 'result','imicode' => $imi['imicode']]);
+                $this->Html->link($imi['name'],
+                                  ['controller' => 'student',
+                                   'action' => 'result',
+                                   'id' => $userID,
+                                   'imicode' => $imi['imicode']]);
                 ?>
             </th>
-            <td class="center"><?= round($imi['average'],1)?></td>
+            <td class="center"><?= $imi['average']?></td>
             <td class="center"><?= $imi['studentScore']?></td>
+            <td class="center"><?= $imi['rank'] ?> </td>
         </tr>
 	<?php endforeach; ?>
     </tbody>

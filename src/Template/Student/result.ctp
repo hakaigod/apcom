@@ -5,12 +5,13 @@
  *
  * @var int $year
  * @var string $season
- * @var int $implNum
+ * @var int $implNumf
  * @var float $average
  * @var \App\Model\Entity\MfQe[] $questions
  * @var \App\Model\Entity\TfAn[] $answers
- * @var \App\Model\Entity\TfSum $score
+ * @var int $score
  * @var array $correctRates
+ * @var int $implNum
  */
 ?>
 
@@ -30,7 +31,8 @@
 <?php else:?>
     <h3><?= "平成{$year}年{$season} {$implNum}回目"?></h3>
     <h4>平均点:<?= round($average,1) ?>点</h4>
-    <h4>合計点:<?= $score?$score->imisum:0 ?>点</h4>
+    <h4>合計点:<?= $score ?>点</h4>
+    <h4>順位:<?= $rank ?></h4>
     <!--TODO:順位表示-->
 	<?php
 	$answersStr = ['未','ア','イ','ウ','エ'];

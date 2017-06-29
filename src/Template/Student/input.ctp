@@ -51,8 +51,10 @@ function json_safe_encode($data){
     </div>
 <?php else:?>
 <h3><?= "平成{$year}年{$season} {$implNum}回目" ?></h3>
-<form name="ansForm" action="
-<?= $this->Html->Url->build(['controller' => 'student', 'action' => 'sendAll','imicode' => $imicode]) ?>" method="post" id="answer-form">
+<form name="ansForm" action="<?= $this->Html->Url->build(
+        ['controller' => 'student', 'action' => 'sendAll',
+         'id' => $userID,'imicode' => $imicode]) ?>
+" method="post" id="answer-form">
     <table class="table table-bordered table-striped table-hover">
 		<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
         <tbody>

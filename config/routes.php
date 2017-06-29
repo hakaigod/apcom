@@ -43,6 +43,30 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
+Router::scope("/student", function ( RouteBuilder $routes ) {
+	
+	$routes->connect(
+		'/:id',
+		['controller' => 'student', 'action'=> 'summary'],
+//		 8桁の数字に制限、0始まりに対応
+		['id' => '\d{8}']
+	);
+	$routes->connect(
+		'/:id/input/:imicode/:linkNum',
+		['controller' => 'student', 'action'=> 'input'],
+		['id' => '\d{8}','imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
+	);
+	$routes->connect(
+		'/:id/sendAll/:imicode/',
+		['controller' => 'student', 'action'=> 'sendAll'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+	$routes->connect(
+		'/:id/result/:imicode',
+		['controller' => 'student', 'action'=> 'result'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+});
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
@@ -51,19 +75,9 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
-	 //ユーザマイページ
-	$routes->connect(
-		'/:student',
-		['controller' => 'student', 'action'=> 'summary'],
-		['student' => '(?i:student)']
-	);
+	 
 	//ユーザIDを指定した際のユーザマイページ(先生向け)
-	 $routes->connect(
-		 '/:student/:id',
-		 ['controller' => 'student', 'action'=> 'summary'],
-//		 8桁の数字に制限、0始まりに対応
-		 ['student' => '(?i:student)','id' => '\d{8}']
-	 );
+
 	 
 //	$routes->connect(
 //		'/:student/:input/:season',
@@ -78,21 +92,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 //		['student' => '(?i:student)','input' =>'(?:input)',
 //			'imiNum' => '\d{1,3}']
 //	);
-	$routes->connect(
-		'/student/input/:imicode/:linkNum',
-		['controller' => 'student', 'action'=> 'input'],
-		['imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
-	);
-	$routes->connect(
-		'/student/sendAll/:imicode/',
-		['controller' => 'student', 'action'=> 'sendAll'],
-		['imicode' => '\d{1,3}']
-	);
-	$routes->connect(
-		'/student/result/:imicode',
-		['controller' => 'student', 'action'=> 'result'],
-		['imicode' => '\d{1,3}']
-	);
+
 	
 //	$routes->connect(
 //		'/:student/:input/:season/:qnum',
