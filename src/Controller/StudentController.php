@@ -50,10 +50,10 @@ class StudentController extends AppController
 		//生徒名:$username
 		$this->set(compact('username'));
 		
-		//cwd
-		$idconComp = $this->loadComponent("Identicon");
+		//生成
+		$identiconComponent = $this->loadComponent("Identicon");
 		try {
-			$this->set("aa", $idconComp->makeImage("15110033"));
+			$identiconComponent->makeImage("15110033");
 		}catch (Exception $e) {
 		}
 		
