@@ -71,8 +71,8 @@
 
 /*問題文*/
 .qaa-question{
-    text-align: center;
-    margin-top: 20px;
+    text-align: left;
+    margin: 20px;
 }
 
 /*正誤*/
@@ -85,6 +85,7 @@
 /*選択肢テーブル*/
 .qaa_select_table{
     margin: 20px;
+    /*word-break: keep-all;*/
 }
 .table-bordered > tbody > tr >td{
     border: none;
@@ -115,6 +116,7 @@
     text-align: center;
 }
 
+/*テスト用 外枠表示*/
 /*#col-main * {*/
     /*border: solid 1px black;*/
 /*}*/

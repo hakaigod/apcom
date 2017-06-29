@@ -1,22 +1,27 @@
 <?php
 namespace App\Controller;
 
-use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
+use App\Model\Table\MfExaTable;
+use App\Model\Table\MfFieTable;
 use App\Model\Table\MfQesTable;
 
 /**
  * @property MfQesTable MfQes
+ * @property MfExaTable MfExa
+ * @property MfFieTable MfFie
  */
 
 class StudentController extends AppController
 {
     public function initialize()
     {
+        //画像取得用のヘルパー
         $helpers = array('qaa');
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
         $this->loadModel('MfQes');
+        $this->loadModel('MfExa');
+        $this->loadModel('MfFie');
     }
 
     public function index()
@@ -32,27 +37,21 @@ class StudentController extends AppController
     public function qaaQuestion()
     {
         //qaaSelectGenre 選択したジャンルの取得
-        $getGenre = $this->request->getData('genre');
+        $getGenre=$this->request->getData('genre');
         //ctpに送る
-        $this -> set('getGenre',$getGenre);
-//        print_r($getGenre);
-//        $this->log($getGenre);
-
+        $this->set('getGenre',$getGenre);
         //ルートから番号の取得(回答した回数になる)
-        $qNum = $this -> request -> getParam('question_num');
-//        debug($qNum);
-        $this -> set('qNum',$qNum);
-
+        $qNum=$this->request->getParam('question_num');
+        $this->set('qNum',$qNum);
         //指定したジャンルのクエリを取得する
-        $this->loadModel('MfQes');
         $question = $this->MfQes->find()
+            ->contain('MfQes','MfQes'.'MfFie')
             ->WHERE(['MfQes.fienum IN' => $getGenre])
             ->ORDER(['qesnum' => 'ASC'])
             //何行飛ばすか
             ->OFFSET($qNum)
             //1行だけ出力する
             ->first();
-
         //問題内容の表示
         $this->set('question',$question);
     }

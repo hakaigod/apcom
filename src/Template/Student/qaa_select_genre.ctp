@@ -1,46 +1,46 @@
 <!-- タイトルセット -->
-<?= $this->start('title'); ?>
+<?= $this->start('title');?>
 ジャンル選択
-<?= $this->end(); ?>
+<?= $this->end();?>
 
 <!-- CSSセット -->
-<?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/qaa.css') ?>
-<?= $this->end(); ?>
+<?= $this->start('css');?>
+<?= $this->Html->css('/private/css/Student/qaa.css')?>
+<?= $this->end();?>
 
 <!-- jsセット -->
-<?= $this->start('script'); ?>
-<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<?= $this->Html->script('/private/js/Student/check.js') ?>
-<?= $this->end(); ?>
+<?= $this->start('script');?>
+<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
+<?= $this->Html->script('/private/js/Student/check.js')?>
+<?= $this->end();?>
 
 <!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
+<?= $this->start('username');?>
 Student
-<?= $this->end(); ?>
+<?= $this->end();?>
 
 <!-- サイドバーセット -->
-<?= $this->start('sidebar'); ?>
+<?= $this->start('sidebar');?>
 <tr class="info"><td> 点数入力画面 </td></tr>
 <tr><td> 一問一答画面 </td></tr>
 <tr><td> 模擬試験画面 </td></tr>
-<?= $this->end(); ?>
+<?= $this->end();?>
 
 <!-- 以下content -->
-<div class = "container-fluid">
-    <div class = "row">
-        <div class = col-md-12>
+<div class="container-fluid">
+    <div class="row">
+        <div class=col-md-12>
             <div id= "qaa-title">
                 一問一答
             </div>
-            <div id = "qaa-sub">
+            <div id="qaa-sub">
                 ジャンル選択
             </div>
         </div>
     </div>
 
-    <div class = "row">
-        <div class = "col-md-12">
+    <div class="row">
+        <div class="col-md-12">
             <p id="qaa-explanation">
                 試験ジャンルを設定すると、一問一答形式で対応ジャンルの設問が出題されます。<br>
                 [詳細]を押すことで現在の総合回答数とジャンル別の正答率を確認することができます。<br>
@@ -50,19 +50,19 @@ Student
     </div>
 
     <div class= "row">
-        <div class = "col-md-12">
-            <div class= "genre-container">
-                <div class = "caption-box">
+        <div class="col-md-12">
+            <div class="genre-container">
+                <div class="caption-box">
                     <!--枠線の上に重ねる文字-->
-                    <div class = "caption"><p>ジャンル一覧</p></div>
+                    <div class="caption"><p>ジャンル一覧</p></div>
                     <!--ジャンル選択フォーム-->
                     <?php
-                    echo $this-> Form -> create('',['type' => 'post', 'url' => ['action' => 'qaaQuestion','question_num' => 1]]);
-                    $options = [
+                    echo $this->Form->create('',['type'=>'post', 'url'=>['action'=>'qaaQuestion','question_num'=>1]]);
+                    $options=[
                         //valueと表示文字の設定
-                        '1' => 'テクノロジ',
-                        '2' => 'ストラテジ',
-                        '3' => 'マネジメント'
+                        '1'=>'テクノロジ',
+                        '2'=>'ストラテジ',
+                        '3'=>'マネジメント'
                     ];
                     //name配列と対応するoptionの選択
                     echo $this->Form->select
@@ -70,14 +70,14 @@ Student
                     ('genre',
                         $options,
                             ['multiple'=>'checkbox'
-                            ,'data-toggle' => "checkbox",]
+                            ,'data-toggle'=>"checkbox",]
                     )
                     ?>
                 </div>
                 <!--決定ボタン-->
-                <div class = "center">
-                    <?= $this -> Form -> button('問題開始',array('type' => 'submit','class' => 'btn btn-info')); ?>
-                    <?= $this -> Form -> end();?>
+                <div class="center">
+                    <?= $this->Form->button('問題開始',array('type'=>'submit','class'=>'btn btn-info'));?>
+                    <?= $this->Form->end();?>
                 </div>
             </div>
         </div>
