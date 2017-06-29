@@ -8,7 +8,9 @@ use Cake\ORM\Entity;
  *
  * @property string $regnum
  * @property int $imicode
- * @property float $imisum
+ * @property float $strategy_sum
+ * @property float $technology_sum
+ * @property float $management_sum
  *
  * @property \App\Model\Entity\MfStu $mf_stu
  */

@@ -24,7 +24,8 @@ class MfQesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.mf_qes'
+        'app.mf_qes',
+        'app.mf_exa'
     ];
 
     /**

@@ -8,7 +8,9 @@ use Cake\ORM\Entity;
  *
  * @property int $imicode
  * @property int $exanum
- * @property float $imisum
+ * @property float $strategy_imisum
+ * @property float $technology_imisum
+ * @property float $management_imisum
  * @property int $imipepnum
  * @property \Cake\I18n\FrozenTime $imp_date
  *

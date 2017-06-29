@@ -12,6 +12,8 @@ use Cake\ORM\Entity;
  * @property int $rejoinder
  * @property int $confidence
  * @property int $correct_answer
+ *
+ * @property \App\Model\Entity\MfStu $mf_stu
  */
 class TfAn extends Entity
 {

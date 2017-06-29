@@ -26,7 +26,9 @@ class TfSumFixture extends TestFixture
     public $fields = [
         'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'imicode' => ['type' => 'integer', 'length' => 6, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'imisum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
+        'strategy_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
+        'technology_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
+        'management_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
         '_indexes' => [
             'imicode' => ['type' => 'index', 'columns' => ['imicode'], 'length' => []],
         ],
@@ -49,9 +51,11 @@ class TfSumFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '4f8f40c2-93c3-4b07-b87a-07375ceb2662',
+            'regnum' => '8216aae3-9e56-44ab-b2f2-2243ed830aaa',
             'imicode' => 1,
-            'imisum' => 1
+            'strategy_sum' => 1,
+            'technology_sum' => 1,
+            'management_sum' => 1
         ],
     ];
 }

@@ -27,7 +27,7 @@ class MfStuFixture extends TestFixture
         'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'stuname' => ['type' => 'string', 'length' => 20, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'stuyear' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'stupass' => ['type' => 'string', 'length' => 40, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'stupass' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'depnum' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'last_update' => ['type' => 'timestamp', 'length' => null, 'null' => false, 'default' => 'CURRENT_TIMESTAMP', 'comment' => '', 'precision' => null],
         'graduate_flg' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
@@ -53,12 +53,12 @@ class MfStuFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => 'f466c055-ee4b-4f6d-b7e6-2c3a24c16e30',
+            'regnum' => '79292b69-032d-435b-825e-ca6eb47b7214',
             'stuname' => 'Lorem ipsum dolor ',
             'stuyear' => 1,
             'stupass' => 'Lorem ipsum dolor sit amet',
             'depnum' => 1,
-            'last_update' => 1498455748,
+            'last_update' => 1498710557,
             'graduate_flg' => 1,
             'deleted_flg' => 1
         ],

@@ -54,8 +54,19 @@ class TfImiTable extends Table
             ->notEmpty('exanum');
 
         $validator
-            ->numeric('imisum')
-            ->allowEmpty('imisum');
+            ->numeric('strategy_imisum')
+            ->requirePresence('strategy_imisum', 'create')
+            ->notEmpty('strategy_imisum');
+
+        $validator
+            ->numeric('technology_imisum')
+            ->requirePresence('technology_imisum', 'create')
+            ->notEmpty('technology_imisum');
+
+        $validator
+            ->numeric('management_imisum')
+            ->requirePresence('management_imisum', 'create')
+            ->notEmpty('management_imisum');
 
         $validator
             ->integer('imipepnum')

@@ -56,7 +56,7 @@
 				<?php foreach ($answers as $answer => $value): ?>
 					<tr>
 						<td><?= $value['stuname']; ?></td>
-						<td><?= $value['imisum'] . '点'; ?></td>
+						<td><?= number_format($value['imisum'] * 1.25, 2) . '点'; ?></td>
 						<?php foreach ($value['answers'] as $ans): ?>
 							<td class="center"><?= $ans; ?></td>
 						<?php endforeach; ?>
@@ -64,7 +64,7 @@
 				<?php endforeach; ?>
 				<tr>
 					<td>平均</td>
-					<td><?= number_format($average['average'],2) . '点'; ?></td>
+					<td><?= $average['imipepnum'] != 0 ? number_format($average['imisum'] / $average['imipepnum'] * 1.25 ,2) : 0 . '点'; ?></td>
 					<?php foreach ($questionsdetail as $par): ?>
 						<td>
 							<?= number_format($par['corrects'] * 100, 0) . '%'; ?>

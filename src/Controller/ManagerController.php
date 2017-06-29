@@ -39,25 +39,26 @@ class ManagerController extends AppController
 	// マネージャートップ画面
 	public function index()
 	{
+		$query = $this->TfImi->find();
+		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
 		//直近の模擬コード取得
 		if (!empty($_GET['id'])) {
-			$nearimi = $_GET['id'];
+			$reqestimicode = $_GET['id'];
 		} else {
-			$query = $this->TfImi->find();
-			$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
+			$reqestimicode = $nearimi;
 		}
 
 		// 受験者平均点
-		$queryAvg = $this->TfSum->find();
-		$queryAvg ->select(['average' => $queryAvg->func()->avg('imisum')])->where(['imicode' => $nearimi]);
+		$queryAvg = $this->TfImi->find();
+		$queryAvg ->select(['imisum' => 'strategy_imisum + technology_imisum + management_imisum', 'imipepnum'])->where(['imicode' => $reqestimicode]);
 		$aveArr = $queryAvg->toArray();
 		$this->set('average', array_shift($aveArr));
 
 		// 模擬試験ごとの回答データ取得
-		$cnt = $this->TfSum->find()->where(['imicode' => $nearimi]);
+		$cnt = $this->TfSum->find()->where(['imicode' => $reqestimicode]);
 
 		$ans = $this->TfAns->find()->contain(['MfStu']);
-		$ans ->where(['imicode' => $nearimi])
+		$ans ->where(['imicode' => $reqestimicode])
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
 		->order(['qesnum', 'TfAns.regnum' =>'DESC']);
 		$ans->limit(($cnt->count() * 10));
@@ -83,8 +84,8 @@ class ManagerController extends AppController
 			if(isset($answers[$key->regnum])){
 				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa);
 			} else {
-				$query = $this->TfSum->get([$key->regnum, $nearimi]);
-				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->imisum, 'answers'=> array('ans'. $i++ => $ansJa)));
+				$query = $this->TfSum->get([$key->regnum, $reqestimicode]);
+				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa)));
 			}
 		}
 		$this->set('answers', $answers);
@@ -113,7 +114,7 @@ class ManagerController extends AppController
 		}
 
 		$questions = $this->MfQes->find();
-		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $nearimi]);
+		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode]);
 		$questions ->select(['exanum', 'qesnum', 'question'])
 		->where(['exanum' => $exanum]);
 		if (!empty($_GET['page'])) {
@@ -151,10 +152,10 @@ class ManagerController extends AppController
 		$this->set('imidata', $arrayimis);
 
 		// タイトルセット
-		if (empty($_GET['id'])) {
+		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
 			$this->set('detaiExamName', '直近一回分');
 		} else {
-			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
+			$this->set('detaiExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
 	}
 	// ページネーター

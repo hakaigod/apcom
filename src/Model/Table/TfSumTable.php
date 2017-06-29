@@ -52,8 +52,19 @@ class TfSumTable extends Table
             ->allowEmpty('imicode', 'create');
 
         $validator
-            ->numeric('imisum')
-            ->allowEmpty('imisum');
+            ->numeric('strategy_sum')
+            ->requirePresence('strategy_sum', 'create')
+            ->notEmpty('strategy_sum');
+
+        $validator
+            ->numeric('technology_sum')
+            ->requirePresence('technology_sum', 'create')
+            ->notEmpty('technology_sum');
+
+        $validator
+            ->numeric('management_sum')
+            ->requirePresence('management_sum', 'create')
+            ->notEmpty('management_sum');
 
         return $validator;
     }
