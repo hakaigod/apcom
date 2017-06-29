@@ -19,6 +19,7 @@ class ManagerController extends AppController
 		$this->set('headerlink', $this->request->webroot . 'Manager');
 
 		$this->loadComponent('Paginator');
+		$this->loadComponent("Identicon");
 
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
@@ -29,6 +30,10 @@ class ManagerController extends AppController
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
 	}
+	// ページネーター
+	public $paginate = [
+		'order' => ['TfAns.qesnum']
+	];
 
 	// パスワードハッシュ値返却
 	private function passhash($pass){
@@ -158,10 +163,7 @@ class ManagerController extends AppController
 			$this->set('detaiExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
 	}
-	// ページネーター
-	public $paginate = [
-		'order' => ['TfAns.qesnum']
-	];
+
 
 	// 問題詳細
 	public function questionDetail()
@@ -215,6 +217,7 @@ class ManagerController extends AppController
 	{
 		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
+		$identiconComponent = $this->loadComponent("Identicon");
 
 		$this->set('deps', $this->MfDep->find());
 
@@ -233,11 +236,13 @@ class ManagerController extends AppController
 					'depnum' => $_POST['depnum'],
 					'stupass' => $this->passhash($_POST['stuno'])
 				]);
+
 				try {
 					$query->execute();
+					$identiconComponent->makeImage($_POST['stuno']);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing');
+					$this->Flash->error('missing' . $e->getMessage());
 				}
 			}
 
@@ -318,6 +323,11 @@ class ManagerController extends AppController
 				$queryStuUpdate->where(['regnum' => $_GET['id']]);
 				try {
 					$queryStuUpdate->execute();
+					// 学籍番号が変更されたら、画像の名前を変更
+					if ($_POST['stuno'] != $_GET['id']) {
+						rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stuno'] . '.png');
+					}
+
 					$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stuno']]);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
@@ -355,10 +365,11 @@ class ManagerController extends AppController
 	{
 		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
+		$identiconComponent = $this->loadComponent("Identicon");
 
 		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
-			if (empty($_POST['admnum']) || empty($_POST['admname'])) {
+			if (empty($_POST['admname']) || empty($_POST['admpass'])) {
 				// 学生番号か名前が未入力の場合
 				$this->Flash->error('missing');
 			} else {
@@ -371,6 +382,8 @@ class ManagerController extends AppController
 				]);
 				try {
 					$query->execute();
+					$admnum = $this->MfAdm->find()->select('admnum')->where(['admname like' => '%' . $_POST['admname'] . '%'])->first()->toArray()['admnum'];
+					$identiconComponent->makeImage($admnum);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
 					$this->Flash->error('missing ' . $e->getMessage());

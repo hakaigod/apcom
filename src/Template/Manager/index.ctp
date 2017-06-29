@@ -64,7 +64,7 @@
 				<?php endforeach; ?>
 				<tr>
 					<td>平均</td>
-					<td><?= $average['imipepnum'] != 0 ? number_format($average['imisum'] / $average['imipepnum'] * 1.25 ,2) : 0 . '点'; ?></td>
+					<td><?= $average['imipepnum'] != 0 ? number_format($average['imisum'] / $average['imipepnum'] * 1.25 ,2) . '点' : 0 . '点'; ?></td>
 					<?php foreach ($questionsdetail as $par): ?>
 						<td>
 							<?= number_format($par['corrects'] * 100, 0) . '%'; ?>
