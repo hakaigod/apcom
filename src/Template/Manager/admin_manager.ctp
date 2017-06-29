@@ -14,7 +14,7 @@ managerrrrr
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
 	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a href="" onclick="window.open('addadmin','管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
+	<tr><td><a onclick="window.open('addadmin','管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->

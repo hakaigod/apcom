@@ -10,6 +10,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
 use \SplFileObject;
+use App\Utils\ImageGeneratorUtility;
 
 class ManagerController extends AppController
 {
@@ -89,38 +90,6 @@ class ManagerController extends AppController
 		$this->set('answers', $answers);
 
 		// 正答率
-		$this->set('questionsdetail', $this->getCorrectRate($ans, $nearimi, $cnt));
-
-		// 模擬試験一覧
-		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
-		$arrayimis = array();
-		$work = null;
-		// 模擬試験の回数を数える
-		foreach ($imidata as $key) {
-			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
-			if($key->exanum != $work) {
-				$i = 0;
-			}
-			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
-			$work = $key->exanum;
-		}
-		array_multisort($arrayimis, SORT_DESC);
-		$this->set('imidata', $arrayimis);
-
-		// タイトルセット
-		if (empty($_GET['id'])) {
-			$this->set('detaiExamName', '直近一回分');
-		} else {
-			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
-		}
-	}
-	// ページネーター
-	public $paginate = [
-		'order' => ['TfAns.qesnum']
-	];
-
-	// 正答率返却用
-	private function getCorrectRate($ans, $nearimi, $cnt) {
 		$pars = array();
 		$corrects = array();
 		$i = 0;
@@ -163,19 +132,42 @@ class ManagerController extends AppController
 				$questionsdetail[$key['qesnum']]['corrects'] += $key['corrects'];
 			}
 		}
+		$this->set('questionsdetail', $questionsdetail);
 
-		return $questionsdetail;
+		// 模擬試験一覧
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
+		$arrayimis = array();
+		$work = null;
+		// 模擬試験の回数を数える
+		foreach ($imidata as $key) {
+			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
+			if($key->exanum != $work) {
+				$i = 0;
+			}
+			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+			$work = $key->exanum;
+		}
+		array_multisort($arrayimis, SORT_DESC);
+		$this->set('imidata', $arrayimis);
+
+		// タイトルセット
+		if (empty($_GET['id'])) {
+			$this->set('detaiExamName', '直近一回分');
+		} else {
+			$this->set('detaiExamName', $arrayimis[$nearimi]['name'] . '回目');
+		}
 	}
-
-
-
-
-
+	// ページネーター
+	public $paginate = [
+		'order' => ['TfAns.qesnum']
+	];
 
 	// 問題詳細
 	public function questionDetail()
 	{
+		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
+
 		$this->set('questionDetail', $this->MfQes->get([$_GET['qn'], $_GET['ex']],['contain' => ['MfExa']]));
 	}
 

@@ -36,7 +36,7 @@
 
 	<div class="full" id="upload">
 		<form method="post" enctype="multipart/form-data" action="">
-			<input type="file" name="studata">
+			<input type="file" name="studata" class="full">
 			<button type="submit" class="btn btn-success">送信</button>
 		</form>
 

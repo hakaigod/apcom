@@ -3,7 +3,15 @@
 	display: none;
 }
 
-@media (min-width: 300px) {
+#sidebar {
+	width: calc(100% / 12 * 2);
+	height: auto;
+	background-color: transparent;
+}
+#sidebar div table tr td a {
+	padding: 10px 0 10px 10px;
+}
+@media (max-width: 900px) {
 	#sidebar {
 		width: 100vw;
 		height: auto;
@@ -15,20 +23,6 @@
 	#sidebar div table {
 		margin: 0;
 	}
-}
-@media (min-width: 1000px) {
-	#sidebar {
-		width: calc(100% / 12 * 2);
-		height: auto;
-		background-color: transparent;
-	}
-	#sidebar div table tr td a {
-		padding: 10px 0 10px 10px;
-	}
-}
-
-#sidebar div *{
-
 }
 #sidebar div table tr td a {
 	cursor:pointer;
@@ -83,18 +77,18 @@
 	padding-top: 53px;
 }
 
-body {
-	/*font-size: 100%;*/
-	background-color: #fdf9f9;
-	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
-}
-
 #reloadbutton {
 	margin-top: 10px;
 }
 
 a {
 	cursor: pointer;
+}
+/*その他*/
+
+body {
+	background-color: #fdf9f9;
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
 }
 
 /*flash用CSS*/
