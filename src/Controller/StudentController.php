@@ -72,58 +72,60 @@ class StudentController extends AppController
 		$regnum = $this->readSession(['userID']);
 		
 		//模擬試験合計、模擬試験情報 取得
-//		$sums = $this->TfSum->find()
-//			->contain(['TfImi','TfImi.MfExa'])
-//			->where(['TfSum.regnum' => $regnum])
-//			->all();
 		$imitations = $this->TfImi->find()
-			->contain([
-				'TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}
-				,'MfExa']
-			)
+			->contain([ 'TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}
+				          ,'MfExa'])
 			->all();
-		$this->set(compact('imitations'));
 		
 		$imiDetails = [];
-		
-		$wholeAvg = ["count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
-		$userAvg = ["count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
+		$userCount = 0;
+		$wholeAvg = [ "tech" => 0, "man" => 0, "str" => 0 ];
+		$userAvg = [ "tech" => 0, "man" => 0, "str" => 0 ];
 		//いるものリスト
 		//模擬試験のタイトル一覧と、全体の平均点、ユーザの合計点、順位
 		//ユーザのジャンルごとの平均点, 全体のジャンルごとの平均点
 		foreach ($imitations as $imi) {
-			$tfSumEntity = $imi['tf_sum'][0];
-			if ( !( $imi instanceof TfImi) ) {
-				return;
-			}
+			if ( !( $imi instanceof TfImi) ) return;
 			$imicode = $imi->imicode;
-			$score  = 0;
-			if (isset($tfSumEntity) && ($tfSumEntity instanceof TfSum)) {
-				$score = $tfSumEntity->_getStudentSum;
-				
-				$userAvg["count"] ++ ;
+			$score  = null;
+			$tfSumArray = $imi['tf_sum'];
+			if (count($tfSumArray) === 1) {
+				$tfSumEntity = $tfSumArray[0];
+				$score = $tfSumEntity->_getStudentSum();
+				//ジャンルごとの合計
+				$userCount ++ ;
 				$userAvg["tech"] += $tfSumEntity->technology_sum;
 				$userAvg["man"] += $tfSumEntity->management_sum;
 				$userAvg["str"] += $tfSumEntity->strategy_sum;
 			}
 			$imiDetails[] = [
-				'name' => $imi->_getName,
+				'imicode' => $imi->imicode,
+				'name' => $imi->_getName($this->TfImi),
 				'date' => $imi->imp_date->format("n月j日"),
-				'avg' => $imi->_getAverage,
+				'avg' => $imi->_getAverage(),
 				'score' => $score,
-				'rank' => $this->TfSum->getRank($imicode, $score)
-				
+				'rank' => $score?$this->TfSum->getRank($imicode, $score):null
 			];
 			$wholeAvg["tech"] += $imi->technology_imisum;
 			$wholeAvg["man"] += $imi->management_imisum;
 			$wholeAvg["str"] += $imi->strategy_imisum;
 		}
 		//平均にするため試験回数で割る
-
-		$this->set(compact('sums'));
-		$this->set(compact('answeredImis'));
+		if ($userCount > 0 ) {
+			foreach ( $userAvg as &$value ) {
+				$value = round( $value/$userCount, 1);
+			}
+		}
+		if (count($imitations) > 0 ) {
+			foreach ( $wholeAvg as &$value ) {
+				$value = round($value/count($imitations),1);
+			}
+		}
+		$this->set(compact('imiDetails'));
 		//ユーザのジャンルごとの平均
 		$this->set(compact('userAvg'));
+		//全体のジャンルごとの平均
+		$this->set(compact('wholeAvg'));
 	}
 	//模擬試験結果入力画面
 	//TODO:編集モード
@@ -260,7 +262,7 @@ class StudentController extends AppController
 			           'imicode' => $imicode,
 			           'technology_imisum' => $techScore,
 			           'management_imisum' => $manaScore,
-				       'strategy_imisum' => $straScore
+			           'strategy_imisum' => $straScore
 			         ]);
 		
 		$connection = ConnectionManager::get('default');
@@ -393,9 +395,9 @@ class StudentController extends AppController
 		return $resultAndZero;
 	}
 	private function getImiPepNum (int $imicode):int {
-			$imitation = $this->TfImi->find()
-				->where([ 'imicode' => $imicode])
-				->first()->toArray();
-			return $imitation['imipepnum']?:0;
+		$imitation = $this->TfImi->find()
+			->where([ 'imicode' => $imicode])
+			->first()->toArray();
+		return $imitation['imipepnum']?:0;
 	}
 }

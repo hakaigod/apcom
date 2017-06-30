@@ -2,9 +2,12 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var string $userID
- * @var array $answeredImis
- *
+ * @var string $username
+ * //name,date,avg,score,rankのキーをもつ
+ * @var array $imiDetails
+ * //tech,man,strのキーをもつ
+ * @var float[] $userAvg
+ * @var float[] $wholeAvg
  */
 ?>
 
@@ -34,12 +37,17 @@
         まだ入力されていない模擬試験があります
     </div>
     <ul  style="list-style:none;">
-		<?php for($i=0;$i<4;$i++):?>
+	    <?php foreach($imiDetails as $imi): ?>
             <li>
-                <!--                TODO:未入力模擬試験一覧を表示-->
-                aa
+	            <?= $this->Html->link($imi['name'],
+	                              ['controller' => 'student',
+	                               'action' => 'input',
+	                               'id' => $userID,
+	                               'imicode' => $imi['imicode'],
+                                      'linkNum' => 1
+                                  ]); ?>
             </li>
-		<?php endfor;?>
+		<?php endforeach;?>
     </ul>
 </div>
 
@@ -57,17 +65,11 @@
     <?= 'src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"'?>
     
     <?= "user-name = \"{$username}さん\""?>
-    <?= "line-dates = " . json_safe_encode( array_column($answeredImis,'date'))?>
-	<?= "line-student-score = " . json_safe_encode( array_column($answeredImis,'studentScore'))?>
-	<?= "line-averages = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-user = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-user = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-user = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-avg = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-avg = " . json_safe_encode( array_column($answeredImis,'average'))?>
-	<?= "radar-tech-avg = " . json_safe_encode( array_column($answeredImis,'average'))?>
- 
- 
+    <?= "line-dates = " . json_safe_encode( array_column($imiDetails,'date'))?>
+	<?= "line-student-score = " . json_safe_encode( array_column($imiDetails,'score'))?>
+	<?= "line-averages = " . json_safe_encode( array_column($imiDetails,'avg'))?>
+	<?= "radar-user = " . json_safe_encode(array_values($userAvg))?>
+	<?= "radar-averages = " . json_safe_encode( array_values($wholeAvg))?>
 >
 </script>
 <br><br>
@@ -78,7 +80,7 @@
 	<?= $this->Html->tableHeaders(['試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
     <tbody>
 	<?php
-	foreach($answeredImis as $imi): ?>
+	foreach($imiDetails as $imi): ?>
         <tr>
             <th class="center"><?=
                 $this->Html->link($imi['name'],
@@ -88,9 +90,9 @@
                                    'imicode' => $imi['imicode']]);
                 ?>
             </th>
-            <td class="center"><?= $imi['average']?></td>
-            <td class="center"><?= $imi['studentScore']?></td>
-            <td class="center"><?= $imi['rank'] ?> </td>
+            <td class="center"><?= $imi['avg']?></td>
+            <td class="center"><?= $imi['score']?:""?></td>
+            <td class="center"><?= $imi['rank']?:"" ?> </td>
         </tr>
 	<?php endforeach; ?>
     </tbody>

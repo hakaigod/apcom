@@ -38,9 +38,15 @@ class TfImi extends Entity
     	return $this->strategy_imisum + $this->technology_imisum + $this->management_imisum;
     }
     public function _getAverage () {
-    	return round($this->_getImiSum() / $this->imipepnum, 1);
+    	if ( $this->imipepnum > 0 ) {
+		    return round($this->_getImiSum() / $this->imipepnum, 1);
+	    }else{
+    		return 0;
+	    }
     }
     public function _getName (TfImiTable $table) {
-    	return $this->mf_exa->_getExamDetail() . $table->getImplNum($this->imicode, $this->exanum);
+    	$implNum = $table->getImplNum($this->imicode, $this->exanum) + 1;
+    	$examName = $this->mf_exa->_getExamDetail();
+    	return "{$examName}  {$implNum}回目";
     }
 }

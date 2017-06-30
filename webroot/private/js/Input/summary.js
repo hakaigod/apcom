@@ -5,6 +5,9 @@ const lineDates = JSON.parse($script.attr("line-dates"));
 const lineStudentScore = JSON.parse($script.attr("line-student-score"));
 const lineAverages = JSON.parse($script.attr("line-averages"));
 
+const radarAverages = JSON.parse($script.attr("radar-averages"));
+const radarUser = JSON.parse($script.attr("radar-user"));
+
 function drawLineChart() {
     "use strict";
     let ctx = document.getElementById('lineChart').getContext('2d');
@@ -62,17 +65,17 @@ function drawRadarChart() {
     let radarChart = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ["M", "T", "W", "T", "F", "S", "S"],
+            labels: ["テクノロジ","マネジメント","ストラテジ"],
             datasets: [{
-                label: 'apples',
+                label: userName,
                 backgroundColor: "rgba(153,255,51,0.4)",
                 borderColor: "rgba(153,255,51,1)",
-                data: [12, 19, 3, 17, 28, 24, 7]
+                data: radarUser
             }, {
-                label: 'oranges',
+                label: '平均',
                 backgroundColor: "rgba(255,153,0,0.4)",
                 borderColor: "rgba(255,153,0,1)",
-                data: [30, 29, 5, 5, 20, 3, 10]
+                data:radarAverages
             }]
         }
     });
