@@ -103,7 +103,6 @@
     <h4>今まで受験した模擬試験</h4>
 </div>
 <table class="table table-bordered table-striped table-hover">
-    <!--    TODO:順位表示-->
 	<?= $this->Html->tableHeaders(['試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
     <tbody>
 	<?php
