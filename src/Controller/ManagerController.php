@@ -228,29 +228,23 @@ class ManagerController extends AppController
 
 		// 個別追加
 		if (!empty($_POST)) {
-			if (empty($_POST['stuno']) || empty($_POST['stuname'])) {
-				// 学生番号か名前が未入力の場合
-				$this->Flash->error('missing');
-			} else {
-				$query = $this->MfStu->query();
-				$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
-				$query->values([
-					'regnum' => $_POST['stuno'],
-					'stuname' => $_POST['stuname'],
-					'stuyear' => $_POST['old'],
-					'depnum' => $_POST['depnum'],
-					'stupass' => $this->passhash($_POST['stuno'])
-				]);
+			$query = $this->MfStu->query();
+			$query->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
+			$query->values([
+				'regnum' => $_POST['stunum'],
+				'stuname' => $_POST['stuname'],
+				'stuyear' => $_POST['old'],
+				'depnum' => $_POST['depnum'],
+				'stupass' => $this->passhash($_POST['stunum'])
+			]);
 
-				try {
-					$query->execute();
-					$identiconComponent->makeImage($_POST['stuno']);
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing' . $e->getMessage());
-				}
+			try {
+				$query->execute();
+				$identiconComponent->makeImage($_POST['stunum']);
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing' . $e->getMessage());
 			}
-
 		}
 		// 一括追加
 		if (!empty($_FILES)) {
@@ -311,34 +305,29 @@ class ManagerController extends AppController
 
 		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
-			if (empty($_POST['stuno']) || empty($_POST['stuname'])) {
-				// 学生番号か名前が未入力の場合
-				$this->Flash->error('missing');
-			} else {
-				$queryStuUpdate = $this->MfStu->query();
-				$queryStuUpdate->update();
-				$queryStuUpdate->set([
-					'regnum' => $_POST['stuno'],
-					'stuname' => $_POST['stuname'],
-					'stuyear' => $_POST['old'],
-					'depnum' => $_POST['depnum'],
-					'deleted_flg' => !empty($_POST['deleted_flg']),
-					'graduate_flg' => !empty($_POST['graduate_flg'])
-				]);
-				$queryStuUpdate->where(['regnum' => $_GET['id']]);
-				try {
-					$queryStuUpdate->execute();
-					// 学籍番号が変更されたら、画像の名前を変更
-					if ($_POST['stuno'] != $_GET['id']) {
-						rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stuno'] . '.png');
-					}
-
-					$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stuno']]);
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
-					$this->set('regnum', $this->MfStu->get($_GET['id']));
+			$queryStuUpdate = $this->MfStu->query();
+			$queryStuUpdate->update();
+			$queryStuUpdate->set([
+				'regnum' => $_POST['stunum'],
+				'stuname' => $_POST['stuname'],
+				'stuyear' => $_POST['old'],
+				'depnum' => $_POST['depnum'],
+				'deleted_flg' => !empty($_POST['deleted_flg']),
+				'graduate_flg' => !empty($_POST['graduate_flg'])
+			]);
+			$queryStuUpdate->where(['regnum' => $_GET['id']]);
+			try {
+				$queryStuUpdate->execute();
+				// 学籍番号が変更されたら、画像の名前を変更
+				if ($_POST['stunum'] != $_GET['id']) {
+					rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stunum'] . '.png');
 				}
+
+				$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stunum']]);
+				$this->Flash->success('success');
+			} catch (Exception $e) {
+				$this->Flash->error('missing ' . $e->getMessage());
+				$this->set('regnum', $this->MfStu->get($_GET['id']));
 			}
 		}
 	}
@@ -479,11 +468,11 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST['stuno'])) {
+		if (!empty($_POST['stunum'])) {
 			$query = $this->MfStu->query();
 			$query->update();
-			$query->set(['stupass' => $this->passhash($_POST['stuno'])])
-			->where(['regnum' => $_POST['stuno']]);
+			$query->set(['stupass' => $this->passhash($_POST['stunum'])])
+			->where(['regnum' => $_POST['stunum']]);
 			try {
 				$query->execute();
 				$this->Flash->success('success');

@@ -2,12 +2,15 @@
 <?= $this->start('title'); ?>
 	学科情報修正
 <?= $this->end(); ?>
+<?= $this->start('script'); ?>
+	<?= $this->Html->script('/private/js/Manager/DepEditCheck.js') ?>
+<?= $this->end(); ?>
 
 <div class="container-fluid">
 	<div class="center" id="label">
 		<label><?= $this->fetch('title')?></label>
 	</div>
-	<form action="" method="post">
+	<form action="" method="post" id="depManager">
 		<!-- 学科番号 -->
 		<input type="text" name="depnum" class="form-control" placeholder="学科番号" readonly="readonly" value="<?= $dep->depnum; ?>">
 		<!-- 学科名 -->

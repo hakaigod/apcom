@@ -1,15 +1,20 @@
-<!-- タイトルセット -->
 <?= $this->start('title'); ?>
+<!-- タイトルセット -->
 	学生情報修正
+<?= $this->end(); ?>
+
+<?= $this->start('script'); ?>
+	<!-- jsセット -->
+	<?= $this->Html->script('/private/js/Manager/StuEditCheck.js') ?>
 <?= $this->end(); ?>
 
 <div class="container-fluid">
 	<div class="center" id="label">
 		<label><?= $this->fetch('title')?></label>
 	</div>
-	<form action="" method="post">
+	<form action="" method="post" id="stuManager">
 		<!-- 学籍番号 -->
-		<input type="text" name="stuno" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
+		<input type="text" name="stunum" class="form-control" placeholder="学籍番号" value="<?= $regnum->regnum; ?>">
 		<!-- 名前 -->
 		<input type="text" name="stuname" class="form-control" placeholder="氏名" value="<?= $regnum->stuname; ?>">
 		<!-- 学科 -->
