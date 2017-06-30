@@ -78,9 +78,8 @@ class StudentController extends AppController
 			->all();
 		
 		$imiDetails = [];
-		$userCount = 0;
-		$wholeAvg = [ "tech" => 0, "man" => 0, "str" => 0 ];
-		$userAvg = [ "tech" => 0, "man" => 0, "str" => 0 ];
+		$wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
+		$userAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
 		//いるものリスト
 		//模擬試験のタイトル一覧と、全体の平均点、ユーザの合計点、順位
 		//ユーザのジャンルごとの平均点, 全体のジャンルごとの平均点
@@ -89,14 +88,12 @@ class StudentController extends AppController
 			$imicode = $imi->imicode;
 			$score  = null;
 			$tfSumArray = $imi['tf_sum'];
-			if (count($tfSumArray) === 1) {
+			if ((count($tfSumArray) === 1) ) {
 				$tfSumEntity = $tfSumArray[0];
+				if ( !($tfSumEntity instanceof TfSum)) return;
 				$score = $tfSumEntity->_getStudentSum();
 				//ジャンルごとの合計
-				$userCount ++ ;
-				$userAvg["tech"] += $tfSumEntity->technology_sum;
-				$userAvg["man"] += $tfSumEntity->management_sum;
-				$userAvg["str"] += $tfSumEntity->strategy_sum;
+				$userAvg = $this->calcGenreSum($userAvg, $tfSumEntity->_getGenreArray());
 			}
 			$imiDetails[] = [
 				'imicode' => $imi->imicode,
@@ -106,27 +103,41 @@ class StudentController extends AppController
 				'score' => $score,
 				'rank' => $score?$this->TfSum->getRank($imicode, $score):null
 			];
-			$wholeAvg["tech"] += $imi->technology_imisum;
-			$wholeAvg["man"] += $imi->management_imisum;
-			$wholeAvg["str"] += $imi->strategy_imisum;
+			$wholeAvg = $this->calcGenreSum($wholeAvg, $imi->_getGenreArray());
 		}
 		//平均にするため試験回数で割る
-		if ($userCount > 0 ) {
-			foreach ( $userAvg as &$value ) {
-				$value = round( $value/$userCount, 1);
-			}
-		}
-		if (count($imitations) > 0 ) {
-			foreach ( $wholeAvg as &$value ) {
-				$value = round($value/count($imitations),1);
-			}
-		}
+		
+		
 		$this->set(compact('imiDetails'));
 		//ユーザのジャンルごとの平均
 		$this->set(compact('userAvg'));
 		//全体のジャンルごとの平均
 		$this->set(compact('wholeAvg'));
 	}
+	
+	public function calcGenreSum( array $sum, array $single):array
+	{
+		//個数を増やす
+		$sum['count']++;
+		foreach ($sum as $key => &$value) {
+			if ($key == 'count') continue;
+			$value += $single[$key];
+		}
+		return $sum;
+	}
+	
+	public function calcGenreAvg( array $sum):array
+	{
+		if ($sum['count'] > 0) {
+			return [
+				round($sum[ 'tech' ] / ( $sum[ 'count' ] * 50 ),1),
+				round($sum[ 'man' ] / ( $sum[ 'count' ] * 10 ),1),
+				round($sum[ 'str' ] / ( $sum[ 'count' ] * 20 ) ,1)];
+		}else{
+			return [0,0,0];
+		}
+	}
+	
 	//模擬試験結果入力画面
 	//TODO:編集モード
 	public function input(){

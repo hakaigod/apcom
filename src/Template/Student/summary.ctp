@@ -32,6 +32,7 @@
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
+<?php if($imiDetails): //TODO:なっとらん?>
 <div class="panel panel-danger">
     <div class="panel-heading">
         まだ入力されていない模擬試験があります
@@ -39,7 +40,7 @@
     <ul  style="list-style:none;">
 	    <?php foreach($imiDetails as $imi): ?>
             <li>
-	            <?= $this->Html->link($imi['name'],
+	            <?= $this->Html->link($imi['name'], //TODO:なっとらん
 	                              ['controller' => 'student',
 	                               'action' => 'input',
 	                               'id' => $userID,
@@ -50,14 +51,16 @@
 		<?php endforeach;?>
     </ul>
 </div>
-
+<?php endif;?>
 
 <!--グラフを表示する要素-->
-<div class="col-xs-8">
+<div class="col-xs-7">
+    <h4 class="">成績の推移</h4>
     <canvas id="lineChart" ></canvas>
 </div>
 <!--グラフを表示する要素-->
-<div class="col-xs-4">
+<div class="col-xs-5">
+    <h4>ジャンルごとの正答率</h4>
     <canvas id="radarChart" ></canvas>
 </div>
 <!--canvasにグラフを設定するスクリプト-->

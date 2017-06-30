@@ -49,4 +49,15 @@ class TfImi extends Entity
     	$examName = $this->mf_exa->_getExamDetail();
     	return "{$examName}  {$implNum}回目";
     }
+    public function _getGenreArray () {
+    	if ($this->imipepnum > 0) {
+		    return [
+			    'tech' => round($this->technology_imisum / $this->imipepnum,1),
+			    'man'  => round($this->management_imisum / $this->imipepnum,1),
+			    'str'  => round($this->strategy_imisum / $this->imipepnum,1)
+		    ];
+	    }else{
+		    return ['tech' =>0, 'man' => 0, 'str' => 0];
+	    }
+    }
 }

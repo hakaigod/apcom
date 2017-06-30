@@ -72,12 +72,27 @@ function drawRadarChart() {
                 borderColor: "rgba(153,255,51,1)",
                 data: radarUser
             }, {
-                label: '平均',
+                label: '受験者平均',
                 backgroundColor: "rgba(255,153,0,0.4)",
                 borderColor: "rgba(255,153,0,1)",
                 data:radarAverages
             }]
-        }
+        },
+	    options:{
+		    responsive:true,
+		    animation:{
+			    easing:'easeOutQuint',
+			    duration:500
+		    },
+		    scale:{
+			    ticks:{
+				    stepSize:20,
+				    beginAtZero:true,
+				    max:100,
+				    min:0
+			    }
+		    }
+	    }
     });
 }
 drawRadarChart();

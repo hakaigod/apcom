@@ -35,4 +35,10 @@ class TfSum extends Entity
     public function _getStudentSum () {
     	return $this->management_sum + $this->strategy_sum + $this->technology_sum;
     }
+    public function _getGenreArray() {
+    	return [
+    		'tech' => $this->technology_sum,
+	        'man' =>  $this->management_sum,
+		    'str' =>  $this->strategy_sum];
+    }
 }
