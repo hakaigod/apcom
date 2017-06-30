@@ -20,8 +20,13 @@ use Cake\Core\Exception\Exception;
  * @property MfQesTable MfQes
  * @property TfSumTable TfSum
  */
+const Q_TOTAL_NUM = 80;
+const Q_NUM_PER_PAGE = 10;
+const MAX_PAGE_NUM = Q_NUM / Q_NUM_PER_PAGE;
+
 class StudentController extends AppController
 {
+	
 	public function initialize(){
 		parent::initialize();
 		
@@ -42,7 +47,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('userID', '17110007');
+		$session->write('userID', '13120023');
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$regnumFromSsn = $this->readSession(['userID']);
@@ -73,46 +78,45 @@ class StudentController extends AppController
 		
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
-			->contain([ 'TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}
-				          ,'MfExa'])
+			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}])
 			->all();
 		
 		$imiDetails = [];
-		$wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
-		$userAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
-		//いるものリスト
-		//模擬試験のタイトル一覧と、全体の平均点、ユーザの合計点、順位
-		//ユーザのジャンルごとの平均点, 全体のジャンルごとの平均点
+		//ジャンルごとの平均が入る
+		$userAvg = $wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
 		foreach ($imitations as $imi) {
 			if ( !( $imi instanceof TfImi) ) return;
 			$imicode = $imi->imicode;
+			//ユーザのその回での点数
 			$score  = null;
-			$tfSumArray = $imi['tf_sum'];
-			if ((count($tfSumArray) === 1) ) {
-				$tfSumEntity = $tfSumArray[0];
+			//その模擬試験を受験している場合
+			if ((count($imi['tf_sum']) === 1) ) {
+				$tfSumEntity = $imi['tf_sum'][0];
 				if ( !($tfSumEntity instanceof TfSum)) return;
 				$score = $tfSumEntity->_getStudentSum();
-				//ジャンルごとの合計
+				//ユーザのジャンルごとの合計に加算
 				$userAvg = $this->calcGenreSum($userAvg, $tfSumEntity->_getGenreArray());
 			}
+			//模擬試験コード,試験名,日付,平均点,ユーザの点数,順位
 			$imiDetails[] = [
 				'imicode' => $imi->imicode,
 				'name' => $imi->_getName($this->TfImi),
 				'date' => $imi->imp_date->format("m/d"),
 				'avg' => $imi->_getAverage(),
 				'score' => $score,
-				'rank' => $score?$this->TfSum->getRank($imicode, $score):null
+				'rank' => ($score !== null)?$this->TfSum->getRank($imicode, $score):null
 			];
+			//全体のジャンルごとの合計に加算
 			$wholeAvg = $this->calcGenreSum($wholeAvg, $imi->_getGenreArray());
 		}
 		//平均にするため試験回数で割る
 		$wholeAvg = $this->calcGenreAvg($wholeAvg);
 		$userAvg = $this->calcGenreAvg($userAvg);
-		
+		//模擬試験回の名前や平均などの情報の配列:$imiDetails
 		$this->set(compact('imiDetails'));
-		//ユーザのジャンルごとの平均
+		//ユーザのジャンルごとの平均:$userAvg
 		$this->set(compact('userAvg'));
-		//全体のジャンルごとの平均
+		//全体のジャンルごとの平均:$wholeAvg
 		$this->set(compact('wholeAvg'));
 	}
 	
@@ -150,10 +154,11 @@ class StudentController extends AppController
 		//リクエストされたページ番号 範囲は1-8
 		$curNum = $this->request->getParam('linkNum');
 		//模擬試験コードから試験実施年度と季節を取得
-		$imitation = $this->TfImi->getOneAndQes($imicode,10,$curNum);
+		$imitation = $this->TfImi->getOneAndQes($imicode,Q_NUM_PER_PAGE,$curNum);
 		if (!isset($imitation)) {
 			return;
 		}
+		//TODO:メソッドを消したので入れ替える
 		$this->setYearAndSeason($imitation);
 		//現在のページ番号をセット:$curNum
 		$this->set(compact('curNum'));
@@ -168,9 +173,9 @@ class StudentController extends AppController
 		
 		//過去入力した選択肢、自信度がセッションに存在する場合
 		//既定値としてビューにセットする:$inputtedLog
-		$iniQueAfNum = ( $curNum - 1 ) * 10 + 1;
+		$iniQueAfNum = ( $curNum - 1 ) * Q_NUM_PER_PAGE + 1;
 		$inputtedLog = [];
-		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + 10; $qNum++ ) {
+		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + Q_NUM_PER_PAGE; $qNum++ ) {
 			$inputtedLog['answers'][$qNum] = $this->readSession([ 'answers', $imicode, $qNum ]);
 			$inputtedLog['confidences'][$qNum] = $this->readSession(['confidences',$imicode,$qNum]);
 		}
@@ -185,12 +190,7 @@ class StudentController extends AppController
 		$implNum = $this->TfImi->getImplNum($imicode,$imitation['exanum']) + 1;
 		$this->set(compact('implNum'));
 	}
-	private function setYearAndSeason(EntityInterface $imitation){
-		//和暦セット:$year
-		$this->set('year',$imitation['mf_exa']->jap_year);
-		//季節セット:$season
-		$this->set('season',$imitation['mf_exa']->exaname);
-	}
+	
 	
 	private function writeAnsToSsn(ServerRequest $request){
 		$imicode = $request->getParam('imicode');
@@ -204,18 +204,18 @@ class StudentController extends AppController
 		//すでに書いたページ番号にtrueを設定
 		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
-		$iniQueBefNum = ( $befNum - 1 ) * 10 + 1;
-		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + 10; $qNum++ ){
+		$iniQueBefNum = ( $befNum - 1 ) * Q_NUM_PER_PAGE + 1;
+		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
 			$answer = $request->getData("answer_{$qNum}");
 			$confidence = $this->request->getData("confidence_{$qNum}");
 			//解答と自信度をセッションに書き込む
+			//TODO:バリデーション
 			$this->writeSession(['answers',$imicode,$qNum], $answer);
 			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
 		}
 	}
 	//解答をDBに送信する
-	//TODO:バリデーション
 	public function sendAll() {
 		//回答入力時
 		if ($this->request->is('post')) {
@@ -229,11 +229,11 @@ class StudentController extends AppController
 		
 		//もしどれか未入力の場合はリダイレクト
 		if ( !($this->isAnsweredAll($this->getNotAnsed($imicode))) ) {
-			$this->redirect([ 'action' => 'input' , 'id' => $regnum,'imicode' => $imicode ]);
+			$this->redirect([ 'action' => 'input' , 'id' => $regnum,'imicode' => $imicode,'pageNum' =>8 ]);
 			return;
 		}
 		
-		$corrects = $this->TfImi->getOneAndQes($imicode,80);
+		$corrects = $this->TfImi->getOneAndQes($imicode,Q_NUM);
 		$rejoinders = $this->readSession(['answers',$imicode]);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		
@@ -255,6 +255,7 @@ class StudentController extends AppController
 			                          'correct_answer' => $answer
 			                        ]);
 			//正解の選択肢だったら
+			//TODO:きれいにする
 			if ($rejoinder == $answer) {
 				switch ($corrects['mf_exa']['mf_qes'][$key - 1]['fienum']) {
 					case 1:
@@ -277,13 +278,14 @@ class StudentController extends AppController
 			           'management_imisum' => $manaScore,
 			           'strategy_imisum' => $straScore
 			         ]);
-		
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
+		//TODO:成功したときセッション内の解答を削除
 		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
 			$insertAnsQuery->execute();
 			$insertSumQuery->execute();
 		});
+		//結果画面にリダイレクト
 		$this->redirect([ 'controller' => 'student','action' => 'result' ,
 		                  'id' => $regnum, 'imicode' => $imicode ]);
 	}
@@ -295,9 +297,9 @@ class StudentController extends AppController
 		//学籍番号
 		$regnum = $this->readSession(['userID']);
 		
-		$imiQesAns = $this->TfImi->getOneAndQes($imicode,80);
+		$imiQesAns = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
-		if ($imiQesAns == null) {
+		if ($imiQesAns === null) {
 			return;
 		}
 		//本番試験コード
@@ -341,12 +343,12 @@ class StudentController extends AppController
 	
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
-		$notAnsedPages = array_fill(0,8,true);
+		$notAnsedPages = array_fill(0,MAX_PAGE_NUM,true);
 		//1-10,11-20などの範囲でどれか一問でも未入力のとき、
 		//ページ番号=>falseが配列に入る
-		foreach (range(0,7) as $pageNum){
-			foreach (range(1,10) as $lowNum) {
-				$qNum = $pageNum * 10 + $lowNum;
+		foreach (range(0,MAX_PAGE_NUM - 1) as $pageNum){
+			foreach (range(1,Q_NUM_PER_PAGE) as $lowNum) {
+				$qNum = $pageNum * Q_NUM_PER_PAGE + $lowNum;
 				$answer = $this->readSession(['answers',$imicode,$qNum]);
 				$conf = $this->readSession([ 'confidences', $imicode, $qNum ]);
 				if (!(isset($answer)) || !(isset($conf))) {
@@ -397,7 +399,7 @@ class StudentController extends AppController
 			->toArray();
 		$resultAndZero = [];
 		$k = 0;
-		for ($i = 0;$i < 80; $i++ ) {
+		for ($i = 0;$i < Q_TOTAL_NUM; $i++ ) {
 			$rate = 0;
 			if ( $k < sizeof($result) && ($result[$k]['subQesnum'] - 1) == $i) {
 				$rate = $result[$k]['rate'];

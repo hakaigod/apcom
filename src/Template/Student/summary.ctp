@@ -33,7 +33,7 @@
 <?php $this->end(); ?>
 <br>
 <?php if($imiDetails): //TODO:なっとらん?>
-<div class="panel panel-danger">
+<div class="panel panel-danger ">
     <div class="panel-heading">
         まだ入力されていない模擬試験があります
     </div>
@@ -41,18 +41,18 @@
 	    <?php foreach($imiDetails as $imi): ?>
             <?php if($imi['score'] === null):?>
                 <li class="text-danger">
-                    <strong>
-	                    <?= $this->Html->link(
-		                    "{$imi['date']} {$imi['name']}",
-		                    ['controller' => 'student',
-		                     'action' => 'input',
-		                     'id' => $userID,
-		                     'imicode' => $imi['imicode'],
-		                     'linkNum' => 1
-		                    ],
-		                    ['class' => 'text-danger ']
-	                    ); ?>
-                    </strong>
+                    <strong><u>
+			                <?= $this->Html->link(
+				                "{$imi['date']} {$imi['name']}",
+				                ['controller' => 'student',
+				                 'action' => 'input',
+				                 'id' => $userID,
+				                 'imicode' => $imi['imicode'],
+				                 'linkNum' => 1
+				                ],
+				                ['class' => 'text-danger ']
+			                ); ?>
+                        </u></strong>
                 </li>
 		    <?php endif;?>
 		<?php endforeach;?>
@@ -84,15 +84,16 @@
 </script>
 <br><br>
 <div class="col-xs-12">
-    <h4>今まで受験した模擬試験</h4>
+    <h4>模擬試験一覧</h4>
 </div>
 <table class="table table-bordered table-striped table-hover">
-	<?= $this->Html->tableHeaders(['試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
+	<?= $this->Html->tableHeaders(['実施日','試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
     <tbody>
 	<?php
 	foreach($imiDetails as $imi): ?>
         <tr>
-            <th class="center">
+            <td class="center col-xs-2"><?= $imi['date']?></td>
+            <th class="col-xs-7">
 	            <?php if($imi['score'] === null):?>
                     <span class="label label-danger">未</span>
 	            <?php else:?>
@@ -105,9 +106,9 @@
 	                                   'imicode' => $imi['imicode']]);
 	            ?>
             </th>
-            <td class="center"><?= $imi['avg']?></td>
-            <td class="center"><?= $imi['score']?:""?></td>
-            <td class="center"><?= $imi['rank']?:"" ?> </td>
+            <td class="center col-xs-1"><?= $imi['avg']?></td>
+            <td class="center col-xs-1"><?= ($imi['score'] !== null)?$imi['score']:""?></td>
+            <td class="center col-xs-1"><?= ($imi['rank'] !== null)?$imi['rank']:"" ?> </td>
         </tr>
 	<?php endforeach; ?>
     </tbody>
