@@ -380,11 +380,7 @@ class StudentController extends AppController
 		return implode(".", $children);
 	}
 	
-	private function getCorrectRates(int $imicode,int $imipepnum = null):array {
-		
-		if ($imipepnum == null) {
-			$imipepnum = $this->getImiPepNum($imicode);
-		}
+	private function getCorrectRates(int $imicode,int $imipepnum):array {
 		if ($imipepnum == 0) {
 			return [];
 		}
@@ -409,10 +405,5 @@ class StudentController extends AppController
 		}
 		return $resultAndZero;
 	}
-	private function getImiPepNum (int $imicode):int {
-		$imitation = $this->TfImi->find()
-			->where([ 'imicode' => $imicode])
-			->first()->toArray();
-		return $imitation['imipepnum']?:0;
-	}
+	
 }
