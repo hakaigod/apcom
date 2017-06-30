@@ -74,8 +74,8 @@ Student
     <div>
         <div class="row">
             <div class="col-md-12">
-                <div class="Source">
-
+                <div class="source">
+                    出典：<?= $question->mf_exa['exaname']?>期&emsp;<?= $question->mf_exa('exa_year'.'time')?>
                 </div>
             </div>
         </div>
@@ -99,6 +99,7 @@ Student
             <div class="qaa-question">
                 <!--問題文-->
                 <div>
+                    <!-- ヘルパー使用 -->
                     <?= $this->qaa->viewTextImg($question->question)?>
                 </div>
             </div>
