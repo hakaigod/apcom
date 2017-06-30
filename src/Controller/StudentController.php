@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\TfImi;
 use App\Model\Entity\TfSum;
 use App\Model\Table\MfQesTable;
 use App\Model\Table\MfStuTable;
@@ -71,31 +72,58 @@ class StudentController extends AppController
 		$regnum = $this->readSession(['userID']);
 		
 		//模擬試験合計、模擬試験情報 取得
-		$sums = $this->TfSum->find()
-			->contain(['TfImi','TfImi.MfExa'])
-			->where(['TfSum.regnum' => $regnum])
+//		$sums = $this->TfSum->find()
+//			->contain(['TfImi','TfImi.MfExa'])
+//			->where(['TfSum.regnum' => $regnum])
+//			->all();
+		$imitations = $this->TfImi->find()
+			->contain([
+				'TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}
+				,'MfExa']
+			)
 			->all();
-		$this->set(compact('sums'));
+		$this->set(compact('imitations'));
 		
-		$answeredImis =[];
-		foreach ($sums as $sum) {
-			$imicode = $sum['imicode'];
-			$exanum = $sum['tf_imi']['exanum'];
-			$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
-			$examDetail = $sum['tf_imi']['mf_exa']->exam_detail;
-			$score = $sum->student_sum;
-			$rank = $this->TfSum->getRank($imicode, $score);
-			$answeredImis[] = [
-				'imicode' => $imicode,
-				'date' => $sum['tf_imi']['imp_date']->format("n月j日"),
-				'name' => "{$examDetail} {$implNum}回目",
-				'average' => round($sum['tf_imi']->imi_sum / $sum['tf_imi']['imipepnum'],1),
-				'studentScore' => $score,
-				'rank' => $rank
+		$imiDetails = [];
+		
+		$wholeAvg = ["count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
+		$userAvg = ["count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
+		//いるものリスト
+		//模擬試験のタイトル一覧と、全体の平均点、ユーザの合計点、順位
+		//ユーザのジャンルごとの平均点, 全体のジャンルごとの平均点
+		foreach ($imitations as $imi) {
+			$tfSumEntity = $imi['tf_sum'][0];
+			if ( !( $imi instanceof TfImi) ) {
+				return;
+			}
+			$imicode = $imi->imicode;
+			$score  = 0;
+			if (isset($tfSumEntity) && ($tfSumEntity instanceof TfSum)) {
+				$score = $tfSumEntity->_getStudentSum;
+				
+				$userAvg["count"] ++ ;
+				$userAvg["tech"] += $tfSumEntity->technology_sum;
+				$userAvg["man"] += $tfSumEntity->management_sum;
+				$userAvg["str"] += $tfSumEntity->strategy_sum;
+			}
+			$imiDetails[] = [
+				'name' => $imi->_getName,
+				'date' => $imi->imp_date->format("n月j日"),
+				'avg' => $imi->_getAverage,
+				'score' => $score,
+				'rank' => $this->TfSum->getRank($imicode, $score)
+				
 			];
+			$wholeAvg["tech"] += $imi->technology_imisum;
+			$wholeAvg["man"] += $imi->management_imisum;
+			$wholeAvg["str"] += $imi->strategy_imisum;
 		}
+		//平均にするため試験回数で割る
+
 		$this->set(compact('sums'));
 		$this->set(compact('answeredImis'));
+		//ユーザのジャンルごとの平均
+		$this->set(compact('userAvg'));
 	}
 	//模擬試験結果入力画面
 	//TODO:編集モード

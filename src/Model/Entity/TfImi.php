@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
+use App\Model\Table\TfImiTable;
 use Cake\ORM\Entity;
 
 /**
@@ -35,5 +36,11 @@ class TfImi extends Entity
     //合計を取得
     public function _getImiSum(){
     	return $this->strategy_imisum + $this->technology_imisum + $this->management_imisum;
+    }
+    public function _getAverage () {
+    	return round($this->_getImiSum() / $this->imipepnum, 1);
+    }
+    public function _getName (TfImiTable $table) {
+    	return $this->mf_exa->_getExamDetail() . $table->getImplNum($this->imicode, $this->exanum);
     }
 }

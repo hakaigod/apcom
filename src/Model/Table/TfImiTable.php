@@ -36,6 +36,8 @@ class TfImiTable extends Table
         $this->setPrimaryKey('imicode');
 	    //書いた
 	    $this->belongsTo('MfExa')->setForeignKey('exanum');
+	    //書いた
+	    $this->hasMany('TfSum')->setForeignKey('imicode');
     }
 
     /**
