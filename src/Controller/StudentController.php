@@ -55,6 +55,7 @@ class StudentController extends AppController
 		}
 		//生徒名取得
 		$username = $this->MfStu->find()
+			->select(['stuname'])
 			->where([ 'MfStu.regnum = ' => $regnumFromSsn ])
 			->first()->toArray()[ 'stuname' ];
 		
@@ -97,6 +98,7 @@ class StudentController extends AppController
 		$this->set(compact('answeredImis'));
 	}
 	//模擬試験結果入力画面
+	//TODO:編集モード
 	public function input(){
 		
 		//模擬試験テーブルの主キー:$imicode
@@ -133,8 +135,10 @@ class StudentController extends AppController
 		$notAnsedPages =$this->getNotAnsed($imicode);
 		//未解答のページ一覧:$notAnsedPages
 		$this->set(compact('notAnsedPages'));
-		//すべてのページが解答されているか:$isAnsed
+		//1-7のページが解答されているか:$isAnsed
+		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
 		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
+		//実施された回数:$implNum
 		$implNum = $this->TfImi->getImplNum($imicode,$imitation['exanum']) + 1;
 		$this->set(compact('implNum'));
 	}
@@ -143,8 +147,8 @@ class StudentController extends AppController
 		$this->set('year',$imitation['mf_exa']->jap_year);
 		//季節セット:$season
 		$this->set('season',$imitation['mf_exa']->exaname);
-		
 	}
+	
 	private function writeAnsToSsn(ServerRequest $request){
 		$imicode = $request->getParam('imicode');
 		//遷移元ページのリンク番号
@@ -168,31 +172,28 @@ class StudentController extends AppController
 		}
 	}
 	//解答をDBに送信する
+	//TODO:バリデーション
 	public function sendAll() {
 		//回答入力時
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
-		
-		//もしどれか未入力の場合はリダイレクト
-		//TODO:isAnsweredAllにlimit追加して全部を範囲にする
-//		if ( !($this->isAnsweredAll($imicode)) ) {
-//		$this->redirect(
-//			[ 'action' => 'input' ,
-//			  'imicode' => $imicode
-//			]
-//		);
-//		}
+		$regnum = $this->readSession(['userID']);
 		
 		$imicode = $this->request->getParam('imicode');
 		//模擬試験コード:$imicode
 		$this->set(compact('imicode'));
+		
+		//もしどれか未入力の場合はリダイレクト
+		if ( !($this->isAnsweredAll($this->getNotAnsed($imicode))) ) {
+			$this->redirect([ 'action' => 'input' , 'id' => $regnum,'imicode' => $imicode ]);
+			return;
+		}
+		
 		$corrects = $this->TfImi->getOneAndQes($imicode,80);
 		$rejoinders = $this->readSession(['answers',$imicode]);
-		$regnum = $this->readSession(['userID']);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		
-		//TODO:この辺をinputの方に分散する
 		//各解答のINSERTクエリを生成
 		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
 		//テクノロジ合計点数
@@ -293,8 +294,6 @@ class StudentController extends AppController
 		$this->set(compact('score'));
 		//正答率:$correctRate
 		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
-		//平均自信度:$confAvg
-//		$this->set('confAvg',$this->getConfAvg($imicode,$imiQesAns['imipepnum']));
 	}
 	
 	//入力されていないページ一覧を取得
@@ -317,7 +316,6 @@ class StudentController extends AppController
 	}
 	//回答が全てのページで入力されているか
 	private function isAnsweredAll(array $notAnsedPages) :bool {
-		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
 		return !(in_array(false,$notAnsedPages));
 	}
 	//セッションから値を読み込む
@@ -366,36 +364,10 @@ class StudentController extends AppController
 		}
 		return $resultAndZero;
 	}
-	private function getConfAvg(int $imicode,int $imipepnum = null): array{
-		if ($imipepnum == null) {
-			$imipepnum = $this->getImiPepNum($imicode);
-		}
-		if ($imipepnum == 0) {
-			return [];
-		}
-		return $this->TfAns->find()
-			->select(['qesnum','avg' => 'sum(confidence - 1) / ' . $imipepnum])
-			->where(['imicode' => $imicode])
-			->group([ 'qesnum' ])
-			->toArray();
-		
-	}
 	private function getImiPepNum (int $imicode):int {
 			$imitation = $this->TfImi->find()
 				->where([ 'imicode' => $imicode])
 				->first()->toArray();
 			return $imitation['imipepnum']?:0;
-	}
-	
-	private function trimRow($data,$rowName) {
-		if ($data instanceof EntityInterface) {
-			$result=[];
-			foreach ($data as $item) {
-				$result[] = $item->get($rowName);
-			}
-			return $result;
-		}else{
-			return null;
-		}
 	}
 }

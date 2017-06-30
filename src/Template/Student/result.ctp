@@ -33,7 +33,6 @@
     <h4>平均点:<?= round($average,1) ?>点</h4>
     <h4>合計点:<?= $score ?>点</h4>
     <h4>順位:<?= $rank ?></h4>
-    <!--TODO:順位表示-->
 	<?php
 	$answersStr = ['未','ア','イ','ウ','エ'];
 	$confidenceStr = ['未','○','△','×'];
