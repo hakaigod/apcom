@@ -20,68 +20,68 @@ use App\Model\Entity\TfImi;
  */
 class TfImiTable extends Table
 {
-
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
-
-        $this->setTable('tf_imi');
-        $this->setDisplayField('imicode');
-        $this->setPrimaryKey('imicode');
-	    //書いた
-	    $this->belongsTo('MfExa')->setForeignKey('exanum');
-	    //書いた
-	    $this->hasMany('TfSum')->setForeignKey('imicode');
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('imicode')
-            ->allowEmpty('imicode', 'create');
-
-        $validator
-            ->integer('exanum')
-            ->requirePresence('exanum', 'create')
-            ->notEmpty('exanum');
-
-        $validator
-            ->integer('strategy_imisum')
-            ->requirePresence('strategy_imisum', 'create')
-            ->notEmpty('strategy_imisum');
-
-        $validator
-            ->integer('technology_imisum')
-            ->requirePresence('technology_imisum', 'create')
-            ->notEmpty('technology_imisum');
-
-        $validator
-            ->integer('management_imisum')
-            ->requirePresence('management_imisum', 'create')
-            ->notEmpty('management_imisum');
-
-        $validator
-            ->integer('imipepnum')
-            ->allowEmpty('imipepnum');
-
-        $validator
-            ->dateTime('imp_date')
-            ->allowEmpty('imp_date');
-
-        return $validator;
-    }
+	
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
+		
+		$this->setTable('tf_imi');
+		$this->setDisplayField('imicode');
+		$this->setPrimaryKey('imicode');
+		//書いた
+		$this->belongsTo('MfExa')->setForeignKey('exanum');
+		//書いた
+		$this->hasMany('TfSum')->setForeignKey('imicode');
+	}
+	
+	/**
+	 * Default validation rules.
+	 *
+	 * @param \Cake\Validation\Validator $validator Validator instance.
+	 * @return \Cake\Validation\Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('imicode')
+			->allowEmpty('imicode', 'create');
+		
+		$validator
+			->integer('exanum')
+			->requirePresence('exanum', 'create')
+			->notEmpty('exanum');
+		
+		$validator
+			->integer('strategy_imisum')
+			->requirePresence('strategy_imisum', 'create')
+			->notEmpty('strategy_imisum');
+		
+		$validator
+			->integer('technology_imisum')
+			->requirePresence('technology_imisum', 'create')
+			->notEmpty('technology_imisum');
+		
+		$validator
+			->integer('management_imisum')
+			->requirePresence('management_imisum', 'create')
+			->notEmpty('management_imisum');
+		
+		$validator
+			->integer('imipepnum')
+			->allowEmpty('imipepnum');
+		
+		$validator
+			->dateTime('imp_date')
+			->allowEmpty('imp_date');
+		
+		return $validator;
+	}
 
 //書いた
 	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):?TfImi{

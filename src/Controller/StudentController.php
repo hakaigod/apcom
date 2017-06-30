@@ -22,7 +22,7 @@ use Cake\Core\Exception\Exception;
  */
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
-const MAX_PAGE_NUM = Q_NUM / Q_NUM_PER_PAGE;
+const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
 
 class StudentController extends AppController
 {
@@ -207,12 +207,15 @@ class StudentController extends AppController
 		$iniQueBefNum = ( $befNum - 1 ) * Q_NUM_PER_PAGE + 1;
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
-			$answer = $request->getData("answer_{$qNum}");
-			$confidence = $this->request->getData("confidence_{$qNum}");
+			$answer = h($request->getData("answer_{$qNum}"));
+			$confidence = h($this->request->getData("confidence_{$qNum}"));
 			//解答と自信度をセッションに書き込む
-			//TODO:バリデーション
-			$this->writeSession(['answers',$imicode,$qNum], $answer);
-			$this->writeSession(['confidences',$imicode, $qNum], $confidence);
+			if ( 0 <= $answer && $answer <= 4 && 1 <= $confidence && $confidence <= 3) {
+				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
+				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
+			}else{
+				$this->log("validation failed on " . $qNum);
+			}
 		}
 	}
 	//解答をDBに送信する
@@ -224,6 +227,7 @@ class StudentController extends AppController
 		$regnum = $this->readSession(['userID']);
 		
 		$imicode = $this->request->getParam('imicode');
+		//TODO:imicodeがTfImiにあるか確認
 		//模擬試験コード:$imicode
 		$this->set(compact('imicode'));
 		
@@ -233,7 +237,7 @@ class StudentController extends AppController
 			return;
 		}
 		
-		$corrects = $this->TfImi->getOneAndQes($imicode,Q_NUM);
+		$corrects = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
 		$rejoinders = $this->readSession(['answers',$imicode]);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		
@@ -247,7 +251,7 @@ class StudentController extends AppController
 		$straScore = 0;
 		foreach ($rejoinders as $key => $rejoinder) {
 			$answer = $corrects['mf_exa']['mf_qes'][$key - 1]->answer;
-			$insertAnsQuery->values([ 'imicode'=>$imicode,
+			$insertAnsQuery->values([ 'imicode'=> $imicode,
 			                          'qesnum'=>  $key,
 			                          'regnum'=>  $regnum,
 			                          'rejoinder'=>  $rejoinder,
@@ -324,7 +328,7 @@ class StudentController extends AppController
 		$answers = $this->TfAns->find()
 			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
 		$this->set(compact('answers'));
-		//合計点:$score
+		//合計点
 		$score = $this->TfSum->find()
 			->where(['TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode])
 			->first();
@@ -336,6 +340,7 @@ class StudentController extends AppController
 		//順位:$rank
 		$rank = $this->TfSum->getRank($imicode, $score);
 		$this->set(compact('rank'));
+		//点数:$score
 		$this->set(compact('score'));
 		//正答率:$correctRate
 		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
