@@ -42,7 +42,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('userID', '13120023');
+		$session->write('userID', '17110007');
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$regnumFromSsn = $this->readSession(['userID']);
@@ -98,7 +98,7 @@ class StudentController extends AppController
 			$imiDetails[] = [
 				'imicode' => $imi->imicode,
 				'name' => $imi->_getName($this->TfImi),
-				'date' => $imi->imp_date->format("n月j日"),
+				'date' => $imi->imp_date->format("m/d"),
 				'avg' => $imi->_getAverage(),
 				'score' => $score,
 				'rank' => $score?$this->TfSum->getRank($imicode, $score):null
@@ -106,7 +106,8 @@ class StudentController extends AppController
 			$wholeAvg = $this->calcGenreSum($wholeAvg, $imi->_getGenreArray());
 		}
 		//平均にするため試験回数で割る
-		
+		$wholeAvg = $this->calcGenreAvg($wholeAvg);
+		$userAvg = $this->calcGenreAvg($userAvg);
 		
 		$this->set(compact('imiDetails'));
 		//ユーザのジャンルごとの平均
@@ -115,6 +116,7 @@ class StudentController extends AppController
 		$this->set(compact('wholeAvg'));
 	}
 	
+	//ジャンルごとの合計をとる
 	public function calcGenreSum( array $sum, array $single):array
 	{
 		//個数を増やす
@@ -125,14 +127,14 @@ class StudentController extends AppController
 		}
 		return $sum;
 	}
-	
+	//レーダーチャートに合わせるため100分率に変換
 	public function calcGenreAvg( array $sum):array
 	{
 		if ($sum['count'] > 0) {
 			return [
-				round($sum[ 'tech' ] / ( $sum[ 'count' ] * 50 ),1),
-				round($sum[ 'man' ] / ( $sum[ 'count' ] * 10 ),1),
-				round($sum[ 'str' ] / ( $sum[ 'count' ] * 20 ) ,1)];
+				round($sum[ 'tech' ] * 100 / ( $sum[ 'count' ] * 50 ) ,1),
+				round($sum[ 'man' ] * 100 / ( $sum[ 'count' ] * 10 ),1),
+				round($sum[ 'str' ]  * 100 / ( $sum[ 'count' ] * 20 ) ,1)];
 		}else{
 			return [0,0,0];
 		}

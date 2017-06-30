@@ -39,15 +39,22 @@
     </div>
     <ul  style="list-style:none;">
 	    <?php foreach($imiDetails as $imi): ?>
-            <li>
-	            <?= $this->Html->link($imi['name'], //TODO:なっとらん
-	                              ['controller' => 'student',
-	                               'action' => 'input',
-	                               'id' => $userID,
-	                               'imicode' => $imi['imicode'],
-                                      'linkNum' => 1
-                                  ]); ?>
-            </li>
+            <?php if($imi['score'] === null):?>
+                <li class="text-danger">
+                    <strong>
+	                    <?= $this->Html->link(
+		                    "{$imi['date']} {$imi['name']}",
+		                    ['controller' => 'student',
+		                     'action' => 'input',
+		                     'id' => $userID,
+		                     'imicode' => $imi['imicode'],
+		                     'linkNum' => 1
+		                    ],
+		                    ['class' => 'text-danger ']
+	                    ); ?>
+                    </strong>
+                </li>
+		    <?php endif;?>
 		<?php endforeach;?>
     </ul>
 </div>
@@ -85,13 +92,18 @@
 	<?php
 	foreach($imiDetails as $imi): ?>
         <tr>
-            <th class="center"><?=
-                $this->Html->link($imi['name'],
-                                  ['controller' => 'student',
-                                   'action' => 'result',
-                                   'id' => $userID,
-                                   'imicode' => $imi['imicode']]);
-                ?>
+            <th class="center">
+	            <?php if($imi['score'] === null):?>
+                    <span class="label label-danger">未</span>
+	            <?php else:?>
+                    <span class="label label-success">済</span>
+                <?php endif;?>
+	            <?= $this->Html->link($imi['name'],
+	                                  ['controller' => 'student',
+	                                   'action' => 'result',
+	                                   'id' => $userID,
+	                                   'imicode' => $imi['imicode']]);
+	            ?>
             </th>
             <td class="center"><?= $imi['avg']?></td>
             <td class="center"><?= $imi['score']?:""?></td>
