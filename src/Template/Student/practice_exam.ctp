@@ -2,6 +2,7 @@
 /**
  * @var \App\Model\Entity\MfExa $exams
  * @var \App\Model\Entity\MfQe $qes
+ *  * @var \App\Model\Entity\MfQe $sesAns
  */
 ?>
 
@@ -82,17 +83,17 @@ managerrrrr
 	
 <!--	-->
 	<!--  解答部分	-->
-	<form name="ansForm"  action="<?= $this->Html->Url->build(['controller'=>'student','action'=>'posAns','ansSelect'=>'$ansSelect']) ?>" method="post">
+	<form name="ansForm" method="post">
+		
 	<div class="row" id="table" data-toggle="buttons">
 		<table class="table table-bordered">
 				<tbody>
 				<tr>
 					<td id="button" class="col-xs-1" >
 						<label class = "btn btn-embossed btn-primary full">
-<!--							        nameは変数名、valueはそれに入る値        -->
-							<input type = "radio"  id="aa" name="ansSelect" value="1" >
-<!--							--><?php //echo ($ansSelect==1) ? " checked" : ""; ?><!--ア-->
-<!--							--><?php ////$this->writesession($qes->qesnum,$_GET); ?>
+					<!--	      nameは変数名、valueはそれに入る値        -->
+							<input type = "radio"  id="aa" name="ansSelect" value="1"
+							<?php echo ($sesAns==1) ? ' checked' : ''; ?>>ア
 						</label>
 					</td>
 					<td id="choice" class="col-xs-11">
@@ -161,8 +162,8 @@ managerrrrr
 							[
 								'class' => 'btn btn-warning',
 								'formaction' =>   $qes->qesnum - 1 ,
-								'type' => 'submit',
-								'value' => 'ansSelect'
+								'type' => 'submit'
+//								'value' => 'ansSelect'
 						]
 						);
 						?>
@@ -198,15 +199,11 @@ managerrrrr
 								[
 									'class' => 'btn btn-warning',
 									'formaction' =>   $qes->qesnum + 1 ,
-									'type' => 'submit',
+									'type' => 'submit'
 //									'value' => $ansnum
 								]);
-							//		if(isset($_POST["ansSelect"])){
-							//  }
-							//	$this->writeSession()
 							?>
 							
-<!--							<input type = "hidden" name = "writeSession[$qes->qesnum]" value = "">-->
 							
 					<?PHP endif;  ?>
 				</div>

@@ -8,7 +8,7 @@
 
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-模擬試験
+結果閲覧
 <?php $this->end(); ?>
 
 

@@ -68,8 +68,7 @@ class StudentController extends AppController
         $this->set(compact('averages'));
     }
     
-
-
+	
 
     //URLからパラメータ(試験番号)を受け取るので引数がある(practiceExam/1の右端の部分)
     //何も指定されなかったときnull
@@ -92,34 +91,43 @@ class StudentController extends AppController
 	
 	    //このコントローラからMfQesモデルを扱うためにloadModelする
 	    $this->loadModel('MfQes');
-	
 	    $qes = $this->MfQes->find()
 		    ->where(['MfQes.qesnum' => $qesnum, 'MfQes.exanum' => $exanum])
 		    ->first();
 	    $this->set(compact('qes'));
-	
-	
-	
-	
-	    if (isset($_POST['ansSelect']) == true) {
-	    }
 	    
+		//posAnsを呼び出せるようにする
+		$this->posAns();
+//	    $this->posAns($qes->$qesnum,$qes->$exanum);
+	    
+//	    if (isset($_POST['ansSelect']) == true) {
+//	    }
     }
+    
 	
+    // 年度と問題番号の紐づけを行う
 	public function posAns(){
-		$ansSelect = $this->request->getParam('ansSelect');
+//    	$this->practiceExam($exanum);
+  
+		
+		//$ansSelectを呼び出せるようにする
+		
+		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('ansSelect'));
-		
 		//POSTで送られたデータをセッションに書き込む
-		$this->writeSession(['Ansers'],$ansSelect);
+		$this->writeSession(['answers'],$ansSelect);
+//		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
 		
+		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
+		//$sesAnsを呼び出せるようにする
+		$sesAns=$this->readSession(['answers']);
+		$this->set(compact('sesAns'));
 		
 	}
 	
 	
 	public function score()
 	    {
-		
 	    }
     
 	    
