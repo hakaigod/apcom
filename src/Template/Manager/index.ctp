@@ -120,7 +120,7 @@
 						<td><?= $value['imi'];?></td>
 						<td> <a href="?id=<?= $value['imi']; ?>"><?= $value['name'] . ' ' .$value['num'] . '回目';?></a></td>
 						<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
-						<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'], 2);?></td>
+						<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'] * 1.25, 2) . '点';?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

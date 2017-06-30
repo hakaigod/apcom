@@ -40,6 +40,10 @@ class ManagerController extends AppController
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->hash($pass);
 	}
+	private function passcheck($inputPass, $databasePass) {
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->check($inputPass, $databasePass);
+	}
 
 	// マネージャートップ画面
 	public function index()
@@ -139,6 +143,7 @@ class ManagerController extends AppController
 			}
 		}
 		$this->set('questionsdetail', $questionsdetail);
+		// ここまで正答率
 
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
@@ -150,7 +155,7 @@ class ManagerController extends AppController
 			if($key->exanum != $work) {
 				$i = 0;
 			}
-			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->imisum));
+			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->strategy_imisum + $key->technology_imisum + $key->management_imisum));
 			$work = $key->exanum;
 		}
 		array_multisort($arrayimis, SORT_DESC);
@@ -405,8 +410,7 @@ class ManagerController extends AppController
 			$query->update();
 			$query->set([
 				'admname' => $_POST['admname'],
-				'deleted_flg' => !empty($_POST['deleted_flg']),
-				'admpass' => $this->passhash($_POST['admpass'])
+				'deleted_flg' => !empty($_POST['deleted_flg'])
 			]);
 			$query->where(['admnum' => $_GET['id']]);
 			try {
@@ -418,6 +422,32 @@ class ManagerController extends AppController
 			}
 		}
 	}
+	// 管理者パスワード再設定
+	public function resetAdmPass()
+	{
+		// レイアウト設定
+		$this->viewBuilder()->layout('addmod');
+
+		// POSTリクエストがあれば実行
+		if (!empty($_POST)) {
+			$oldPass = $this->MfAdm->get($_POST['admnum'])->toArray()['admpass'];
+			if ($this->passcheck($_POST['admOldPass'], $oldPass)) {
+				$admPassUpdate = $this->MfAdm->query()->update();
+				$admPassUpdate->set(['admpass' => $this->passhash($_POST['admNewPass'])])
+				->where(['admnum' => $_POST['admnum']]);
+				try {
+					$admPassUpdate->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing ' . $e->getMessage());
+				}
+			} else {
+				$this->Flash->error('古いパスワードが違います');
+			}
+		}
+	}
+
+
 	// 模擬試験コード発行画面
 	public function imiCodeIssue()
 	{

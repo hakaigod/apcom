@@ -10,7 +10,6 @@
 	<form action="" method="post">
 		<input type="text" name="admno" class="form-control" placeholder="管理者連番" readonly="readonly" value="<?= $admnum->admnum; ?>">
 		<input type="text" name="admname" class="form-control" placeholder="氏名" value="<?= $admnum->admname; ?>">
-		<input type="password" name="admpass" class="form-control" placeholder="パスワード">
 		<label class="checkbox">
 			削除
 			<input type="checkbox" data-toggle="checkbox" name="deleted_flg" <?= $admnum->deleted_flg ? 'checked="checked"' : ""; ?>>
