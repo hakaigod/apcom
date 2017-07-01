@@ -43,7 +43,7 @@
 </div>
 <div id="answers">
 	<div id="AMresult">
-		<table class="table table-bordered full">
+		<table class="table table-bordered table-striped full">
 			<thead>
 				<tr>
 					<td class="col-xs-3" id="name">名前</td><td class="stusum">合計</td>
@@ -108,7 +108,7 @@
 <div class="row">
 	<div class="col-xs-12" id="examdata">
 		<h5>過去試験データ</h5>
-		<table class="table table-bordered">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<td class="col-xs-2">回数</td><td class="col-xs-4">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
