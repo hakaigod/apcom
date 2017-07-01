@@ -25,7 +25,6 @@ $(function(){
 	$('#stuManager').submit(function(){
 		// エラーメッセージ
 		var errorMessage = "";
-
 		errorMessage = errorMessage + checknum();
 		errorMessage = errorMessage + checkname();
 
@@ -42,13 +41,14 @@ $(function(){
 
 	function checknum() {
 		errorMessage = "";
-		if($("input[name='stunum']").val() == "" || !$("input[name='stunum']").val().match(/^[0-9]+$/)){
-			errorMessage = errorMessage + "・学籍番号が半角数字以外です\n";
+		if($("input[name='stunum']").val() == ""){
+			return "・学籍番号が未入力です\n";
+		} else if(!$("input[name='stunum']").val().match(/^[0-9]+$/)) {
+			return "・学籍番号が半角数字以外です\n";
+		} else if($("input[name='stunum']").val().length != 8) {
+			return "・学籍番号は８桁で入力してください\n";
 		}
-		if($("input[name='stunum']").val().length != 8) {
-			errorMessage = errorMessage + "・学籍番号は８桁で入力してください\n";
-		}
-		return errorMessage;
+		return "";
 	}
 	function checkname() {
 		if($("input[name='stuname']").val() == ""){
@@ -56,7 +56,7 @@ $(function(){
 		} else if (!$("input[name='stuname']").val().match(/^[ぁ-んァ-ヶー一-龠　\r\n\t]+$/)) {
 			return "・氏名の文字が不正です\n";
 		}
-		return errorMessage;
+		return "";
 	}
 
 	function checkerror(errorMessage) {

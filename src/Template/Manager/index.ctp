@@ -64,7 +64,7 @@
 				<?php endforeach; ?>
 				<tr>
 					<td>平均</td>
-					<td><?= $average['imipepnum'] != 0 ? number_format($average['imisum'] / $average['imipepnum'] * 1.25 ,2) . '点' : 0 . '点'; ?></td>
+					<td><?= $average != 0 ? number_format($average * 1.25 ,2) . '点' : 0 . '点'; ?></td>
 					<?php foreach ($questionsdetail as $par): ?>
 						<td>
 							<?= number_format($par['corrects'] * 100, 0) . '%'; ?>
@@ -74,9 +74,6 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- <div class="right">
-		<button class="btn btn-info">CSV出力</button>
-	</div> -->
 	<!-- ページネーター -->
 	<div class="center">
 		<?= $this->Paginator->counter(['format' => '{{page}} / {{pages}}']); ?>
@@ -118,7 +115,7 @@
 				<?php foreach ($imidata as $key => $value): ?>
 					<tr>
 						<td><?= $value['imi'];?></td>
-						<td> <a href="?id=<?= $value['imi']; ?>"><?= $value['name'] . ' ' .$value['num'] . '回目';?></a></td>
+						<td><a href="?id=<?= $value['imi']; ?>"><?= $value['name'] . ' ' .$value['num'] . '回目';?></a></td>
 						<td><?= $value['imipepnum'] == null ? '受験者なし' : $value['imipepnum'] . '人';?></td>
 						<td><?= $value['imipepnum'] == null ? '受験者なし' : number_format($value['imisum'] / $value['imipepnum'] * 1.25, 2) . '点';?></td>
 					</tr>
