@@ -104,7 +104,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 	foreach($imiDetails as $imi): ?>
         <tr>
             <td class="center col-xs-2"><?= $imi['date']?></td>
-            <th class="col-xs-7">
+            <th class="col-xs-6">
 	            <?php if($imi['score'] === null):?>
                     <span class="label label-danger">未</span>
 	            <?php else:?>
@@ -116,10 +116,22 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 	                                   'id' => $userID,
 	                                   'imicode' => $imi['imicode']]);
 	            ?>
+                &nbsp;
+	            <?=
+	            $this->Html->link("[編集]",
+	                              ['controller' => 'student',
+	                               'action' => 'input',
+	                               'id' => $userID,
+	                               'imicode' => $imi['imicode']
+		                              ,'linkNum' => 1],
+	                              ['class' => 'text-muted']);
+	            ?>
             </th>
             <td class="center col-xs-1"><?= $imi['avg']?></td>
             <td class="center col-xs-1"><?= ($imi['score'] !== null)?$imi['score']:""?></td>
             <td class="center col-xs-1"><?= ($imi['rank'] !== null)?$imi['rank']:"" ?> </td>
+           
+            
         </tr>
 	<?php endforeach; ?>
     </tbody>

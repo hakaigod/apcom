@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\TfAn;
 use App\Model\Entity\TfImi;
 use App\Model\Entity\TfSum;
 use App\Model\Table\MfQesTable;
@@ -159,7 +160,6 @@ class StudentController extends AppController
 	}
 	
 	//模擬試験結果入力画面
-	//TODO:編集モード
 	public function input(){
 		
 		//模擬試験テーブルの主キー:$imicode
@@ -180,30 +180,42 @@ class StudentController extends AppController
 		$this->set(compact('curNum'));
 		//問題文セット:$questions
 		$this->set('questions',$imitation['mf_exa']['mf_qes']);
-		
-		//回答入力時(=POST)
-		if ($this->request->is('post')) {
-			//セッションに解答を書き込む
-			$this->writeAnsToSsn($this->request);
-		}
-		
-		//過去入力した選択肢、自信度がセッションに存在する場合
-		//既定値としてビューにセットする:$inputtedLog
-		$iniQueAfNum = ( $curNum - 1 ) * Q_NUM_PER_PAGE + 1;
-		$inputtedLog = [];
-		for ($qNum = $iniQueAfNum ; $qNum < $iniQueAfNum + Q_NUM_PER_PAGE; $qNum++ ) {
-			$inputtedLog['answers'][$qNum] = $this->readSession([ 'answers', $imicode, $qNum ]);
-			$inputtedLog['confidences'][$qNum] = $this->readSession(['confidences',$imicode,$qNum]);
+		$inputtedLog['answers'] = array_fill(1, Q_TOTAL_NUM , null);
+		$inputtedLog['confidences'] = array_fill(1, Q_TOTAL_NUM , null);
+		//最初のアクセスのとき
+		if ( $this->readSession(['answers',$imicode]) === null ){
+			//過去入力した選択肢、自信度をDBから読み込む
+			$answersFromDB = $this->TfAns->find()
+				->where([ 'imicode' => $imicode, 'regnum' => $this->readSession([ 'userID' ]) ])
+				->all();
+			foreach ($answersFromDB as $answer) {
+				if ($answer instanceof TfAn) {
+					$inputtedLog['answers'][$answer->qesnum] = $answer->rejoinder;
+					$inputtedLog['confidences'][$answer->qesnum] = $answer->confidence;
+				}
+			}
+			$this->writeSession([ 'answers',$imicode], $inputtedLog['answers']);
+			$this->writeSession([ 'confidences',$imicode], $inputtedLog['confidences']);
+		}else {
+			//回答入力時(=POST)はセッションに解答を書き込む
+			if ( $this->request->is('post') ) $this->writeAnsToSsn($this->request);
+			//過去入力した選択肢、自信度がセッションに存在する場合
+			//既定値としてビューにセットする:$inputtedLog
+			$iniQueAfNum = ( $curNum - 1 ) * Q_NUM_PER_PAGE + 1;
+			$inputtedLog = [];
+			for ( $qNum = $iniQueAfNum; $qNum < $iniQueAfNum + Q_NUM_PER_PAGE; $qNum++ ) {
+				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
+				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
+			}
 		}
 		$this->set(compact('inputtedLog'));
-		$notAnsedPages =$this->getNotAnsed($imicode);
+		$notAnsedPages = $this->getNotAnsed($imicode);
 		//未解答のページ一覧:$notAnsedPages
 		$this->set(compact('notAnsedPages'));
 		//1-7のページが解答されているか:$isAnsed
-		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
-		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
+		unset($notAnsedPages[ count($notAnsedPages) - 1 ]);
+		$this->set('isAnsed', $this->isAnsweredAll($notAnsedPages));
 	}
-	
 	
 	private function writeAnsToSsn(ServerRequest $request){
 		$imicode = $request->getParam('imicode');
@@ -290,7 +302,6 @@ class StudentController extends AppController
 			         ]);
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
-		//TODO:すでにINSERTされていないかチェック
 		$genOnDup = function (array $names) {
 			$state = "ON DUPLICATE KEY UPDATE ";
 			for ($i = 0; $i < count($names); $i ++ ) {
