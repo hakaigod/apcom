@@ -8,10 +8,16 @@ use App\Model\Table\MfStuTable;
 use App\Model\Table\TfAnsTable;
 use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
+use Cake\Database\Exception;
 use Cake\Http\ServerRequest;
-use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
-use Cake\Core\Exception\Exception;
+const Q_TOTAL_NUM = 80;
+const Q_NUM_PER_PAGE = 10;
+const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
+const TECH_NUM = 1;
+const MAN_NUM = 2;
+const STR_NUM = 3;
+
 
 /**
  * @property TfAnsTable TfAns
@@ -20,9 +26,7 @@ use Cake\Core\Exception\Exception;
  * @property MfQesTable MfQes
  * @property TfSumTable TfSum
  */
-const Q_TOTAL_NUM = 80;
-const Q_NUM_PER_PAGE = 10;
-const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
+
 
 class StudentController extends AppController
 {
@@ -56,6 +60,7 @@ class StudentController extends AppController
 		
 		//セッションの学籍番号とURLの学籍番号が違うとき、セッションの方にリダイレクト
 		if ($regnumFromReq != $regnumFromSsn) {
+			$this->log("The required regnum is not your regnum in session");
 			$this->redirect([ 'controller' => 'student','action' => 'summary' , 'id' => $regnumFromSsn ]);
 			return;
 		}
@@ -69,6 +74,8 @@ class StudentController extends AppController
 		$this->set(compact('username'));
 		//リンクを生成するための学籍番号:$userID
 		$this->set("userID",$regnumFromSsn);
+		
+		
 	}
 	
 	//ユーザマイページに表示される画面
@@ -79,20 +86,27 @@ class StudentController extends AppController
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
 			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}])
+			->orderDesc('imicode')
 			->all();
 		
 		$imiDetails = [];
 		//ジャンルごとの平均が入る
 		$userAvg = $wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
 		foreach ($imitations as $imi) {
-			if ( !( $imi instanceof TfImi) ) return;
+			if ( !( $imi instanceof TfImi) ) {
+				$this->log('$imi is not instanceof TfImi');
+				return;
+			}
 			$imicode = $imi->imicode;
 			//ユーザのその回での点数
 			$score  = null;
 			//その模擬試験を受験している場合
 			if ((count($imi['tf_sum']) === 1) ) {
 				$tfSumEntity = $imi['tf_sum'][0];
-				if ( !($tfSumEntity instanceof TfSum)) return;
+				if ( !($tfSumEntity instanceof TfSum)) {
+					$this->log('$tfSumEntity is not instanceof TfSum');
+					return;
+				}
 				$score = $tfSumEntity->_getStudentSum();
 				//ユーザのジャンルごとの合計に加算
 				$userAvg = $this->calcGenreSum($userAvg, $tfSumEntity->_getGenreArray());
@@ -153,13 +167,15 @@ class StudentController extends AppController
 		$this->set(compact('imicode'));
 		//リクエストされたページ番号 範囲は1-8
 		$curNum = $this->request->getParam('linkNum');
-		//模擬試験コードから試験実施年度と季節を取得
+		//模擬試験コードから試験実施年度と季節,問題を取得
 		$imitation = $this->TfImi->getOneAndQes($imicode,Q_NUM_PER_PAGE,$curNum);
-		if (!isset($imitation)) {
+		if (!isset($imitation) || !($imitation instanceof TfImi)) {
+			$this->log('failed to get an imitation entity');
 			return;
 		}
-		//TODO:メソッドを消したので入れ替える
-		$this->setYearAndSeason($imitation);
+		$imiName = $imitation->_getName($this->TfImi);
+		//模擬試験名:$imiName
+		$this->set(compact('imiName'));
 		//現在のページ番号をセット:$curNum
 		$this->set(compact('curNum'));
 		//問題文セット:$questions
@@ -186,9 +202,6 @@ class StudentController extends AppController
 		//1-7のページが解答されているか:$isAnsed
 		unset($notAnsedPages[count($notAnsedPages) - 1 ]);
 		$this->set('isAnsed',$this->isAnsweredAll($notAnsedPages));
-		//実施された回数:$implNum
-		$implNum = $this->TfImi->getImplNum($imicode,$imitation['exanum']) + 1;
-		$this->set(compact('implNum'));
 	}
 	
 	
@@ -209,8 +222,9 @@ class StudentController extends AppController
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
 			$confidence = h($this->request->getData("confidence_{$qNum}"));
-			//解答と自信度をセッションに書き込む
+			//値のチェック
 			if ( 0 <= $answer && $answer <= 4 && 1 <= $confidence && $confidence <= 3) {
+				//解答と自信度をセッションに書き込む
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
 				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
 			}else{
@@ -227,71 +241,91 @@ class StudentController extends AppController
 		$regnum = $this->readSession(['userID']);
 		
 		$imicode = $this->request->getParam('imicode');
-		//TODO:imicodeがTfImiにあるか確認
 		//模擬試験コード:$imicode
 		$this->set(compact('imicode'));
 		
-		//もしどれか未入力の場合はリダイレクト
+		//もし一つでも未入力の場合は何もしない
 		if ( !($this->isAnsweredAll($this->getNotAnsed($imicode))) ) {
-			$this->redirect([ 'action' => 'input' , 'id' => $regnum,'imicode' => $imicode,'pageNum' =>8 ]);
+			$this->set('answeredAll',false);
+			$this->log('All rejoinders should be inputted.');
 			return;
 		}
-		
+		$this->set('answeredAll',true);
 		$corrects = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
+		if ($corrects === null) {
+			$this->set('imicodeInRange',false);
+			$this->log('imicode is out of range.');
+			return;
+		}
+		$this->set('imicodeInRange',true);
 		$rejoinders = $this->readSession(['answers',$imicode]);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		
 		//各解答のINSERTクエリを生成
 		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
-		//テクノロジ合計点数
-		$techScore = 0;
-		//マネジメント
-		$manaScore = 0;
-		//ストラテジ
-		$straScore = 0;
+		
+		//各ジャンルの合計点
+		$scores = [TECH_NUM => 0, MAN_NUM => 0, STR_NUM => 0];
 		foreach ($rejoinders as $key => $rejoinder) {
-			$answer = $corrects['mf_exa']['mf_qes'][$key - 1]->answer;
+			$question = &$corrects['mf_exa']['mf_qes'][$key - 1];
 			$insertAnsQuery->values([ 'imicode'=> $imicode,
 			                          'qesnum'=>  $key,
 			                          'regnum'=>  $regnum,
 			                          'rejoinder'=>  $rejoinder,
 			                          'confidence'=>  $confidences[$key],
-			                          'correct_answer' => $answer
+			                          'correct_answer' => $question->answer
 			                        ]);
 			//正解の選択肢だったら
-			//TODO:きれいにする
-			if ($rejoinder == $answer) {
-				switch ($corrects['mf_exa']['mf_qes'][$key - 1]['fienum']) {
-					case 1:
-						$techScore ++;
-						break;
-					case 2:
-						$manaScore ++;
-						break;
-					case 3:
-						$straScore ++;
-						break;
-				}
+			if ($rejoinder == $question->answer) {
+				$scores [$question->fienum] ++;
 			}
 		}
 		$insertSumQuery = $this->TfSum->query()
-			->insert(['regnum','imicode','technology_imisum','management_imisum','strategy_imisum'])
+			->insert(['regnum','imicode','technology_sum','management_sum','strategy_sum'])
 			->values([ 'regnum' => $regnum,
 			           'imicode' => $imicode,
-			           'technology_imisum' => $techScore,
-			           'management_imisum' => $manaScore,
-			           'strategy_imisum' => $straScore
+			           'technology_sum' => $scores[TECH_NUM],
+			           'management_sum' => $scores[MAN_NUM],
+			           'strategy_sum' => $scores[STR_NUM]
 			         ]);
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
-		//TODO:成功したときセッション内の解答を削除
-		$connection->transactional(function ($connection) use ($insertAnsQuery,$insertSumQuery) {
-			$insertAnsQuery->execute();
-			$insertSumQuery->execute();
-		});
+		//TODO:すでにINSERTされていないかチェック
+		$genOnDup = function (array $names) {
+			$state = "ON DUPLICATE KEY UPDATE ";
+			for ($i = 0; $i < count($names); $i ++ ) {
+				$state .= "`{$names[$i]}` = VALUES(`{$names[$i]}`)";
+				if ($i !== count($names) - 1) {
+					$state .= ", ";
+				}
+			}
+			return $state;
+		};
+		//もしすでに行が存在する場合は上書き
+		$insertAnsQuery = $insertAnsQuery->epilog($genOnDup(['rejoinder','confidence','correct_answer']));
+		$insertSumQuery = $insertSumQuery->epilog($genOnDup(['technology_sum','management_sum','strategy_sum']));
+		
+		$result = false;
+		
+		try {
+			$result = $connection->transactional(function ( $connection ) use ( $insertAnsQuery, $insertSumQuery ) {
+				$insertSumQuery->execute();
+				$insertAnsQuery->execute();
+				$this->log("transaction is successfully executed");
+				return true;
+			});
+		}catch (\PDOException $e) {
+			$this->log($e->getMessage());
+		}
+		$this->set(compact('result'));
 		//結果画面にリダイレクト
-		$this->redirect([ 'controller' => 'student','action' => 'result' ,
-		                  'id' => $regnum, 'imicode' => $imicode ]);
+		if ($result) {
+			//セッション内の解答削除
+			$this->removeSession(['confidences', $imicode]);
+			$this->removeSession(['answers', $imicode]);
+			$this->redirect([ 'controller' => 'student', 'action' => 'result',
+			                  'id'         => $regnum, 'imicode' => $imicode ]);
+		}
 	}
 	
 	//各回の詳細な結果
@@ -304,6 +338,7 @@ class StudentController extends AppController
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
 		if ($imiQesAns === null) {
+			$this->log("imicode is out of range");
 			return;
 		}
 		//本番試験コード
@@ -342,8 +377,33 @@ class StudentController extends AppController
 		$this->set(compact('rank'));
 		//点数:$score
 		$this->set(compact('score'));
+		$getCorrectRates = function(int $imicode,int $imipepnum):array {
+			if ($imipepnum == 0) {
+				return [];
+			}
+			//問題ごとに何人正解したか
+			//ただし0は出ない
+			$query = $this->TfAns->find();
+			$result = $query
+				->select([ 'subQesnum' => 'qesnum',
+				           'rate' => "count(*) / {$imipepnum}"])
+				->where([ 'rejoinder = correct_answer', 'imicode' => $imicode])
+				->group(['qesnum'])
+				->toArray();
+			$resultAndZero = [];
+			$k = 0;
+			for ($i = 0;$i < Q_TOTAL_NUM; $i++ ) {
+				$rate = 0;
+				if ( $k < sizeof($result) && ($result[$k]['subQesnum'] - 1) == $i) {
+					$rate = $result[$k]['rate'];
+					$k++;
+				}
+				$resultAndZero[$i] = $rate;
+			}
+			return $resultAndZero;
+		};
 		//正答率:$correctRate
-		$this->set('correctRates',$this->getCorrectRates($imicode,$imiQesAns['imipepnum']));
+		$this->set('correctRates',$getCorrectRates($imicode,$imiQesAns['imipepnum']));
 	}
 	
 	//入力されていないページ一覧を取得
@@ -380,35 +440,14 @@ class StudentController extends AppController
 		$session = $this->request->session();
 		$session->write($this->getSsnTag($tagArray), $data);
 	}
+	private function removeSession(array $tagArray){
+		$session = $this->request->session();
+		$session->delete($this->getSsnTag($tagArray));
+	}
 	//配列からセッションの場所(文字列)を生成
 	private function getSsnTag( array $children): String{
 		return implode(".", $children);
 	}
 	
-	private function getCorrectRates(int $imicode,int $imipepnum):array {
-		if ($imipepnum == 0) {
-			return [];
-		}
-		//問題ごとに何人正解したか
-		//ただし0は出ない
-		$query = $this->TfAns->find();
-		$result = $query
-			->select([ 'subQesnum' => 'qesnum',
-			           'rate' => "count(*) / {$imipepnum}"])
-			->where([ 'rejoinder = correct_answer', 'imicode' => $imicode])
-			->group(['qesnum'])
-			->toArray();
-		$resultAndZero = [];
-		$k = 0;
-		for ($i = 0;$i < Q_TOTAL_NUM; $i++ ) {
-			$rate = 0;
-			if ( $k < sizeof($result) && ($result[$k]['subQesnum'] - 1) == $i) {
-				$rate = $result[$k]['rate'];
-				$k++;
-			}
-			$resultAndZero[$i] = $rate;
-		}
-		return $resultAndZero;
-	}
 	
 }

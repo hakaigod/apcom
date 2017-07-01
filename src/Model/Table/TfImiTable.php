@@ -87,7 +87,7 @@ class TfImiTable extends Table
 	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):?TfImi{
 		$row =  $this->find()
 			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
-				return $q->select(['exanum','qesnum','question','answer'])
+				return $q->select(['exanum','qesnum','question','answer','fienum'])
 					->limit($limit)
 					->page($page);
 			}

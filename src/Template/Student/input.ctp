@@ -3,20 +3,21 @@
  * [模擬試験結果(各解答)の入力ページ]
  *
  * @var \App\View\AppView $this
- * この模擬試験の基が行われた年
- * @var Integer $year
- * この模擬試験の基が行われた季節
- * @var String $season
+ * 模擬試験コード
+ * @var int               $imicode
+ * @var string $userID
+ * 模擬試験名
+ * @var string $imiName
+ * 現在表示しているページ番号 currentNum
+ * @var Integer $curNum
  * DBから取得した問題一覧
  * @var \App\Model\Entity\MfQe[][] $questions
  * 過去に入力されていた解答と自信度
  * @var array $inputtedLog
- * 現在表示しているページ番号 currentNum
- * @var Integer $curNum
+ * 1-7ページが解答されているか
  * @var bool $isAnsed
+ * 1-8の未解答のページ一覧
  * @var bool[] $notAnsedPages
- * @var int $imicode
- * @var int $implNum
  */
 ?>
 <?php
@@ -44,13 +45,13 @@ function json_safe_encode($data){
 <tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <tr><td><a href="#">管理者管理</a></td></tr>
 <?php $this->end(); ?>
-<?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum))):?>
+<?php if( !(isset($imiName))):?>
     <br><br>
     <div class="alert alert-danger" role="alert">
         この模擬試験は実施されていません
     </div>
 <?php else:?>
-<h3><?= "平成{$year}年{$season} {$implNum}回目" ?></h3>
+<h3><?= $imiName ?></h3>
 <form name="ansForm" action="<?= $this->Html->Url->build(
         ['controller' => 'student', 'action' => 'sendAll',
          'id' => $userID,'imicode' => $imicode]) ?>

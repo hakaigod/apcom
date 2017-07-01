@@ -32,7 +32,11 @@
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
-<?php if($imiDetails): //TODO:なっとらん?>
+
+<?php
+//score列にnullを含む場合
+//3番目のtrueは型を比較するか(==か===かの違い)
+if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 <div class="panel panel-danger ">
     <div class="panel-heading">
         まだ入力されていない模擬試験があります
@@ -72,21 +76,27 @@
 </div>
 <!--canvasにグラフを設定するスクリプト-->
 <script id="check-script"
-    <?= 'src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"'?>
-    
-    <?= "user-name = \"{$username}さん\""?>
-    <?= "line-dates = " . json_safe_encode( array_column($imiDetails,'date'))?>
-	<?= "line-student-score = " . json_safe_encode( array_column($imiDetails,'score'))?>
-	<?= "line-averages = " . json_safe_encode( array_column($imiDetails,'avg'))?>
-	<?= "radar-user = " . json_safe_encode(array_values($userAvg))?>
-	<?= "radar-averages = " . json_safe_encode( array_values($wholeAvg))?>
->
+    <?= ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"'?>
+    <?= " user-name = \"{$username}さん\""?>
+    <?php
+    $dates = array_column($imiDetails,'date');
+    krsort($dates);
+    echo " line-dates = " . json_safe_encode( array_values($dates) );
+    $scores = array_column($imiDetails,'score');
+    krsort($scores);
+    echo " line-student-score = " . json_safe_encode( array_values($scores) );
+    $averages =  array_column($imiDetails,'avg');
+    krsort($averages);
+    echo " line-averages = " . json_safe_encode( array_values($averages) );
+    ?>
+	<?= " radar-user = " . json_safe_encode(array_values($userAvg))?>
+	<?= " radar-averages = " . json_safe_encode( array_values($wholeAvg))?>
+ defer>
 </script>
 <br><br>
 <div class="col-xs-12">
     <h4>模擬試験一覧</h4>
 </div>
-<!--TODO:逆順にする-->
 <table class="table table-bordered table-striped table-hover">
 	<?= $this->Html->tableHeaders(['実施日','試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
     <tbody>

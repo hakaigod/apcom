@@ -44,9 +44,12 @@ class TfImi extends Entity
     		return 0;
 	    }
     }
-    public function _getName (TfImiTable $table) {
+    public function _getName (TfImiTable $table,MfExa $mfExa = null):string {
     	$implNum = $table->getImplNum($this->imicode, $this->exanum) + 1;
-    	$examName = $this->mf_exa->_getExamDetail();
+    	if ($mfExa === null) {
+    		$mfExa = $this->mf_exa;
+	    }
+    	$examName = $mfExa->_getExamDetail();
     	return "{$examName}  {$implNum}回目";
     }
     public function _getGenreArray () {

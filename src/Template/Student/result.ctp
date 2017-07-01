@@ -31,17 +31,18 @@
 <?php else:?>
     <h3><?= "平成{$year}年{$season} {$implNum}回目"?></h3>
     <h4>平均点:<?= round($average,1) ?>点</h4>
-    <h4>合計点:<?= $score ?>点</h4>
-    <h4>順位:<?= $rank ?></h4>
-	<?php
-	$answersStr = ['未','ア','イ','ウ','エ'];
-	$confidenceStr = ['未','○','△','×'];
-	?>
+    
 	<?php if(empty($answers) || empty($correctRates)): ?>
         <div class="alert alert-warning" role="alert">
             まだ入力されていません
         </div>
 	<?php else:?>
+        <h4>合計点:<?= $score ?>点</h4>
+        <h4>順位:<?= $rank ?></h4>
+		<?php
+		$answersStr = ['未','ア','イ','ウ','エ'];
+		$confidenceStr = ['未','○','△','×'];
+		?>
         <table class="table table-bordered table-striped table-hover">
 			<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
             <tbody>

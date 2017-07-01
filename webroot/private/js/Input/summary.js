@@ -43,10 +43,7 @@ function drawLineChart() {
         },
         options:{
             responsive:true,
-            animation:{
-                easing:'easeOutQuint',
-                duration:500
-            },
+            animation:false,
             scales: {
                 yAxes: [{
                     ticks: {
@@ -80,10 +77,7 @@ function drawRadarChart() {
         },
 	    options:{
 		    responsive:true,
-		    animation:{
-			    easing:'easeOutQuint',
-			    duration:500
-		    },
+		    animation:false,
 		    scale:{
 			    ticks:{
 				    stepSize:20,
