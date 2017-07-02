@@ -55,23 +55,30 @@ function json_safe_encode($data){
 		['controller' => 'student', 'action' => 'sendAll',
 		 'id' => $userID,'imicode' => $imicode]) ?>
 " method="post" id="answer-form">
-        <table class="table table-bordered table-striped table-hover">
-			<?= $this->Html->tableHeaders(['番号','問題文', '解答','自信度'],[],['class' => 'center']); ?>
+        <table id="input-table" class="table table-bordered table-striped table-hover">
+            <thead >
+            <tr>
+                <th class ="center">番号</th>
+                <th class ="center">問題文</th>
+                <th class ="center">解答</th>
+                <th class ="center">自信度</th>
+            </tr>
+            </thead>
             <tbody>
 			<?php foreach (range(1, 10) as $i ): ?>
                 <tr>
                     <!--                問題番号-->
-                    <th class="col-xs-1 center">
+                    <td class=" col-sm-12  col-md-1 center">
 						<?= $qNum = $questions[ $i - 1 ]['qesnum'] ?>
-                    </th>
+                    </td>
                     <!--                問題文(最初の10文字のみ)-->
-                    <td class="col-xs-3">
+                    <td class=" col-sm-12  col-md-3 sentence">
 						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
                         ...
                     </td>
                     <!--                解答-->
-                    <td class="col-xs-5 center">
-                        <div data-toggle="buttons">
+                    <td class=" col-sm-12  col-md-5 center">
+                        <div id="<?= "rejoinder_{$i}"?>" data-toggle="buttons">
 							<?php
 							$ansChoices = ['ア','イ','ウ','エ','未記入'];
 							$answerTag = 'answer_' . $qNum;
@@ -95,8 +102,8 @@ function json_safe_encode($data){
                         </div>
                     </td>
                     <!--                自信度-->
-                    <td class="col-xs-3 center">
-                        <div data-toggle="buttons">
+                    <td class=" col-sm-12  col-md-3 center">
+                        <div id="<?= "conf_{$i}"?>" data-toggle="buttons">
 							<?php
 							$confChoices = ['o','△','X'];
 							$confTag = "confidence_{$qNum}";

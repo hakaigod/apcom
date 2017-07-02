@@ -4,6 +4,7 @@
     margin-right: 3px;
     margin-left: 3px;
     border-radius: 5px;
+    transition: border 0.1s linear, color 0.1s linear, background-color 0.1s linear;
 }
 .end-btn {
     margin-right: 0;
@@ -17,4 +18,23 @@
 /*}*/
 .btn-info.active {
     background: midnightblue;
+}
+
+
+@media screen and (max-width: 991px) {
+    #input-table {
+        border: none;
+    }
+    #input-table thead {
+        display: none;
+    }
+    #input-table tr {
+        display: block;
+        margin-bottom: 20px;
+    }
+    #input-table td {
+        display: block;
+        padding: 10px;
+        text-align: center;
+    }
 }

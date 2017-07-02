@@ -20,6 +20,7 @@
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Manager/index.css') ?>
+<?= $this->Html->css('/private/css/Input/summary.css') ?>
 <?php $this->end(); ?>
 
 <!-- jsセット -->
@@ -66,12 +67,12 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 <?php endif;?>
 
 <!--グラフを表示する要素-->
-<div class="col-xs-7">
+<div class="col-sm-12 col-md-7 display-chart">
     <h4 class="">成績の推移</h4>
     <canvas id="lineChart" ></canvas>
 </div>
 <!--グラフを表示する要素-->
-<div class="col-xs-5">
+<div class="col-sm-12 col-md-5 display-chart">
     <h4>ジャンルごとの正答率</h4>
     <canvas id="radarChart" ></canvas>
 </div>
@@ -98,14 +99,22 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 <div class="col-xs-12">
     <h4>模擬試験一覧</h4>
 </div>
-<table class="table table-bordered table-striped table-hover">
-	<?= $this->Html->tableHeaders(['実施日','試験名','平均', '点数','順位'],[],['class' => 'center']); ?>
+<table id="summary-table" class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th class ="center">実施日</th>
+        <th class ="center">試験名</th>
+        <th class ="center">平均</th>
+        <th class ="center">点数</th>
+        <th class ="center">順位</th>
+    </tr>
+    </thead>
     <tbody>
 	<?php
 	foreach($imiDetails as $imi): ?>
         <tr>
-            <td class="center col-xs-2"><?= $imi['date']?></td>
-            <th class="col-xs-6">
+            <td data-label="実施日" class="center col-sm-12 col-md-2"><?= $imi['date']?></td>
+            <td class="col-sm-12 col-md-6">
 	            <?php if($imi['score'] === null):?>
                     <span class="label label-danger">未</span>
 	            <?php else:?>
@@ -127,10 +136,10 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 		                              ,'linkNum' => 1],
 	                              ['class' => 'text-muted']);
 	            ?>
-            </th>
-            <td class="center col-xs-1"><?= $imi['avg']?></td>
-            <td class="center col-xs-1"><?= ($imi['score'] !== null)?$imi['score']:""?></td>
-            <td class="center col-xs-1"><?= ($imi['rank'] !== null)?$imi['rank']:"" ?> </td>
+            </td>
+            <td data-label="平均" class="center col-sm-12 col-md-1"><?= $imi['avg']?></td>
+            <td data-label="点数" class="center col-sm-12 col-md-1"><?= ($imi['score'] !== null)?$imi['score']:"　"?></td>
+            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)?$imi['rank']:"　" ?> </td>
            
             
         </tr>
