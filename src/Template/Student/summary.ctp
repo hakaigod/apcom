@@ -2,6 +2,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
+ * @var string $userID
  * @var string $username
  * //name,date,avg,score,rankのキーをもつ
  * @var array $imiDetails

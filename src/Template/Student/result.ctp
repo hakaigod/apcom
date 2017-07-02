@@ -3,15 +3,20 @@
  *
  * @var \App\View\AppView $this
  *
- * @var int $year
- * @var string $season
- * @var int $implNumf
- * @var float $average
+ * 試験名
+ * @var string $exaname
+ * 問題文、正答
  * @var \App\Model\Entity\MfQe[] $questions
+ * 生徒が選んだ解答
  * @var \App\Model\Entity\TfAn[] $answers
+ * 生徒の点数
  * @var int $score
+ * 問題ごとの正答率
  * @var array $correctRates
- * @var int $implNum
+ * 試験の平均点
+ * @var float $average
+ * 生徒の順位
+ * @var int $rank
  */
 ?>
 
@@ -21,7 +26,6 @@
 
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
-<tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
 <?php $this->end(); ?>
 <?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum)) || !(isset($average))):?>
     <br><br>
@@ -29,7 +33,7 @@
         この模擬試験は実施されていません
     </div>
 <?php else:?>
-    <h3><?= "平成{$year}年{$season} {$implNum}回目"?></h3>
+    <h3><?= $exaname?></h3>
     <h4>平均点:<?= round($average,1) ?>点</h4>
     
 	<?php if(empty($answers) || empty($correctRates)): ?>

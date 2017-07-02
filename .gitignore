@@ -4,3 +4,5 @@
 /logs/*
 /.idea/
 /webroot/private/image/
+/webroot/private/js/Input/chromedriver.exe
+/webroot/private/js/Input/geckodriver.exe

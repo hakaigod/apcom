@@ -3,12 +3,12 @@
  *
  * @var \App\View\AppView $this
  * @var string $userID
+ * @var string $username
  * @var bool $answeredAll
  * @var bool $result
  * @var int $imicode
  * @var bool $imicodeInRange
  */
-use App\Controller\StudentController;
 
 ?>
 
@@ -17,8 +17,7 @@ use App\Controller\StudentController;
 <?php $this->end(); ?>
 
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') ?>/Manager">トップページ</a></td></tr>
-<tr><td><a href="manager/strmanager">学生情報管理</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . '/Manager'?>">トップページ</a></td></tr>
 <?php $this->end(); ?>
 <br>
 <?php
