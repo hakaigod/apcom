@@ -2,7 +2,7 @@
 /**
  *
  * @var \App\View\AppView $this
- *
+ * @var string $username
  * 試験名
  * @var string $exaname
  * 問題文、正答
@@ -17,6 +17,11 @@
  * @var float $average
  * 生徒の順位
  * @var int $rank
+ * 生徒のジャンルごと点数
+ * @var array $userScore
+ * 全体のジャンルごと平均
+ * @var array $wholeAvg
+ *
  */
 ?>
 
@@ -33,6 +38,7 @@
 	echo " user-name = \"{$username}さん\"";
     echo " radar-user = " . json_safe_encode(array_values($userScore));
 	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
+	echo " bar-numbers = " . json_safe_encode(array_values($barNumbers));
 	?>
         defer>
 </script>
@@ -52,8 +58,11 @@
             まだ入力されていません
         </div>
 	<?php else:?>
+        <div class="col-md-12 exam-title">
+            <?= $exaname?>
+        </div>
         <div class="col-md-7">
-        <h3><?= $exaname?></h3>
+        
         <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
         <h4>合計点:<?= round($score * 1.25,1) ?>点</h4>
         <h4>順位:<?= $rank  ?></h4>
@@ -66,6 +75,10 @@
         <div class="col-sm-12 col-md-5 display-chart">
             <h4>ジャンルごとの正答率</h4>
             <canvas id="radarChart" ></canvas>
+        </div>
+        <div class="col-sm-12 col-md-5 display-chart">
+            <h4>ew</h4>
+            <canvas id="barChart" ></canvas>
         </div>
 
         <table class="table table-bordered table-striped table-hover">

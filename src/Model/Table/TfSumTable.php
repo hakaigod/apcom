@@ -20,7 +20,9 @@ use Cake\Validation\Validator;
  */
 class TfSumTable extends Table
 {
-
+	public const TECH_NAME = "technology_sum";
+	public const MAN_NAME = "management_sum";
+	public const STR_NAME = "strategy_sum";
     /**
      * Initialize method
      *

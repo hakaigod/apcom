@@ -74,9 +74,6 @@ managerrrrr
                                     $this->Html->link("平成".$exam->jap_year . "年度 ". $exam->exaname ,
                                         //practiceExamアクションに飛ぶリンクを生成
                                         //コントローラを指定していないので、今と同じコントローラ
-                                        //['action' => 'practiceExam', 'exanum' => $exam->exanum]のように名前を付けた場合は
-                                        //practiceExam?exanum=1のようにハテナの方になる
-                                        //TODO:URLに問題番号を追加する
                                         ['action' => 'practiceExam'
                                                           , 'exanum' =>$exam->exanum
                                                           ,'qesnum' => 1],

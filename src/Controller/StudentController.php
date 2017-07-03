@@ -14,9 +14,13 @@ use Cake\Datasource\ConnectionManager;
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
+//本当はテーブルに書いたほうがいいけども文字数が
 const TECH_NUM = 1;
+const TECH_WEIGHT = 2;
 const MAN_NUM = 2;
+const MAN_WEIGHT = 10;
 const STR_NUM = 3;
+const STR_WEIGHT = 5;
 /**
  * @property TfAnsTable TfAns
  * @property MfStuTable MfStu
@@ -30,9 +34,7 @@ class StudentController extends AppController
 	
 	public function initialize(){
 		parent::initialize();
-		
-		//左上のロゴのURL設定
-		$this->set("headerlink", $this->request->getAttribute('webroot') . "Student");
+		$this->set('headerlink', $this->request->webroot . 'Manager');
 		
 		//回答テーブル
 		$this->loadModel('TfAns');
@@ -51,7 +53,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('userID', '13120023');
+		$session->write('userID', '15110027');
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$regnumFromSsn = $this->readSession(['userID']);
@@ -146,9 +148,9 @@ class StudentController extends AppController
 	{
 		if ($sum['count'] > 0) {
 			return [
-				round($sum[ 'tech' ] * 100 / ( $sum[ 'count' ] * 50 ) ,1),
-				round($sum[ 'man' ] * 100 / ( $sum[ 'count' ] * 10 ),1),
-				round($sum[ 'str' ]  * 100 / ( $sum[ 'count' ] * 20 ) ,1)];
+				round($sum[ 'tech' ]  /  $sum[ 'count' ] * TECH_WEIGHT  ,1),
+				round($sum[ 'man' ]  /  $sum[ 'count' ] * MAN_WEIGHT ,1),
+				round($sum[ 'str' ]  /  $sum[ 'count' ] * STR_WEIGHT  ,1)];
 		}else{
 			return [0,0,0];
 		}
@@ -225,6 +227,7 @@ class StudentController extends AppController
 		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
 		$iniQueBefNum = ( $befNum - 1 ) * Q_NUM_PER_PAGE + 1;
+		$validationFailed = false;
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
@@ -235,9 +238,11 @@ class StudentController extends AppController
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
 				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
 			}else{
-				$this->log("validation failed on " . $qNum);
+				$validationFailed = true;
 			}
 		}
+		if ($validationFailed) $this->log("validation failed on " . $befNum);
+
 	}
 	//解答をDBに送信する
 	public function sendAll() {
@@ -363,9 +368,9 @@ class StudentController extends AppController
 		$this->set(compact('average'));
 		//全体のジャンルごとの平均
 		$wholeAvg = [
-			round($imiQesAns['technology_imisum'] / $imiQesAns->imipepnum * 2,1),
-			round($imiQesAns['management_imisum'] / $imiQesAns->imipepnum * 10,1),
-			round($imiQesAns['strategy_imisum'] / $imiQesAns->imipepnum * 5,1)
+			round($imiQesAns[TfImiTable::TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
+			round($imiQesAns[TfImiTable::MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
+			round($imiQesAns[TfImiTable::STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
 		];
 		$this->set(compact('wholeAvg'));
 		//問題:$questions
@@ -379,7 +384,10 @@ class StudentController extends AppController
 			->where([ 'TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode ])
 			->first();
 		//レーダーチャートに表示する、ユーザのジャンルごとの合計点:$userScore
-		$userScore = [ $score['technology_sum'] * 2, $score['management_sum'] * 10, $score['strategy_sum'] * 5];
+		$userScore = [
+			$score[TfSumTable::TECH_NAME] * TECH_WEIGHT,
+			$score[TfSumTable::MAN_NAME] * MAN_WEIGHT,
+			$score[TfSumTable::STR_NAME] * STR_WEIGHT];
 		$this->set(compact('userScore'));
 		if ( isset($score) && $score instanceof TfSum ) {
 			$score = $score->_getStudentSum();
@@ -391,7 +399,26 @@ class StudentController extends AppController
 		$rank = $this->TfSum->getRank($imicode, $score);
 		$this->set(compact('rank'));
 		//正答率:$correctRates
-		$getCorrectRates = function ( int $imicode, int $imipepnum ): array {
+		$this->set('correctRates', $this->getCorrectRates($imicode, $imiQesAns[ 'imipepnum' ]));
+		//ジャンルごとの分布:$barNumbers
+		$barNumNonZero = $this->TfSum->find()->select(
+			[ 'score_floor' => "TRUNCATE(("
+				. TfSumTable::TECH_NAME . "+"
+				. TfSumTable::MAN_NAME . "+"
+				. TfSumTable::STR_NAME . " ) * 1.25,-1)  ",
+			  'score_number' => 'count(*)' ])
+			->where(['imicode' => $imicode])
+			->group([ 'score_floor' ])->toArray();
+		$this->set(compact('barNumbers'));
+		$barNumHasZero = array_fill(0,11,0);
+		foreach($barNumNonZero as $value) {
+			$barNumHasZero[(int)($value['score_floor']/10)] = round($value['score_number'] / $imiQesAns->imipepnum * 100,1);
+		}
+		$this->set("barNumbers",$barNumHasZero);
+	}
+	
+	private function getCorrectRates( int $imicode, int $imipepnum ): array
+	{
 			//誰も受験していないとき、空の配列を返す
 			if ( $imipepnum == 0 ) return [];
 			//問題ごとに何人正解したか
@@ -409,11 +436,7 @@ class StudentController extends AppController
 			}
 			
 			return $resultAndZero;
-		};
-		$this->set('correctRates', $getCorrectRates($imicode, $imiQesAns[ 'imipepnum' ]));
-		
 	}
-	
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
 		$notAnsedPages = array_fill(0,MAX_PAGE_NUM,true);

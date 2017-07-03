@@ -20,7 +20,9 @@ use App\Model\Entity\TfImi;
  */
 class TfImiTable extends Table
 {
-	
+	public const TECH_NAME = "technology_imisum";
+	public const MAN_NAME = "management_imisum";
+	public const STR_NAME = "strategy_imisum";
 	/**
 	 * Initialize method
 	 *
