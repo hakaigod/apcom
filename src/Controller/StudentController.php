@@ -16,7 +16,6 @@ class StudentController extends AppController
     public function initialize()
     {
         //画像取得用のヘルパー
-        $helpers = array('qaa','year');
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
         $this->loadModel('MfQes');
