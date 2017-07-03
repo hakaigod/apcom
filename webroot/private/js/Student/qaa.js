@@ -9,8 +9,23 @@ function selectAnswer(select) {
     if(select === $answer){
         document.getElementById("qaa-falsehood").innerHTML = "正解";
     } else {
-        document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+$answer;
+        var ans = "";
+        switch($answer){
+            case 1:
+                ans = "ア";
+                break;
+            case  2:
+                ans = "イ";
+                break;
+            case  3:
+                ans = "ウ";
+                break;
+            default:
+                ans = "エ";
+                break;
+        }
+        document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+ans;
     }
-    //その他のボタンを
-    $("#choice").prop("disabled",false);
+    //その他のボタンを無効にする
+    $('.choice').prop('disabled',true);
 }

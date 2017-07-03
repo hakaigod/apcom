@@ -13,6 +13,7 @@ class QaaHelper extends Helper
     //取得した文字列に画像リンクが含まれている場合、正しくリンクに飛ばせるように置換して戻す
     function viewTextImg(string $content):string
     {
-          return str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$content);
+          return str_replace('<?= $this->request->webroot ?>',
+              $this->request->getAttribute("webroot") ,$content);
     }
 }

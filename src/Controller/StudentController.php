@@ -16,7 +16,7 @@ class StudentController extends AppController
     public function initialize()
     {
         //画像取得用のヘルパー
-        $helpers = array('qaa');
+        $helpers = array('qaa','year');
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
         $this->loadModel('MfQes');
@@ -45,13 +45,14 @@ class StudentController extends AppController
         $this->set('qNum',$qNum);
         //指定したジャンルのクエリを取得する
         $question = $this->MfQes->find()
-            ->contain('MfQes','MfQes'.'MfFie')
+            ->contain(['MfExa','MfFie'])
             ->WHERE(['MfQes.fienum IN' => $getGenre])
             ->ORDER(['qesnum' => 'ASC'])
             //何行飛ばすか
             ->OFFSET($qNum)
             //1行だけ出力する
             ->first();
+//        print_r($question);
         //問題内容の表示
         $this->set('question',$question);
     }

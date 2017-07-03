@@ -33,7 +33,9 @@ class MfQesTable extends Table
         $this->setTable('mf_qes');
         $this->setDisplayField('qesnum');
         $this->setPrimaryKey(['qesnum', 'exanum']);
+        //アソシエーションの設定
         $this->belongsTo('MfFie')->setForeignKey('fienum');
+        $this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**

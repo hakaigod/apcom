@@ -57,7 +57,8 @@ Student
                     <div class="caption"><p>ジャンル一覧</p></div>
                     <!--ジャンル選択フォーム-->
                     <?php
-                    echo $this->Form->create('',['type'=>'post', 'url'=>['action'=>'qaaQuestion','question_num'=>1]]);
+                    echo $this->Form->create('',['type'=>'post',
+                        'url'=>['action'=>'qaaQuestion','question_num'=>1]]);
                     $options=[
                         //valueと表示文字の設定
                         '1'=>'テクノロジ',
@@ -76,7 +77,8 @@ Student
                 </div>
                 <!--決定ボタン-->
                 <div class="center">
-                    <?= $this->Form->button('問題開始',array('type'=>'submit','class'=>'btn btn-info'));?>
+                    <?= $this->Form->button('問題開始',array('type'=>'submit',
+                        'class'=>'btn btn-info'));?>
                     <?= $this->Form->end();?>
                 </div>
             </div>

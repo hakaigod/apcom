@@ -62,6 +62,12 @@
 /*ジャンル選択*/
 
 /*問題*/
+/*出典*/
+.source{
+    text-align: right;
+    font-size: small;
+}
+
 /*問番号*/
 #qaa-question-no{
     margin-top: 20px;

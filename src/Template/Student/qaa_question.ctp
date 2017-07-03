@@ -75,7 +75,7 @@ Student
         <div class="row">
             <div class="col-md-12">
                 <div class="source">
-                    出典：<?= $question->mf_exa['exaname']?>期&emsp;<?= $question->mf_exa('exa_year'.'time')?>
+                    出典：<?= $question->mf_exa['exaname']?>期&emsp;<?= $question->mf_exa['exa_year']?>
                 </div>
             </div>
         </div>
@@ -118,7 +118,7 @@ Student
     <table class="qaa_select_table table-bordered col-md-12">
         <tr class="select_tr" >
             <td class="col-md-1">
-                <input type="button" id="choice" class="btn btn-embossed btn-primary full" value="ア" onclick="selectAnswer(1)">
+                <input type="button" class="choice btn btn-embossed btn-primary full" value="ア" onclick="selectAnswer(1)">
             </td>
             <td class="col-md-11">
                 <?= $this->qaa->viewTextImg($question->choice1)?>
@@ -126,7 +126,7 @@ Student
         </tr>
         <tr>
             <td class="col-md-1">
-                <input type="button" class="btn btn-embossed btn-primary full" value="イ" onclick="selectAnswer(2)">
+                <input type="button" class="choice btn btn-embossed btn-primary full" value="イ" onclick="selectAnswer(2)">
             </td>
             <td class="col-md-11">
                 <?= $this->qaa->viewTextImg($question->choice2)?>
@@ -134,7 +134,7 @@ Student
         </tr>
         <tr>
             <td class="col-md-1">
-                <input type="button" class="btn btn-embossed btn-primary full" value="ウ" onclick="selectAnswer(3)">
+                <input type="button" class="choice btn btn-embossed btn-primary full" value="ウ" onclick="selectAnswer(3)">
             </td>
             <td class="col-md-11">
                 <?= $this->qaa->viewTextImg($question->choice3)?>
@@ -142,7 +142,7 @@ Student
         </tr>
         <tr>
             <td class="col-md-1">
-                <input type="button" class="btn btn-embossed btn-primary full" value="エ" onclick="selectAnswer(4)">
+                <input type="button" class="choice btn btn-embossed btn-primary full" value="エ" onclick="selectAnswer(4)">
             </td>
             <td class="col-md-11">
                 <?= $this->qaa->viewTextImg($question->choice4)?>
