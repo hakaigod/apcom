@@ -153,7 +153,9 @@ managerrrrr
 				<div class="qaa-back">
 					<?php if(($qes->qesnum-1)==0): ?>
 						<?= $this->Html->link("<< 前の問題" ,
-							['action' => 'practiceExam', $exams->exanum,$qes->qesnum-1],
+							['action' => 'practiceExam',
+                                'exanum' =>$exams->exanum,
+                                'qesnum' => $qes->qesnum-1],
 							[ 'class' => "btn btn-warning disabled" ]
 						);
 						?>
@@ -190,7 +192,9 @@ managerrrrr
 				<div  class="qaa-next">
 					<?php if ($qes->qesnum==80): ?>
 						<?= $this->Html->link("次の問題 >>" ,
-							['action' => 'practiceExam', $exams->exanum , $qes->qesnum + 1 ],
+							['action' => 'practiceExam',
+                                'exanum' =>$exams->exanum ,
+                                'qesnum' =>$qes->qesnum + 1 ],
 							[ 'class' => "btn btn-warning disabled" ]
 						);
 						?>

@@ -57,8 +57,4 @@ class MfExaTable extends Table
 
         return $validator;
     }
-<<<<<<< HEAD
-	
-=======
->>>>>>> cf5f7415274494c8a1b0f6d66c313e9d6b5dffe3
 }

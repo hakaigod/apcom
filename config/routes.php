@@ -66,6 +66,28 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		['controller' => 'student', 'action'=> 'result'],
 		['id' => '\d{8}','imicode' => '\d{1,3}']
 	);
+	$routes->connect(
+		'/qaaSelectGenre',
+		['controller' => 'student', 'action' => 'qaaSelectGenre']
+	);
+	
+	$routes->connect(
+		'/qaaQuestion/:question_num/',
+		['controller' => 'student', 'action' => 'qaaQuestion'],
+		['question_num' => '\d+',]
+	);
+	
+	$routes->connect(
+		'/yearSelection',
+		['controller' => 'student', 'action' => 'yearSelection']
+	);
+	
+	
+	$routes->connect(
+		'/practiceExam/:exanum/:qesnum/',
+		['controller' => 'student', 'action' => 'practiceExam'],
+		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
+	);
 });
 
 Router::scope('/', function (RouteBuilder $routes) {
@@ -75,21 +97,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
-    $routes->connect(
-        '/student/qaaSelectGenre',
-        ['controller' => 'student', 'action' => 'qaaSelectGenre']
-    );
-
-    $routes->connect(
-        '/student/qaaQuestion/:question_num/',
-        ['controller' => 'student', 'action' => 'qaaQuestion'],
-        ['question_num' => '\d+',]
-    );
-
-	$routes->connect('/student/practiceExam/:exanum/:qesnum',
-        ['controller' => 'Student', 'action' => 'practiceExam'],
-        ['exanum' => '\d{1-3}','qesnum'=>'\d{1-2}']
-    );
+    
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
@@ -116,12 +124,4 @@ Router::scope('/', function (RouteBuilder $routes) {
 //    $routes->fallbacks(DashedRoute::class);
 });
 
-/**
-<<<<<<< HEAD
- * Load all plugin routes.  See the Plugin documentation on
-=======
- * Load all plugin routes. See the Plugin documentation on
->>>>>>> 06f60cc757dd0b5aa0de321dad87b35ae62b5ec7
- * how to customize the loading of plugin routes.
- */
 Plugin::routes();

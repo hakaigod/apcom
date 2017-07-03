@@ -77,7 +77,9 @@ managerrrrr
                                         //['action' => 'practiceExam', 'exanum' => $exam->exanum]のように名前を付けた場合は
                                         //practiceExam?exanum=1のようにハテナの方になる
                                         //TODO:URLに問題番号を追加する
-                                        ['action' => 'practiceExam', $exam->exanum,1],
+                                        ['action' => 'practiceExam'
+                                                          , 'exanum' =>$exam->exanum
+                                                          ,'qesnum' => 1],
                                         [ 'class'=>" year-btn btn btn-info full" ]
                                     )
                                     ?>
@@ -102,7 +104,7 @@ managerrrrr
 <div>
     <?= $this->Html->link("TOPへ戻る" ,
         [
-            'action'=>'practiceExam'
+            'action'=>'yearSelection'
         ],[
 //                真ん中に持っていくためにcol-xs-offset-5で余白を取る
             'class' =>'btn btn-warning col-xs-offset-5 col-xs-2'
