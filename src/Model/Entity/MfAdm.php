@@ -4,20 +4,14 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * MfQe Entity
+ * MfAdm Entity
  *
- * @property int $qesnum
- * @property int $exanum
- * @property string $fienum
- * @property string $question
- * @property string $answer_pic
- * @property string $choice1
- * @property string $choice2
- * @property string $choice3
- * @property string $choice4
- * @property int $answer
+ * @property int $admnum
+ * @property string $admname
+ * @property string $admpass
+ * @property bool $deleted_flg
  */
-class MfQe extends Entity
+class MfAdm extends Entity
 {
 
     /**
@@ -31,7 +25,6 @@ class MfQe extends Entity
      */
     protected $_accessible = [
         '*' => true,
-        'qesnum' => false,
-        'exanum' => false
+        'admnum' => false
     ];
 }

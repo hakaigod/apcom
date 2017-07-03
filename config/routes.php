@@ -74,35 +74,18 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
-	 
-	//ユーザIDを指定した際のユーザマイページ(先生向け)
+	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+    $routes->connect(
+        '/student/qaaSelectGenre',
+        ['controller' => 'student', 'action' => 'qaaSelectGenre']
+    );
 
-	 
-//	$routes->connect(
-//		'/:student/:input/:season',
-//		['controller' => 'student', 'action'=> 'input',1 ],
-//		['student' => '(?i:student)','input' =>'(?:input)',
-//			'season' => '\d{2}_(haru|aki)']
-//	);
-//このルートを有効にすると、form actionで相対パスを指定しているので面倒になる
-//	$routes->connect(
-//		'/:student/:input/:imiNum',
-//		['controller' => 'student', 'action'=> 'input', 1],
-//		['student' => '(?i:student)','input' =>'(?:input)',
-//			'imiNum' => '\d{1,3}']
-//	);
+    $routes->connect(
+        '/student/qaaQuestion/:question_num/',
+        ['controller' => 'student', 'action' => 'qaaQuestion'],
+        ['question_num' => '\d+',]
+    );
 
-	
-//	$routes->connect(
-//		'/:student/:input/:season/:qnum',
-//		['controller' => 'student', 'action'=> 'input'],
-//		['student' => '(?i:student)','input' =>'(?:input)',
-//			'season' => '\d{2}_(haru|aki)','qnum' => '[1-8]{1}']
-//	);
-//	$routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-
-	
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

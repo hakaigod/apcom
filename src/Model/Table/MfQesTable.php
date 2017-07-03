@@ -33,6 +33,9 @@ class MfQesTable extends Table
         $this->setTable('mf_qes');
         $this->setDisplayField('qesnum');
         $this->setPrimaryKey(['qesnum', 'exanum']);
+        //アソシエーションの設定
+        $this->belongsTo('MfFie')->setForeignKey('fienum');
+        $this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**
@@ -44,6 +47,7 @@ class MfQesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
+            ->integer('qesnum')
             ->allowEmpty('qesnum', 'create');
 
         $validator
