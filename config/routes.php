@@ -43,6 +43,31 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
+Router::scope("/student", function ( RouteBuilder $routes ) {
+	
+	$routes->connect(
+		'/:id',
+		['controller' => 'student', 'action'=> 'summary'],
+//		 8桁の数字に制限、0始まりに対応
+		['id' => '\d{8}']
+	);
+	$routes->connect(
+		'/:id/input/:imicode/:linkNum',
+		['controller' => 'student', 'action'=> 'input'],
+		['id' => '\d{8}','imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
+	);
+	$routes->connect(
+		'/:id/sendAll/:imicode/',
+		['controller' => 'student', 'action'=> 'sendAll'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+	$routes->connect(
+		'/:id/result/:imicode',
+		['controller' => 'student', 'action'=> 'result'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+});
+
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -64,7 +89,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    //$routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+//    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
     /**
      * Connect catchall routes for all controllers.
      *
@@ -81,6 +107,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+    //デフォルトのcontroller/actionを無効にする
 //    $routes->fallbacks(DashedRoute::class);
 });
 

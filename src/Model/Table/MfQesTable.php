@@ -82,4 +82,11 @@ class MfQesTable extends Table
 
         return $validator;
     }
+    public function getTexts($conditions, $mass = 10, $offset = 1) : Query{
+	    return $this->find()
+		    ->select(['qesnum','question'])
+		    ->where($conditions)
+		    ->limit($mass)
+		    ->page($offset);
+    }
 }

@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property string $regnum
  * @property int $rejoinder
  * @property int $confidence
+ * @property int $correct_answer
  */
 class TfAn extends Entity
 {
