@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 // データの取得
-const $script = $("#script");
+const $script = $("#script")
 const $answer = JSON.parse($script.attr("answer"));
 
 function selectAnswer(select) {

@@ -47,7 +47,9 @@ class StudentController extends AppController
 		$this->loadModel('TfSum');
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
-		
+		//分野モデル読み込み
+		$this->loadModel('MfFie');
+
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
 		$session->write('userID', '13120023');
@@ -457,48 +459,32 @@ class StudentController extends AppController
 		return implode(".", $children);
 	}
 	
-	
-}
-    public function initialize()
-    {
-        //画像取得用のヘルパー
-        parent::initialize();
-        $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
-        $this->loadModel('MfQes');
-        $this->loadModel('MfExa');
-        $this->loadModel('MfFie');
-    }
+	//一問一答ジャンル選択画面
+	public function qaaSelectGenre()
+	{
+	}
 
-    public function index()
-    {
-    }
-
-    //一問一答ジャンル選択画面
-    public function qaaSelectGenre()
-    {
-    }
-
-    //一問一答出題画面
-    public function qaaQuestion()
-    {
-        //qaaSelectGenre 選択したジャンルの取得
-        $getGenre=$this->request->getData('genre');
-        //ctpに送る
-        $this->set('getGenre',$getGenre);
-        //ルートから番号の取得(回答した回数になる)
-        $qNum=$this->request->getParam('question_num');
-        $this->set('qNum',$qNum);
-        //指定したジャンルのクエリを取得する
-        $question = $this->MfQes->find()
-            ->contain(['MfExa','MfFie'])
-            ->WHERE(['MfQes.fienum IN' => $getGenre])
-            ->ORDER(['qesnum' => 'ASC'])
-            //何行飛ばすか
-            ->OFFSET($qNum)
-            //1行だけ出力する
-            ->first();
+	//一問一答出題画面
+	public function qaaQuestion()
+	{
+		//qaaSelectGenre 選択したジャンルの取得
+		$getGenre=$this->request->getData('genre');
+		//ctpに送る
+		$this->set('getGenre',$getGenre);
+		//ルートから番号の取得(回答した回数になる)
+		$qNum=$this->request->getParam('question_num');
+		$this->set('qNum',$qNum);
+		//指定したジャンルのクエリを取得する
+		$question = $this->MfQes->find()
+			->contain(['MfExa','MfFie'])
+			->WHERE(['MfQes.fienum IN' => $getGenre])
+			->ORDER(['qesnum' => 'ASC'])
+			//何行飛ばすか
+			->OFFSET($qNum)
+			//1行だけ出力する
+			->first();
 //        print_r($question);
-        //問題内容の表示
-        $this->set('question',$question);
-    }
+		//問題内容の表示
+		$this->set('question',$question);
+	}
 }
