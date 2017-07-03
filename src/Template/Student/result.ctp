@@ -23,30 +23,51 @@
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>
-
+<!-- jsセット -->
+<?php $this->start('script'); ?>
+<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+<!--canvasにグラフを設定するスクリプト-->
+<script id="graph-script"
+	<?php
+	echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/result.js"';
+	echo " user-name = \"{$username}さん\"";
+    echo " radar-user = " . json_safe_encode(array_values($userScore));
+	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
+	?>
+        defer>
+</script>
+<?php $this->end(); ?>
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
 <?php $this->end(); ?>
+
 <?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum)) || !(isset($average))):?>
     <br><br>
     <div class="alert alert-danger" role="alert">
         この模擬試験は実施されていません
     </div>
 <?php else:?>
-    <h3><?= $exaname?></h3>
-    <h4>平均点:<?= round($average,1) ?>点</h4>
-    
 	<?php if(empty($answers) || empty($correctRates)): ?>
         <div class="alert alert-warning" role="alert">
             まだ入力されていません
         </div>
 	<?php else:?>
-        <h4>合計点:<?= $score ?>点</h4>
-        <h4>順位:<?= $rank ?></h4>
+        <div class="col-md-7">
+        <h3><?= $exaname?></h3>
+        <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
+        <h4>合計点:<?= round($score * 1.25,1) ?>点</h4>
+        <h4>順位:<?= $rank  ?></h4>
 		<?php
 		$answersStr = ['未','ア','イ','ウ','エ'];
 		$confidenceStr = ['未','○','△','×'];
 		?>
+        </div>
+        <!--グラフを表示する要素-->
+        <div class="col-sm-12 col-md-5 display-chart">
+            <h4>ジャンルごとの正答率</h4>
+            <canvas id="radarChart" ></canvas>
+        </div>
+
         <table class="table table-bordered table-striped table-hover">
 			<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
             <tbody>
@@ -87,4 +108,9 @@
         </table>
 	<?php endif; ?>
 <?php endif; ?>
+<?php
+function json_safe_encode($data){
+	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+}
+?>
 <br><br><br><br>

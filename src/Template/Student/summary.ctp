@@ -26,11 +26,30 @@
 <!-- jsセット -->
 <?php $this->start('script'); ?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
+<!--canvasにグラフを設定するスクリプト-->
+<script id="check-script"
+	<?php
+    echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"';
+	echo " user-name = \"{$username}さん\"";
+	$dates = array_column($imiDetails,'date');
+	krsort($dates);
+	echo " line-dates = " . json_safe_encode( array_values($dates) );
+	$scores = array_column($imiDetails,'score');
+	krsort($scores);
+	echo " line-student-score = " . json_safe_encode( array_values($scores) );
+	$averages =  array_column($imiDetails,'avg');
+	krsort($averages);
+	echo " line-averages = " . json_safe_encode( array_values($averages) );
+	echo " radar-user = " . json_safe_encode(array_values($userAvg));
+	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
+	?>
+        defer>
+</script>
 <?php $this->end(); ?>
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."/student" ?>">トップページ</a></td></tr>
+<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."student" ?>">トップページ</a></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
@@ -76,25 +95,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
     <h4>ジャンルごとの正答率</h4>
     <canvas id="radarChart" ></canvas>
 </div>
-<!--canvasにグラフを設定するスクリプト-->
-<script id="check-script"
-    <?= ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"'?>
-    <?= " user-name = \"{$username}さん\""?>
-    <?php
-    $dates = array_column($imiDetails,'date');
-    krsort($dates);
-    echo " line-dates = " . json_safe_encode( array_values($dates) );
-    $scores = array_column($imiDetails,'score');
-    krsort($scores);
-    echo " line-student-score = " . json_safe_encode( array_values($scores) );
-    $averages =  array_column($imiDetails,'avg');
-    krsort($averages);
-    echo " line-averages = " . json_safe_encode( array_values($averages) );
-    ?>
-	<?= " radar-user = " . json_safe_encode(array_values($userAvg))?>
-	<?= " radar-averages = " . json_safe_encode( array_values($wholeAvg))?>
- defer>
-</script>
+
 <br><br>
 <div class="col-xs-12">
     <h4>模擬試験一覧</h4>
@@ -120,26 +121,34 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 	            <?php else:?>
                     <span class="label label-success">済</span>
                 <?php endif;?>
-	            <?= $this->Html->link($imi['name'],
-	                                  ['controller' => 'student',
-	                                   'action' => 'result',
+	            <?php
+                $titleArray = ['controller' => 'student',
 	                                   'id' => $userID,
-	                                   'imicode' => $imi['imicode']]);
+	                                   'imicode' => $imi['imicode']];
+                if ($imi['score'] === null) {
+                    $titleArray['action'] = 'input';
+                    $titleArray['linkNum'] = 1;
+                }else{
+                    $titleArray['action'] = 'result';
+                }
+                echo $this->Html->link($imi['name'],$titleArray);
 	            ?>
                 &nbsp;
-	            <?=
-	            $this->Html->link("[編集]",
-	                              ['controller' => 'student',
-	                               'action' => 'input',
-	                               'id' => $userID,
-	                               'imicode' => $imi['imicode']
-		                              ,'linkNum' => 1],
-	                              ['class' => 'text-muted']);
+	            <?php
+                if ($imi['score'] !== null) {
+	                echo $this->Html->link("[編集]",
+	                                  [ 'controller'  => 'student',
+	                                    'action'      => 'input',
+	                                    'id'          => $userID,
+	                                    'imicode'     => $imi[ 'imicode' ]
+		                                  , 'linkNum' => 1 ],
+	                                  [ 'class' => 'text-muted' ]);
+                }
 	            ?>
             </td>
-            <td data-label="平均" class="center col-sm-12 col-md-1"><?= $imi['avg']?></td>
-            <td data-label="点数" class="center col-sm-12 col-md-1"><?= ($imi['score'] !== null)?$imi['score']:"　"?></td>
-            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)?$imi['rank']:"　" ?> </td>
+            <td data-label="平均" class="center col-sm-12 col-md-1"><?= round($imi['avg'] * 1.25,1)?></td>
+            <td data-label="点数" class="center col-sm-12 col-md-1"><?= ($imi['score'] !== null)? round($imi['score'] * 1.25,1):"　"?></td>
+            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $imi['rank'] :"　" ?> </td>
            
             
         </tr>

@@ -50,7 +50,7 @@ class StudentController extends AppController
 		
 		//TODO:この行はセッションが実装されたら消す
 		$session = $this->request->session();
-		$session->write('userID', '15110027');
+		$session->write('userID', '13120023');
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$regnumFromSsn = $this->readSession(['userID']);
@@ -79,7 +79,8 @@ class StudentController extends AppController
 		
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
-			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) { return $q->where(['regnum' => $regnum] );}])
+			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) {
+				return $q->where(['regnum' => $regnum] );}])
 			->orderDesc('imicode')
 			->all();
 		
@@ -329,77 +330,91 @@ class StudentController extends AppController
 	}
 	
 	//各回の詳細な結果
-	public function result () {
+	public function result ()
+	{
 		//模擬試験コード
 		$imicode = $this->request->getParam('imicode');
 		//学籍番号
-		$regnum = $this->readSession(['userID']);
+		$regnum = $this->readSession([ 'userID' ]);
 		
-		$imiQesAns = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
+		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
-		if ($imiQesAns === null) {
+		if ( $imiQesAns === null ) {
 			$this->log("imicode is out of range");
 			return;
 		}
 		//本番試験コード
 		$exanum = $imiQesAns->exanum;
 		//試験名:$exaname
-		$this->set('exaname',$imiQesAns->_getName($this->TfImi));
+		$this->set('exaname', $imiQesAns->_getName($this->TfImi));
 		//年度:$year
-		$this->set('year',$imiQesAns['mf_exa']->jap_year);
+		$this->set('year', $imiQesAns[ 'mf_exa' ]->jap_year);
 		//季節:$season
-		$this->set('season',$imiQesAns['mf_exa']->exaname);
+		$this->set('season', $imiQesAns[ 'mf_exa' ]->exaname);
 		//同じ本番試験が模擬試験として実施された回数
-		$implNum = $this->TfImi->getImplNum($imicode,$exanum) + 1;
+		$implNum = $this->TfImi->getImplNum($imicode, $exanum) + 1;
 		$this->set(compact('implNum'));
 		//平均点:$average
 		$average = 0;
-		if (isset($imiQesAns) && $imiQesAns->imipepnum > 0) {
+		if ( isset($imiQesAns) && $imiQesAns->imipepnum > 0 ) {
 			$average = $imiQesAns->_getImiSum() / $imiQesAns->imipepnum;
 		}
 		$this->set(compact('average'));
+		//全体のジャンルごとの平均
+		$wholeAvg = [
+			round($imiQesAns['technology_imisum'] / $imiQesAns->imipepnum * 2,1),
+			round($imiQesAns['management_imisum'] / $imiQesAns->imipepnum * 10,1),
+			round($imiQesAns['strategy_imisum'] / $imiQesAns->imipepnum * 5,1)
+		];
+		$this->set(compact('wholeAvg'));
 		//問題:$questions
-		$this->set("questions",$imiQesAns['mf_exa']['mf_qes']);
+		$this->set("questions", $imiQesAns[ 'mf_exa' ][ 'mf_qes' ]);
 		//解答:$answers
 		$answers = $this->TfAns->find()
-			->where(['TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum] )->toArray();
+			->where([ 'TfAns.imicode' => $imicode, 'TfAns.regnum' => $regnum ])->toArray();
 		$this->set(compact('answers'));
 		//生徒の合計点:$score
 		$score = $this->TfSum->find()
-			->where(['TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode])
+			->where([ 'TfSum.regnum' => $regnum, 'TfSum.imicode' => $imicode ])
 			->first();
-		if (isset($score) && $score instanceof TfSum) {
+		//レーダーチャートに表示する、ユーザのジャンルごとの合計点:$userScore
+		$userScore = [ $score['technology_sum'] * 2, $score['management_sum'] * 10, $score['strategy_sum'] * 5];
+		$this->set(compact('userScore'));
+		if ( isset($score) && $score instanceof TfSum ) {
 			$score = $score->_getStudentSum();
-		}else{
+		} else {
 			$score = 0;
 		}
 		$this->set(compact('score'));
+
 		//順位:$rank
 		$rank = $this->TfSum->getRank($imicode, $score);
 		$this->set(compact('rank'));
 		//正答率:$correctRates
-		$getCorrectRates = function(int $imicode,int $imipepnum):array {
+		$getCorrectRates = function ( int $imicode, int $imipepnum ): array {
 			//誰も受験していないとき、空の配列を返す
-			if ($imipepnum == 0) return [];
+			if ( $imipepnum == 0 ) return [];
 			//問題ごとに何人正解したか
 			//ただし0は出ない
 			$correctRatesNonZero = $this->TfAns->find()->select([ 'subQesnum' => 'qesnum',
-				           'rate' => "count(*) / {$imipepnum}"])
-				->where([ 'rejoinder = correct_answer', 'imicode' => $imicode])
-				->group(['qesnum'])
+			                                                      'rate'      => "count(*) / {$imipepnum}" ])
+				->where([ 'rejoinder = correct_answer', 'imicode' => $imicode ])
+				->group([ 'qesnum' ])
 				->toArray();
 			$this->set(compact('correctRatesNonZero'));
 			//無い問題番号を0で埋める
 			$resultAndZero = array_fill(0, Q_TOTAL_NUM, 0);
-			foreach ($correctRatesNonZero as $rate) {
-				$resultAndZero[$rate['subQesnum'] - 1] = $rate['rate'];
+			foreach ( $correctRatesNonZero as $rate ) {
+				$resultAndZero[ $rate[ 'subQesnum' ] - 1 ] = $rate[ 'rate' ];
 			}
+			
 			return $resultAndZero;
 		};
-		$this->set('correctRates',$getCorrectRates($imicode,$imiQesAns['imipepnum']));
+		$this->set('correctRates', $getCorrectRates($imicode, $imiQesAns[ 'imipepnum' ]));
+		
 	}
-	
-	//入力されていないページ一覧を取得
+		
+		//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
 		$notAnsedPages = array_fill(0,MAX_PAGE_NUM,true);
 		//1-10,11-20などの範囲でどれか一問でも未入力のとき、
