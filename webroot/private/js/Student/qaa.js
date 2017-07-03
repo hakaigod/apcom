@@ -1,15 +1,15 @@
 /* jshint esversion: 6 */
 
 // データの取得
-const $script = $("#script")
+const $script = $("#script");
 const $answer = JSON.parse($script.attr("answer"));
 
 function selectAnswer(select) {
-    "use strict"
+    "use strict";
     if(select === $answer){
         document.getElementById("qaa-falsehood").innerHTML = "正解";
     } else {
-        var ans = "";
+            let ans = "";
         switch($answer){
             case 1:
                 ans = "ア";
