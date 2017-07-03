@@ -167,6 +167,7 @@ class StudentController extends AppController
 		$curNum = $this->request->getParam('linkNum');
 		//模擬試験コードから試験実施年度と季節,問題を取得
 		$imitation = $this->TfImi->getOneAndQes($imicode,Q_NUM_PER_PAGE,$curNum);
+
 		if (!isset($imitation) || !($imitation instanceof TfImi)) {
 			$this->log('failed to get an imitation entity');
 			return;
@@ -174,14 +175,18 @@ class StudentController extends AppController
 		$imiName = $imitation->_getName($this->TfImi);
 		//模擬試験名:$imiName
 		$this->set(compact('imiName'));
+
 		//現在のページ番号をセット:$curNum
 		$this->set(compact('curNum'));
 		//問題文セット:$questions
 		$this->set('questions',$imitation['mf_exa']['mf_qes']);
 		$inputtedLog['answers'] = array_fill(1, Q_TOTAL_NUM , null);
 		$inputtedLog['confidences'] = array_fill(1, Q_TOTAL_NUM , null);
+		
+		
 		//最初のアクセスのとき
 		if ( $this->readSession(['answers',$imicode]) === null ){
+			
 			//過去入力した選択肢、自信度をDBから読み込む
 			$answersFromDB = $this->TfAns->find()
 				->where([ 'imicode' => $imicode, 'regnum' => $this->readSession([ 'userID' ]) ])
@@ -205,14 +210,18 @@ class StudentController extends AppController
 				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
 				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
 			}
+			
 		}
+
 		$this->set(compact('inputtedLog'));
 		$notAnsedPages = $this->getNotAnsed($imicode);
 		//未解答のページ一覧:$notAnsedPages
 		$this->set(compact('notAnsedPages'));
+		
 		//1-7のページが解答されているか:$isAnsed
 		unset($notAnsedPages[ count($notAnsedPages) - 1 ]);
 		$this->set('isAnsed', $this->isAnsweredAll($notAnsedPages));
+
 	}
 	
 	private function writeAnsToSsn(ServerRequest $request){
@@ -224,10 +233,13 @@ class StudentController extends AppController
 			$this->log("imicode or befNum are not set");
 			return;
 		}
+		
 		//すでに書いたページ番号にtrueを設定
 		$this->writeSession(['inputtedPages',$befNum],true);
 		//遷移元ページの一番最初の問題番号
 		$iniQueBefNum = ( $befNum - 1 ) * Q_NUM_PER_PAGE + 1;
+
+		$validationFailed = false;
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
@@ -238,9 +250,12 @@ class StudentController extends AppController
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
 				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
 			}else{
-				$this->log("validation failed on " . $qNum);
+				$validationFailed = true;
 			}
 		}
+		
+		if ($validationFailed) $this->log("validation failed on " . $iniQueBefNum);
+		
 	}
 	//解答をDBに送信する
 	public function sendAll() {
