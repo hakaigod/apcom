@@ -52,19 +52,19 @@ managerrrrr
 
 <table class="table table-bordered table-hover table-striped" id="deplist">
 	<thead>
-		<td></td><td>学科番号</td><td>学科名</td><td>削除</td>
+		<td>学科番号</td><td>学科名</td><td>削除</td><td></td>
 	</thead>
 	<tbody>
 		<?php foreach ($deps as $dep): ?>
 			<tr>
+				<td class="col-xs-2"><?= $dep->depnum; ?></td>
+				<td class="col-xs-8"><?= $dep->depname; ?></td>
+				<td class="col-xs-1"><?= $dep->deleted_flg ? "済" : ""; ?></td>
 				<td class="col-xs-1 center">
 					<button class="btn btn-primary" onclick="window.open('moddep?id=<?= $dep->depnum; ?>','学科情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>
-				<td class="col-xs-2"><?= $dep->depnum; ?></td>
-				<td class="col-xs-3"><?= $dep->depname; ?></td>
-				<td class="col-xs-1"><?= $dep->deleted_flg ? "済" : ""; ?></td>
 			</tr>
 		<?php  endforeach;?>
 	</tbody>

@@ -52,19 +52,19 @@ managerrrrr
 
 <table class="table table-bordered table-hover table-striped" id="strlist">
 	<thead>
-		<td></td><td>管理者連番</td><td>名前</td><td>削除</td>
+		<td>管理者連番</td><td>名前</td><td>削除</td><td></td>
 	</thead>
 	<tbody>
 		<?php foreach ($admins as $admin): ?>
 			<tr>
+				<td class="col-xs-2"><?= $admin->admnum; ?></td>
+				<td class="col-xs-8"><?= $admin->admname; ?></td>
+				<td class="col-xs-1"><?= $admin->deleted_flg ? "済" : ""; ?></td>
 				<td class="col-xs-1 center">
 					<button class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>
-				<td class="col-xs-2"><?= $admin->admnum; ?></td>
-				<td class="col-xs-7"><?= $admin->admname; ?></td>
-				<td class="col-xs-2"><?= $admin->deleted_flg ? "済" : ""; ?></td>
 			</tr>
 		<?php  endforeach;?>
 	</tbody>
