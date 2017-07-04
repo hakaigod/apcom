@@ -2,10 +2,6 @@
 <?= $this->start('title'); ?>
 管理者管理
 <?= $this->end(); ?>
-<!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-managerrrrr
-<?= $this->end(); ?>
 
 <?= $this->start('css'); ?>
 	<?= $this->Html->css('/private/css/Manager/adminmanager.css') ?>

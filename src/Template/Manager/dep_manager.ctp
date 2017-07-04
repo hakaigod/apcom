@@ -2,10 +2,6 @@
 <?= $this->start('title'); ?>
 学科管理
 <?= $this->end(); ?>
-<!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-managerrrrr
-<?= $this->end(); ?>
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>

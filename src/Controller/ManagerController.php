@@ -6,7 +6,7 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 
-// use Cake\ORM\TableRegistry;
+
 use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
 use \SplFileObject;
@@ -27,9 +27,20 @@ class ManagerController extends AppController
 		$this->loadmodel('MfExa');
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
-		
+
 		//TODO:正しいユーザー名に変える
-		$this->set("username","てすとさん");
+
+		$session = $this->request->session();
+		// セッション情報取得
+		if (!empty($session->read('username'))) {
+			if ($session->read('role') == 'student') {
+				$this->redirect(['controller' => 'student', 'action' => 'summary','id' => $session->read('userID')]);
+			} else {
+				$this->set("username", $session->read('username'));
+			}
+		} else {
+			$this->redirect(['controller' => 'Login', 'action' => 'index']);
+		}
 	}
 	// ページネーター
 	public $paginate = [
