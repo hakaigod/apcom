@@ -12,6 +12,11 @@
 
 ?>
 
+<!-- タイトルセット -->
+<?php $this->start('title'); ?>
+応用情報ど.com  -入力データ送信
+<?php $this->end(); ?>
+
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>

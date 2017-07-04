@@ -34,7 +34,6 @@ class StudentController extends AppController
 	
 	public function initialize(){
 		parent::initialize();
-		$this->set('headerlink', $this->request->webroot . 'Manager');
 		
 		//回答テーブル
 		$this->loadModel('TfAns');
@@ -53,6 +52,9 @@ class StudentController extends AppController
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
 		
+		$this->writeSession(['userID'], "13120023");
+		$this->writeSession(['username'], "おでん");
+		$this->writeSession(['role'], "student");
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
@@ -75,8 +77,10 @@ class StudentController extends AppController
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
 			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
+			$this->set('headerlink', $this->request->getAttribute("webroot") . 'manager');
 		}else{
 			$this->set("studentName", $username);
+			$this->set('headerlink', $this->request->getAttribute("webroot") . 'student/' . $idFromSsn);
 		}
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);

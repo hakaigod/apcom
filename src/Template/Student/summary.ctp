@@ -14,7 +14,7 @@
 
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-学生メニュー
+応用情報ど.com  -メニュー
 <?php $this->end(); ?>
 
 <!-- CSSセット -->
@@ -49,7 +49,9 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."student" ?>">トップページ</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',["action" => "summary", "id" => $userID])?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
@@ -104,7 +106,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 
 <br><br>
 <div class="col-xs-12">
-    <h4>模擬試験一覧</h4>
+    <h4>模試の一覧</h4>
 </div>
 <table id="summary-table" class="table table-bordered table-striped table-hover">
     <thead>
