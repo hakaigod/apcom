@@ -10,7 +10,6 @@ use Cake\View\Exception\MissingTemplateException;
 use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
 use \SplFileObject;
-use App\Utils\ImageGeneratorUtility;
 
 class ManagerController extends AppController
 {
@@ -28,6 +27,9 @@ class ManagerController extends AppController
 		$this->loadmodel('MfExa');
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
+		
+		//TODO:正しいユーザー名に変える
+		$this->set("username","てすとさん");
 	}
 	// ページネーター
 	public $paginate = [
@@ -154,9 +156,9 @@ class ManagerController extends AppController
 
 		// タイトルセット
 		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
-			$this->set('detaiExamName', '直近一回分');
+			$this->set('detailExamName', '直近一回分');
 		} else {
-			$this->set('detaiExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
+			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
 	}
 

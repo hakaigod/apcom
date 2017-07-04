@@ -1,9 +1,7 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\TfSum;
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
