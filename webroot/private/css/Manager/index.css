@@ -1,53 +1,84 @@
-#col-main * {
-	/*border: solid 1px black;*/
+/*結果表示部分*/
+#AMresult table thead tr #name {
+	max-width: 20%;
 }
-@media (min-width: 300px) {
-	#questions {
-		display: none;
-	}
-	#AMresult{
-		width: 100%;
-	}
+#AMresult table thead tr .stusum {
+	max-width: 10%;
 }
-@media (min-width: 1000px) {
-	#AMresult{
-		width: calc(100% / 12 * 5);
-	}
-	#questions {
-		display: block;
-		width: calc(100% / 12 * 7);
-		padding-left: 0;
-		overflow-x: scroll;
-	}
-	#questions table thead tr td{
-		/*min-width: 60px;*/
-		height: 30px;
-	}
-}
-#filter {
-	margin-top: 10px;
-}
-
-#AMresult{
-	padding-right: 0;
+#AMresult table thead tr #ques {
+	min-width: 7%;
+	text-align: center;
 }
 #AMresult table thead tr td{
 	height: 30px;
 }
-#AMresulttitle {
-	margin-top: 50px;
+/*自動読み込みボタン*/
+#answershead div div {
+	margin-top: -5px;
 }
+/*結果表示部分*/
 
-.select {
-	min-width: 0;
+/*ページネーション*/
+.pagination-plain * {
+	font-size: 20px;
 }
+.pagination-plain {
+	margin: 0 0 0px;
+}
+.pagination-plain > li.next {
+	padding-left: 10px;
+}
+.pagination-plain > li.prev {
+	padding-right: 10px;
+}
+/*ページネーション*/
 
-.oooo {
-	font-size: 100px;
+/*正答率*/
+.parnum {
+	font-size: 200%;
 }
-.font {
-	font-size: 45px;
+.par {
+	font-size: 25px;
+	margin: -20px 0 -20px 0;
 }
 .qno {
-	font-size: 30px;
+	font-size: 130%;
 }
+
+/*正答率枠線*/
+#q0, #q1, #q2, #q3, #q4, #q5, #q6, #q7, #q8, #q9 {
+	border-top: solid 1px #ddd;
+	border-left: solid 1px #ddd;
+}
+#q5, #q6, #q7, #q8, #q9 {
+	border-bottom: solid 1px #ddd;
+}
+#q4, #q9{
+	border-right: solid 1px #ddd;
+}
+/*正答率枠線*/
+.col-par-5 {
+	position:relative;
+	min-height:1px;
+	padding-right:15px;
+	padding-left:15px;
+	float:left;
+	width: 20%;
+}
+.col-par-5 #question {
+	height: 90px;
+	font-size: 15px;
+}
+/*正答率*/
+
+/*過去試験一覧*/
+#examdata {
+	margin-top: 40px;
+}
+/*過去試験一覧*/
+
+/*その他*/
+* {
+	font-weight: 500;
+}
+/*その他*/

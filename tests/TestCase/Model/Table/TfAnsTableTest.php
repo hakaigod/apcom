@@ -24,7 +24,9 @@ class TfAnsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.tf_ans'
+        'app.tf_ans',
+        'app.mf_stu',
+        'app.mf_dep'
     ];
 
     /**

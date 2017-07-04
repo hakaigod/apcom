@@ -3,7 +3,15 @@
 	display: none;
 }
 
-@media (min-width: 300px) {
+#sidebar {
+	width: calc(100% / 12 * 2);
+	height: auto;
+	background-color: transparent;
+}
+#sidebar div table tr td a {
+	padding: 10px 0 10px 10px;
+}
+@media (max-width: 900px) {
 	#sidebar {
 		width: 100vw;
 		height: auto;
@@ -16,21 +24,8 @@
 		margin: 0;
 	}
 }
-@media (min-width: 1000px) {
-	#sidebar {
-		width: calc(100% / 12 * 2);
-		height: auto;
-		background-color: transparent;
-	}
-	#sidebar div table tr td a {
-		padding: 10px 0 10px 10px;
-	}
-}
-
-#sidebar div *{
-
-}
 #sidebar div table tr td a {
+	cursor:pointer;
 	display: block;
 }
 #list {
@@ -68,6 +63,9 @@
 .center{
 	text-align: center;
 }
+.right {
+	text-align: right;
+}
 .full {
 	width: 100%;
 }
@@ -79,8 +77,66 @@
 	padding-top: 53px;
 }
 
+#reloadbutton {
+	margin-top: 10px;
+}
+
+a {
+	cursor: pointer;
+}
+/*その他*/
+
 body {
-	/*font-size: 100%;*/
 	background-color: #fdf9f9;
 	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+}
+
+/*flash用CSS*/
+div.message {
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    font-weight: normal;
+    padding: 0 1.5rem 0 1.5rem;
+    transition: height 300ms ease-out 0s;
+    background-color: #a0d3e8;
+    color: #626262;
+    top: 15px;
+    right: 15px;
+    z-index: 999;
+    overflow: hidden;
+    height: 50px;
+    line-height: 2.5em;
+    box-radius: 5px;
+}
+
+div.message:before {
+    line-height: 0px;
+    font-size: 20px;
+    height: 12px;
+    width: 12px;
+    border-radius: 15px;
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    position: relative;
+    left: -11px;
+    background-color: #FFF;
+    padding: 12px 14px 12px 10px;
+    content: "i";
+    color: #a0d3e8;
+}
+
+div.message.error {
+    background-color: #C3232D;
+    color: #FFF;
+}
+
+div.message.error:before {
+    padding: 11px 16px 14px 7px;
+    color: #C3232D;
+    content: "x";
+}
+div.message.hidden {
+    height: 0;
 }

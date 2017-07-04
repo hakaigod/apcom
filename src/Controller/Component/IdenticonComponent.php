@@ -25,7 +25,7 @@ const SAT = 121;
 const VAL = 200;
 class IdenticonComponent extends Component
 {
-	
+
 	/**
 	 * Default configuration.
 	 *

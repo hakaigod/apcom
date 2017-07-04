@@ -49,7 +49,7 @@ class TfAnsFixture extends TestFixture
         [
             'imicode' => 1,
             'qesnum' => 1,
-            'regnum' => '12d5a5a1-ab41-4f14-a5e2-5c490893cdef',
+            'regnum' => 'd0600ef2-35c5-4e38-9826-a3350b0fd50a',
             'rejoinder' => 1,
             'confidence' => 1,
             'correct_answer' => 1
