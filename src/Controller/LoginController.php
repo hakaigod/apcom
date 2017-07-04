@@ -8,6 +8,8 @@ class LoginController extends AppController
 {
 	public function initialize(){
 		parent::initialize();
+//		$this->set('headerlink', $this->request->webroot . 'Manager');
+//		$this->set("username","うんこ");
 		$this->viewBuilder()->layout('login');
 //require 'password.php';   // password_verfy()はphp 5.5.0以降の関数のため、バージョンが古くて使えない場合に使用
 // セッション開始
@@ -47,7 +49,8 @@ class LoginController extends AppController
 
                     // 2. ユーザIDとパスワードが入力されていたら認証する
                     $dsn = sprintf('mysql:dbname=%s;  host=%s;  charset=utf8',$db['dbname'] , $db['host']);
-
+	
+                    $sql = null;
                     // 3. エラー処理
                     try {
                         $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
@@ -70,7 +73,7 @@ class LoginController extends AppController
                                     $row['admnum'];  // ユーザー名
                                 }
                                 $_SESSION["username"] = $row['admname'];
-                                $_SESSION["role"] = "管理者";
+                                $_SESSION["role"] = "manager";
                                 $_SESSION["userID"] = $row['admnum'];
                                 $this->redirect([ 'controller' => 'Manager','action' => 'index']);
 
@@ -85,7 +88,7 @@ class LoginController extends AppController
                             $errorMessage = '管理者番号あるいはパスワードに誤りがあります。';
                             $this->set('errorMessage', $errorMessage);
                         }
-                    } catch (PDOException $e) {
+                    } catch (\PDOException $e) {
                         //$errorMessage = 'データベースエラー';
                         echo $errorMessage;
                         $errorMessage = $sql;
@@ -102,7 +105,7 @@ class LoginController extends AppController
                     $regnum = $_POST["regnum"];
                     // 2. ユーザIDとパスワードが入力されていたら認証する
                     $dsn = sprintf('mysql:dbname=%s;  host=%s;  charset=utf8', $db['dbname'], $db['host']);
-
+					$sql = null;
                     // 3. エラー処理
                     try {
                         $pdo = new PDO($dsn, $db['user'], $db['pass'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -126,9 +129,9 @@ class LoginController extends AppController
                                 }
 
                                 $_SESSION["username"] = $row['stuname'];
-                                $_SESSION["role"] = "学生";
+                                $_SESSION["role"] = "student";
                                 $_SESSION["userID"] = $row['regnum'];
-                                $this->redirect([ 'controller' => 'Student','action' => 'summary']);
+                                $this->redirect([ 'controller' => 'Student','action' => 'summary','id' => $row['regnum']]);
                             } else {
                                 // 認証失敗
                                 $errorMessage = '学籍番号あるいはパスワードに誤りがあります。';
@@ -140,7 +143,7 @@ class LoginController extends AppController
                             $errorMessage = '学籍番号あるいはパスワードに誤りがあります。';
                             $this->set('errorMessage', $errorMessage);
                         }
-                    } catch (PDOException $exception) {
+                    } catch (\PDOException $exception) {
                         //$errorMessage = 'データベースエラー';
                         echo $errorMessage;
                         $errorMessage = $sql;

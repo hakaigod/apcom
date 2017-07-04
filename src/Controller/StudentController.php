@@ -51,9 +51,7 @@ class StudentController extends AppController
 		//試験モデル読み込み
 		$this->loadModel('MfExa');
 		
-		//TODO:この行はセッションが実装されたら消す
-		$session = $this->request->session();
-		$session->write('userID', '15110027');
+		
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$regnumFromSsn = $this->readSession(['userID']);
