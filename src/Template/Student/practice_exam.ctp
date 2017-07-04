@@ -106,7 +106,8 @@ managerrrrr
 				<tr>
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect"  value="2">イ
+							<input type = "radio"  id="aa"  name="ansSelect"  value="2"
+								<?php echo ($sesAns==2) ? ' checked' : ''; ?>>イ
 						</label>
 					</td>
 					<td id="choice">
@@ -119,7 +120,8 @@ managerrrrr
 					
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect" value="3">ウ
+							<input type = "radio"  id="aa"  name="ansSelect" value="3"
+								<?php echo ($sesAns==3) ? ' checked' : ''; ?>>ウ
 						</label>
 					</td>
 					<td id="choice">
@@ -132,7 +134,8 @@ managerrrrr
 				<tr>
 					<td id="button">
 						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect" value="4">エ
+							<input type = "radio"  id="aa"  name="ansSelect" value="4"
+								<?php echo ($sesAns==4) ? ' checked' : ''; ?>>エ
 						</label>
 					</td>
 					<td id="choice">
@@ -177,9 +180,10 @@ managerrrrr
 						 $this->Form->button("解答を終了する" ,
 							 [
 								 'class' => 'btn btn-info',
-								 'formaction' =>  '../../score',
-								 'type' => 'submit',
-								 'value' => '' ]
+								 'formaction' =>  '../../score', $exams->exanum,
+								 'type' => 'submit'
+//								 'value' => ''
+					]
 						 );
 					?>
 				</div>

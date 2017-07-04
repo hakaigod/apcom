@@ -1,7 +1,6 @@
 <?php
 /**
  * @var \App\Model\Entity\MfExa $exams
- * @var \App\Model\Entity\MfQe $qes
  */
 ?>
 
@@ -40,6 +39,39 @@ managerrrrr
 <?php $this->end(); ?>
 
 
-
-
 <!-- 以下content -->
+
+<!--header-->
+<div class = "row">
+	<div class = "col-md-12">
+		<div class = col-md-12>
+			<br/>
+			<div id = "exam-title">
+				<?= "平成".$exams->jap_year . "年度 ". $exams->exaname ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

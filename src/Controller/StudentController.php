@@ -21,7 +21,7 @@ class StudentController extends AppController
     {
         parent::initialize();
         $this->set('headerlink', $this->request->getAttribute('webroot') . 'Student');
-	    $session = $this->request->session();
+//	    $session = $this->request->session();
     }
 
     public function index()
@@ -39,7 +39,7 @@ class StudentController extends AppController
         //このコントローラからTfImiモデルを扱うためにloadModelする
         $this->loadModel('TfImi');
         $imitations=$this->TfImi->find()->toArray();
-
+		
         //本番試験番号がキー、その平均点がバリューの要素を追加していく
         $averages=[];
         //本番1つにつき、授業模擬はゼロから複数回実施されているので、
@@ -75,7 +75,6 @@ class StudentController extends AppController
     //このexanumの宣言はconfig/routes.phpの$routes->connect('/student/practiceExam/:exanum'にある
     public function practiceExam($exanum = null,$qesnum=null)
     {
-	    
 	    $this->set(compact('exanum'));
 	    
 	    //このコントローラからMfExaモデルを扱うためにloadModelする
@@ -87,8 +86,7 @@ class StudentController extends AppController
 		    //配列として返されるので単数として受け取る
 		    ->first();
 	    $this->set(compact('exams'));
-	
-	
+	    
 	    //このコントローラからMfQesモデルを扱うためにloadModelする
 	    $this->loadModel('MfQes');
 	    $qes = $this->MfQes->find()
@@ -97,8 +95,8 @@ class StudentController extends AppController
 	    $this->set(compact('qes'));
 	    
 		//posAnsを呼び出せるようにする
-		$this->posAns();
-//	    $this->posAns($qes->$qesnum,$qes->$exanum);
+//		$this->posAns();
+	    $this->posAns($qes->$qesnum,$qes->$exanum);
 	    
 //	    if (isset($_POST['ansSelect']) == true) {
 //	    }
@@ -106,35 +104,50 @@ class StudentController extends AppController
     
 	
     // 年度と問題番号の紐づけを行う
-	public function posAns(){
+	public function posAns($qesnum,$exanum){
 //    	$this->practiceExam($exanum);
-  
 		
 		//$ansSelectを呼び出せるようにする
-		
 		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('ansSelect'));
 		//POSTで送られたデータをセッションに書き込む
-		$this->writeSession(['answers'],$ansSelect);
-//		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
+//		$this->writeSession(['answers'],$ansSelect);
+		
+		//この書き方をすると階層構造 answer->exaN->qesN->ansS となる
+		$this->writeSession(['answers.ansS'],$ansSelect);
+//		$this->writeSession(['answers.exaN.qesN.ansS'],$exanum,$qesnum,$ansSelect);
 		
 		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
 		//$sesAnsを呼び出せるようにする
-		$sesAns=$this->readSession(['answers']);
-		$this->set(compact('sesAns'));
 		
+		$sesAns=$this->readSession(['answers.ansS']);
+		$this->set(compact('sesAns'));
 	}
 	
 	
-	public function score()
-	    {
-	    }
-    
+	public function score($exanum=null){
+		
+		$this->set(compact('exanum'));
+		
+		//このコントローラからMfExaモデルを扱うためにloadModelする
+		$this->loadModel('MfExa');
+		//実施された本番一覧を取得
+		$exams = $this->MfExa->find()
+			//テーブル内のexanumから抽出する
+			->where(['MfExa.exanum' => $exanum])
+			//配列として返されるので単数として受け取る
+			->first();
+		$this->set(compact('exams'));
+		
+	}
+ 
+	
 	    
 	//セッションから値を読み込む
 	//引数は値の場所の配列
     private function readSession(array $tagArray){
     	$session=$this->request->session();
+//	    return $session->read(($tagArray),$data);
     	return $session->read($this->getSsnTag($tagArray));
     }
     
@@ -142,7 +155,9 @@ class StudentController extends AppController
 	//引数は値の場所の配列と書き込むデータ
 	private function writeSession(array  $tagArray,$data){
     	$session=$this->request->session();
-    	$session->write($this->getSsnTag($tagArray),$data);
+//    	$session->write(($tagArray),$data);
+		$session->write($this->getSsnTag($tagArray),$data);
+	
 	}
 	
 	//配列からセッションの場所(文字列)を生成

@@ -50,13 +50,20 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
-
+	
 	$routes->connect('/student/practiceExam/:exanum/:qesnum',
         ['controller' => 'Student', 'action' => 'practiceExam'],
         ['exanum' => '\d{1-3}','qesnum'=>'\d{1-2}']
     );
-
-    /**
+	
+	$routes->connect('/student/score/:exanum',
+		['controller' => 'Student', 'action' => 'score'],
+		['exanum' => '\d{1-3}']
+	);
+	
+	
+	
+	/**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
 
