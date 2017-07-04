@@ -7,9 +7,6 @@ $(function() {
         if($('#genre-1:checked').val() !== '1' && $('#genre-2:checked').val() !== '2' && $('#genre-3:checked').val() !== '3') {
             // 警告を出す
             window.alert('ジャンルを選択してください。');
-            // window.console.log($('#genre-1:checked').val());
-            // window.console.log($('#genre-2:checked').val());
-            // window.console.log($('#genre-3:checked').val());
             // 処理を中断
             return false;
         }
