@@ -3,6 +3,8 @@
  * 問題とページ番号　新しい問題に遷移する度インクリメント
  * @var Integer $qNum
  * @var array $getGenre
+ * モーダルに表示するデータを保存するためのセッション
+ * @var $session
  */
 ?>
 
@@ -25,7 +27,7 @@
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
 <script id="script" src="<?= $this->request->getAttribute('webroot')?>/private/js/Student/qaa.js"
-    answer=<?= json_safe_encode($question->answer)?>
+        answer=<?= json_safe_encode($question->answer)?>
 ></script>
 <?= $this->end();?>
 
@@ -60,7 +62,12 @@ Student
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title">一問一答  現在の成績</h4>
                             </div>
-                            <div class="modal-body">Modal内容</div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+
+
+                                </div>
+                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
                             </div>
@@ -75,7 +82,7 @@ Student
         <div class="row">
             <div class="col-md-12">
                 <div class="source">
-                    出典：<?= $question->mf_exa['exaname']?>期&emsp;<?= $question->mf_exa['exa_year']?>
+                    出典：<?= $question->mf_exa->exam_detail . " 問" . $question->qesnum?>
                 </div>
             </div>
         </div>
@@ -114,42 +121,42 @@ Student
     </div>
     <!--選択肢ある場合-->
     <?php if(!empty($question->choice1)):?>
-    <!--選択肢-->
-    <table class="qaa_select_table table-bordered col-md-12">
-        <tr class="select_tr" >
-            <td class="col-md-1">
-                <input type="button" class="choice btn btn-embossed btn-primary full" value="ア" onclick="selectAnswer(1)">
-            </td>
-            <td class="col-md-11">
-                <?= $this->qaa->viewTextImg($question->choice1)?>
-            </td>
-        </tr>
-        <tr>
-            <td class="col-md-1">
-                <input type="button" class="choice btn btn-embossed btn-primary full" value="イ" onclick="selectAnswer(2)">
-            </td>
-            <td class="col-md-11">
-                <?= $this->qaa->viewTextImg($question->choice2)?>
-            </td>
-        </tr>
-        <tr>
-            <td class="col-md-1">
-                <input type="button" class="choice btn btn-embossed btn-primary full" value="ウ" onclick="selectAnswer(3)">
-            </td>
-            <td class="col-md-11">
-                <?= $this->qaa->viewTextImg($question->choice3)?>
-            </td>
-        </tr>
-        <tr>
-            <td class="col-md-1">
-                <input type="button" class="choice btn btn-embossed btn-primary full" value="エ" onclick="selectAnswer(4)">
-            </td>
-            <td class="col-md-11">
-                <?= $this->qaa->viewTextImg($question->choice4)?>
-            </td>
-        </tr>
-    </table>
-    <!--選択肢がない場合は該当する画像があるのでそれを取ってきて文字なしのチェックボックスを拾ってくる-->
+        <!--選択肢-->
+        <table class="qaa_select_table table-bordered col-md-12">
+            <tr class="select_tr" >
+                <td class="col-md-1">
+                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='1'?>ア>
+                </td>
+                <td class="col-md-11">
+                    <?= $this->qaa->viewTextImg($question->choice1)?>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-1">
+                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='2'?>イ>
+                </td>
+                <td class="col-md-11">
+                    <?= $this->qaa->viewTextImg($question->choice2)?>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-1">
+                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='3'?>ウ>
+                </td>
+                <td class="col-md-11">
+                    <?= $this->qaa->viewTextImg($question->choice3)?>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-1">
+                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='4'?>エ>
+                </td>
+                <td class="col-md-11">
+                    <?= $this->qaa->viewTextImg($question->choice4)?>
+                </td>
+            </tr>
+        </table>
+        <!--選択肢がない場合は該当する画像があるのでそれを取ってきて文字なしのチェックボックスを拾ってくる-->
     <?php else:?>
         <!--画像無し選択肢-->
         <!-- 画像表示 -->
@@ -160,10 +167,10 @@ Student
         </div>
         <div class="row">
             <div class="select-answer">
-                <input type="submit" class="btn btn-embossed btn-primary" value="1" >
-                <input type="submit" class="btn btn-embossed btn-primary" value="2" >
-                <input type="submit" class="btn btn-embossed btn-primary" value="3" >
-                <input type="submit" class="btn btn-embossed btn-primary" value="4" >
+                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='1'?>ア >
+                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='2'?>イ >
+                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='3'?>ウ >
+                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='4'?>エ >
             </div>
         </div>
     <?php endif;?>
@@ -173,7 +180,27 @@ Student
             <div class="qaa-next">
                 <form action="" method="post">
                     <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
-                    <input type="hidden" name="genre[0]" value="<?= $getGenre[0]?>" >
+                    <input type="hidden" name="genre[0]" value="<?= $getGenre[0]?>">
+                    <!--セッションへの保存-->
+                    <input type="hidden" name="answerLog" value="
+                    <?php
+                    //falsehoodに正誤又は未回答の結果を入力
+                    if($question->answer == $select){
+                        $falsehood = "O";
+                    }else if($select == ""){
+                        $falsehood = "-";
+                    }else {
+                        $falsehood = "X";
+                    }
+                    $answerLog[$qNum]=
+                    [
+                        'qnum'=>$qNum,
+                        'detail'=> $question->mf_exa->exam_detail,
+                        'field'=>$question->mf_fie->fiename,
+                        'falsehood'=>$falsehood,
+                    ];
+                    debug($answerLog);
+                    ?>">
                 </form>
             </div>
         </div>

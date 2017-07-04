@@ -1,3 +1,7 @@
+.exam-title{
+	font-size: 50px;
+	border-bottom: 1px solid #148d75;
+}
 @media screen and (max-width: 991px) {
 	#summary-table {
 		border: none;

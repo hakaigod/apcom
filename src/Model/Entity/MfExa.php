@@ -33,6 +33,6 @@ class MfExa extends Entity
 		return $this->get('exa_year')->format('Y');
 	}
 	public function _getExamDetail () {
-		return "平成 " . $this->jap_year . "年 " . $this->exaname;
+		return "平成 " . $this->jap_year . "年 " . $this->exaname . "期";
 	}
 }
