@@ -2,7 +2,11 @@
 /**
  *
  * @var \App\View\AppView $this
+ * @var string $userID
  * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * 試験名
  * @var string $exaname
  * 問題文、正答
@@ -21,7 +25,8 @@
  * @var array $userScore
  * 全体のジャンルごと平均
  * @var array $wholeAvg
- *
+ * ヒストグラムの分布図の百分率の配列
+ * @var array $barNumbers
  */
 ?>
 

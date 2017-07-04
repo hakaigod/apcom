@@ -11,6 +11,7 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\Query;
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
@@ -76,7 +77,7 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
-			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
+			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()[0]->stuname);
 			$this->set('headerlink', $this->request->getAttribute("webroot") . 'manager');
 		}else{
 			$this->set("studentName", $username);
@@ -99,7 +100,7 @@ class StudentController extends AppController
 		
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
-			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) {
+			->contain([ 'MfExa','TfSum' => function(Query $q) use ($regnum) {
 				return $q->where(['regnum' => $regnum] );}])
 			->orderDesc('imicode')
 			->all();
@@ -220,8 +221,8 @@ class StudentController extends AppController
 			$iniQueAfNum = ( $curNum - 1 ) * Q_NUM_PER_PAGE + 1;
 			$inputtedLog = [];
 			for ( $qNum = $iniQueAfNum; $qNum < $iniQueAfNum + Q_NUM_PER_PAGE; $qNum++ ) {
-				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
-				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
+				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
+				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
 			}
 		}
 		$this->set(compact('inputtedLog'));
@@ -250,11 +251,15 @@ class StudentController extends AppController
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
-			$confidence = h($this->request->getData("confidence_{$qNum}"));
 			//値のチェック
-			if ( 0 <= $answer && $answer <= 4 && 1 <= $confidence && $confidence <= 3) {
+			if ( ctype_digit($answer) && 0 <= $answer && $answer <= 4) {
 				//解答と自信度をセッションに書き込む
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
+			}else{
+				$validationFailed = true;
+			}
+			$confidence = h($this->request->getData("confidence_{$qNum}"));
+			if(ctype_digit($confidence) && 1 <= $confidence && $confidence <= 3) {
 				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
 			}else{
 				$validationFailed = true;

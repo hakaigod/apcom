@@ -6,6 +6,10 @@
  * 模擬試験コード
  * @var int $imicode
  * @var string $userID
+ * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * 模擬試験名
  * @var string $imiName
  * 現在表示しているページ番号 currentNum

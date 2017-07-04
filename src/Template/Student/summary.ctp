@@ -4,6 +4,9 @@
  * @var \App\View\AppView $this
  * @var string $userID
  * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * //name,date,avg,score,rankのキーをもつ
  * @var array $imiDetails
  * //tech,man,strのキーをもつ
@@ -59,7 +62,7 @@
 <?php
 //score列にnullを含む場合
 //3番目のtrueは型を比較するか(==か===かの違い)
-if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
+if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' ):?>
 <div class="panel panel-danger ">
     <div class="panel-heading">
         まだ入力されていない模擬試験があります
@@ -76,20 +79,18 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                     <strong><u>
 			                <?php
                             $imiTitle ="{$imi['date']} {$imi['name']}";
-                            if ($role == 'manager') {
-                                echo $imiTitle;
-                            }else {
-	                            echo $this->Html->link(
-		                            $imiTitle,
-		                            [ 'controller' => 'student',
-		                              'action'     => 'input',
-		                              'id'         => $userID,
-		                              'imicode'    => $imi[ 'imicode' ],
-		                              'linkNum'    => 1
-		                            ],
-		                            [ 'class' => 'text-danger ' ]
-	                            );
-                            }?>
+			
+			                echo $this->Html->link(
+				                $imiTitle,
+				                [ 'controller' => 'student',
+				                  'action'     => 'input',
+				                  'id'         => $userID,
+				                  'imicode'    => $imi[ 'imicode' ],
+				                  'linkNum'    => 1
+				                ],
+				                [ 'class' => 'text-danger ' ]
+			                );
+			                ?>
                         </u></strong>
                 </li>
 		    <?php endif;?>
