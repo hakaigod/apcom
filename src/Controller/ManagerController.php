@@ -28,8 +28,6 @@ class ManagerController extends AppController
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
 
-		//TODO:正しいユーザー名に変える
-
 		$session = $this->request->session();
 		// セッション情報取得
 		if (!empty($session->read('username'))) {

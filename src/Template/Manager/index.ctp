@@ -55,7 +55,7 @@ managerrrrr
             <tbody>
 			<?php foreach ($answers as $answer => $value): ?>
                 <tr>
-                    <td><?= $value['stuname']?></td>
+                    <td><a href="<?= $this->request->webroot . 'student/' . $value['regnum']?>" target="_blank"><?= $value['stuname']?></a></td>
                     <td><?= number_format($value['imisum'] * 1.25, 2) . '点'; ?></td>
 					<?php foreach ($value['answers'] as $ans): ?>
                         <td class="center"><?= $ans; ?></td>
