@@ -35,7 +35,7 @@
 <script id="graph-script"
 	<?php
 	echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/result.js"';
-	echo " user-name = \"{$username}さん\"";
+	echo " user-name = \"{$studentName}さん\"";
     echo " radar-user = " . json_safe_encode(array_values($userScore));
 	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
 	echo " bar-numbers = " . json_safe_encode(array_values($barNumbers));

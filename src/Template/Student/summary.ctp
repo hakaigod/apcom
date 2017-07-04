@@ -30,7 +30,7 @@
 <script id="check-script"
 	<?php
     echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"';
-	echo " user-name = \"{$username}さん\"";
+	echo " user-name = \"{$studentName}さん\"";
 	$dates = array_column($imiDetails,'date');
 	krsort($dates);
 	echo " line-dates = " . json_safe_encode( array_values($dates) );
@@ -67,16 +67,22 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
             <?php if($imi['score'] === null):?>
                 <li class="text-danger">
                     <strong><u>
-			                <?= $this->Html->link(
-				                "{$imi['date']} {$imi['name']}",
-				                ['controller' => 'student',
-				                 'action' => 'input',
-				                 'id' => $userID,
-				                 'imicode' => $imi['imicode'],
-				                 'linkNum' => 1
-				                ],
-				                ['class' => 'text-danger ']
-			                ); ?>
+			                <?php
+                            $imiTitle ="{$imi['date']} {$imi['name']}";
+                            if ($role == 'manager') {
+                                echo $imiTitle;
+                            }else {
+	                            $this->Html->link(
+		                            $imiTitle,
+		                            [ 'controller' => 'student',
+		                              'action'     => 'input',
+		                              'id'         => $userID,
+		                              'imicode'    => $imi[ 'imicode' ],
+		                              'linkNum'    => 1
+		                            ],
+		                            [ 'class' => 'text-danger ' ]
+	                            );
+                            }?>
                         </u></strong>
                 </li>
 		    <?php endif;?>
@@ -131,11 +137,15 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                 }else{
                     $titleArray['action'] = 'result';
                 }
-                echo $this->Html->link($imi['name'],$titleArray);
+                if ($role == 'manager') {
+	                echo $imi[ 'name' ];
+                }else {
+	                echo $this->Html->link($imi[ 'name' ], $titleArray);
+                }
 	            ?>
                 &nbsp;
 	            <?php
-                if ($imi['score'] !== null) {
+                if ($imi['score'] !== null && $role != 'manager') {
 	                echo $this->Html->link("[編集]",
 	                                  [ 'controller'  => 'student',
 	                                    'action'      => 'input',

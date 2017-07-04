@@ -50,33 +50,43 @@ class StudentController extends AppController
 		$this->loadModel('MfFie');
 		//試験モデル読み込み
 		$this->loadModel('MfExa');
-		
+		//管理者モデル読み込み
+		$this->loadModel('MfAdm');
 		
 		
 		$regnumFromReq = $this->request->getParam('id');
-		$regnumFromSsn = $this->readSession(['userID']);
-		//TODO:管理者用の条件分岐
-		//TODO:ログインしていないとき、ログイン画面に飛ばす条件分岐
-		//セッションの学籍番号とURLの学籍番号が違うとき、セッションの方にリダイレクト
-		if ($regnumFromReq != null && $regnumFromReq != $regnumFromSsn) {
+		$idFromSsn = $this->readSession(['userID']);
+		$roleFromSsn = $this->readSession(['role']);
+		if ($idFromSsn == null) {
+			//セッションにIDが無いとき
+			$this->log("Any regnum is found in session");
+			$this->redirect([ 'controller' => 'Login', 'action' => 'index']);
+			return;
+		}else if ($regnumFromReq != null && $roleFromSsn != 'manager' && $regnumFromReq != $idFromSsn) {
+			//セッションの学籍番号とURLの学籍番号が違うとき、セッションの方にリダイレクト
 			$this->log("The required regnum is not your regnum in session");
-			$this->redirect([ 'controller' => 'student','action' => 'summary' , 'id' => $regnumFromSsn ]);
+			$this->redirect([ 'controller' => 'student', 'action' => 'summary', 'id' => $idFromSsn ]);
 			return;
 		}
-		//生徒名:$username
-		$username = $this->MfStu->find()
-			->select(['stuname'])
-			->where([ 'MfStu.regnum = ' => $regnumFromSsn ])
-			->first()->toArray()[ 'stuname' ];
-		$this->set(compact('username'));
-		//リンクを生成するための学籍番号:$userID
-		$this->set("userID",$regnumFromSsn);
+		$username = $this->readSession([ 'username' ]);
+		$this->set('username',$username);
+		//ログインしているユーザのID:$userID
+		$this->set("userID",$idFromSsn);
+		//チャート等に表示するための生徒名:$studentName
+		if ($roleFromSsn == 'manager'){
+			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
+		}else{
+			$this->set("studentName", $username);
+		}
+		//リンクを生成するための学籍番号:$studentID
+		$this->set("studentID",$regnumFromReq);
+		$this->set("role", $roleFromSsn);
 	}
 	
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
-		$regnum = $this->readSession(['userID']);
+		$regnum = $this->request->getParam("id");
 		
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
@@ -156,7 +166,9 @@ class StudentController extends AppController
 	
 	//模擬試験結果入力画面
 	public function input(){
-		
+		if ($this->readSession(['role']) != 'student') {
+			return;
+		}
 		//模擬試験テーブルの主キー:$imicode
 		$imicode = $this->request->getParam('imicode');
 		$this->set(compact('imicode'));
@@ -244,6 +256,11 @@ class StudentController extends AppController
 	}
 	//解答をDBに送信する
 	public function sendAll() {
+		
+		if ($this->readSession(['role']) != 'student') {
+			return;
+		}
+		
 		//回答入力時
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
