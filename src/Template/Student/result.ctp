@@ -62,9 +62,9 @@
             <div class="exam-title">
 	            <?= $exaname?>
             </div>
-            <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
-            <h4>あなたの成績:<?= round($score * 1.25,1) ?>点</h4>
             <h4>順位:<?= $rank  ?></h4>
+            <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
+            <h4><?= $studentName?>さんの成績:<?= round($score * 1.25,1) ?>点</h4>
         </div>
         <!--グラフを表示する要素-->
         <div class="col-sm-12 col-md-7 display-chart">

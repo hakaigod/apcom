@@ -193,7 +193,7 @@ class StudentController extends AppController
 		if ( $this->readSession(['answers',$imicode]) === null ){
 			//過去入力した選択肢、自信度をDBから読み込む
 			$answersFromDB = $this->TfAns->find()
-				->where([ 'imicode' => $imicode, 'regnum' => $this->readSession([ 'userID' ]) ])
+				->where([ 'imicode' => $imicode, 'regnum' => $this->request->getParam("id")])
 				->all();
 			foreach ($answersFromDB as $answer) {
 				if ($answer instanceof TfAn) {
@@ -356,7 +356,7 @@ class StudentController extends AppController
 		//模擬試験コード
 		$imicode = $this->request->getParam('imicode');
 		//学籍番号
-		$regnum = $this->readSession([ 'userID' ]);
+		$regnum = $this->request->getParam("id");
 		
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない

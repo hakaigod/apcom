@@ -129,7 +129,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                 <?php endif;?>
 	            <?php
                 $titleArray = ['controller' => 'student',
-	                                   'id' => $userID,
+	                                   'id' => $studentID,
 	                                   'imicode' => $imi['imicode']];
                 if ($imi['score'] === null) {
                     $titleArray['action'] = 'input';
@@ -137,8 +137,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                 }else{
                     $titleArray['action'] = 'result';
                 }
-                if ($role == 'manager') {
-	                echo $imi[ 'name' ];
+                if ($role == 'manager' && !(isset($imi['score']))) {
+                    echo $imi[ 'name' ];
                 }else {
 	                echo $this->Html->link($imi[ 'name' ], $titleArray);
                 }
