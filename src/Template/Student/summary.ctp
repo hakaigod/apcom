@@ -72,7 +72,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                             if ($role == 'manager') {
                                 echo $imiTitle;
                             }else {
-	                            $this->Html->link(
+	                            echo $this->Html->link(
 		                            $imiTitle,
 		                            [ 'controller' => 'student',
 		                              'action'     => 'input',
