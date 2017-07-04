@@ -6,7 +6,7 @@
 	max-width: 10%;
 }
 #AMresult table thead tr #ques {
-	max-width: 7%;
+	min-width: 7%;
 	text-align: center;
 }
 #AMresult table thead tr td{

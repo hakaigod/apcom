@@ -53,12 +53,12 @@ class MfStuFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '79292b69-032d-435b-825e-ca6eb47b7214',
+            'regnum' => 'ac240875-997d-4faa-b98d-32607f089779',
             'stuname' => 'Lorem ipsum dolor ',
             'stuyear' => 1,
             'stupass' => 'Lorem ipsum dolor sit amet',
             'depnum' => 1,
-            'last_update' => 1498710557,
+            'last_update' => 1499131572,
             'graduate_flg' => 1,
             'deleted_flg' => 1
         ],

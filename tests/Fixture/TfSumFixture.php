@@ -26,9 +26,9 @@ class TfSumFixture extends TestFixture
     public $fields = [
         'regnum' => ['type' => 'string', 'fixed' => true, 'length' => 8, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
         'imicode' => ['type' => 'integer', 'length' => 6, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'strategy_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
-        'technology_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
-        'management_sum' => ['type' => 'float', 'length' => null, 'precision' => null, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => ''],
+        'strategy_sum' => ['type' => 'integer', 'length' => 3, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'technology_sum' => ['type' => 'integer', 'length' => 3, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'management_sum' => ['type' => 'integer', 'length' => 3, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'imicode' => ['type' => 'index', 'columns' => ['imicode'], 'length' => []],
         ],
@@ -51,7 +51,7 @@ class TfSumFixture extends TestFixture
      */
     public $records = [
         [
-            'regnum' => '8216aae3-9e56-44ab-b2f2-2243ed830aaa',
+            'regnum' => '7f2f9a84-8c14-4775-a31c-6685dd7caa9d',
             'imicode' => 1,
             'strategy_sum' => 1,
             'technology_sum' => 1,

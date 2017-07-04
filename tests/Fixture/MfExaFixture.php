@@ -46,7 +46,7 @@ class MfExaFixture extends TestFixture
         [
             'exanum' => 1,
             'exaname' => 'Lorem ipsum dolor sit ame',
-            'exa_year' => '2017-06-29 04:29:13'
+            'exa_year' => '2017-07-04 01:26:08'
         ],
     ];
 }

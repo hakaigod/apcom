@@ -55,7 +55,7 @@
 			<tbody>
 				<?php foreach ($answers as $answer => $value): ?>
 					<tr>
-						<td><?= $value['stuname']; ?></td>
+						<td>100.00点</td>
 						<td><?= number_format($value['imisum'] * 1.25, 2) . '点'; ?></td>
 						<?php foreach ($value['answers'] as $ans): ?>
 							<td class="center"><?= $ans; ?></td>

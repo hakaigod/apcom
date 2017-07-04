@@ -33,7 +33,6 @@ class TfImiTable extends Table
         $this->setTable('tf_imi');
         $this->setDisplayField('imicode');
         $this->setPrimaryKey('imicode');
-		$this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**
@@ -54,23 +53,24 @@ class TfImiTable extends Table
             ->notEmpty('exanum');
 
         $validator
-            ->numeric('strategy_imisum')
+            ->integer('strategy_imisum')
             ->requirePresence('strategy_imisum', 'create')
             ->notEmpty('strategy_imisum');
 
         $validator
-            ->numeric('technology_imisum')
+            ->integer('technology_imisum')
             ->requirePresence('technology_imisum', 'create')
             ->notEmpty('technology_imisum');
 
         $validator
-            ->numeric('management_imisum')
+            ->integer('management_imisum')
             ->requirePresence('management_imisum', 'create')
             ->notEmpty('management_imisum');
 
         $validator
             ->integer('imipepnum')
-            ->allowEmpty('imipepnum');
+            ->requirePresence('imipepnum', 'create')
+            ->notEmpty('imipepnum');
 
         $validator
             ->dateTime('imp_date')

@@ -87,20 +87,13 @@ class ManagerController extends AppController
 		$answers = array();
 		$work = null;
 		$i = 0;
+		$ansJa = ['', 'ア', 'イ', 'ウ', 'エ'];
 		foreach ($ans as $key) {
-			switch ($key->rejoinder) {
-				// ア・イ・ウ・エに変換
-				case 0: $ansJa = '';break;
-				case 1: $ansJa = 'ア';break;
-				case 2: $ansJa = 'イ';break;
-				case 3: $ansJa = 'ウ';break;
-				default: $ansJa = 'エ';break;
-			}
 			if(isset($answers[$key->regnum])){
-				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa);
+				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa[$key->rejoinder]);
 			} else {
 				$query = $this->TfSum->get([$key->regnum, $reqestimicode]);
-				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa)));
+				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
 			}
 		}
 		$this->set('answers', $answers);
@@ -152,7 +145,7 @@ class ManagerController extends AppController
 			if($key->exanum != $work) {
 				$i = 0;
 			}
-			$exam = '平成' . $key->mf_exa->jap_year . '年' . $key->mf_exa->exaname;
+			$exam = $key->mf_exa->exam_detail;
 			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->strategy_imisum + $key->technology_imisum + $key->management_imisum));
 			$work = $key->exanum;
 		}

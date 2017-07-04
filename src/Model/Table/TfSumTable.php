@@ -33,7 +33,6 @@ class TfSumTable extends Table
         $this->setTable('tf_sum');
         $this->setDisplayField('regnum');
         $this->setPrimaryKey(['regnum', 'imicode']);
-		$this->belongsTo('MfStu')->setForeignKey('regnum');
     }
 
     /**
@@ -52,17 +51,17 @@ class TfSumTable extends Table
             ->allowEmpty('imicode', 'create');
 
         $validator
-            ->numeric('strategy_sum')
+            ->integer('strategy_sum')
             ->requirePresence('strategy_sum', 'create')
             ->notEmpty('strategy_sum');
 
         $validator
-            ->numeric('technology_sum')
+            ->integer('technology_sum')
             ->requirePresence('technology_sum', 'create')
             ->notEmpty('technology_sum');
 
         $validator
-            ->numeric('management_sum')
+            ->integer('management_sum')
             ->requirePresence('management_sum', 'create')
             ->notEmpty('management_sum');
 
