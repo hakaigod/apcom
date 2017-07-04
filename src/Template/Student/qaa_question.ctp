@@ -75,7 +75,7 @@ Student
         <div class="row">
             <div class="col-md-12">
                 <div class="source">
-                    出典：<?= $question->mf_exa['exaname']?>期&emsp;<?= $question->mf_exa['exa_year']?>
+                    出典：<?= $question->mf_exa->exam_detail . " 問" . $question->qesnum?>
                 </div>
             </div>
         </div>

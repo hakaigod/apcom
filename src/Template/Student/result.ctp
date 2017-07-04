@@ -58,31 +58,32 @@
             まだ入力されていません
         </div>
 	<?php else:?>
-        <div class="col-md-12 exam-title">
-            <?= $exaname?>
-        </div>
-        <div class="col-md-7">
-        
-        <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
-        <h4>合計点:<?= round($score * 1.25,1) ?>点</h4>
-        <h4>順位:<?= $rank  ?></h4>
-		<?php
-		$answersStr = ['未','ア','イ','ウ','エ'];
-		$confidenceStr = ['未','○','△','×'];
-		?>
+        <div class="col-md-12 ">
+            <div class="exam-title">
+	            <?= $exaname?>
+            </div>
+            <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
+            <h4>あなたの成績:<?= round($score * 1.25,1) ?>点</h4>
+            <h4>順位:<?= $rank  ?></h4>
         </div>
         <!--グラフを表示する要素-->
-        <div class="col-sm-12 col-md-5 display-chart">
+        <div class="col-sm-12 col-md-7 display-chart">
+            <h4>成績分布</h4>
+            <canvas id="barChart" ></canvas>
+        </div>
+        <span class="col-md-1"></span>
+        <div class="col-sm-12 col-md-4 display-chart">
             <h4>ジャンルごとの正答率</h4>
             <canvas id="radarChart" ></canvas>
         </div>
-        <div class="col-sm-12 col-md-5 display-chart">
-            <h4>ew</h4>
-            <canvas id="barChart" ></canvas>
-        </div>
+       
 
         <table class="table table-bordered table-striped table-hover">
-			<?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
+	        <?php
+	        $answersStr = ['未','ア','イ','ウ','エ'];
+	        $confidenceStr = ['未','○','△','×'];
+	        ?>
+            <?= $this->Html->tableHeaders(['番号','問題文','解答', '正答','自信度','○×','正答率'],[],['class' => 'center']); ?>
             <tbody>
 			<?php foreach (range(1, 80) as $i ): ?>
                 <tr>
