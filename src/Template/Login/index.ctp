@@ -1,20 +1,15 @@
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
-Login
-<?= $this->end(); ?>
-<!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-userrrrr
+応用情報ど.com
 <?= $this->end(); ?>
 
-<!-- サイドバーセット -->
-<?= $this->start('sidebar'); ?>
-<tr><td><a href="#">a</a></td></tr>
-<tr><td><a href="#">b</a></td></tr>
-<tr><td><a href="#">c</a></td></tr>
+<!-- ユーザーネームセット -->
+<?= $this->start('script'); ?>
+
 <?= $this->end(); ?>
 
 <!-- 以下content -->
-<a href="manager" class="btn btn-hg btn-danger">管理者メニュー</a>
+<br><br><br>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
