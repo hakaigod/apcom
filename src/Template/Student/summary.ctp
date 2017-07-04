@@ -65,8 +65,13 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
         まだ入力されていない模擬試験があります
     </div>
     <ul  style="list-style:none;">
-	    <?php foreach($imiDetails as $imi): ?>
-            <?php if($imi['score'] === null):?>
+	    <?php
+        $current = 0;
+        $max = 3;
+        for( ; $current < count($imiDetails) && $current < $max;$current++): ?>
+            <?php
+            $imi = $imiDetails[$current];
+            if($imi['score'] === null):?>
                 <li class="text-danger">
                     <strong><u>
 			                <?php
@@ -88,7 +93,16 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                         </u></strong>
                 </li>
 		    <?php endif;?>
-		<?php endforeach;?>
+		<?php endfor;?>
+        <?php
+        if ($current < count($imiDetails)) {
+            echo $this->Html->link(
+	            "もっと見る",
+                "#imitation-list",
+                [ 'class' => 'text-primary' ]
+            );
+        }
+        ?>
     </ul>
 </div>
 <?php endif;?>
@@ -105,7 +119,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 </div>
 
 <br><br>
-<div class="col-xs-12">
+<div id="imitation-list" class="col-xs-12">
     <h4>模試の一覧</h4>
 </div>
 <table id="summary-table" class="table table-bordered table-striped table-hover">

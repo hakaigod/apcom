@@ -65,13 +65,13 @@ function drawRadarChart() {
             labels: ["テクノロジ","マネジメント","ストラテジ"],
             datasets: [{
                 label: userName,
-                backgroundColor: "rgba(153,255,51,0.4)",
-                borderColor: "rgba(153,255,51,1)",
+                backgroundColor: "rgba(201,60,58,0)",
+                borderColor: "rgba(201,60,58,0.8)",
                 data: radarUser
             }, {
                 label: '受験者平均',
-                backgroundColor: "rgba(255,153,0,0.4)",
-                borderColor: "rgba(255,153,0,1)",
+                backgroundColor: "rgba(2,63,138,0)",
+                borderColor: "rgba(2,63,138,0.8)",
                 data:radarAverages
             }]
         },

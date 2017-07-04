@@ -87,6 +87,11 @@ class StudentController extends AppController
 		$this->set("role", $roleFromSsn);
 	}
 	
+	//パスワード更新
+	public function updatePass(  ){
+	
+	}
+	
 	//ユーザマイページに表示される画面
 	public function summary(){
 		
