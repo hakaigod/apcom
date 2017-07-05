@@ -4,6 +4,9 @@
  * @var \App\View\AppView $this
  * @var string $userID
  * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * @var bool $answeredAll
  * @var bool $result
  * @var int $imicode
@@ -11,6 +14,11 @@
  */
 
 ?>
+
+<!-- タイトルセット -->
+<?php $this->start('title'); ?>
+応用情報ど.com  -入力データ送信
+<?php $this->end(); ?>
 
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>

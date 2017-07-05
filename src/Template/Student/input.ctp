@@ -6,6 +6,10 @@
  * 模擬試験コード
  * @var int $imicode
  * @var string $userID
+ * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * 模擬試験名
  * @var string $imiName
  * 現在表示しているページ番号 currentNum
@@ -25,6 +29,10 @@ function json_safe_encode($data){
 	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 ?>
+<!-- タイトルセット -->
+<?php $this->start('title'); ?>
+応用情報ど.com  -模試入力
+<?php $this->end(); ?>
 
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
@@ -41,8 +49,9 @@ function json_safe_encode($data){
 
 
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
-<tr><td><a href="#">管理者管理</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',["action" => "summary", "id" => $userID])?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <?php $this->end(); ?>
 <?php if( !(isset($imiName))):?>
     <br><br>
@@ -105,7 +114,7 @@ function json_safe_encode($data){
                     <td class=" col-sm-12  col-md-3 center">
                         <div id="<?= "conf_{$i}"?>" data-toggle="buttons">
 							<?php
-							$confChoices = ['o','△','X'];
+							$confChoices = ['circle_white','triangle_white','cross_white'];
 							$confTag = "confidence_{$qNum}";
 							//前回入力されていた自信度
 							$inputtedConf = $inputtedLog['confidences'][$qNum];
@@ -120,7 +129,7 @@ function json_safe_encode($data){
 								echo "<label class=\"btn btn-info {$active}\" >";
 								echo "<input type=\"radio\"  name=\"{$confTag}\" "
 									."autocomplete=\"off\" {$checked} value=\"{$value}\">";
-								echo $confChoices[$y];
+								echo $this->Html->image($confChoices[$y] . ".svg", ['alt' => $confChoices[$y]]);
 								echo '</label>';
 							}
 							?>

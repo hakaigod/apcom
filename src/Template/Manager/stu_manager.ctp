@@ -10,9 +10,11 @@
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a onclick="window.open('addstu','学生情報追加','width=500,height=600,scrollbars=yes');">学生情報追加</a></td></tr>
-	<tr><td><a onclick="window.open('reissuestupass','学生パスワード再発行','width=500,height=400');">学生パスワード再発行</a></td></tr>
+	<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+	<tr><td><a onclick="window.open('<?= $this->Url->build(['action' => 'addstu'])?>',
+                    '学生情報追加','width=500,height=600,scrollbars=yes');">学生情報追加</a></td></tr>
+	<tr><td><a onclick="window.open('<?= $this->Url->build(['action' => 'reIssueStuPass'])?>',
+                    '学生パスワード再発行','width=500,height=400');">学生パスワード再発行</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->

@@ -1,3 +1,15 @@
+<?php
+/***
+ *
+ * @var \App\View\AppView $this
+ * 左上に表示するロゴのリンクのURL生成に使用する、controllerとactionなどを指定
+ * @var array $logoLink
+ * 右上に表示するユーザのアイコンのパス生成に使用する
+ * @var string $userID
+ * 右上に表示するユーザの名前
+ * @var string $username
+ */
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +32,6 @@
 	<?= $this->fetch('css') ?>
 
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
-	<?= $this->Html->script('video.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
 	<?= $this->Html->script('application.js') ?>
 	<?= $this->Html->script('prettify.js') ?>
@@ -35,15 +46,15 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
 <div class="container-fluid">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="<?= $headerlink; ?>">
-			<img src="<?= $this->request->webroot ?>img/logo.png" class="nabvar-img">
+		<a class="navbar-brand" href="<?= $this->Url->build($logoLink) ?>">
+			<img src="<?= $this->request->getAttribute("webroot") ?>img/logo.png" class="nabvar-img">
 		</a>
 	</div>
 	<div class="navbar-collapse collapse">
 		<div class="nav navbar-nav navbar-right">
 			<li class="dropdown navbar-buttton">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-					<img src="<?= $this->request->webroot ?>private/img/1312000.png" class="dropdown-img">
+					<img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
 					ようこそ、<?= $username?:"ERROR!"?>さん
 					<span class="caret"></span>
 				</a>

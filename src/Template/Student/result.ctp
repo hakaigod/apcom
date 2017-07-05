@@ -2,7 +2,11 @@
 /**
  *
  * @var \App\View\AppView $this
+ * @var string $userID
  * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * 試験名
  * @var string $exaname
  * 問題文、正答
@@ -21,9 +25,15 @@
  * @var array $userScore
  * 全体のジャンルごと平均
  * @var array $wholeAvg
- *
+ * ヒストグラムの分布図の百分率の配列
+ * @var array $barNumbers
  */
 ?>
+
+<!-- タイトルセット -->
+<?php $this->start('title'); ?>
+応用情報ど.com  -模試結果
+<?php $this->end(); ?>
 
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Input/input.css') ?>
@@ -44,7 +54,9 @@
 </script>
 <?php $this->end(); ?>
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . "/Manager" ?>">トップページ</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',["action" => "summary", "id" => $userID])?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <?php $this->end(); ?>
 
 <?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum)) || !(isset($average))):?>
@@ -62,9 +74,9 @@
             <div class="exam-title">
 	            <?= $exaname?>
             </div>
-            <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
-            <h4>あなたの成績:<?= round($score * 1.25,1) ?>点</h4>
             <h4>順位:<?= $rank  ?></h4>
+            <h4>平均点:<?= round($average * 1.25,1) ?>点</h4>
+            <h4><?= $studentName?>さんの成績:<?= round($score * 1.25,1) ?>点</h4>
         </div>
         <!--グラフを表示する要素-->
         <div class="col-sm-12 col-md-7 display-chart">

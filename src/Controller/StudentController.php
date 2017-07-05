@@ -11,6 +11,7 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
+use Cake\ORM\Query;
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
@@ -34,7 +35,6 @@ class StudentController extends AppController
 	
 	public function initialize(){
 		parent::initialize();
-		$this->set('headerlink', $this->request->webroot . 'Manager');
 		
 		//回答テーブル
 		$this->loadModel('TfAns');
@@ -53,6 +53,9 @@ class StudentController extends AppController
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
 		
+		$this->writeSession(['userID'], "13120023");
+		$this->writeSession(['username'], "おでん");
+		$this->writeSession(['role'], "student");
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
@@ -74,13 +77,21 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
-			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
+			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()[0]->stuname);
+			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 		}else{
 			$this->set("studentName", $username);
+			$this->set("logoLink", ["controller" => "student","action" => "summary","id" => $idFromSsn]);
+			
 		}
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
+	}
+	
+	//パスワード更新
+	public function updatePass(  ){
+	
 	}
 	
 	//ユーザマイページに表示される画面
@@ -90,7 +101,7 @@ class StudentController extends AppController
 		
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
-			->contain([ 'MfExa','TfSum' => function($q) use ($regnum) {
+			->contain([ 'MfExa','TfSum' => function(Query $q) use ($regnum) {
 				return $q->where(['regnum' => $regnum] );}])
 			->orderDesc('imicode')
 			->all();
@@ -193,7 +204,7 @@ class StudentController extends AppController
 		if ( $this->readSession(['answers',$imicode]) === null ){
 			//過去入力した選択肢、自信度をDBから読み込む
 			$answersFromDB = $this->TfAns->find()
-				->where([ 'imicode' => $imicode, 'regnum' => $this->readSession([ 'userID' ]) ])
+				->where([ 'imicode' => $imicode, 'regnum' => $this->request->getParam("id")])
 				->all();
 			foreach ($answersFromDB as $answer) {
 				if ($answer instanceof TfAn) {
@@ -211,8 +222,8 @@ class StudentController extends AppController
 			$iniQueAfNum = ( $curNum - 1 ) * Q_NUM_PER_PAGE + 1;
 			$inputtedLog = [];
 			for ( $qNum = $iniQueAfNum; $qNum < $iniQueAfNum + Q_NUM_PER_PAGE; $qNum++ ) {
-				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
-				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
+				$inputtedLog[ 'answers' ][ $qNum ] = $this->readSession([ 'answers', $imicode, $qNum ]);
+				$inputtedLog[ 'confidences' ][ $qNum ] = $this->readSession([ 'confidences', $imicode, $qNum ]);
 			}
 		}
 		$this->set(compact('inputtedLog'));
@@ -241,11 +252,15 @@ class StudentController extends AppController
 		for ($qNum = $iniQueBefNum ; $qNum < $iniQueBefNum + Q_NUM_PER_PAGE; $qNum++ ){
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
-			$confidence = h($this->request->getData("confidence_{$qNum}"));
 			//値のチェック
-			if ( 0 <= $answer && $answer <= 4 && 1 <= $confidence && $confidence <= 3) {
+			if ( ctype_digit($answer) && 0 <= $answer && $answer <= 4) {
 				//解答と自信度をセッションに書き込む
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
+			}else{
+				$validationFailed = true;
+			}
+			$confidence = h($this->request->getData("confidence_{$qNum}"));
+			if(ctype_digit($confidence) && 1 <= $confidence && $confidence <= 3) {
 				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
 			}else{
 				$validationFailed = true;
@@ -356,7 +371,7 @@ class StudentController extends AppController
 		//模擬試験コード
 		$imicode = $this->request->getParam('imicode');
 		//学籍番号
-		$regnum = $this->readSession([ 'userID' ]);
+		$regnum = $this->request->getParam("id");
 		
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない

@@ -4,6 +4,9 @@
  * @var \App\View\AppView $this
  * @var string $userID
  * @var string $username
+ * @var string $studentName
+ * @var string $studentID
+ * @var string $role
  * //name,date,avg,score,rankのキーをもつ
  * @var array $imiDetails
  * //tech,man,strのキーをもつ
@@ -14,7 +17,7 @@
 
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-学生メニュー
+応用情報ど.com  -メニュー
 <?php $this->end(); ?>
 
 <!-- CSSセット -->
@@ -49,7 +52,9 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request->getAttribute('webroot') ."student" ?>">トップページ</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',["action" => "summary", "id" => $userID])?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
@@ -57,36 +62,48 @@
 <?php
 //score列にnullを含む場合
 //3番目のtrueは型を比較するか(==か===かの違い)
-if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
+if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' ):?>
 <div class="panel panel-danger ">
     <div class="panel-heading">
         まだ入力されていない模擬試験があります
     </div>
     <ul  style="list-style:none;">
-	    <?php foreach($imiDetails as $imi): ?>
-            <?php if($imi['score'] === null):?>
+	    <?php
+        $current = 0;
+        $max = 3;
+        for( ; $current < count($imiDetails) && $current < $max;$current++): ?>
+            <?php
+            $imi = $imiDetails[$current];
+            if($imi['score'] === null):?>
                 <li class="text-danger">
                     <strong><u>
 			                <?php
                             $imiTitle ="{$imi['date']} {$imi['name']}";
-                            if ($role == 'manager') {
-                                echo $imiTitle;
-                            }else {
-	                            $this->Html->link(
-		                            $imiTitle,
-		                            [ 'controller' => 'student',
-		                              'action'     => 'input',
-		                              'id'         => $userID,
-		                              'imicode'    => $imi[ 'imicode' ],
-		                              'linkNum'    => 1
-		                            ],
-		                            [ 'class' => 'text-danger ' ]
-	                            );
-                            }?>
+			
+			                echo $this->Html->link(
+				                $imiTitle,
+				                [ 'controller' => 'student',
+				                  'action'     => 'input',
+				                  'id'         => $userID,
+				                  'imicode'    => $imi[ 'imicode' ],
+				                  'linkNum'    => 1
+				                ],
+				                [ 'class' => 'text-danger ' ]
+			                );
+			                ?>
                         </u></strong>
                 </li>
 		    <?php endif;?>
-		<?php endforeach;?>
+		<?php endfor;?>
+        <?php
+        if ($current < count($imiDetails)) {
+            echo $this->Html->link(
+	            "もっと見る",
+                "#imitation-list",
+                [ 'class' => 'text-primary' ]
+            );
+        }
+        ?>
     </ul>
 </div>
 <?php endif;?>
@@ -103,8 +120,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
 </div>
 
 <br><br>
-<div class="col-xs-12">
-    <h4>模擬試験一覧</h4>
+<div id="imitation-list" class="col-xs-12">
+    <h4>模試の一覧</h4>
 </div>
 <table id="summary-table" class="table table-bordered table-striped table-hover">
     <thead>
@@ -129,7 +146,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                 <?php endif;?>
 	            <?php
                 $titleArray = ['controller' => 'student',
-	                                   'id' => $userID,
+	                                   'id' => $studentID,
 	                                   'imicode' => $imi['imicode']];
                 if ($imi['score'] === null) {
                     $titleArray['action'] = 'input';
@@ -137,8 +154,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) ):?>
                 }else{
                     $titleArray['action'] = 'result';
                 }
-                if ($role == 'manager') {
-	                echo $imi[ 'name' ];
+                if ($role == 'manager' && !(isset($imi['score']))) {
+                    echo $imi[ 'name' ];
                 }else {
 	                echo $this->Html->link($imi[ 'name' ], $titleArray);
                 }

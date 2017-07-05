@@ -9,9 +9,11 @@
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a onclick="window.open('addadmin','管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
-	<tr><td><a onclick="window.open('resetAdmPass','パスワード再設定','width=500,height=450');">パスワード再設定</a></td></tr>
+	<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+	<tr><td><a onclick="window.open('<?=$this->Url->build(["action" => "addadmin"])?>',
+	'管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
+	<tr><td><a onclick="window.open('<?=$this->Url->build(["action" => "resetAdmPass"])?>',
+	'パスワード再設定','width=500,height=450');">パスワード再設定</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->
