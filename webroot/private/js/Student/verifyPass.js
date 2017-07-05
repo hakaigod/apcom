@@ -59,20 +59,23 @@ $(function(){
         });
     });
 	$("#register-button").click(function () {
+		let validate_success = true;
 		$.each(["#old-pass","#new-pass","#verify"],function (key,val) {
 			let text = $(val).val();
 			let errorMessage = checkText(text);
 			if (errorMessage !== null) {
 				window.alert(errorMessage);
+				validate_success = false;
 				return false;
 			}
 		});
-		if ($("#new-pass").val() !== $("#verify").val()) {
-			window.alert(INCONSISTENT);
-			return false;
+		if (validate_success) {
+			if ($("#new-pass").val() !== $("#verify").val()) {
+				window.alert(INCONSISTENT);
+				return false;
+			}
+			$(this).submit();
 		}
-		$(this).submit();
-		
 	});
 	function checkText(text) {
 		if (!(isNotNull(text))) {
