@@ -21,7 +21,7 @@ managerrrrr
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <tr><td><?= $this->Html->link("学生情報管理",["action" => "stuManager"]);?></td></tr>
 <tr><td><?= $this->Html->link("学科管理",["action" => "depManager"]);?></td></tr>
 <tr><td><?= $this->Html->link("管理者管理",["action" => "adminManager"]);?></td></tr>

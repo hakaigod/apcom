@@ -53,9 +53,9 @@ class StudentController extends AppController
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
 		
-		$this->writeSession(['userID'], "13120023");
-		$this->writeSession(['username'], "おでん");
-		$this->writeSession(['role'], "student");
+//		$this->writeSession(['userID'], "13120023");
+//		$this->writeSession(['username'], "おでん");
+//		$this->writeSession(['role'], "student");
 		
 		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
@@ -77,7 +77,7 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
-			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()[0]->stuname);
+			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
 			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 		}else{
 			$this->set("studentName", $username);

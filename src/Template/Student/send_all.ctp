@@ -25,7 +25,7 @@
 <?php $this->end(); ?>
 
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a href="<?= $this->request-> getAttribute('webroot') . '/Manager'?>">トップページ</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <?php $this->end(); ?>
 <br>
 <?php
