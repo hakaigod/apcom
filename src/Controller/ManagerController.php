@@ -47,12 +47,12 @@ class ManagerController extends AppController
 	];
 
 	// パスワードハッシュ値返却
-	private function passhash($pass){
+	private function passHash($pass){
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->hash($pass);
 	}
 	// パスワードチェック
-	private function passcheck($inputPass, $databasePass) {
+	private function pasCheck($inputPass, $databasePass) {
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->check($inputPass, $databasePass);
 	}
@@ -236,16 +236,15 @@ class ManagerController extends AppController
 			$queryAddStu = $this->MfStu->query()
 			->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
 			->values([
-				$this->request->getData('')
 				'regnum' => $this->request->getData('stunum'),
 				'stuname' => $this->request->getData('stuname'),
 				'stuyear' => $this->request->getData('old'),
 				'depnum' => $this->request->getData('depnum'),
-				'stupass' => $this->passhash($this->request->getData('stunum'))
+				'stupass' => $this->passHash($this->request->getData('stunum'))
 			]);
 			try {
 				$queryAddStu->execute();
-				$identiconComponent->makeImage($_POST['stunum']);
+				$identiconComponent->makeImage($this->request->getData('stunum'));
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing' . $e->getMessage());
@@ -277,7 +276,7 @@ class ManagerController extends AppController
 							'stuname' => $key[1],
 							'stuyear' => $key[3],
 							'depnum' => $depnum,
-							'stupass' => $this->passhash($key[0])
+							'stupass' => $this->passHash($key[0])
 						]);
 					}
 				}
@@ -285,7 +284,7 @@ class ManagerController extends AppController
 					$querystu->execute();
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			} else {
 				$this->Flash->error('専用テンプレートを使用してください');
@@ -299,7 +298,7 @@ class ManagerController extends AppController
 
 		// 学生情報
 		try {
-			$this->set('regnum', $this->MfStu->get($_GET['id']));
+			$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 		} catch (Exception $e) {
 			// 学籍番号更新後、画面更新せずに編集ボタンを押した場合エラーが起きる
 			die('Student Not Found.');
@@ -329,7 +328,7 @@ class ManagerController extends AppController
 				$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stunum']]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 				$this->set('regnum', $this->MfStu->get($_GET['id']));
 			}
 		}
@@ -375,7 +374,7 @@ class ManagerController extends AppController
 				->values([
 					'admnum' => NULL,
 					'admname' => $_POST['admname'],
-					'admpass' => $this->passhash($_POST['admpass'])
+					'admpass' => $this->passHash($_POST['admpass'])
 				]);
 				try {
 					$queryAdminInsert->execute();
@@ -383,7 +382,7 @@ class ManagerController extends AppController
 					$identiconComponent->makeImage($admnum);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			}
 		}
@@ -405,14 +404,14 @@ class ManagerController extends AppController
 				'deleted_flg' => !empty($_POST['deleted_flg']),
 
 				//　消す
-				'admpass' => $this->passhash($_POST['admpass'])
+				'admpass' => $this->passHash($_POST['admpass'])
 			])
 			->where(['admnum' => $_GET['id']]);
 			try {
 				$queryAdminUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 				$this->set('admnum', $this->MfAdm->get($_GET['id']));
 			}
 		}
@@ -426,15 +425,15 @@ class ManagerController extends AppController
 		// POSTリクエストがあれば実行
 		if (!empty($_POST)) {
 			$oldPass = $this->MfAdm->get($_POST['admnum'])->toArray()['admpass'];
-			if ($this->passcheck($_POST['admOldPass'], $oldPass)) {
+			if ($this->pasCheck($_POST['admOldPass'], $oldPass)) {
 				$queryAdmPassUpdate = $this->MfAdm->query()->update()
-				->set(['admpass' => $this->passhash($_POST['admNewPass'])])
+				->set(['admpass' => $this->passHash($_POST['admNewPass'])])
 				->where(['admnum' => $_POST['admnum']]);
 				try {
 					$queryAdmPassUpdate->execute();
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			} else {
 				$this->Flash->error('古いパスワードが違います');
@@ -459,7 +458,7 @@ class ManagerController extends AppController
 				$queryImiCodeIssueInsert->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
 		$this->render('imicodeissue','addmod');
@@ -472,13 +471,13 @@ class ManagerController extends AppController
 		if (!empty($_POST['stunum'])) {
 			$queryReIssueStuPassUpdate = $this->MfStu->query()
 			->update()
-			->set(['stupass' => $this->passhash($_POST['stunum'])])
+			->set(['stupass' => $this->passHash($_POST['stunum'])])
 			->where(['regnum' => $_POST['stunum']]);
 			try {
 				$queryReIssueStuPassUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
 
@@ -523,7 +522,7 @@ class ManagerController extends AppController
 				$queryDepInsert->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
 	}
@@ -549,7 +548,7 @@ class ManagerController extends AppController
 				$this->redirect($this->referer());
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 				$this->redirect($this->referer());
 			}
 		}

@@ -73,7 +73,7 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
-			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()[0]->stuname);
+			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
 			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 		}else{
 			$this->set("studentName", $username);

@@ -52,7 +52,7 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><?= $this->Html->link('トップページ',["action" => "summary", "id" => $userID])?></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <tr><td><a href="">パスワード更新</a></td></tr>

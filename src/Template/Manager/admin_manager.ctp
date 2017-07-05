@@ -9,7 +9,7 @@
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+	<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 	<tr><td><a onclick="window.open('<?=$this->Url->build(["action" => "addadmin"])?>',
 	'管理者情報追加','width=500,height=400');">管理者情報追加</a></td></tr>
 	<tr><td><a onclick="window.open('<?=$this->Url->build(["action" => "resetAdmPass"])?>',
