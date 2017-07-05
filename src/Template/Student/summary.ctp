@@ -37,11 +37,16 @@
 	$dates = array_column($imiDetails,'date');
 	krsort($dates);
 	echo " line-dates = " . json_safe_encode( array_values($dates) );
+	$conv = function (array &$array):array {
+		krsort($array);
+		foreach ($array as &$value) { isset($value) ? $value *= 1.25 : null; }
+        return $array;
+    };
 	$scores = array_column($imiDetails,'score');
-	krsort($scores);
+	$scores = $conv($scores);
 	echo " line-student-score = " . json_safe_encode( array_values($scores) );
 	$averages =  array_column($imiDetails,'avg');
-	krsort($averages);
+	$averages = $conv($averages);
 	echo " line-averages = " . json_safe_encode( array_values($averages) );
 	echo " radar-user = " . json_safe_encode(array_values($userAvg));
 	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
@@ -76,7 +81,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
             $imi = $imiDetails[$current];
             if($imi['score'] === null):?>
                 <li class="text-danger">
-                    <strong><u>
+                    <u>
 			                <?php
                             $imiTitle ="{$imi['date']} {$imi['name']}";
 			
@@ -91,17 +96,19 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 				                [ 'class' => 'text-danger ' ]
 			                );
 			                ?>
-                        </u></strong>
+                    </u>
                 </li>
 		    <?php endif;?>
 		<?php endfor;?>
         <?php
         if ($current < count($imiDetails)) {
+            echo "<u>";
             echo $this->Html->link(
 	            "もっと見る",
                 "#imitation-list",
                 [ 'class' => 'text-primary' ]
             );
+            echo "</u>";
         }
         ?>
     </ul>
