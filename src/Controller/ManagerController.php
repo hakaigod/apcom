@@ -30,7 +30,6 @@ class ManagerController extends AppController
 		$this->loadmodel('MfQes');
 		
 		$session = $this->request->session();
-		//TODO:正しいユーザー名に変える
 		$this->set("username",$session->read("username"));
 		
 		$this->set("userID",$session->read("userID"));

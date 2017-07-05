@@ -59,27 +59,15 @@ $(function(){
         });
     });
 	$("#register-button").click(function () {
-		let oldForm = $("#old-pass").val();
-		let firstForm = $("#new-pass").val();
-		let secondForm = $("#verify").val();
-		
-		let oldFormError = checkText(oldForm);
-		let firstFormError = checkText(firstForm);
-		let secondFormError = checkText(secondForm);
-		
-		if (oldFormError !== null) {
-			window.alert(oldFormError);
-			return false;
-		}
-		if (firstFormError !== null) {
-			window.alert(firstFormError);
-			return false;
-		}
-		if (secondFormError !== null) {
-			window.alert(secondFormError);
-			return false;
-		}
-		if (firstForm !== secondForm) {
+		$.each(["#old-pass","#new-pass","#verify"],function (key,val) {
+			let text = $(val).val();
+			let errorMessage = checkText(text);
+			if (errorMessage !== null) {
+				window.alert(errorMessage);
+				return false;
+			}
+		});
+		if ($("#new-pass").val() !== $("#verify").val()) {
 			window.alert(INCONSISTENT);
 			return false;
 		}
