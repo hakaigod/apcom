@@ -49,7 +49,7 @@ class LoginController extends AppController
 
                     // 2. ユーザIDとパスワードが入力されていたら認証する
                     $dsn = sprintf('mysql:dbname=%s;  host=%s;  charset=utf8',$db['dbname'] , $db['host']);
-	
+
                     $sql = null;
                     // 3. エラー処理
                     try {

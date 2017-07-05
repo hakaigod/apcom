@@ -68,8 +68,10 @@
                             <input type="password" id="password" name="password" value="" placeholder="パスワードを入力" class="form-control">
                             <span id="errormessage"><?php if(!empty($this->viewVars['errorMessage'])){echo  $this->viewVars['errorMessage'];}?></span>
                             <div class="checkbox">
-                                <input type="checkbox" id="checkbox" name="checkbox" value="管理者"  >　<span id="text2">管理者</span> <br>
-
+								<label class="checkbox">
+									<input type="checkbox" data-toggle="checkbox" name="checkbox" id="checkbox">
+									管理者
+								</label>
                             </div>
                             <div class="col-md-12">
                                 <input type="submit" id="login" name="login"  class="btn btn-embossed btn-primary" onclick="" value=" 　ログイン　" ><br>    <br>
