@@ -15,8 +15,9 @@ class ManagerController extends AppController
 {
 	public function initialize(){
 		parent::initialize();
-		$this->set('headerlink', $this->request->webroot . 'Manager');
 
+		$this->set("logoLink", ["controller" => "manager","action" => "index"]);
+		
 		$this->loadComponent('Paginator');
 
 		$this->loadmodel('MfDep');
@@ -30,6 +31,8 @@ class ManagerController extends AppController
 		
 		//TODO:正しいユーザー名に変える
 		$this->set("username","てすとさん");
+		
+		$this->set("userID",$this->request->session()->read("userID"));
 	}
 	// ページネーター
 	public $paginate = [
@@ -427,9 +430,6 @@ class ManagerController extends AppController
 	// 模擬試験コード発行画面
 	public function imiCodeIssue()
 	{
-		// レイアウト設定
-		$this->viewBuilder()->layout('addmod');
-
 		$this->set('exams', $this->MfExa->find());
 
 		// POSTリクエストがあれば実行
@@ -447,12 +447,11 @@ class ManagerController extends AppController
 				$this->Flash->error('missing ' . $e->getMessage());
 			}
 		}
+		$this->render('imicodeissue','addmod');
 	}
 	// 学生パスワード再発行画面
 	public function reIssueStuPass()
 	{
-		// レイアウト設定
-		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
 		if (!empty($_POST['stunum'])) {
@@ -467,6 +466,8 @@ class ManagerController extends AppController
 				$this->Flash->error('missing ' . $e->getMessage());
 			}
 		}
+		
+		$this->render('reissuestupass','addmod');
 	}
 	// 学科管理画面
 	public function depManager() {

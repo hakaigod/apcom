@@ -21,11 +21,14 @@ managerrrrr
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-<tr class="info"><td><a href="">トップページ</a></td></tr>
-<tr><td><a href="Manager/StuManager">学生情報管理</a></td></tr>
-<tr><td><a href="Manager/depManager">学科管理</a></td></tr>
-<tr><td><a href="Manager/adminManager">管理者管理</a></td></tr>
-<tr><td><a onclick="window.open('Manager/imicodeissue','模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a></td></tr>
+<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+<tr><td><?= $this->Html->link("学生情報管理",["action" => "stuManager"]);?></td></tr>
+<tr><td><?= $this->Html->link("学科管理",["action" => "depManager"]);?></td></tr>
+<tr><td><?= $this->Html->link("管理者管理",["action" => "adminManager"]);?></td></tr>
+<tr><td>
+        <a onclick="window.open( '<?=$this->Url->build(['action'=>'imiCodeIssue'])?>'
+        ,'模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a>
+    </td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->

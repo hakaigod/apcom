@@ -78,10 +78,11 @@ class StudentController extends AppController
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
 			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()[0]->stuname);
-			$this->set('headerlink', $this->request->getAttribute("webroot") . 'manager');
+			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 		}else{
 			$this->set("studentName", $username);
-			$this->set('headerlink', $this->request->getAttribute("webroot") . 'student/' . $idFromSsn);
+			$this->set("logoLink", ["controller" => "student","action" => "summary","id" => $idFromSsn]);
+			
 		}
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);

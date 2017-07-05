@@ -89,6 +89,53 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
 	);
 });
+Router::scope("/manager", function ( RouteBuilder $routes ) {
+	$routes->connect(
+		'',
+		['controller' => 'manager', 'action'=> 'index']);
+	$routes->connect(
+		'/imitation/register',
+		['controller' => 'manager', 'action'=> 'imiCodeIssue']);
+});
+//学生、学科、管理者の管理
+Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
+	//学生管理
+	$routes->connect(
+		'/students',
+		['controller' => 'manager', 'action' => 'stuManager']
+	);
+	$routes->connect(
+		'/students/add',
+		['controller' => 'manager', 'action' => 'addstu']
+	);
+	$routes->connect(
+		'/students/reset',
+		['controller' => 'manager', 'action' => 'reIssueStuPass']
+	);
+	//学科管理
+	$routes->connect(
+		'/departments',
+		['controller' => 'manager', 'action' => 'depManager']
+	);
+	$routes->connect(
+		'/departments/add',
+		['controller' => 'manager', 'action' => 'adddep']
+	);
+	//管理者管理
+	$routes->connect(
+		'/admins',
+		['controller' => 'manager', 'action' => 'adminManager']
+	);
+	$routes->connect(
+		'/admins/add',
+		['controller' => 'manager', 'action' => 'addadmin']
+	);
+	$routes->connect(
+		'/admins/reset',
+		['controller' => 'manager', 'action' => 'resetAdmPass']
+	);
+});
+
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
@@ -96,7 +143,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+	$routes->connect('', ['controller' => 'Login', 'action' => 'index']);
+	$routes->connect('login', ['controller' => 'Login', 'action' => 'index']);
 	
     /**
      * Connect catchall routes for all controllers.
@@ -114,7 +162,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-    $routes->fallbacks(DashedRoute::class);
+//    $routes->fallbacks(DashedRoute::class);
 });
 
 /**

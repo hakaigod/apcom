@@ -32,7 +32,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
 <div class="container-fluid">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="<?= $headerlink; ?>">
+        <a class="navbar-brand" href="<?= $this->Url->build($logoLink) ?>">
 			<img src="<?= $this->request->webroot ?>img/logo.png" class="nabvar-img">
 		</a>
 	</div>

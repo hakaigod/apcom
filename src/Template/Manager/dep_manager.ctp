@@ -14,8 +14,8 @@ managerrrrr
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar'); ?>
-	<tr class="info"><td><a href="<?= $this->request->webroot ?>Manager">トップページ</a></td></tr>
-	<tr><td><a onclick="window.open('adddep','学生情報追加','width=500,height=400');">学科追加</a></td></tr>
+	<tr class="info"><td><?=$this->Html->link("トップページ",['action' => 'index'])?></td></tr>
+	<tr><td><a onclick="window.open('<?=$this->Url->build(["action" => "adddep"])?>','学科情報追加','width=500,height=400');">学科追加</a></td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->
