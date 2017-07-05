@@ -1,10 +1,15 @@
 <?php
 /**
- * 問題とページ番号　新しい問題に遷移する度インクリメント
+ * 問番号
  * @var Integer $qNum
+ * DBから取得した１行の問情報
+ * @var array $question
+ * 選択肢番号
+ * @var Integer $select
+ * 前問題の正誤、選択、問題情報を格納する配列
+ * @var array $answerLog
+ * ジャンル選択画面からPOSTしたジャンル番号
  * @var array $getGenre
- * モーダルに表示するデータを保存するためのセッション
- * @var $session
  */
 ?>
 
@@ -12,37 +17,31 @@
 <?= $this->start('title');?>
 一問一答
 <?= $this->end();?>
-
 <!-- CSSセット -->
 <?= $this->start('css');?>
 <?= $this->Html->css('/private/css/Student/qaa.css')?>
 <?= $this->end();?>
-
 <!-- jsセット -->
 <?php function json_safe_encode($data){
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 ?>
-
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
 <script id="script" src="<?= $this->request->getAttribute('webroot')?>/private/js/Student/qaa.js"
         answer=<?= json_safe_encode($question->answer)?>
 ></script>
 <?= $this->end();?>
-
 <!-- ユーザーネームセット -->
 <?= $this->start('username');?>
 Student
 <?= $this->end();?>
-
 <!-- サイドバーセット -->
 <?= $this->start('sidebar');?>
 <tr class="info"><td> 点数入力画面 </td></tr>
 <tr><td> 一問一答画面 </td></tr>
 <tr><td> 模擬試験画面 </td></tr>
 <?= $this->end();?>
-
 <!-- 以下content -->
 <div class="container-fluid">
     <div class="row">
@@ -92,12 +91,7 @@ Student
         <div class="col-md-12">
             <div id="qaa-question-no">
                 問：
-                <?php
-                if($qNum > 1) {
-                    echo $qNum;
-                } else {
-                    echo 1;}
-                ?>
+                <?= $qNum?>
             </div>
         </div>
     </div>
@@ -123,43 +117,23 @@ Student
     <?php if(!empty($question->choice1)):?>
         <!--選択肢-->
         <table class="qaa_select_table table-bordered col-md-12">
-            <tr class="select_tr" >
-                <td class="col-md-1">
-                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='1'?>ア>
-                </td>
-                <td class="col-md-11">
-                    <?= $this->qaa->viewTextImg($question->choice1)?>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-1">
-                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='2'?>イ>
-                </td>
-                <td class="col-md-11">
-                    <?= $this->qaa->viewTextImg($question->choice2)?>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-1">
-                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='3'?>ウ>
-                </td>
-                <td class="col-md-11">
-                    <?= $this->qaa->viewTextImg($question->choice3)?>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-1">
-                    <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select='4'?>エ>
-                </td>
-                <td class="col-md-11">
-                    <?= $this->qaa->viewTextImg($question->choice4)?>
-                </td>
-            </tr>
+            <?php for($i=1;$i<5;$i++):?>
+                <?php $selectArray = array('ア','イ','ウ','エ')?>
+                <tr class="select_tr" >
+                    <td class="col-md-1">
+                        <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select=$i?><?= $selectArray[$i-1] ?>>
+                    </td>
+                    <td class="col-md-11">
+                        <?php
+                        $choice = 'choice'.$i;
+                        echo $this->qaa->viewTextImg($question->$choice);
+                        ?>
+                    </td>
+                </tr>
+            <?php endfor; ?>
         </table>
-        <!--選択肢がない場合は該当する画像があるのでそれを取ってきて文字なしのチェックボックスを拾ってくる-->
     <?php else:?>
-        <!--画像無し選択肢-->
-        <!-- 画像表示 -->
+        <!--選択肢がない場合は該当する画像があるので文章無しのボタン表示-->
         <div class=row>
             <div class="ans-img col-md-12">
                 <?= $this->qaa->viewTextImg($question->answer_pic)?>
@@ -167,10 +141,10 @@ Student
         </div>
         <div class="row">
             <div class="select-answer">
-                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='1'?>ア >
-                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='2'?>イ >
-                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='3'?>ウ >
-                <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select='4'?>エ >
+                <?php for ($i=1;$i<5;$i++):?>
+                    <?php $selectArray = array('ア','イ','ウ','エ')?>
+                    <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select=$i?><?= $selectArray[$i-1]?> >
+                <?php endfor; ?>
             </div>
         </div>
     <?php endif;?>
@@ -192,14 +166,101 @@ Student
                     }else {
                         $falsehood = "X";
                     }
-                    $answerLog[$qNum]=
-                    [
-                        'qnum'=>$qNum,
-                        'detail'=> $question->mf_exa->exam_detail,
-                        'field'=>$question->mf_fie->fiename,
-                        'falsehood'=>$falsehood,
-                    ];
-                    debug($answerLog);
+
+                    if (empty($answerLog['$qNum'])){
+                        $answerLog = array(
+                            '$qNum'=>array(
+                                'qnum'=>$qNum,
+                                'detail'=>$question->mf_exa->exam_detail,
+                                'field'=>$question->mf_fie->fiename,
+                                'falsehood'=>$falsehood
+                            )
+                        );
+                    } else {
+                        $answerLog = array_merge($answerLog,
+                            array(
+                                '$qNum'=>array(
+                                    'qnum'=>$qNum,
+                                    'detail'=>$question->mf_exa->exam_detail,
+                                    'field'=>$question->mf_fie->fiename,
+                                    'falsehood'=>$falsehood
+                                )
+                            )
+                        );
+                    }
+                    $i = 0;
+                    foreach ($answerLog as $list=>$num){
+                        echo ($num);
+                        foreach ($num as $item=>$value){
+                            echo $item.'=>'.$value('qnum');
+                            echo $item.'=>'.$value('detail');
+                            echo $item.'=>'.$value('field');
+                            echo $item.'=>'.$value('falsehood');
+                        }
+                    }
+
+                    $list = array(
+                        '山田' => array(
+                            'ID' => '001',
+                            '出身' => '函館',
+                            'メールアドレス' => 'yamada@example.com',
+                            '性別' => '女性'
+                        ),
+                        '田中' => array(
+                            'ID' => '002',
+                            'メールアドレス' => 'tanaka@example.com',
+                            '性別'  => '男性'
+                        ),
+                        '高橋' => array(
+                            'ID' => '003',
+                            '出身' => '札幌',
+                            'メールアドレス' => 'takahasi@example.com',
+                            '性別'  => '女性',
+                        ),
+                        '井上' => array(
+                            'ID' => '004',
+                            '出身' => '東京',
+                            'メールアドレス' => 'inoue@example.com',
+                            '性別'  => '男性',
+                        ),
+                        '小林' => array(
+                            'ID' => '005',
+                            '出身' => '大阪',
+                            'メールアドレス' => 'kobayasi@example.com',
+                            '性別'  => '男性',
+                        ),
+                        '森' => array(
+                            'ID' => '006',
+                            '出身' => '沖縄',
+                            'メールアドレス' => 'mori@example.com',
+                            '性別'  => '女性',
+                        )
+                    );
+
+                    $i = 0;
+                    //配列の中の名前を出す。
+                    foreach($list as $key => $member){
+                        echo $key;
+                        if($i < count($list)-1){
+                            echo ',';
+                        }
+                        $i++;
+                    }
+
+                    //改行。
+                    echo PHP_EOL;
+
+                    //配列の中の名前を出す。
+                    echo join(",",array_keys($list)).PHP_EOL;
+
+
+                    //出身地札幌の人間を表示する
+                    foreach($list as $key => $member){
+                        if(!isset($member['出身']) || $member['出身'] != '札幌'){
+                            echo $key.PHP_EOL;
+                        }
+                    }
+
                     ?>">
                 </form>
             </div>
