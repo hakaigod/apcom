@@ -29,10 +29,11 @@ class ManagerController extends AppController
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
 		
+		$session = $this->request->session();
 		//TODO:正しいユーザー名に変える
-		$this->set("username","てすとさん");
+		$this->set("username",$session->read("username"));
 		
-		$this->set("userID",$this->request->session()->read("userID"));
+		$this->set("userID",$session->read("userID"));
 	}
 	// ページネーター
 	public $paginate = [
