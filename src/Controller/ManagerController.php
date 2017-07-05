@@ -64,8 +64,8 @@ class ManagerController extends AppController
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
 
 		//直近の模擬コード取得
-		if (!empty($_GET['id'])) {
-			$reqestimicode = $_GET['id'];
+		if (!empty($this->request->getQuery('id'))) {
+			$reqestimicode = $this->request->getQuery('id');
 		} else {
 			$reqestimicode = $nearimi;
 		}
@@ -88,8 +88,8 @@ class ManagerController extends AppController
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
 		->order(['qesnum', 'TfAns.regnum' =>'DESC'])
 		->limit(($imipepnum * 10));
-		if (!empty($_GET['page'])) {
-			$ans->offset($_GET['page'] * 10 - 10);
+		if (!empty($this->request->getQuery('page'))) {
+			$ans->offset($this->request->getQuery('page') * 10 - 10);
 		}
 		// ページネーターセット
 		$this->paginate['limit'] = $imipepnum * 10;
@@ -115,8 +115,8 @@ class ManagerController extends AppController
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
 		$questions->select(['exanum', 'qesnum', 'question', 'answer'])
 		->where(['exanum' => $exanum]);
-		if (!empty($_GET['page'])) {
-			$questions->offset($_GET['page'] * 10 - 10);
+		if (!empty($this->request->getQuery('page'))) {
+			$questions->offset($this->request->getQuery('page') * 10 - 10);
 		}
 		$questions->order(['qesnum'])->limit(10);
 		$this->set(compact('questions'));
@@ -165,7 +165,7 @@ class ManagerController extends AppController
 		$this->set('imidata', $arrayimis);
 
 		// タイトルセット
-		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
+		if (empty($this->request->getQuery('id')) || $this->request->getQuery('id') == $nearimi) {
 			$this->set('detailExamName', '直近一回分');
 		} else {
 			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
@@ -196,23 +196,23 @@ class ManagerController extends AppController
 		->order(['regnum' => 'DESC']);
 
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['regnum'])) {
-				$queryStudens->where(['regnum' => $_POST['regnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('regnum'))) {
+				$queryStudens->where(['regnum' => $this->request->getData('regnum')]);
 			} else {
-				if (!empty($_POST['stuname'])) {
-					$queryStudens->where(['stuname LIKE' => '%'.$_POST['stuname'].'%']);
+				if (!empty($this->request->getData('stuname'))) {
+					$queryStudens->where(['stuname LIKE' => '%'.$this->request->getData('stuname').'%']);
 				}
-				if ($_POST['depnum'] != '0'){
-					$queryStudens->where(['MfStu.depnum' => $_POST['depnum']]);
+				if ($this->request->getData('depnum') != '0'){
+					$queryStudens->where(['MfStu.depnum' => $this->request->getData('depnum')]);
 				}
-				if ($_POST['stuyear'] != '0') {
-					$queryStudens->where(['stuyear' => $_POST['stuyear']]);
+				if ($this->request->getData('stuyear') != '0') {
+					$queryStudens->where(['stuyear' => $this->request->getData('stuyear')]);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryStudens->where(['MfStu.deleted_flg' => FALSE]);
 				}
-				if (empty($_POST['graduate_flg'])) {
+				if (empty($this->request->getData('graduate_flg'))) {
 					$queryStudens->where(['graduate_flg' => FALSE]);
 				}
 			}
@@ -232,15 +232,16 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
 		// 個別追加
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryAddStu = $this->MfStu->query()
 			->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
 			->values([
-				'regnum' => $_POST['stunum'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'stupass' => $this->passhash($_POST['stunum'])
+				$this->request->getData('')
+				'regnum' => $this->request->getData('stunum'),
+				'stuname' => $this->request->getData('stuname'),
+				'stuyear' => $this->request->getData('old'),
+				'depnum' => $this->request->getData('depnum'),
+				'stupass' => $this->passhash($this->request->getData('stunum'))
 			]);
 			try {
 				$queryAddStu->execute();

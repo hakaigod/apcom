@@ -32,10 +32,10 @@ const STR_WEIGHT = 5;
  */
 class StudentController extends AppController
 {
-	
+
 	public function initialize(){
 		parent::initialize();
-		
+
 		//回答テーブル
 		$this->loadModel('TfAns');
 		//模擬試験テーブル
@@ -52,11 +52,7 @@ class StudentController extends AppController
 		$this->loadModel('MfExa');
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
-		
-		$this->writeSession(['userID'], "13120023");
-		$this->writeSession(['username'], "おでん");
-		$this->writeSession(['role'], "student");
-		
+
 		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
 		$roleFromSsn = $this->readSession(['role']);
@@ -82,30 +78,30 @@ class StudentController extends AppController
 		}else{
 			$this->set("studentName", $username);
 			$this->set("logoLink", ["controller" => "student","action" => "summary","id" => $idFromSsn]);
-			
+
 		}
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
 	}
-	
+
 	//パスワード更新
 	public function updatePass(  ){
-	
+
 	}
-	
+
 	//ユーザマイページに表示される画面
 	public function summary(){
-		
+
 		$regnum = $this->request->getParam("id");
-		
+
 		//模擬試験合計、模擬試験情報 取得
 		$imitations = $this->TfImi->find()
 			->contain([ 'MfExa','TfSum' => function(Query $q) use ($regnum) {
 				return $q->where(['regnum' => $regnum] );}])
 			->orderDesc('imicode')
 			->all();
-		
+
 		$imiDetails = [];
 		//ジャンルごとの平均が入る
 		$userAvg = $wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
@@ -150,7 +146,7 @@ class StudentController extends AppController
 		//全体のジャンルごとの平均:$wholeAvg
 		$this->set(compact('wholeAvg'));
 	}
-	
+
 	//ジャンルごとの合計をとる
 	public function calcGenreSum( array $sum, array $single):array
 	{
@@ -174,7 +170,7 @@ class StudentController extends AppController
 			return [0,0,0];
 		}
 	}
-	
+
 	//模擬試験結果入力画面
 	public function input(){
 		if ($this->readSession(['role']) != 'student') {
@@ -234,7 +230,7 @@ class StudentController extends AppController
 		unset($notAnsedPages[ count($notAnsedPages) - 1 ]);
 		$this->set('isAnsed', $this->isAnsweredAll($notAnsedPages));
 	}
-	
+
 	private function writeAnsToSsn(ServerRequest $request){
 		$imicode = $request->getParam('imicode');
 		//遷移元ページのリンク番号
@@ -271,21 +267,21 @@ class StudentController extends AppController
 	}
 	//解答をDBに送信する
 	public function sendAll() {
-		
+
 		if ($this->readSession(['role']) != 'student') {
 			return;
 		}
-		
+
 		//回答入力時
 		if ($this->request->is('post')) {
 			$this->writeAnsToSsn($this->request);
 		}
 		$regnum = $this->readSession(['userID']);
-		
+
 		$imicode = $this->request->getParam('imicode');
 		//模擬試験コード:$imicode
 		$this->set(compact('imicode'));
-		
+
 		//もし一つでも未入力の場合は何もしない
 		if ( !($this->isAnsweredAll($this->getNotAnsed($imicode))) ) {
 			$this->set('answeredAll',false);
@@ -364,7 +360,7 @@ class StudentController extends AppController
 			                  'id'         => $regnum, 'imicode' => $imicode ]);
 		}
 	}
-	
+
 	//各回の詳細な結果
 	public function result ()
 	{
@@ -372,7 +368,7 @@ class StudentController extends AppController
 		$imicode = $this->request->getParam('imicode');
 		//学籍番号
 		$regnum = $this->request->getParam("id");
-		
+
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
 		if ( $imiQesAns === null ) {
@@ -446,7 +442,7 @@ class StudentController extends AppController
 		}
 		$this->set("barNumbers",$barNumHasZero);
 	}
-	
+
 	private function getCorrectRates( int $imicode, int $imipepnum ): array
 	{
 			//誰も受験していないとき、空の配列を返す
@@ -464,7 +460,7 @@ class StudentController extends AppController
 			foreach ( $correctRatesNonZero as $rate ) {
 				$resultAndZero[ $rate[ 'subQesnum' ] - 1 ] = $rate[ 'rate' ];
 			}
-			
+
 			return $resultAndZero;
 	}
 	//入力されていないページ一覧を取得
@@ -509,12 +505,12 @@ class StudentController extends AppController
 	private function getSsnTag( array $children): String{
 		return implode(".", $children);
 	}
-	
+
 	//一問一答ジャンル選択画面
 	public function qaaSelectGenre()
 	{
 	}
-	
+
 	//一問一答出題画面
 	public function qaaQuestion()
 	{
@@ -540,7 +536,7 @@ class StudentController extends AppController
 	}
 	public function yearSelection()
 	{
-		
+
 		//実施された本番一覧を取得
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
@@ -572,13 +568,13 @@ class StudentController extends AppController
 		}
 		$this->set(compact('averages'));
 	}
-	
-	
+
+
 	public function practiceExam()
 	{
 		$exanum = $this->request->getParam("exanum");
 		$qesnum = $this->request->getParam("qesnum");
-		
+
 		$this->set(compact('exanum'));
 		//実施された本番一覧を取得
 		$exams = $this->MfExa->find()
@@ -587,12 +583,12 @@ class StudentController extends AppController
 			//配列として返されるので単数として受け取る
 			->first();
 		$this->set(compact('exams'));
-		
+
 		$qes = $this->MfQes->find()
 			->where(['MfQes.qesnum' => $qesnum, 'MfQes.exanum' => $exanum])
 			->first();
 		$this->set(compact('qes'));
-		
+
 		//posAnsを呼び出せるようにする
 		$this->posAns();
 //	    $this->posAns($qes->$qesnum,$qes->$exanum);
@@ -600,30 +596,30 @@ class StudentController extends AppController
 //	    if (isset($_POST['ansSelect']) == true) {
 //	    }
 	}
-	
-	
+
+
 	// 年度と問題番号の紐づけを行う
 	public function posAns(){
 //    	$this->practiceExam($exanum);
-		
-		
+
+
 		//$ansSelectを呼び出せるようにする
-		
+
 		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('ansSelect'));
 		//POSTで送られたデータをセッションに書き込む
 		$this->writeSession(['answers'],$ansSelect);
 //		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
-		
+
 		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
 		//$sesAnsを呼び出せるようにする
 		$sesAns=$this->readSession(['answers']);
 		$this->set(compact('sesAns'));
-		
+
 	}
-	
+
 	public function score()
 	{
-	
+
 	}
 }
