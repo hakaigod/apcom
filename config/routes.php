@@ -109,6 +109,10 @@ Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
 		['controller' => 'manager', 'action' => 'addstu']
 	);
 	$routes->connect(
+		'/students/modify',
+		['controller' => 'manager', 'action' => 'modstu']
+	);
+	$routes->connect(
 		'/students/reset',
 		['controller' => 'manager', 'action' => 'reIssueStuPass']
 	);

@@ -315,7 +315,7 @@ class ManagerController extends AppController
 					// 学籍番号が変更されたら、画像の名前を変更
 					rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stunum'] . '.png');
 				}
-				$this->redirect(['controller' => 'Manager', 'action' => 'modstu?id=' .$_POST['stunum']]);
+				$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $_POST['stunum']]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing ' . $e->getMessage());
