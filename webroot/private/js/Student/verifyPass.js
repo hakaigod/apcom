@@ -1,53 +1,101 @@
 /*jshint esversion: 6 */
 
+
 $(function(){
 	"use strict";
-
-
-	$(".pass-form").blur(function () {
-        console.log("started");
-        let borderColor = 'red';
+	
+	const NOT_INPUTTED = "パスワードが未入力です。";
+	const NOT_ALPHANUM = "パスワードは8～20文字の英数字で入力してください。";
+	const INCONSISTENT = "パスワードが一致していません。";
+	$("#old-pass").blur(function () {
         let text = $(this).val();
-        console.log(text);
-		if (isNotNull(text)) {
-            console.log("old is not null");
-
-            if (isAlphaNum(text)) {
-				borderColor = 'steelblue';
-                console.log("old is alphanum");
-			}else {
-                //TODO:エラーメッセージ表示
-                console.log("old is not alphanum");
-            }
-        }else{
-			//TODO:エラーメッセージ表示
-            console.log("old is null");
-		}
-        $(this).css("border-color",borderColor);
-    });
-
-	// admnum
-	$(".newers").blur(function(){
-        let borderColor = 'red';
-        let firstForm = $('#new-pass').val();
-        let secondForm = $('#verify').val();
-        //一つ目のフォームが未入力だったら何もしない
-        if (!(isNotNull(firstForm))) {
-        	return;
-		}
-		//
-		if (isNotNull(secondForm)) {
-			if (isAlphaNum(firstForm) && isAlphaNum(secondForm)) {
-                borderColor = 'steelblue';
-			}else{
-                //TODO:エラーメッセージ表示
-			}
+		let errorMessage = checkText(text);
+		if (errorMessage === null) {
+			$(this).css("border-color","steelblue");
+			$("#old-pass-text").text("");
 		}else{
-            //TODO:エラーメッセージ表示
-        }
-        $("#verify").css("border-color",borderColor);
-
+			$(this).css("border-color","red");
+			$("#old-pass-text").text(errorMessage);
+			
+		}
     });
+
+	$(".newer").blur(function(){
+		let idArray = {
+			0 : {
+				"id":"#new-pass",
+				"color":"",
+				"text":""
+			},
+			1 : {
+				"id":"#verify",
+				"color":"",
+				"text":""
+			}
+		};
+		
+        let firstForm = $(idArray[0].id).val();
+        let secondForm = $(idArray[1].id).val();
+		
+		let firstFormError = checkText(firstForm);
+        let secondFormError = checkText(secondForm);
+        
+        if (firstFormError !== null) {
+	        idArray[0].color = 'red';
+	        idArray[0].text = firstFormError;
+        }else if (secondFormError !== null) {
+	        idArray[1].color = 'red';
+	        idArray[1].text = secondFormError;
+        }else if (firstForm !== secondForm) {
+	        idArray[1].color = 'red';
+	        idArray[1].text = INCONSISTENT;
+        }else{
+	        idArray[0].color = 'steelblue';
+	        idArray[1].color = 'steelblue';
+        }
+        $.each(idArray,function (key, val) {
+	        $(val.id + "-text").text(val.text);
+	        $(val.id).css("border-color", val.color);
+        });
+    });
+	$("#register-button").click(function () {
+		let oldForm = $("#old-pass").val();
+		let firstForm = $("#new-pass").val();
+		let secondForm = $("#verify").val();
+		
+		let oldFormError = checkText(oldForm);
+		let firstFormError = checkText(firstForm);
+		let secondFormError = checkText(secondForm);
+		
+		if (oldFormError !== null) {
+			window.alert(oldFormError);
+			return false;
+		}
+		if (firstFormError !== null) {
+			window.alert(firstFormError);
+			return false;
+		}
+		if (secondFormError !== null) {
+			window.alert(secondFormError);
+			return false;
+		}
+		if (firstForm !== secondForm) {
+			window.alert(INCONSISTENT);
+			return false;
+		}
+		$(this).submit();
+		
+	});
+	function checkText(text) {
+		if (!(isNotNull(text))) {
+			return NOT_INPUTTED;
+		}
+		if (!(isAlphaNum(text))){
+			return NOT_ALPHANUM;
+		}
+		return null;
+	}
+	
     function isNotNull(text){
         return text !== "";
     }

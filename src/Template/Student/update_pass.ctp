@@ -42,19 +42,26 @@
     <form action="" method="post" id="change-pass">
         <br>
         現在のパスワード
-        <input type="password" name="old-pass" id="old-pass" class="form-control pass-form" placeholder="現在のパスワード">
+        <input type="password" name="old-pass" id="old-pass" class="form-control pass-form" placeholder="現在のパスワード"
+               required pattern="^([a-zA-Z0-9]{8,20})$">
+        <div id="old-pass-text"></div>
+
         <br>
         新しいパスワード
-        <input type="password" name="new-pass" id="new-pass" class="form-control pass-form newer" placeholder="新しいパスワード">
+        <input type="password" name="new-pass" id="new-pass" class="form-control pass-form newer" placeholder="新しいパスワード"
+        required pattern="^([a-zA-Z0-9]{8,20})$">
+        <div id="new-pass-text"></div>
+
         <br>
         再入力
-        <input type="password" name="verify" id="verify" class="form-control newer" placeholder="再入力">
+        <input type="password" name="verify" id="verify" class="form-control newer" placeholder="再入力"
+               required pattern="^([a-zA-Z0-9]{8,20})$">
         <button type="button" id="show-pass" class="btn btn-xs btn-info">パスワード表示</button>
-
+        <div id="verify-text"></div>
         <br>
         <div class="full buttons">
             <button type="button" onclick="history.back()" class="col-xs-5 btn btn-warning">キャンセル</button>
-            <button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
+            <button type="button" id="register-button" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
         </div>
 
     </form>
