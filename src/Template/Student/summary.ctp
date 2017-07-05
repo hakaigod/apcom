@@ -7,9 +7,10 @@
  * @var string $studentName
  * @var string $studentID
  * @var string $role
- * //name,date,avg,score,rankのキーをもつ
+ * @var array $logoLink
+ * name,date,avg,score,rankのキーをもつ
  * @var array $imiDetails
- * //tech,man,strのキーをもつ
+ * tech,man,strのキーをもつ
  * @var float[] $userAvg
  * @var float[] $wholeAvg
  */
@@ -60,7 +61,7 @@
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
-<tr><td><a href="">パスワード更新</a></td></tr>
+<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
 <?php $this->end(); ?>
 <br>
 
@@ -89,7 +90,6 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 				                $imiTitle,
 				                [ 'controller' => 'student',
 				                  'action'     => 'input',
-				                  'id'         => $userID,
 				                  'imicode'    => $imi[ 'imicode' ],
 				                  'linkNum'    => 1
 				                ],
@@ -152,14 +152,13 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
                     <span class="label label-success">済</span>
                 <?php endif;?>
 	            <?php
-                $titleArray = ['controller' => 'student',
-	                                   'id' => $studentID,
-	                                   'imicode' => $imi['imicode']];
+                $titleArray = ['controller' => 'student', 'imicode' => $imi['imicode']];
                 if ($imi['score'] === null) {
                     $titleArray['action'] = 'input';
                     $titleArray['linkNum'] = 1;
                 }else{
                     $titleArray['action'] = 'result';
+                    $titleArray['id'] = $studentID;
                 }
                 if ($role == 'manager' && !(isset($imi['score']))) {
                     echo $imi[ 'name' ];
@@ -173,9 +172,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 	                echo $this->Html->link("[編集]",
 	                                  [ 'controller'  => 'student',
 	                                    'action'      => 'input',
-	                                    'id'          => $userID,
-	                                    'imicode'     => $imi[ 'imicode' ]
-		                                  , 'linkNum' => 1 ],
+	                                    'imicode'     => $imi[ 'imicode' ],
+                                        'linkNum' => 1 ],
 	                                  [ 'class' => 'text-muted' ]);
                 }
 	            ?>

@@ -51,18 +51,23 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 //		 8桁の数字に制限、0始まりに対応
 		['id' => '\d{8}']
 	);
+	
 	$routes->connect(
-		'/:id/input/:imicode/:linkNum',
+		'/updatePassword',
+		['controller' => 'student', 'action'=> 'updatePass']
+	);
+	$routes->connect(
+		'/input/:imicode/:linkNum',
 		['controller' => 'student', 'action'=> 'input'],
 		['id' => '\d{8}','imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
 	);
 	$routes->connect(
-		'/:id/sendAll/:imicode/',
+		'/sendAll/:imicode/',
 		['controller' => 'student', 'action'=> 'sendAll'],
 		['id' => '\d{8}','imicode' => '\d{1,3}']
 	);
 	$routes->connect(
-		'/:id/result/:imicode',
+		'/result/:id/:imicode',
 		['controller' => 'student', 'action'=> 'result'],
 		['id' => '\d{8}','imicode' => '\d{1,3}']
 	);
@@ -81,7 +86,6 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
-	
 	
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',

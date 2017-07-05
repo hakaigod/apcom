@@ -7,49 +7,55 @@
  * @var string $studentName
  * @var string $studentID
  * @var string $role
+ * @var array $logoLink
  */
 ?>
 
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-応用情報ど.com  -メニュー
+応用情報ど.com  -パスワード更新
 <?php $this->end(); ?>
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Manager/index.css') ?>
-<?= $this->Html->css('/private/css/Input/summary.css') ?>
 <?php $this->end(); ?>
 
-<!-- jsセット -->
+
 <?php $this->start('script'); ?>
-<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<!--canvasにグラフを設定するスクリプト-->
-<script id="check-script"
-	<?php
-	echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"';
-	echo " user-name = \"{$studentName}さん\"";
-	$dates = array_column($imiDetails,'date');
-	krsort($dates);
-	echo " line-dates = " . json_safe_encode( array_values($dates) );
-	$scores = array_column($imiDetails,'score');
-	krsort($scores);
-	echo " line-student-score = " . json_safe_encode( array_values($scores) );
-	$averages =  array_column($imiDetails,'avg');
-	krsort($averages);
-	echo " line-averages = " . json_safe_encode( array_values($averages) );
-	echo " radar-user = " . json_safe_encode(array_values($userAvg));
-	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
-	?>
-	    defer>
-</script>
-<?php $this->end(); ?>
+<?= $this->Html->script('/private/js/Student/displayPass.js') ?>
+<?= $this->Html->script('/private/js/Student/verifyPass.js') ?>
+<?php $this->end();?>
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
-<tr><td><a href="">パスワード更新</a></td></tr>
 <?php $this->end(); ?>
 <br>
+<div class="col-md-offset-2">
+    <h5>パスワード変更</h5>
+    ログインに使用するパスワードを変更することが出来ます。<br>
+    パスワードを共有することや推測されやすいパスワードは避けてください。
+</div>
+<div class="col-md-offset-3 col-md-6">
+    <form action="" method="post" id="change-pass">
+        <br>
+        現在のパスワード
+        <input type="password" name="old-pass" id="old-pass" class="form-control pass-form" placeholder="現在のパスワード">
+        <br>
+        新しいパスワード
+        <input type="password" name="new-pass" id="new-pass" class="form-control pass-form newer" placeholder="新しいパスワード">
+        <br>
+        再入力
+        <input type="password" name="verify" id="verify" class="form-control newer" placeholder="再入力">
+        <button type="button" id="show-pass" class="btn btn-xs btn-info">パスワード表示</button>
+
+        <br>
+        <div class="full buttons">
+            <button type="button" onclick="history.back()" class="col-xs-5 btn btn-warning">キャンセル</button>
+            <button type="submit" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
+        </div>
+
+    </form>
+</div>
