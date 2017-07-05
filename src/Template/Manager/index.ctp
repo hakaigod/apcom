@@ -65,7 +65,7 @@ managerrrrr
             <tr>
                 <td>平均</td>
                 <td><?= $average != 0 ? number_format($average * 1.25 ,2) . '点' : 0 . '点'; ?></td>
-				<?php foreach ($questionsdetail as $par): ?>
+				<?php foreach ($questionsDetail as $par): ?>
                     <td>
 						<?= number_format($par['corrects'] * 100, 0) . '%'; ?>
                     </td>
@@ -92,9 +92,9 @@ managerrrrr
 <div class="row" id="correctRate">
     <div class="col-xs-12">
         <h6>正答率</h6>
-		<?php $i = 0; foreach ($questionsdetail as $key): ?>
+		<?php $i = 0; foreach ($questionsDetail as $key): ?>
             <div class="col-par-5" id="<?= 'q' . $i?>">
-                <div class="qno"><a onclick="window.open('Manager/QuestionDetail?ex=<?= $key['exanum'] . '&qn='. $key['qesnum'];?>','問題詳細','width=700,height=400,scrollbars=yes');">問 <?= $key['qesnum']; ?></a></div>
+                <div class="qno"><a href="Manager/QuestionDetail?ex=<?= $key['exanum'] . '&qn='. $key['qesnum'];?>" target="_blank">問 <?= $key['qesnum']; ?></a></div>
                 <div id="question"><?= mb_strimwidth(strip_tags($key['question']), 0, 40, "..."); ?></div>
                 <div class="par"><b class="parnum"><?= number_format($key['corrects'] * 100, 1); ?></b>%</div>
             </div>

@@ -15,7 +15,7 @@ class ManagerController extends AppController
 {
 	public function initialize(){
 		parent::initialize();
-		$this->set('headerlink', $this->request->webroot . 'Manager');
+		$this->set('logoLink', $this->request->webroot . 'Manager');
 
 		$this->loadComponent('Paginator');
 
@@ -34,6 +34,7 @@ class ManagerController extends AppController
 			if ($session->read('role') == 'student') {
 				$this->redirect(['controller' => 'student', 'action' => 'summary','id' => $session->read('userID')]);
 			} else {
+				$this->set("userID", $session->read('userID'));
 				$this->set("username", $session->read('username'));
 			}
 		} else {
@@ -75,11 +76,11 @@ class ManagerController extends AppController
 		->where(['imicode' => $reqestimicode])->first()->toArray();
 		// 模擬試験の受験員人数
 		$imipepnum = $queryAvg['imipepnum'];
-		$avg = 0;
+		$average = 0;
 		if ($imipepnum != 0) {
-			$avg = $queryAvg['imisum'] / $queryAvg['imipepnum'];
+			$average = $queryAvg['imisum'] / $queryAvg['imipepnum'];
 		}
-		$this->set('average', $avg);
+		$this->set(compact('average'));
 
 		// 模擬試験ごとの回答データ取得
 		$ans = $this->TfAns->find()->contain(['MfStu'])
@@ -107,7 +108,7 @@ class ManagerController extends AppController
 				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
 			}
 		}
-		$this->set('answers', $answers);
+		$this->set(compact('answers'));
 
 		// 問題情報取得
 		$questions = $this->MfQes->find();
@@ -118,7 +119,7 @@ class ManagerController extends AppController
 			$questions->offset($_GET['page'] * 10 - 10);
 		}
 		$questions->order(['qesnum'])->limit(10);
-		$this->set('questions', $questions);
+		$this->set(compact('questions'));
 
 		// 正答率
 		$questionsDetail = array();
@@ -144,7 +145,7 @@ class ManagerController extends AppController
 				$questionsDetail[$key['qesnum']]['corrects'] /= $imipepnum;
 			}
 		}
-		$this->set('questionsdetail', $questionsDetail);
+		$this->set(compact('questionsDetail'));
 		// ここまで正答率
 
 		// 模擬試験一覧
@@ -176,8 +177,12 @@ class ManagerController extends AppController
 	{
 		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
+		$ex = $this->request->getQuery('ex');
+		$qn = $this->request->getQuery('qn');
 
-		$this->set('questionDetail', $this->MfQes->get([$_GET['qn'], $_GET['ex']],['contain' => ['MfExa']]));
+		$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
+		$this->set(compact('ex'));
+		$this->set(compact('qn'));
 	}
 
 	// 学生管理
@@ -396,7 +401,10 @@ class ManagerController extends AppController
 			->update()
 			->set([
 				'admname' => $_POST['admname'],
-				'deleted_flg' => !empty($_POST['deleted_flg'])
+				'deleted_flg' => !empty($_POST['deleted_flg']),
+
+				//　消す
+				'admpass' => $this->passhash($_POST['admpass'])
 			])
 			->where(['admnum' => $_GET['id']]);
 			try {

@@ -5,9 +5,9 @@
 	<?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->fetch('title')?></title>
-	
+
 	<?= $this->Html->meta('icon') ?>
-	
+
 	<?= $this->fetch('meta') ?>
 
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -16,8 +16,9 @@
     <!-- 自作CSS -->
 	<?= $this->Html->css('/private/css/default.css') ?>
 	<?= $this->Html->css('/private/css/flat_overwrite.css') ?>
-	<?= $this->Html->css('/private/css/login/login.css') ?>
-	
+	<?= $this->Html->css('/private/css/Login/login.css') ?>
+
+
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
 	<?= $this->Html->script('video.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
@@ -25,14 +26,14 @@
 	<?= $this->Html->script('prettify.js') ?>
 
     <!-- 自作JS -->
-	
-	
+
+
 	<?= $this->fetch('meta') ?>
 	<?= $this->fetch('css') ?>
 	<?= $this->fetch('script') ?>
 
     <!-- login   -->
-	
+
 	<?= $this->Html->script('/private/js/login/login.js') ?>
 
 </head>
