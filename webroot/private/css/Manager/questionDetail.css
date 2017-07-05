@@ -1,0 +1,9 @@
+#question {
+	min-height: 30vh;
+}
+#choice {
+	min-height: 40vh;
+}
+.buttons {
+	margin-top: 0px;
+}

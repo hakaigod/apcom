@@ -308,28 +308,28 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryStuUpdate = $this->MfStu->query()->update()
 			->set([
-				'regnum' => $_POST['stunum'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'deleted_flg' => !empty($_POST['deleted_flg']),
-				'graduate_flg' => !empty($_POST['graduate_flg'])
+				'regnum' => $this->request->getData('stunum'),
+				'stuname' => $this->request->getData('stuname'),
+				'stuyear' => $this->request->getData('old'),
+				'depnum' => $this->request->getData('depnum'),
+				'deleted_flg' => !empty($this->request->getData('deleted_flg')),
+				'graduate_flg' => !empty($this->request->getData('graduate_flg'))
 			])
-			->where(['regnum' => $_GET['id']]);
+			->where(['regnum' => $this->request->getQuery('id')]);
 			try {
 				$queryStuUpdate->execute();
-				if ($_POST['stunum'] != $_GET['id']) {
+				if ($this->request->getData('stunum') != $this->request->getQuery('id')) {
 					// 学籍番号が変更されたら、画像の名前を変更
-					rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stunum'] . '.png');
+					rename('private/img/identicons/' . $this->request->getQuery('id') . '.png', 'private/img/identicons/' . $this->request->getData('stunum') . '.png');
 				}
-				$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $_POST['stunum']]);
+				$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $this->request->getData('stunum')]);
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing');
-				$this->set('regnum', $this->MfStu->get($_GET['id']));
+				$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 			}
 		}
 	}
@@ -340,14 +340,14 @@ class ManagerController extends AppController
 		// 管理者一覧
 		$queryAdmins = $this->MfAdm->find();
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['admnum'])) {
-				$queryAdmins->where(['admnum' => $_POST['admnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('admnum'))) {
+				$queryAdmins->where(['admnum' => $this->request->getData('admnum')]);
 			} else {
-				if (!empty($_POST['admname'])) {
-					$queryAdmins->where(['admname LIKE' => '%' . $_POST['admname'] . '%']);
+				if (!empty($this->request->getData('admname'))) {
+					$queryAdmins->where(['admname LIKE' => '%' . $this->request->getData('admname') . '%']);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryAdmins->where(['deleted_flg' => FALSE]);
 				}
 			}
@@ -364,21 +364,21 @@ class ManagerController extends AppController
 		$identiconComponent = $this->loadComponent("Identicon");
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
-			if (empty($_POST['admname']) || empty($_POST['admpass'])) {
-				// 学生番号か名前が未入力の場合
+		if ($this->request->is('POST')) {
+			if (empty($this->request->getData('admname')) || empty($this->request->getData('admpass'))) {
+				// 管理者連番か名前が未入力の場合
 				$this->Flash->error('missing');
 			} else {
 				$queryAdminInsert = $this->MfAdm->query()
 				->insert(['admnum', 'admname', 'admpass'])
 				->values([
 					'admnum' => NULL,
-					'admname' => $_POST['admname'],
-					'admpass' => $this->passHash($_POST['admpass'])
+					'admname' => $this->request->getData('admname'),
+					'admpass' => $this->request->getData('admpass')
 				]);
 				try {
 					$queryAdminInsert->execute();
-					$admnum = $this->MfAdm->find()->select('admnum')->where(['admname like' => '%' . $_POST['admname'] . '%'])->first()->toArray()['admnum'];
+					$admnum = $this->MfAdm->find()->select('admnum')->where(['admname like' => '%' . $this->request->getData('admname') . '%'])->first()->toArray()['admnum'];
 					$identiconComponent->makeImage($admnum);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
@@ -393,26 +393,26 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// 管理者情報
-		$this->set('admnum', $this->MfAdm->get($_GET['id']));
+		$this->set('admnum', $this->MfAdm->get($this->request->getQuery('id')));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryAdminUpdate = $this->MfAdm->query()
 			->update()
 			->set([
-				'admname' => $_POST['admname'],
-				'deleted_flg' => !empty($_POST['deleted_flg']),
+				'admname' => $this->request->getData('admname'),
+				'deleted_flg' => !empty($this->request->getData('deleted_flg')),
 
 				//　消す
-				'admpass' => $this->passHash($_POST['admpass'])
+				'admpass' => $this->passHash($this->request->getData('admpass'))
 			])
-			->where(['admnum' => $_GET['id']]);
+			->where(['admnum' => $this->request->getQuery('id')]);
 			try {
 				$queryAdminUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
 				$this->Flash->error('missing');
-				$this->set('admnum', $this->MfAdm->get($_GET['id']));
+				$this->set('admnum', $this->MfAdm->get($this->request->getQuery('id')));
 			}
 		}
 	}
@@ -423,12 +423,12 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
-			$oldPass = $this->MfAdm->get($_POST['admnum'])->toArray()['admpass'];
-			if ($this->pasCheck($_POST['admOldPass'], $oldPass)) {
+		if ($this->request->is('POST')) {
+			$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
+			if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
 				$queryAdmPassUpdate = $this->MfAdm->query()->update()
-				->set(['admpass' => $this->passHash($_POST['admNewPass'])])
-				->where(['admnum' => $_POST['admnum']]);
+				->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
+				->where(['admnum' => $this->request->getData('admnum')]);
 				try {
 					$queryAdmPassUpdate->execute();
 					$this->Flash->success('success');
@@ -447,12 +447,12 @@ class ManagerController extends AppController
 		$this->set('exams', $this->MfExa->find());
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryImiCodeIssueInsert = $this->TfImi->query()
 			->insert(['imicode', 'exanum'])
 			->values([
 				'imicode' => NULL,
-				'exanum' => $_POST['exanum']
+				'exanum' => $this->request->getData('exanum')
 			]);
 			try {
 				$queryImiCodeIssueInsert->execute();
@@ -466,14 +466,14 @@ class ManagerController extends AppController
 	// 学生パスワード再発行画面
 	public function reIssueStuPass()
 	{
-
 		// POSTリクエストがあれば実行
-		if (!empty($_POST['stunum'])) {
-			$queryReIssueStuPassUpdate = $this->MfStu->query()
-			->update()
-			->set(['stupass' => $this->passHash($_POST['stunum'])])
-			->where(['regnum' => $_POST['stunum']]);
+		if (!empty($this->request->getData('stunum'))) {
 			try {
+				$this->MfStu->get($this->request->getData('stunum'));
+				$queryReIssueStuPassUpdate = $this->MfStu->query()
+				->update()
+				->set(['stupass' => $this->passHash($this->request->getData('stunum'))])
+				->where(['regnum' => $this->request->getData('stunum')]);
 				$queryReIssueStuPassUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
@@ -487,14 +487,14 @@ class ManagerController extends AppController
 	public function depManager() {
 		$queryDep = $this->MfDep->find();
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['depnum'])) {
-				$queryDep->where(['depnum' => $_POST['depnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('depnum'))) {
+				$queryDep->where(['depnum' => $this->request->getData('depnum')]);
 			} else {
-				if (!empty($_POST['admname'])) {
-					$queryDep->where(['admname LIKE' => '%' . $_POST['depnum'] . '%']);
+				if (!empty($this->request->getData('admname'))) {
+					$queryDep->where(['admname LIKE' => '%' . $this->request->getData('depnum') . '%']);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryDep->where(['deleted_flg' => FALSE]);
 				}
 			}
@@ -511,12 +511,12 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryDepInsert = $this->MfDep->query()
 			->insert(['depnum', 'depname'])
 			->values([
 				'depnum' => NULL,
-				'depname' => $_POST['depname']
+				'depname' => $this->request->getData('depname')
 			]);
 			try {
 				$queryDepInsert->execute();
@@ -532,16 +532,16 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// 学科情報
-		$this->set('dep', $this->MfDep->get($_GET['id']));
+		$this->set('dep', $this->MfDep->get($this->request->getQuery('id')));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryDepUpdate = $this->MfDep->query()->update()
 			->set([
-				'depname' => $_POST['depname'],
-				'deleted_flg' => !empty($_POST['deleted_flg'])
+				'depname' => $this->request->getData('depname'),
+				'deleted_flg' => !empty($this->request->getData('deleted_flg'))
 			])
-			->where(['depnum' => $_POST['depnum']]);
+			->where(['depnum' => $this->request->getData('depnum')]);
 			try {
 				$queryDepUpdate->execute();
 				//直前のページにリダイレクト

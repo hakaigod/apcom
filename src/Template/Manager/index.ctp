@@ -92,7 +92,7 @@
         <h6>正答率</h6>
 		<?php $i = 0; foreach ($questionsDetail as $key): ?>
             <div class="col-par-5" id="<?= 'q' . $i?>">
-                <div class="qno"><a href="Manager/QuestionDetail?ex=<?= $key['exanum'] . '&qn='. $key['qesnum'];?>" target="_blank">問 <?= $key['qesnum']; ?></a></div>
+                <div class="qno"><a href="<?= $this->Url->build(['action' => 'question_detail','ex' => $key['exanum'], 'qn' => $key['qesnum']])?>" target="_blank">問 <?= $key['qesnum']; ?></a></div>
                 <div id="question"><?= mb_strimwidth(strip_tags($key['question']), 0, 40, "..."); ?></div>
                 <div class="par"><b class="parnum"><?= number_format($key['corrects'] * 100, 1); ?></b>%</div>
             </div>

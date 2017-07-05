@@ -44,7 +44,7 @@ use Cake\Routing\Route\DashedRoute;
 Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope("/student", function ( RouteBuilder $routes ) {
-	
+
 	$routes->connect(
 		'/:id',
 		['controller' => 'student', 'action'=> 'summary'],
@@ -70,19 +70,19 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		'/qaaSelectGenre',
 		['controller' => 'student', 'action' => 'qaaSelectGenre']
 	);
-	
+
 	$routes->connect(
 		'/qaaQuestion/:question_num/',
 		['controller' => 'student', 'action' => 'qaaQuestion'],
 		['question_num' => '\d+',]
 	);
-	
+
 	$routes->connect(
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
-	
-	
+
+
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
 		['controller' => 'student', 'action' => 'practiceExam'],
@@ -96,6 +96,7 @@ Router::scope("/manager", function ( RouteBuilder $routes ) {
 	$routes->connect(
 		'/imitation/register',
 		['controller' => 'manager', 'action'=> 'imiCodeIssue']);
+
 });
 //学生、学科、管理者の管理
 Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
@@ -125,6 +126,10 @@ Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
 		'/departments/add',
 		['controller' => 'manager', 'action' => 'adddep']
 	);
+	$routes->connect(
+		'/departments/mod',
+		['controller' => 'manager', 'action' => 'moddep']
+	);
 	//管理者管理
 	$routes->connect(
 		'/admins',
@@ -135,8 +140,16 @@ Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
 		['controller' => 'manager', 'action' => 'addadmin']
 	);
 	$routes->connect(
+		'/admins/mod',
+		['controller' => 'manager', 'action' => 'modadmin']
+	);
+	$routes->connect(
 		'/admins/reset',
 		['controller' => 'manager', 'action' => 'resetAdmPass']
+	);
+	$routes->connect(
+		'/question_detail',
+		['controller' => 'manager', 'action' => 'question_detail']
 	);
 });
 
@@ -149,7 +162,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
 	$routes->connect('', ['controller' => 'Login', 'action' => 'index']);
 	$routes->connect('login', ['controller' => 'Login', 'action' => 'index']);
-	
+
     /**
      * Connect catchall routes for all controllers.
      *

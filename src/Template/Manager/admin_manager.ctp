@@ -59,7 +59,7 @@
 				<td class="col-xs-8"><?= $admin->admname; ?></td>
 				<td class="col-xs-1"><?= $admin->deleted_flg ? "済" : ""; ?></td>
 				<td class="col-xs-1 center">
-					<button class="btn btn-primary" onclick="window.open('modadmin?id=<?= $admin->admnum; ?>','管理者情報修正','width=500,height=450');">
+					<button class="btn btn-primary" onclick="window.open('<?=$this->Url->build(['action' => 'modadmin','id' => $admin->admnum])?>','管理者情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>

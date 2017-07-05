@@ -1,5 +1,11 @@
+<!-- タイトルセット -->
+<?= $this->start('title'); ?>
+	問題詳細
+<?= $this->end(); ?>
+
 <?= $this->start('css'); ?>
 	<?= $this->Html->css('/private/css/ap.css') ?>
+	<?= $this->Html->css('/private/css/Manager/questionDetail.css') ?>
 <?= $this->end(); ?>
 
 <!-- 以下Content -->
@@ -7,13 +13,13 @@
 <h4><?= $questionDetail->mf_exa->exam_detail . '　問' . $questionDetail->qesnum; ?></h4>
 <!-- 問題文 -->
 <!-- 問題画像があれば表示される -->
-<div class="row">
+<div class="row" id="question">
 	<?= $this->qaa->viewTextImg($questionDetail->question)?>
 </div>
 
 <?php if(empty($questionDetail->answer_pic)): ?>
 	<!-- 選択肢が画像ではない場合 -->
-	<div class="row">
+	<div class="row" id="choice">
 		<table class="table table-bordered">
 			<tbody>
 				<tr>
@@ -37,7 +43,7 @@
 	</div>
 <?php else:?>
 	<!-- 選択肢が画像の場合 -->
-	<div class="row">
+	<div class="row" id="choice">
 		<div class="center">
 			<?= $this->qaa->viewTextImg($questionDetail->answer_pic)?>
 		</div>
