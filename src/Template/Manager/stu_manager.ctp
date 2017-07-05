@@ -89,7 +89,7 @@
 				<td class="col-xs-1"><?= $record->graduate_flg ? "済" : "";; ?></td>
 				<td class="col-xs-1"><?= $record->deleted_flg ? "済" : ""; ?></td>
 				<td class="col-xs-1 center">
-					<button class="btn btn-primary" onclick="window.open('modstu?id=<?= $record->regnum; ?>','学生情報修正','width=500,height=450');">
+					<button class="btn btn-primary" onclick="window.open('<?= $this->Url->build(['action' => 'modstu','id' => $record->regnum])?>','学生情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>
