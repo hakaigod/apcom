@@ -28,8 +28,11 @@
 ?>
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
-<script id="script" src="<?= $this->request->getAttribute('webroot')?>/private/js/Student/qaa.js"
-        answer=<?= json_safe_encode($question->answer)?>
+<script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setlog.js"
+        qnum = '<?= json_safe_encode($qNum); ?>'
+        answer = '<?= json_safe_encode($question->answer); ?>'
+        field = '<?= json_safe_encode($question->mf_fie['fiename']); ?>'
+        detail = '<?= json_safe_encode($question->mf_exa->exam_detail); ?>'
 ></script>
 <?= $this->end();?>
 <!-- ユーザーネームセット -->
@@ -155,114 +158,7 @@ Student
                 <form action="" method="post">
                     <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
                     <input type="hidden" name="genre[0]" value="<?= $getGenre[0]?>">
-                    <!--セッションへの保存-->
-                    <input type="hidden" name="answerLog" value="
-                    <?php
-                    //falsehoodに正誤又は未回答の結果を入力
-                    if($question->answer == $select){
-                        $falsehood = "O";
-                    }else if($select == ""){
-                        $falsehood = "-";
-                    }else {
-                        $falsehood = "X";
-                    }
-
-                    if (empty($answerLog['$qNum'])){
-                        $answerLog = array(
-                            '$qNum'=>array(
-                                'qnum'=>$qNum,
-                                'detail'=>$question->mf_exa->exam_detail,
-                                'field'=>$question->mf_fie->fiename,
-                                'falsehood'=>$falsehood
-                            )
-                        );
-                    } else {
-                        $answerLog = array_merge($answerLog,
-                            array(
-                                '$qNum'=>array(
-                                    'qnum'=>$qNum,
-                                    'detail'=>$question->mf_exa->exam_detail,
-                                    'field'=>$question->mf_fie->fiename,
-                                    'falsehood'=>$falsehood
-                                )
-                            )
-                        );
-                    }
-                    $i = 0;
-                    foreach ($answerLog as $list=>$num){
-                        echo ($num);
-                        foreach ($num as $item=>$value){
-                            echo $item.'=>'.$value('qnum');
-                            echo $item.'=>'.$value('detail');
-                            echo $item.'=>'.$value('field');
-                            echo $item.'=>'.$value('falsehood');
-                        }
-                    }
-
-                    $list = array(
-                        '山田' => array(
-                            'ID' => '001',
-                            '出身' => '函館',
-                            'メールアドレス' => 'yamada@example.com',
-                            '性別' => '女性'
-                        ),
-                        '田中' => array(
-                            'ID' => '002',
-                            'メールアドレス' => 'tanaka@example.com',
-                            '性別'  => '男性'
-                        ),
-                        '高橋' => array(
-                            'ID' => '003',
-                            '出身' => '札幌',
-                            'メールアドレス' => 'takahasi@example.com',
-                            '性別'  => '女性',
-                        ),
-                        '井上' => array(
-                            'ID' => '004',
-                            '出身' => '東京',
-                            'メールアドレス' => 'inoue@example.com',
-                            '性別'  => '男性',
-                        ),
-                        '小林' => array(
-                            'ID' => '005',
-                            '出身' => '大阪',
-                            'メールアドレス' => 'kobayasi@example.com',
-                            '性別'  => '男性',
-                        ),
-                        '森' => array(
-                            'ID' => '006',
-                            '出身' => '沖縄',
-                            'メールアドレス' => 'mori@example.com',
-                            '性別'  => '女性',
-                        )
-                    );
-
-                    $i = 0;
-                    //配列の中の名前を出す。
-                    foreach($list as $key => $member){
-                        echo $key;
-                        if($i < count($list)-1){
-                            echo ',';
-                        }
-                        $i++;
-                    }
-
-                    //改行。
-                    echo PHP_EOL;
-
-                    //配列の中の名前を出す。
-                    echo join(",",array_keys($list)).PHP_EOL;
-
-
-                    //出身地札幌の人間を表示する
-                    foreach($list as $key => $member){
-                        if(!isset($member['出身']) || $member['出身'] != '札幌'){
-                            echo $key.PHP_EOL;
-                        }
-                    }
-
-                    ?>">
-                </form>
+                    </form>
             </div>
         </div>
     </div>
