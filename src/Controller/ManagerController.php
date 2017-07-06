@@ -69,6 +69,8 @@ class ManagerController extends AppController
 		} else {
 			$reqestimicode = $nearimi;
 		}
+		$session = $this->request->session();
+		$session->write('reqestimicode',$reqestimicode);
 
 		// 受験者平均点
 		$queryAvg = $this->TfImi->find()
@@ -176,9 +178,26 @@ class ManagerController extends AppController
 	public function questionDetail()
 	{
 		// レイアウト設定
-		$this->viewBuilder()->layout('addmod');
+		// $this->viewBuilder()->layout('addmod');
 		$ex = $this->request->getQuery('ex');
 		$qn = $this->request->getQuery('qn');
+
+		$session = $this->request->session();
+		$reqestimicode = $session->read(['reqestimicode']);
+		$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
+		->where([
+			'imicode' => $reqestimicode,
+			'qesnum' => $qn
+		])
+		->toArray();
+		$selectAnswer = array(1 => 0,0,0,0,'correct' => 0);
+		foreach ($selectAnswerQuerry as $key) {
+			if (!empty($key['rejoinder'])) {
+				$selectAnswer[$key['rejoinder']]++;
+			}
+			$selectAnswer['correct'] = $key['correct_answer'];
+		}
+		$this->set(compact('selectAnswer'));
 
 		$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
 		$this->set(compact('ex'));

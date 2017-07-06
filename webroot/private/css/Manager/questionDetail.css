@@ -1,9 +1,12 @@
-#question {
-	min-height: 30vh;
+body {
+	min-height: 100vh;
+}
+/*#question {
+	min-height: 20vh;
 }
 #choice {
-	min-height: 40vh;
-}
+	min-height: 20vh;
+}*/
 .buttons {
-	margin-top: 0px;
+	margin: 20px 0;
 }

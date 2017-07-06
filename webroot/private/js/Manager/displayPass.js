@@ -1,10 +1,11 @@
 $(function() {
-	$('#passcheck').mousedown(function(){
-		$("input[name='admOldPass']").attr('type','text');
-		$("input[name='admNewPass']").attr('type','text');
-	});
-	$('#passcheck').mouseup(function(){
-		$("input[name='admOldPass']").attr('type','password');
-		$("input[name='admNewPass']").attr('type','password');
+	$('#passcheck').click(function() {
+		if($("input[name$='Pass']").attr('type') == 'text') {
+			$("input[name$='Pass']").attr('type','password');
+			$(this).text("パスワード表示");
+		} else {
+			$("input[name$='Pass']").attr('type','text');
+			$(this).text("パスワード非表示");
+		}
 	});
 });

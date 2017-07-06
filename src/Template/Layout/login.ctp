@@ -69,7 +69,7 @@
                             <span id="errormessage"><?php if(!empty($this->viewVars['errorMessage'])){echo  $this->viewVars['errorMessage'];}?></span>
                             <div class="checkbox">
 								<label class="checkbox">
-									<input type="checkbox" data-toggle="checkbox" name="checkbox" id="checkbox">
+									<input type="checkbox" data-toggle="checkbox" name="checkbox" id="checkbox" value="管理者">
 									管理者
 								</label>
                             </div>
