@@ -12,6 +12,7 @@
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
 <?= $this->Html->script('/private/js/Student/check.js')?>
+<?= $this->Html->script('/private/js/Student/reset.js')?>
 <?= $this->end();?>
 
 <!-- ユーザーネームセット -->

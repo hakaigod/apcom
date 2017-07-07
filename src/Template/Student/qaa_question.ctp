@@ -2,12 +2,16 @@
 /**
  * 問番号
  * @var Integer $qNum
+ *
  * DBから取得した１行の問情報
  * @var array $question
+ *
  * 選択肢番号
  * @var Integer $select
+ *
  * 前問題の正誤、選択、問題情報を格納する配列
  * @var array $answerLog
+ *
  * ジャンル選択画面からPOSTしたジャンル番号
  * @var array $getGenre
  */
@@ -28,6 +32,7 @@
 ?>
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
+<?= $this->Html->script('/private/js/Student/getlog.js')?>
 <script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setlog.js"
         qnum = '<?= json_safe_encode($qNum); ?>'
         answer = '<?= json_safe_encode($question->answer); ?>'
@@ -66,8 +71,7 @@ Student
                             </div>
                             <div class="modal-body">
                                 <div class="container-fluid">
-
-
+                                    <div id= "test1"></div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -146,7 +150,7 @@ Student
             <div class="select-answer">
                 <?php for ($i=1;$i<5;$i++):?>
                     <?php $selectArray = array('ア','イ','ウ','エ')?>
-                    <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select=$i?><?= $selectArray[$i-1]?> >
+                    <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select=$i?><?= $selectArray[$i-1] ?> >
                 <?php endfor; ?>
             </div>
         </div>
