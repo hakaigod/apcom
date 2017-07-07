@@ -40,18 +40,16 @@
 	<?= $this->Html->script('/private/js/index.js') ?>
 	
 	<?= $this->fetch('script') ?>
-
-    <script src="nodejs/socket.io/socket.io.js"></script>
+    
+    <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-        var socket = io('http://' <?= $this->request->env('SERVER_NAME')?>, {path: '/nodejs/socket.io',transports:'websocket'});
-        socket.on('connect', function(msg) {
-            console.log("connect");
-        });
-        socket.on('message', function(msg) {
-            document.getElementById("activity").innerHTML = msg.value;
+        var socket = io('http://localhost:3000');
+        socket.on('news', function (data) {
+            console.log(data);
+            
+            document.getElementById("activity").innerHTML = data['hello'];
         });
     </script>
-    
 
 </head>
 <body>
