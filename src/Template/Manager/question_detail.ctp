@@ -10,6 +10,11 @@
 <?= $this->start('script'); ?>
 	<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js') ?>
 <?= $this->end(); ?>
+<?php
+	function json_safe_encode($data){
+	    return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+	}
+?>
 
 <!-- 以下Content -->
 
@@ -68,11 +73,12 @@
 <!-- 各選択肢の選択率 -->
 <div class="row">
 	<canvas id="myChart" height="50"></canvas>
-	<script type="text/javascript">
-		var selectAnswer = [<?= $selectAnswer[1]?>, <?= $selectAnswer[2]?>,<?= $selectAnswer[3]?>,<?= $selectAnswer[4]?>];
-		var correct_answer = <?= $selectAnswer['correct'] - 1 ?>;
-	</script>
-	<script type="text/javascript" src="<?= $this->request->getAttribute('webroot')?>/private/js/Manager/selectAnswerRate.js"></script>
+
+	<script type="text/javascript" id="script"
+		src="<?= $this->request->getAttribute('webroot')?>/private/js/Manager/selectAnswerRate.js"
+		data-select = '<?= json_safe_encode($selectAnswer['answers']); ?>'
+		data-correct = '<?= json_safe_encode($selectAnswer['correct']); ?>'
+	></script>
 </div>
 
 

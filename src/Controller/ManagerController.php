@@ -190,11 +190,9 @@ class ManagerController extends AppController
 			'qesnum' => $qn
 		])
 		->toArray();
-		$selectAnswer = array(1 => 0,0,0,0,'correct' => 0);
+		$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
 		foreach ($selectAnswerQuerry as $key) {
-			if (!empty($key['rejoinder'])) {
-				$selectAnswer[$key['rejoinder']]++;
-			}
+			$selectAnswer['answers'][$key['rejoinder']]++;
 			$selectAnswer['correct'] = $key['correct_answer'];
 		}
 		$this->set(compact('selectAnswer'));
@@ -251,7 +249,7 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
 		// 個別追加
-		if ($this->request->is('POST')) {
+		if (!empty($this->request->getData('stunum'))) {
 			$queryAddStu = $this->MfStu->query()
 			->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
 			->values([
@@ -266,12 +264,12 @@ class ManagerController extends AppController
 				$identiconComponent->makeImage($this->request->getData('stunum'));
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing' . $e->getMessage());
+				$this->Flash->error('missing' . '個別');
 			}
 		}
 		// 一括追加
 		if (!empty($_FILES)) {
-			if ($_FILES["studata"]["name"] == 'addstu') {
+			if ($_FILES["studata"]["name"] == 'addstu.csv') {
 				// 読み込んだSJISのデータをUTF-8に変換して保存
 				file_put_contents($_FILES["studata"]["tmp_name"], mb_convert_encoding(file_get_contents($_FILES["studata"]["tmp_name"]), 'UTF-8', 'SJIS'));
 				// UTF-8に変換したデータをSplFileObjectでCSVとして読み込み
