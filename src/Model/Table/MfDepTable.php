@@ -1,8 +1,7 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -44,6 +43,7 @@ class MfDepTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
+            ->integer('depnum')
             ->allowEmpty('depnum', 'create');
 
         $validator

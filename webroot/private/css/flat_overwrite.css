@@ -2,3 +2,8 @@
 .navbar-collapse .navbar-nav.navbar-right:last-child > .dropdown:last-child > a {
     border-radius: 0;
 }
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+	background-color:#f1f1f1;
+}

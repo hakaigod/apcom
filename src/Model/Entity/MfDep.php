@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * MfDep Entity
  *
- * @property string $depnum
+ * @property int $depnum
  * @property string $depname
  * @property bool $deleted_flg
  */

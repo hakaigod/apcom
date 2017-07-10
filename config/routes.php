@@ -43,6 +43,53 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
+Router::scope("/student", function ( RouteBuilder $routes ) {
+	
+	$routes->connect(
+		'/:id',
+		['controller' => 'student', 'action'=> 'summary'],
+//		 8桁の数字に制限、0始まりに対応
+		['id' => '\d{8}']
+	);
+	$routes->connect(
+		'/:id/input/:imicode/:linkNum',
+		['controller' => 'student', 'action'=> 'input'],
+		['id' => '\d{8}','imicode' => '\d{1,3}', 'linkNum' => '[1-8]{1}']
+	);
+	$routes->connect(
+		'/:id/sendAll/:imicode/',
+		['controller' => 'student', 'action'=> 'sendAll'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+	$routes->connect(
+		'/:id/result/:imicode',
+		['controller' => 'student', 'action'=> 'result'],
+		['id' => '\d{8}','imicode' => '\d{1,3}']
+	);
+	$routes->connect(
+		'/qaaSelectGenre',
+		['controller' => 'student', 'action' => 'qaaSelectGenre']
+	);
+	
+	$routes->connect(
+		'/qaaQuestion/:question_num/',
+		['controller' => 'student', 'action' => 'qaaQuestion'],
+		['question_num' => '\d+',]
+	);
+	
+	$routes->connect(
+		'/yearSelection',
+		['controller' => 'student', 'action' => 'yearSelection']
+	);
+	
+	
+	$routes->connect(
+		'/practiceExam/:exanum/:qesnum/',
+		['controller' => 'student', 'action' => 'practiceExam'],
+		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
+	);
+});
+
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -50,20 +97,13 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
 	$routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
-	
+
 	$routes->connect('/student/practiceExam/:exanum/:qesnum',
         ['controller' => 'Student', 'action' => 'practiceExam'],
         ['exanum' => '\d{1-3}','qesnum'=>'\d{1-2}']
     );
-	
-	$routes->connect('/student/score/:exanum',
-		['controller' => 'Student', 'action' => 'score'],
-		['exanum' => '\d{1-3}']
-	);
-	
-	
-	
-	/**
+
+    /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
 

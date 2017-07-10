@@ -33,6 +33,7 @@ class MfExaTable extends Table
         $this->setTable('mf_exa');
         $this->setDisplayField('exanum');
         $this->setPrimaryKey('exanum');
+        $this->hasMany('MfQes')->setForeignKey('exanum');
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
+use App\Model\Table\TfImiTable;
 use Cake\ORM\Entity;
 
 /**
@@ -8,9 +9,13 @@ use Cake\ORM\Entity;
  *
  * @property int $imicode
  * @property int $exanum
- * @property float $imisum
+ * @property int $strategy_imisum
+ * @property int $technology_imisum
+ * @property int $management_imisum
  * @property int $imipepnum
  * @property \Cake\I18n\FrozenTime $imp_date
+ *
+ * @property \App\Model\Entity\MfExa $mf_exa
  */
 class TfImi extends Entity
 {
@@ -28,5 +33,34 @@ class TfImi extends Entity
         '*' => true,
         'imicode' => false
     ];
-
+    //合計を取得
+    public function _getImiSum(){
+    	return $this->strategy_imisum + $this->technology_imisum + $this->management_imisum;
+    }
+    public function _getAverage () {
+    	if ( $this->imipepnum > 0 ) {
+		    return round($this->_getImiSum() / $this->imipepnum, 1);
+	    }else{
+    		return 0;
+	    }
+    }
+    public function _getName (TfImiTable $table,MfExa $mfExa = null):string {
+    	$implNum = $table->getImplNum($this->imicode, $this->exanum) + 1;
+    	if ($mfExa === null) {
+    		$mfExa = $this->mf_exa;
+	    }
+    	$examName = $mfExa->_getExamDetail();
+    	return "{$examName}  {$implNum}回目";
+    }
+    public function _getGenreArray () {
+    	if ($this->imipepnum > 0) {
+		    return [
+			    'tech' => round($this->technology_imisum / $this->imipepnum,1),
+			    'man'  => round($this->management_imisum / $this->imipepnum,1),
+			    'str'  => round($this->strategy_imisum / $this->imipepnum,1)
+		    ];
+	    }else{
+		    return ['tech' =>0, 'man' => 0, 'str' => 0];
+	    }
+    }
 }

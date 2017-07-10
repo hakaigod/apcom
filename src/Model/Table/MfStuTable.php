@@ -33,6 +33,7 @@ class MfStuTable extends Table
         $this->setTable('mf_stu');
         $this->setDisplayField('regnum');
         $this->setPrimaryKey('regnum');
+		$this->belongsTo('MfDep')->setForeignKey('depnum');
     }
 
     /**
@@ -57,6 +58,7 @@ class MfStuTable extends Table
             ->allowEmpty('stupass');
 
         $validator
+            ->integer('depnum')
             ->allowEmpty('depnum');
 
         $validator

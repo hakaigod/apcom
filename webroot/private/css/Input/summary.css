@@ -1,0 +1,31 @@
+.exam-title{
+	font-size: 50px;
+	border-bottom: 1px solid #148d75;
+}
+@media screen and (max-width: 991px) {
+	#summary-table {
+		border: none;
+	}
+	#summary-table thead {
+		display: none;
+	}
+	#summary-table tr {
+		display: block;
+		margin-bottom: 20px;
+	}
+	#summary-table td {
+		display: block;
+		padding: 10px;
+		text-align: center;
+	}
+	#summary-table td::before {
+		 content: attr(data-label);
+		 float: left;
+		 font-weight: bold;
+	 }
+}
+@media screen and (max-width: 500px) {
+	div .display-chart {
+		display: none;
+	}
+}

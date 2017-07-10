@@ -16,6 +16,8 @@ use Cake\ORM\Entity;
  * @property string $choice3
  * @property string $choice4
  * @property int $answer
+ *
+ * @property \App\Model\Entity\MfExa $mf_exa
  */
 class MfQe extends Entity
 {

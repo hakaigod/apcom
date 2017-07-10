@@ -2,7 +2,6 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -33,6 +32,9 @@ class MfQesTable extends Table
         $this->setTable('mf_qes');
         $this->setDisplayField('qesnum');
         $this->setPrimaryKey(['qesnum', 'exanum']);
+        //アソシエーションの設定
+        $this->belongsTo('MfFie')->setForeignKey('fienum');
+        $this->belongsTo('MfExa')->setForeignKey('exanum');
     }
 
     /**
@@ -78,5 +80,12 @@ class MfQesTable extends Table
             ->allowEmpty('answer');
 
         return $validator;
+    }
+    public function getTexts($conditions, $mass = 10, $offset = 1) : Query{
+	    return $this->find()
+		    ->select(['qesnum','question'])
+		    ->where($conditions)
+		    ->limit($mass)
+		    ->page($offset);
     }
 }

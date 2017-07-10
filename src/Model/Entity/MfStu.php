@@ -10,10 +10,12 @@ use Cake\ORM\Entity;
  * @property string $stuname
  * @property int $stuyear
  * @property string $stupass
- * @property string $depnum
+ * @property int $depnum
  * @property \Cake\I18n\FrozenTime $last_update
  * @property bool $graduate_flg
  * @property bool $deleted_flg
+ *
+ * @property \App\Model\Entity\MfDep $mf_dep
  */
 class MfStu extends Entity
 {

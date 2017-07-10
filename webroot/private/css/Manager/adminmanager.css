@@ -10,3 +10,7 @@ table {
 .select {
 	min-width: 0;
 }
+
+#addconditions {
+	display: none;
+}

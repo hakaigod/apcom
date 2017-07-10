@@ -1,0 +1,128 @@
+/*ヘッダー*/
+#qaa-title{
+    font-size:50px;
+    font-weight: bold;
+    float:left;
+}
+
+#qaa-sub{
+    text-align: right;
+    border-bottom: solid 1px #aeb6bf;
+    padding-top: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#qaa-detail{
+    text-align: right;
+    border-bottom: solid 1px #aeb6bf;
+    padding-top: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#qaa-explanation{
+    margin-top: 10px;
+    margin-left: 20px;
+    text-align: left;
+    font-size: 20px;
+}
+
+.caption-box{
+    position: relative;
+    margin-top: 20px;
+    padding: 25px 20px 10px 20px;
+    border: 1px solid #aeb6bf;
+}
+
+.caption{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0px 20px;
+    font-size: inherit;
+    background-color: ghostwhite;
+    transform: translateY(-35%) translateX(1em);
+    font-weight: bold;
+}
+/*ヘッダー*/
+/*ジャンル選択*/
+.checkbox {
+    height : 20px;
+}
+.checkbox label{
+    max-height : 20px;
+    margin-top: -10px;
+}
+
+.genre-container .btn{
+    margin-top: 20px;
+    text-align: center;
+}
+/*ジャンル選択*/
+
+/*問題*/
+/*出典*/
+.source{
+    text-align: right;
+    font-size: small;
+}
+
+/*問番号*/
+#qaa-question-no{
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+/*問題文*/
+.qaa-question{
+    text-align: left;
+    margin: 20px;
+}
+
+/*正誤*/
+.qaa-falsehood{
+    text-align: left;
+    margin: 30px;
+    font-size: 40px;
+}
+
+/*選択肢テーブル*/
+.qaa_select_table{
+    margin: 20px;
+    /*word-break: keep-all;*/
+}
+.table-bordered > tbody > tr >td{
+    border: none;
+    padding: 5px;
+}
+
+/*回答が画像の場合の設定*/
+/*画像*/
+.ans-img{
+    text-align: center;
+    margin: 20px;
+}
+/*選択肢ボタン*/
+.select-answer{
+    text-align: center;
+    margin: 10px;
+}
+
+.select-answer .btn{
+    padding: 10px 30px 10px 30px;
+    margin: 20px;
+}
+
+/*次の問題ボタン*/
+.qaa-next{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/*テスト用 外枠表示*/
+/*#col-main * {*/
+    /*border: solid 1px black;*/
+/*}*/

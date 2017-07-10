@@ -33,6 +33,7 @@ class TfAnsTable extends Table
         $this->setTable('tf_ans');
         $this->setDisplayField('imicode');
         $this->setPrimaryKey(['imicode', 'qesnum', 'regnum']);
+		$this->belongsTo('MfStu')->setForeignKey('regnum');
     }
 
     /**
@@ -48,6 +49,7 @@ class TfAnsTable extends Table
             ->allowEmpty('imicode', 'create');
 
         $validator
+            ->integer('qesnum')
             ->allowEmpty('qesnum', 'create');
 
         $validator
@@ -60,6 +62,10 @@ class TfAnsTable extends Table
         $validator
             ->integer('confidence')
             ->allowEmpty('confidence');
+
+        $validator
+            ->integer('correct_answer')
+            ->allowEmpty('correct_answer');
 
         return $validator;
     }

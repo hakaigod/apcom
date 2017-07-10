@@ -35,14 +35,16 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
 <div class="container-fluid">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="<?= $headerlink; ?>">応用情報 ど.com</a>
+		<a class="navbar-brand" href="<?= $headerlink; ?>">
+			<img src="<?= $this->request->webroot ?>img/logo.png" class="nabvar-img">
+		</a>
 	</div>
 	<div class="navbar-collapse collapse">
 		<div class="nav navbar-nav navbar-right">
 			<li class="dropdown navbar-buttton">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
 					<img src="<?= $this->request->webroot ?>private/img/1312000.png" class="dropdown-img">
-					ようこそ、<?= $this->fetch('username')?>さん
+					ようこそ、<?= $username?:"ERROR!"?>さん
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
@@ -74,6 +76,15 @@
 	<div class="col-xs-8 col-xs-offset-2" id="col-main">
 		<?= $this->fetch('content') ?>
 	</div>
+    <!-- 右サイドカラム -->
+    <div class="col-xs-offset-1 col-xs-1">
+        <div class="row floating">
+            <div class="" id="reloadbutton">
+                <button class="btn btn-success" onclick="location.reload();">更新</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 </div>
 </body>
