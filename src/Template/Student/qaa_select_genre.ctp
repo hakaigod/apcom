@@ -82,7 +82,8 @@ Student
                     ('問題開始',
                         array(
                             'type'=>'submit',
-                            'class'=>'btn btn-info'
+                            'class'=>'btn btn-info',
+                            'id'=>'form1'
                         )
                     );?>
                     <?= $this->Form->end();?>

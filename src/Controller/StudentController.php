@@ -498,7 +498,7 @@ class StudentController extends AppController
         $question=$this->MfQes->find()
             ->contain(['MfExa','MfFie'])
             ->WHERE(['MfQes.fienum IN'=>$getGenre])
-            ->ORDER(['qesnum'=>'ASC'])
+            ->ORDER(['RAND()'])
             //何行飛ばすか
             ->OFFSET($qNum)
             //1行だけ出力する

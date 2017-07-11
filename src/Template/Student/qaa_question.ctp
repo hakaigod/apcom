@@ -35,6 +35,7 @@
 <?= $this->Html->script('/private/js/Student/getlog.js')?>
 <script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setlog.js"
         qnum = '<?= json_safe_encode($qNum); ?>'
+        quesnum = '<?= json_safe_encode($question->qesnum); ?>'
         answer = '<?= json_safe_encode($question->answer); ?>'
         field = '<?= json_safe_encode($question->mf_fie['fiename']); ?>'
         detail = '<?= json_safe_encode($question->mf_exa->exam_detail); ?>'
@@ -67,11 +68,28 @@ Student
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">一問一答  現在の成績</h4>
+                                <h4 class="modal-title">現在の成績</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="container-fluid">
-                                    <div id= "test1"></div>
+                                    <!--累計情報-->
+                                    <div class="row" id="total-info">
+                                        <!--プログレスバーをここに表示する-->
+                                    </div>
+                                    <div class="row">
+                                        <!--過去文ログ-->
+                                        <table id="log-table" class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>回答番数</th>
+                                                <th>問題番号</th>
+                                                <th>出典</th>
+                                                <th>ジャンル</th>
+                                                <th>正誤</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -123,7 +141,7 @@ Student
     <!--選択肢ある場合-->
     <?php if(!empty($question->choice1)):?>
         <!--選択肢-->
-        <table class="qaa_select_table table-bordered col-md-12">
+        <table class="qaa_select_table table-bordered col-md-12" id="choice-table">
             <?php for($i=1;$i<5;$i++):?>
                 <?php $selectArray = array('ア','イ','ウ','エ')?>
                 <tr class="select_tr" >
@@ -161,8 +179,10 @@ Student
             <div class="qaa-next">
                 <form action="" method="post">
                     <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
-                    <input type="hidden" name="genre[0]" value="<?= $getGenre[0]?>">
-                    </form>
+                    <?php for($i=0;$i<count($getGenre);$i++):?>
+                        <input type="hidden" name="genre[]" value="<?= $getGenre[$i]?>">
+                    <?php endfor;?>
+                </form>
             </div>
         </div>
     </div>

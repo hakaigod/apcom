@@ -2,6 +2,7 @@
 // データの取得
 const $script = $('#script');
 const qnum = JSON.parse($script.attr('qnum'));
+const quesnum = JSON.parse($script.attr('quesnum'));
 const answer = JSON.parse($script.attr('answer'));
 const field = JSON.parse($script.attr('field'));
 const detail = JSON.parse($script.attr('detail'));
@@ -16,10 +17,10 @@ $(function() {
         let ans = new Array("ア","イ","ウ","エ");
         if ($(this).val() == ans[answer]) {
             document.getElementById("qaa-falsehood").innerHTML = "正解";
-            falsehood = "O";
+            falsehood = "正解";
         } else {
             document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+ans[answer];
-            falsehood = "X";
+            falsehood = "不正解";
         }
     });
     //セッションへの保存処理
@@ -27,10 +28,12 @@ $(function() {
         if (('sessionStorage' in window) && (window.sessionStorage !== null)) {
             // セッションストレージが使える
             let answerLog = {
-                    'answer':answer,
-                    'field':field,
-                    'detail':detail,
-                    'falsehood':falsehood
+                'qNum':qnum,
+                'quesnum':quesnum,
+                'answer':answer,
+                'field':field,
+                'detail':detail,
+                'falsehood':falsehood
             };
 
             let list = JSON.stringify(answerLog);
