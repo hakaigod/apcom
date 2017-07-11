@@ -71,12 +71,12 @@ managerrrrr
                                     <?=
                                     //個人模擬試験へのリンクを生成
                                     //タイトルは平成27年度春のように出力
-                                    $this->Html->link("平成".$exam->jap_year . "年度 ". $exam->exaname ,
+                                    $this->Html->link( $exam->_getExamDetail()  ,
                                         //practiceExamアクションに飛ぶリンクを生成
                                         //コントローラを指定していないので、今と同じコントローラ
                                         ['action' => 'practiceExam'
-                                                          , 'exanum' =>$exam->exanum
-                                                          ,'qesnum' => 1],
+	                                        , 'exanum' =>$exam->exanum
+	                                        ,'qesnum' => 1],
                                         [ 'class'=>" year-btn btn btn-info full" ]
                                     )
                                     ?>
