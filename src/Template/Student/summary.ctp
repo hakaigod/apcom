@@ -7,9 +7,10 @@
  * @var string $studentName
  * @var string $studentID
  * @var string $role
- * //name,date,avg,score,rankのキーをもつ
+ * @var array $logoLink
+ * name,date,avg,score,rankのキーをもつ
  * @var array $imiDetails
- * //tech,man,strのキーをもつ
+ * tech,man,strのキーをもつ
  * @var float[] $userAvg
  * @var float[] $wholeAvg
  */
@@ -37,11 +38,16 @@
 	$dates = array_column($imiDetails,'date');
 	krsort($dates);
 	echo " line-dates = " . json_safe_encode( array_values($dates) );
+	$conv = function (array &$array):array {
+		krsort($array);
+		foreach ($array as &$value) { isset($value) ? $value *= 1.25 : null; }
+        return $array;
+    };
 	$scores = array_column($imiDetails,'score');
-	krsort($scores);
+	$scores = $conv($scores);
 	echo " line-student-score = " . json_safe_encode( array_values($scores) );
 	$averages =  array_column($imiDetails,'avg');
-	krsort($averages);
+	$averages = $conv($averages);
 	echo " line-averages = " . json_safe_encode( array_values($averages) );
 	echo " radar-user = " . json_safe_encode(array_values($userAvg));
 	echo " radar-averages = " . json_safe_encode( array_values($wholeAvg));
@@ -55,7 +61,7 @@
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 <tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
-<tr><td><a href="">パスワード更新</a></td></tr>
+<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
 <?php $this->end(); ?>
 <br>
 
@@ -76,7 +82,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
             $imi = $imiDetails[$current];
             if($imi['score'] === null):?>
                 <li class="text-danger">
-                    <strong><u>
+                    <u>
 			                <?php
                             $imiTitle ="{$imi['date']} {$imi['name']}";
 			
@@ -84,24 +90,25 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 				                $imiTitle,
 				                [ 'controller' => 'student',
 				                  'action'     => 'input',
-				                  'id'         => $userID,
 				                  'imicode'    => $imi[ 'imicode' ],
 				                  'linkNum'    => 1
 				                ],
 				                [ 'class' => 'text-danger ' ]
 			                );
 			                ?>
-                        </u></strong>
+                    </u>
                 </li>
 		    <?php endif;?>
 		<?php endfor;?>
         <?php
         if ($current < count($imiDetails)) {
+            echo "<u>";
             echo $this->Html->link(
 	            "もっと見る",
                 "#imitation-list",
                 [ 'class' => 'text-primary' ]
             );
+            echo "</u>";
         }
         ?>
     </ul>
@@ -145,14 +152,13 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
                     <span class="label label-success">済</span>
                 <?php endif;?>
 	            <?php
-                $titleArray = ['controller' => 'student',
-	                                   'id' => $studentID,
-	                                   'imicode' => $imi['imicode']];
+                $titleArray = ['controller' => 'student', 'imicode' => $imi['imicode']];
                 if ($imi['score'] === null) {
                     $titleArray['action'] = 'input';
                     $titleArray['linkNum'] = 1;
                 }else{
                     $titleArray['action'] = 'result';
+                    $titleArray['id'] = $studentID;
                 }
                 if ($role == 'manager' && !(isset($imi['score']))) {
                     echo $imi[ 'name' ];
@@ -166,9 +172,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 	                echo $this->Html->link("[編集]",
 	                                  [ 'controller'  => 'student',
 	                                    'action'      => 'input',
-	                                    'id'          => $userID,
-	                                    'imicode'     => $imi[ 'imicode' ]
-		                                  , 'linkNum' => 1 ],
+	                                    'imicode'     => $imi[ 'imicode' ],
+                                        'linkNum' => 1 ],
 	                                  [ 'class' => 'text-muted' ]);
                 }
 	            ?>

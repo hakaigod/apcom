@@ -47,7 +47,7 @@ function drawLineChart() {
             scales: {
                 yAxes: [{
                     ticks: {
-                        max:80,
+                        max:100,
                         beginAtZero:true
                     }
                 }]

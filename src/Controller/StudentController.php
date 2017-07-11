@@ -12,6 +12,8 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
+use Cake\Auth\DefaultPasswordHasher;
+
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
@@ -84,10 +86,39 @@ class StudentController extends AppController
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
 	}
+	// パスワードハッシュ値返却
+	private function passHash($pass){
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->hash($pass);
+	}
+	// パスワードチェック
+	private function pasCheck($inputPass, $databasePass) {
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->check($inputPass, $databasePass);
+	}
 
 	//パスワード更新
-	public function updatePass(  ){
+	public function updatePass(){
 
+		// POSTリクエストがあれば実行
+		if ($this->request->is('POST')) {
+			$session = $this->request->session();
+			$id = $session->read('userID');
+			$oldPass = $this->MfAdm->get($this->request->getData($id))->toArray()['stupass'];
+			if ($this->pasCheck($this->request->getData('old-pass'), $oldPass)) {
+				$updatePassQuery = $this->MfAdm->query()->update()
+				->set(['stupass' => $this->passHash($this->request->getData('new-pass'))])
+				->where(['admnum' => $this->request->getData($id)]);
+				try {
+					$queryAdmPassUpdate->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing');
+				}
+			} else {
+				$this->Flash->error('古いパスワードが違います');
+			}
+		}
 	}
 
 	//ユーザマイページに表示される画面
@@ -128,7 +159,7 @@ class StudentController extends AppController
 			$imiDetails[] = [
 				'imicode' => $imi->imicode,
 				'name' => $imi->_getName($this->TfImi),
-				'date' => $imi->imp_date->format("m/d"),
+				'date' => $imi->imp_date->format('m/d'),
 				'avg' => $imi->_getAverage(),
 				'score' => $score,
 				'rank' => ($score !== null)?$this->TfSum->getRank($imicode, $score):null

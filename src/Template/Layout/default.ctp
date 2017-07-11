@@ -42,6 +42,16 @@
 
 	<?= $this->fetch('script') ?>
 
+    <script src="/nodejs/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io('http://localhost:3000');
+        socket.on('news', function (data) {
+            console.log(data);
+
+            document.getElementById("activity").innerHTML = data['hello'];
+        });
+    </script>
+
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
@@ -53,6 +63,7 @@
 	</div>
 	<div class="navbar-collapse collapse">
 		<div class="nav navbar-nav navbar-right">
+            <!-- <p class="navba-text" id="activity-text"></p> -->
 			<li class="dropdown navbar-buttton">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
 					<img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
