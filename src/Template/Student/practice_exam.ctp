@@ -177,7 +177,6 @@ managerrrrr
 					<?php endif; ?>
 				</div>
 			
-			
 				<!--	解答を終了するボタン	-->
 				<div  class="qaa-score">
 					<?=
@@ -186,14 +185,14 @@ managerrrrr
 								 'class' => 'btn btn-info',
 								 'formaction'=> $this->Url->build(['action' =>'score',
 									                                'exanum' => $exams->exanum]),
-								 'type' => 'submit'
-//								 'value' => $exams->exanum
-					]
+								 'name' => 'into_ques',
+								 'value' => $qes->qesnum,
+								  'type' => 'submit'
+
+							 ]
 						 );
 					?>
 				</div>
-			
-			
 			
 			<!--	次の問題ボタン	-->
 				<div  class="qaa-next">
@@ -210,15 +209,12 @@ managerrrrr
 								[
 									'class' => 'btn btn-warning',
 									'formaction' =>   $qes->qesnum + 1 ,
-									'type' => 'submit',
 									'name' => 'into_ques',
-									'value' => -1
+									'value' => -1,
+									'type' => 'submit'
 								]);
 							?>
-							
-							
 					<?PHP endif;  ?>
 				</div>
 			</div>
-	
 	</form>

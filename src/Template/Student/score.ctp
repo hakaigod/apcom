@@ -14,6 +14,8 @@
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Student/score.css') ?>
+<?= $this->Html->css('/private/css/ap.css') ?>
+
 <?php $this->end(); ?>
 
 
@@ -55,23 +57,43 @@ managerrrrr
 
 
 <br/><br/><br/>
-<p class="message">問題番号をクリックすると、各問題の答えが確認できます。</p>
+<!--<p class="message">問題番号をクリックすると、各問題の答えが確認できます。</p>-->
 
 <div class="ans-table" >
 <div class="row">
 	<div class="col-xs-12">
-		<table class="table table-bordered col-xs-12" id="ans-table">
+		<table class="table table-bordered row" id="ans-table">
 			
-			<tr><?= $sum  ?></tr>
-			<tr class="table-title"><th>No.</th><th>問題文</th><th>正否</th><th>アナタの解答</th><th>答え</th></tr>
+			<caption  class="score-box">
+				<p>
+					<b class="score" id="score-opt" ><?= $sum ?></b>/100<b class="score">点でした</b>
+				</p>
+			</caption>
+				<tr class="table-title">
+					<th class="col-xs-1">No.</th>
+					<th class="col-xs-6">問題文</th>
+					<th class="col-xs-1">正否</th>
+					<th class="col-xs-2">アナタの解答</th>
+					<th class="col-xs-2">答え</th>
+				</tr>
 			<tbody>
 			<!--   行の要素   -->
 			<!--  tr...行  tb...列		-->
 			<?php foreach (range(1, 80) as $i ): ?>
 				<tr>
+					<td>
 					<!--		問題No.		-->
-					<td class="col-xs-1 right" id="qes-no">
-						<p class="qes-no"><?= "問".$i."." ?></p>
+					<div class="col-xs-1 right" id="qes-no">
+						<?= $this->Form->button("問".$i ,
+							[
+								'class' => 'btn btn-info',
+								'formaction'=> $this->Url->build(['action' =>'practiceExam',
+																	'exanum' => $exams->exanum,
+																	'qesnum' =>$i]),
+								'type' => 'submit'
+							]);
+						?>
+<!--						<p class="qes-no">--><?//= "問".$i ?><!--</p>-->
 					</td>
 					
 					<!--    問題文    -->
@@ -100,20 +122,23 @@ managerrrrr
 							echo $this->qaa->viewTextImg($ansbox[$i - 1]["choice" . $practice[$i]]);
 						}else{
 							//	mb_strimwidthにより、12文字以上の文章は「...」により省略する
-							echo mb_strimwidth($this->qaa->viewTextImg($ansbox[$i - 1]["choice" . $practice[$i]]), 0, 12, "...");
+							echo '<p class="ans-text">' .  $ansbox[$i - 1]["choice" . $practice[$i]] . '</p>';
+//							echo mb_strimwidth((), 0, 12, "...");
 							
 						}?>
 					</td>
 					
 					<!--    正答   -->
-					<td class="col-xs-2">
+					<td class="col-xs-2 ans-text">
 						<!--	正答の解答文表示		-->
+						
 						<!--  解答文に画像が含まれていたら文字制限を解除し表示-->
 						<?php if(strpos($ansbox[$i - 1]["choice" . $ansbox[$i - 1]->answer],'img')){
 							echo $this->qaa->viewTextImg($ansbox[$i - 1]["choice" . $ansbox[$i - 1]->answer]);
 						}else{
 							//	mb_strimwidthにより、12文字以上の文章は「...」により省略する
-							echo mb_strimwidth($this->qaa->viewTextImg($ansbox[$i - 1]["choice" . $ansbox[$i - 1]->answer]), 0, 12, "...");
+							echo '<p class="ans-text">' .  $ansbox[$i - 1]["choice" . $ansbox[$i - 1]->answer] . '</p>';
+//							echo mb_strimwidth($ansbox[$i - 1]["choice" . $ansbox[$i - 1]->answer], 0, 12, "...");
 						}
 						?>
 					</td>

@@ -542,6 +542,15 @@ class StudentController extends AppController
 			}
 		}
 		$this->set(compact('averages'));
+		
+		//各年度の全国合格率(チンパン)
+		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
+		$this->set(compact('passRate'));
+		
+		
+//	    結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
+//      残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
+		$this->removeSession(['practiceAnswers']);
 	}
 	
 	//解答画面
@@ -556,15 +565,7 @@ class StudentController extends AppController
 		$this->set(compact('exanum'));
 		
 		
-		//空なら80個のnullを入れる
-		if(empty($this->readSession(['practiceAnswers']))){
-			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
-			// セッションであるpracticeAnswersの中にexanumの配列を作る
-			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
-		}
-		
-		// セッションであるpracticeAnswersの中のexanumの中にqesnumの配列を作る
-		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
+		$this->intoQes();
 		
 		//保持してるラジオボタンの値を1問分返す
 		$ansed = $this->readSession(['practiceAnswers'])[$exanum][$qesnum];
@@ -587,13 +588,36 @@ class StudentController extends AppController
 		$this->score();
 	}
 	
+	//全問試験用のセッション処理
+	public function intoQes(){
+		//exanumは文字列
+		$exanum = $this->request->getParam("exanum");
+		//qesnumは整数
+		$qesnum = $this->request->getParam("qesnum");
+		//POSTされたラジオボタンの値
+		$ansSelect = $this->request->getData('ansSelect');
+		$this->set(compact('exanum'));
+		
+		
+		//空なら80個のnullを入れる
+		if(empty($this->readSession(['practiceAnswers']))){
+			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
+			// セッションであるpracticeAnswersの中にexanumの配列を作る
+			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
+		}
+		
+		// セッションであるpracticeAnswersの中のexanumの中にqesnumの配列を作る
+		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
+	}
+	
 
 //結果画面
 	public function score(){
+		$this->intoQes();
+		//exanumは文字列
 		$exanum = $this->request->getParam("exanum");
-		$this->set(compact('exanum'));
-		$sum=0;
 		
+		$sum=0;
 		//実施された本番一覧を取得
 		$exams = $this->MfExa->find()
 			//テーブル内のexanumから抽出する
@@ -611,7 +635,6 @@ class StudentController extends AppController
 		$practice = $this->readSession(['practiceAnswers'])[$exanum];
 		$this->set(compact('practice'));
 		
-		
 		//正答数をカウント
 		foreach (range(1, 80) as $i ) {
 			if ($practice[$i] == $ansbox[$i - 1]->answer) {
@@ -620,7 +643,7 @@ class StudentController extends AppController
 		}
 		
 		//正答数を1.25倍し、100点満点の点数を出す
-		$sum=round($sum * 1.25,1) ;
+		$sum=round($sum * 1.25,2) ;
 		$this->set(compact('sum'));
 		
 		

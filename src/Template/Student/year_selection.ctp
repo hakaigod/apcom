@@ -58,14 +58,14 @@ managerrrrr
             <div class="col-xs-12">
                 <table class="table table-bordered ">
                     <thead id="tableTitle">
-                    <tr><th>試験年度</th><th>受験回数</th><th>前回の点数</th><th>全体の平均点</th></tr>
+                    <tr><th>試験年度</th><th>全国合格率</th><th>前回の点数</th><th>全体の平均点</th></tr>
                     </thead>
                     <tbody>
 
                     <!--   行の要素   -->
                     <?php foreach($exams as $exam): ?>
                         <tr>
-                            <td>
+                            <td class="col-xs-4">
                                 <!-- 試験名とそのリンク-->
                                 <div>
                                     <?=
@@ -82,10 +82,12 @@ managerrrrr
                                     ?>
                                 </div>
                             </td>
-                            <td>0</td>
-                            <td>76</td>
+							<!--	  全国合格率        -->
+                            <td class="col-xs-2"><?= number_format($passRate[$exam->exanum-1],1)."%" ?></td>
+	                        <!--	          -->
+	                        <td class="col-xs-2">76</td>
                             <!-- 各回の平均点-->
-                            <td><?= $averages[$exam->exanum]; ?></td>
+                            <td class="col-xs-4"><?= $averages[$exam->exanum]; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
