@@ -250,21 +250,25 @@ class ManagerController extends AppController
 
 		// 個別追加
 		if (!empty($this->request->getData('stunum'))) {
-			$queryAddStu = $this->MfStu->query()
-			->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
-			->values([
-				'regnum' => $this->request->getData('stunum'),
-				'stuname' => $this->request->getData('stuname'),
-				'stuyear' => $this->request->getData('old'),
-				'depnum' => $this->request->getData('depnum'),
-				'stupass' => $this->passHash($this->request->getData('stunum'))
-			]);
-			try {
-				$queryAddStu->execute();
-				$identiconComponent->makeImage($this->request->getData('stunum'));
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing' . '個別');
+			if (empty($this->request->getData('stunum')) || empty($this->request->getData('stuname'))) {
+				$this->Flash->error('必須項目が未入力です');
+			} else {
+				$queryAddStu = $this->MfStu->query()
+				->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
+				->values([
+					'regnum' => $this->request->getData('stunum'),
+					'stuname' => $this->request->getData('stuname'),
+					'stuyear' => $this->request->getData('old'),
+					'depnum' => $this->request->getData('depnum'),
+					'stupass' => $this->passHash($this->request->getData('stunum'))
+				]);
+				try {
+					$queryAddStu->execute();
+					$identiconComponent->makeImage($this->request->getData('stunum'));
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing' . '個別');
+				}
 			}
 		}
 		// 一括追加
@@ -326,27 +330,31 @@ class ManagerController extends AppController
 
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
-			$queryStuUpdate = $this->MfStu->query()->update()
-			->set([
-				'regnum' => $this->request->getData('stunum'),
-				'stuname' => $this->request->getData('stuname'),
-				'stuyear' => $this->request->getData('old'),
-				'depnum' => $this->request->getData('depnum'),
-				'deleted_flg' => !empty($this->request->getData('deleted_flg')),
-				'graduate_flg' => !empty($this->request->getData('graduate_flg'))
-			])
-			->where(['regnum' => $this->request->getQuery('id')]);
-			try {
-				$queryStuUpdate->execute();
-				if ($this->request->getData('stunum') != $this->request->getQuery('id')) {
-					// 学籍番号が変更されたら、画像の名前を変更
-					rename('private/img/identicons/' . $this->request->getQuery('id') . '.png', 'private/img/identicons/' . $this->request->getData('stunum') . '.png');
+			if (empty($this->request->getData('stunum')) || empty($this->request->getData('stuname'))) {
+				$this->Flash->error('必須項目が未入力です');
+			} else {
+				$queryStuUpdate = $this->MfStu->query()->update()
+				->set([
+					'regnum' => $this->request->getData('stunum'),
+					'stuname' => $this->request->getData('stuname'),
+					'stuyear' => $this->request->getData('old'),
+					'depnum' => $this->request->getData('depnum'),
+					'deleted_flg' => !empty($this->request->getData('deleted_flg')),
+					'graduate_flg' => !empty($this->request->getData('graduate_flg'))
+				])
+				->where(['regnum' => $this->request->getQuery('id')]);
+				try {
+					$queryStuUpdate->execute();
+					if ($this->request->getData('stunum') != $this->request->getQuery('id')) {
+						// 学籍番号が変更されたら、画像の名前を変更
+						rename('private/img/identicons/' . $this->request->getQuery('id') . '.png', 'private/img/identicons/' . $this->request->getData('stunum') . '.png');
+					}
+					$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $this->request->getData('stunum')]);
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing');
+					$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 				}
-				$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $this->request->getData('stunum')]);
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing');
-				$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 			}
 		}
 	}
@@ -374,6 +382,7 @@ class ManagerController extends AppController
 
 		$this->set('admins', $queryAdmins);
 	}
+	
 	public function addadmin()
 	{
 		// レイアウト設定
