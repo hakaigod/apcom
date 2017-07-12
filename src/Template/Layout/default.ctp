@@ -38,16 +38,14 @@
 
 	<!-- 自作JS -->
 	<?= $this->Html->script('/private/js/index.js') ?>
-	
 	<?= $this->fetch('script') ?>
-    
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-        var socket = io('http://localhost:3000');
-        socket.on('news', function (data) {
+        //TODO:IPアドレスを動的に設定
+        var socket = io('http://localhost:23000');
+        socket.on('messageFromPHP', function (data) {
             console.log(data);
-            
-            document.getElementById("activity").innerHTML = data['hello'];
+            $('#activity-text').text(data);
         });
     </script>
 
@@ -62,7 +60,7 @@
 	</div>
 	<div class="navbar-collapse collapse">
 		<div class="nav navbar-nav navbar-right">
-            <p class="navba-text" id="activity-text"></p>
+            <div class="navbar-text" id="activity-text"></div>
 			<li class="dropdown navbar-buttton">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
 					<img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">

@@ -19,7 +19,12 @@ use Cake\Validation\Validator;
  */
 class TfAnsTable extends Table
 {
-
+	public static $IMICODE = 'imicode';
+	public static $QESNUM = 'qesnum';
+	public static $REGNUM = 'regnum';
+	public static $REJOINDER = 'rejoinder';
+	public static $CONFIDENCE = 'confidence';
+	public static $CORRECT_ANSWER = 'correct_answer';
     /**
      * Initialize method
      *
@@ -69,4 +74,16 @@ class TfAnsTable extends Table
 
         return $validator;
     }
+	
+	public static function getRowNames(  )
+	{
+		return [
+			TfAnsTable::$IMICODE,
+			TfAnsTable::$QESNUM,
+			TfAnsTable::$REGNUM,
+			TfAnsTable::$REJOINDER,
+			TfAnsTable::$CONFIDENCE,
+			TfAnsTable::$CORRECT_ANSWER
+		];
+	}
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 use App\Model\Entity\TfAn;
 use App\Model\Entity\TfImi;
@@ -12,6 +13,8 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
+
+
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
@@ -149,6 +152,8 @@ class StudentController extends AppController
 		$this->set(compact('userAvg'));
 		//全体のジャンルごとの平均:$wholeAvg
 		$this->set(compact('wholeAvg'));
+		
+		$this->emitMessage($this->readSession(['username']) . "さんがトップページに来ました");
 	}
 	
 	//ジャンルごとの合計をとる
@@ -266,7 +271,7 @@ class StudentController extends AppController
 				$validationFailed = true;
 			}
 		}
-		if ($validationFailed) $this->log("validation failed on " . $befNum);
+		if ($validationFailed) $this->log("validation failed on page " . $befNum);
 
 	}
 	//解答をDBに送信する
@@ -303,28 +308,28 @@ class StudentController extends AppController
 		$rejoinders = $this->readSession(['answers',$imicode]);
 		$confidences = $this->readSession([ 'confidences', $imicode ]);
 		//各解答のINSERTクエリを生成
-		$insertAnsQuery = $this->TfAns->query()->insert([ 'imicode', 'qesnum', 'regnum', 'rejoinder', 'confidence','correct_answer' ]);
+		$insertAnsQuery = $this->TfAns->query()->insert(TfAnsTable::getRowNames());
 		//各ジャンルの合計点
 		$scores = [TECH_NUM => 0, MAN_NUM => 0, STR_NUM => 0];
 		foreach ($rejoinders as $key => $rejoinder) {
 			$question = &$corrects['mf_exa']['mf_qes'][$key - 1];
-			$insertAnsQuery->values([ 'imicode'=> $imicode,
-			                          'qesnum'=>  $key,
-			                          'regnum'=>  $regnum,
-			                          'rejoinder'=>  $rejoinder,
-			                          'confidence'=>  $confidences[$key],
-			                          'correct_answer' => $question->answer
+			$insertAnsQuery->values([ TfAnsTable::$IMICODE => $imicode,
+			                          TfAnsTable::$QESNUM=>  $key,
+			                          TfAnsTable::$REGNUM=>  $regnum,
+			                          TfAnsTable::$REJOINDER=>  $rejoinder,
+			                          TfAnsTable::$CONFIDENCE=>  $confidences[$key],
+			                          TfAnsTable::$CORRECT_ANSWER => $question->answer
 			                        ]);
 			//正解の選択肢だったら
 			if ($rejoinder == $question->answer) $scores [$question->fienum] ++;
 		}
 		$insertSumQuery = $this->TfSum->query()
-			->insert(['regnum','imicode','technology_sum','management_sum','strategy_sum'])
+			->insert(['regnum','imicode',TfSumTable::$TECH_NAME,TfSumTable::$MAN_NAME,TfSumTable::$STR_NAME])
 			->values([ 'regnum' => $regnum,
 			           'imicode' => $imicode,
-			           'technology_sum' => $scores[TECH_NUM],
-			           'management_sum' => $scores[MAN_NUM],
-			           'strategy_sum' => $scores[STR_NUM]
+			           TfSumTable::$TECH_NAME => $scores[TECH_NUM],
+			           TfSumTable::$MAN_NAME => $scores[MAN_NUM],
+			           TfSumTable::$STR_NAME => $scores[STR_NUM]
 			         ]);
 		$connection = ConnectionManager::get('default');
 		//解答と合計のINSERTをトランザクションで行う
@@ -340,7 +345,7 @@ class StudentController extends AppController
 		};
 		//もしすでに行が存在する場合は上書き
 		$insertAnsQuery = $insertAnsQuery->epilog($genOnDup(['rejoinder','confidence','correct_answer']));
-		$insertSumQuery = $insertSumQuery->epilog($genOnDup(['technology_sum','management_sum','strategy_sum']));
+		$insertSumQuery = $insertSumQuery->epilog($genOnDup([TfSumTable::$TECH_NAME,TfSumTable::$MAN_NAME,TfSumTable::$STR_NAME]));
 		//トランザクションの実行結果
 		$result = false;
 		try {
@@ -360,6 +365,10 @@ class StudentController extends AppController
 			//セッション内の解答削除
 			$this->removeSession(['confidences', $imicode]);
 			$this->removeSession(['answers', $imicode]);
+			$name = $this->readSession([ 'username' ]);
+			$examname = $this->TfImi->find()->where(["imicode" => $imicode])->contain(['MfExa'])->first()->_getName($this->TfImi);
+			$total = array_sum($scores);
+			$this->emitMessage("{$name}さんが{$examname}で{$total}点を獲得しました。");
 			$this->redirect([ 'controller' => 'student', 'action' => 'result',
 			                  'id'         => $regnum, 'imicode' => $imicode ]);
 		}
@@ -398,9 +407,9 @@ class StudentController extends AppController
 		$this->set(compact('average'));
 		//全体のジャンルごとの平均
 		$wholeAvg = [
-			round($imiQesAns[TfImiTable::TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
-			round($imiQesAns[TfImiTable::MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
-			round($imiQesAns[TfImiTable::STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
+			round($imiQesAns[TfImiTable::$TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
 		];
 		$this->set(compact('wholeAvg'));
 		//問題:$questions
@@ -415,9 +424,9 @@ class StudentController extends AppController
 			->first();
 		//レーダーチャートに表示する、ユーザのジャンルごとの合計点:$userScore
 		$userScore = [
-			$score[TfSumTable::TECH_NAME] * TECH_WEIGHT,
-			$score[TfSumTable::MAN_NAME] * MAN_WEIGHT,
-			$score[TfSumTable::STR_NAME] * STR_WEIGHT];
+			$score[TfSumTable::$TECH_NAME] * TECH_WEIGHT,
+			$score[TfSumTable::$MAN_NAME] * MAN_WEIGHT,
+			$score[TfSumTable::$STR_NAME] * STR_WEIGHT];
 		$this->set(compact('userScore'));
 		if ( isset($score) && $score instanceof TfSum ) {
 			$score = $score->_getStudentSum();
@@ -433,9 +442,9 @@ class StudentController extends AppController
 		//ジャンルごとの分布:$barNumbers
 		$barNumNonZero = $this->TfSum->find()->select(
 			[ 'score_floor' => "TRUNCATE(("
-				. TfSumTable::TECH_NAME . "+"
-				. TfSumTable::MAN_NAME . "+"
-				. TfSumTable::STR_NAME . " ) * 1.25,-1)  ",
+				. TfSumTable::$TECH_NAME . "+"
+				. TfSumTable::$MAN_NAME . "+"
+				. TfSumTable::$STR_NAME . " ) * 1.25,-1)  ",
 			  'score_number' => 'count(*)' ])
 			->where(['imicode' => $imicode])
 			->group([ 'score_floor' ])->toArray();
@@ -453,8 +462,9 @@ class StudentController extends AppController
 			if ( $imipepnum == 0 ) return [];
 			//問題ごとに何人正解したか
 			//ただし0は出ない
-			$correctRatesNonZero = $this->TfAns->find()->select([ 'subQesnum' => 'qesnum',
-			                                                      'rate'      => "count(*) / {$imipepnum}" ])
+			$correctRatesNonZero = $this->TfAns->find()
+				->select([ 'subQesnum' => 'qesnum',
+				           'rate'      => "count(*) / {$imipepnum}" ])
 				->where([ 'rejoinder = correct_answer', 'imicode' => $imicode ])
 				->group([ 'qesnum' ])
 				->toArray();
@@ -625,5 +635,25 @@ class StudentController extends AppController
 	public function score()
 	{
 	
+	}
+	
+	public function emitMessage( string $message )
+	{
+		global $redis;
+		if ( !( isset($redis) ) ) {
+		
+			$redis = new \Redis;
+			try {
+				$redis->connect('127.0.0.1', '6379');
+			}catch (\Exception $exception) {
+			
+			}
+		}
+		try {
+			$emitter = new \SocketIO\Emitter($redis);
+			$emitter->emit('messageFromPHP', $message);
+		}catch (\Exception $exception){
+		
+		}
 	}
 }
