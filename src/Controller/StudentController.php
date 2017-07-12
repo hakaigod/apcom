@@ -484,27 +484,37 @@ class StudentController extends AppController
     {
     }
 
+    //遷移失敗時の警告画面
+    public function qaaAlert()
+    {
+    }
+
     //一問一答出題画面
     public function qaaQuestion()
     {
         //qaaSelectGenre 選択したジャンルの取得
         $getGenre=$this->request->getData('genre');
-        //ctpに送る
-        $this->set(compact('getGenre'));
-        //ルートから番号の取得(回答した回数になる)
-        $qNum=$this->request->getParam('question_num');
-        $this->set('qNum',$qNum);
-        //指定したジャンルのクエリを取得する
-        $question=$this->MfQes->find()
-            ->contain(['MfExa','MfFie'])
-            ->WHERE(['MfQes.fienum IN'=>$getGenre])
-            ->ORDER(['RAND()'])
-            //何行飛ばすか
-            ->OFFSET($qNum)
-            //1行だけ出力する
-            ->first();
-        //問題内容の表示
-        $this->set(compact('question'));
+        //取得ジャンルが正しく受け取れていない場合、エラー表示を行い、ジャンル選択画面に遷移させる
+        if(empty($getGenre)){
+            $this->render('qaa_alert');
+        } else {
+            //ctpに送る
+            $this->set(compact('getGenre'));
+            //ルートから番号の取得(回答した回数になる)
+            $qNum=$this->request->getParam('question_num');
+            $this->set('qNum',$qNum);
+            //指定したジャンルのクエリを取得する
+            $question=$this->MfQes->find()
+                ->contain(['MfExa','MfFie'])
+                ->WHERE(['MfQes.fienum IN'=>$getGenre])
+                ->ORDER(['RAND()'])
+                //何行飛ばすか
+                ->OFFSET($qNum)
+                //1行だけ出力する
+                ->first();
+            //問題内容の表示
+            $this->set(compact('question'));
+        }
     }
     public function yearSelection()
     {
@@ -569,7 +579,6 @@ class StudentController extends AppController
 //	    }
     }
 
-
     // 年度と問題番号の紐づけを行う
     public function posAns(){
 //    	$this->practiceExam($exanum);
@@ -592,6 +601,5 @@ class StudentController extends AppController
 
     public function score()
     {
-
     }
 }
