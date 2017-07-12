@@ -1,0 +1,95 @@
+/*　年度タイトル　*/
+#exam-title{
+	font-size: 30px;
+	border-bottom: 1px solid #148d75;
+}
+
+/* スコアの枠調整 */
+.score-box{
+	background-color: rgba(182, 237, 245, 0.27);
+	padding: 20px 0px 10px 0px;
+}
+
+/*  スコアの調整  */
+.score{
+	font-size: 50px;
+}
+
+/*  スコア強調用  */
+#score-opt {
+	color: #faad08;
+	text-shadow:
+			-1px -1px 0px #5c5c5c,
+			1px -1px 0px #5c5c5c,
+			1px 1px 0px #5c5c5c,
+			-1px 1px 0px #5c5c5c;
+}
+/*  メッセージ調整  */
+.message{
+	margin-bottom: 20px;
+}
+
+/* テーブルの枠線調整 */
+.ans-table{
+	border: solid;
+}
+/* テーブルの空白調整 */
+#ans-table.table{
+	margin: 0px 0px 0px 0px;
+}
+
+
+/* テーブルの空白調整 */
+.table{
+	margin-top: 80px;
+}
+
+/* テーブル上部の調整 */
+.table-title{
+	border-top: solid;
+}
+
+/*  テーブル列のタイトル  */
+th{
+	text-align: center;
+}
+
+/*  問題No.の調整  */
+#qes-no{
+	background-color: #3498db;
+	text-align: center;
+}
+.qes-no{
+	color: white;
+}
+
+.ans-text{
+	width: calc(100vw / 6);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	/*color: #f00;*/
+	display: inline-block;
+}
+
+
+
+
+
+
+/*    ○×セルの調整 　 */
+.ans-check{
+	text-align: center;
+	margin-bottom: 0;
+}
+
+p{
+	margin: 3px 0px 3px 0px;
+}
+
+
+/*  TOPボタンの調整   */
+.top-btn{
+	width: 10em;
+	text-align: center;
+}
