@@ -73,11 +73,38 @@ Student
                             <div class="modal-body">
                                 <div class="container-fluid">
                                     <!--累計情報-->
-                                    <div class="row" id="total-info">
-                                        <!--プログレスバーをここに表示する-->
+                                    <div class="row" id="technology-topic">
+                                        <div class="col-md-3">
+                                            <div style="font-size:16px;">テクノロジ:</div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="progress" id="progress-technology">
+                                                <!--プログレスバー表示-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row"  id="management-topic">
+                                        <div class="col-md-3">
+                                            <div style="font-size:16px">マネジメント：</div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="progress" id="progress-management">
+                                                <!--プログレスバー表示-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="strategy-topic">
+                                        <div class="col-md-3">
+                                            <div style="font-size:16px">ストラテジ：</div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="progress" id="progress-strategy">
+                                                <!--プログレスバー表示-->
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        <!--過去文ログ-->
+                                        <!--過去問題ログ-->
                                         <table id="log-table" class="table table-bordered">
                                             <thead>
                                             <tr>
@@ -106,7 +133,7 @@ Student
         <div class="row">
             <div class="col-md-12">
                 <div class="source">
-                    出典：<?= $question->mf_exa->exam_detail . " 問" . $question->qesnum?>
+                    出典：<?= $question->mf_exa->exam_detail ." 問" .$question->qesnum ."  " .$question->mf_fie->fiename ?>
                 </div>
             </div>
         </div>

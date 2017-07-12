@@ -15,11 +15,11 @@ $(function() {
         $('.choice').prop('disabled', true);
         //正誤判定
         let ans = new Array("ア","イ","ウ","エ");
-        if ($(this).val() == ans[answer]) {
+        if ($(this).val() == ans[answer-1]) {
             document.getElementById("qaa-falsehood").innerHTML = "正解";
             falsehood = "正解";
         } else {
-            document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+ans[answer];
+            document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+ans[answer-1];
             falsehood = "不正解";
         }
     });

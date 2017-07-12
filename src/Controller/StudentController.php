@@ -505,7 +505,6 @@ class StudentController extends AppController
             ->first();
         //問題内容の表示
         $this->set(compact('question'));
-
     }
     public function yearSelection()
     {
