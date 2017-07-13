@@ -81,12 +81,12 @@ class TfImiTable extends Table
 
         return $validator;
     }
-	public const TECH_NAME = "technology_imisum";
-	public const MAN_NAME = "management_imisum";
-	public const STR_NAME = "strategy_imisum";
+	public static $TECH_NAME = "technology_imisum";
+	public static $MAN_NAME = "management_imisum";
+	public static $STR_NAME = "strategy_imisum";
 
 //書いた
-	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):?TfImi{
+	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):TfImi{
 		$row =  $this->find()
 			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
 				return $q->select(['exanum','qesnum','question','answer','fienum'])

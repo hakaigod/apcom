@@ -16,7 +16,7 @@ class LoginController extends AppController
         session_start();
 
 
-        $db['host'] = "192.168.20.224";  // DBサーバのURL
+        $db['host'] = "localhost";  // DBサーバのURL
         $db['user'] = "root";  // ユーザー名
         $db['pass'] = "high01";  // ユーザー名のパスワード
         $db['dbname'] = "apcom";  // データベース名
