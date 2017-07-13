@@ -43,8 +43,8 @@
     
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-        //TODO:IPアドレスを動的に設定
-        var socket = io('http://192.168.20.224:3000');
+        //TODO:IPアドレスをいい感じに設定
+        var socket = io('http://<?= $_SERVER['SERVER_ADDR']?>:3000');
         socket.on('messageFromPHP', function (data) {
             console.log(data);
             var activityText = $('#activity-text');
