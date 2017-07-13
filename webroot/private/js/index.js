@@ -7,4 +7,5 @@ $(function(){
 		$('#list').slideDown();
 		$('#sidebar').slideUp();
 	});
+	
 });

@@ -140,3 +140,16 @@ div.message.error:before {
 div.message.hidden {
     height: 0;
 }
+
+
+#activity-div{
+	width: calc(100vw / 4);
+	overflow: hidden;
+	white-space: nowrap;
+}
+#activity-text{
+	/*line-height: 0;*/
+	font-size:16px;
+	height:1em;
+	margin:0;
+}

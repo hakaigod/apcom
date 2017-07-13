@@ -20,7 +20,9 @@ use App\Model\Entity\TfImi;
  */
 class TfImiTable extends Table
 {
-
+	public static $TECH_NAME = "technology_imisum";
+	public static $MAN_NAME = "management_imisum";
+	public static $STR_NAME = "strategy_imisum";
     /**
      * Initialize method
      *
@@ -81,9 +83,7 @@ class TfImiTable extends Table
 
         return $validator;
     }
-	public static $TECH_NAME = "technology_imisum";
-	public static $MAN_NAME = "management_imisum";
-	public static $STR_NAME = "strategy_imisum";
+
 
 //書いた
 	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):TfImi{
