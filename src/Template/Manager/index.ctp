@@ -92,11 +92,17 @@
         <h6>正答率</h6>
 		<?php $i = 0; foreach ($questionsDetail as $key): ?>
             <div class="col-par-5" id="<?= 'q' . $i?>">
-                <div class="qno"><a href="<?= $this->Url->build(['action' => 'question_detail','ex' => $key['exanum'], 'qn' => $key['qesnum']])?>" target="_blank">問 <?= $key['qesnum']; ?></a></div>
+                <div class="qno"><a href="<?= $this->Url->build(['action' => 'question_detail','ex' => $key['exanum'], 'qn' => $key['qesnum']])?>" data-toggle="modal" data-target="#myModal<?= $i ?>">問 <?= $key['qesnum']; ?></a></div>
                 <div id="question"><?= mb_strimwidth(strip_tags($key['question']), 0, 40, "..."); ?></div>
                 <div class="par"><b class="parnum"><?= number_format($key['corrects'] * 100, 1); ?></b>%</div>
             </div>
-			<?php $i++;endforeach; ?>
+			<div class="modal fade" id="myModal<?= $i ?>">
+				<div class="modal-dialog">
+			        <div class="modal-content">
+			        </div>
+			    </div>
+			</div>
+		<?php $i++;endforeach; ?>
     </div>
 </div>
 
@@ -122,3 +128,23 @@
         </table>
     </div>
 </div>
+
+<!--モーダルウィンドウの中身 -->
+<!-- <div class="modal fade" id="myModal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">現在の成績</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div> -->

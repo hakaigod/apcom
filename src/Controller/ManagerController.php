@@ -172,6 +172,7 @@ class ManagerController extends AppController
 		} else {
 			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
+
 	}
 
 	// 問題詳細
@@ -382,7 +383,7 @@ class ManagerController extends AppController
 
 		$this->set('admins', $queryAdmins);
 	}
-	
+
 	public function addadmin()
 	{
 		// レイアウト設定
