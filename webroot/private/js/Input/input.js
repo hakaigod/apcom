@@ -40,4 +40,13 @@ $(function(){
             return false;
         }
     });
+    
+    //TODO:なんとかする
+    $('.answers-div > label').click(function ()  {
+        console.log("clicked");
+        let name = $(this).attr("name");
+        console.log(name);
+    });
+    
+    
 });
