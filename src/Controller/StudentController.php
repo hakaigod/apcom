@@ -153,6 +153,7 @@ class StudentController extends AppController
 		$this->set(compact('wholeAvg'));
 		
 		$this->emitMessage($this->readSession(['username']) . "さんがトップページに来ました");
+//		$this->emitMessage(rand(0,100));
 	}
 	
 	//ジャンルごとの合計をとる
@@ -406,9 +407,9 @@ class StudentController extends AppController
 		$this->set(compact('average'));
 		//全体のジャンルごとの平均
 		$wholeAvg = [
-			round($imiQesAns[TfImiTable::TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
-			round($imiQesAns[TfImiTable::MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
-			round($imiQesAns[TfImiTable::STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
+			round($imiQesAns[TfImiTable::$TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
 		];
 		$this->set(compact('wholeAvg'));
 		//問題:$questions

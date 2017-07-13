@@ -44,12 +44,20 @@
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         //TODO:IPアドレスを動的に設定
-        var socket = io('http://localhost:23000');
+        var socket = io('http://192.168.20.224:3000');
         socket.on('messageFromPHP', function (data) {
             console.log(data);
-            $('#activity-text').text(data);
-	        $("#activity-text").css({padding-left:0});
-	        $("#activity-text").animate({padding-left:"100px"},1000);
+            var activityText = $('#activity-text');
+            activityText.stop(true,false);
+            activityText.animate({opacity:'0'},500,"swing",function(){
+                activityText.css({opacity:'1'});
+                activityText.text(data);
+                //右に完全に隠れた状態から出て来る
+                activityText.css({paddingLeft:'28vw'});
+                activityText.animate({paddingLeft:'0'},1700,"swing");
+                }
+            );
+            
         });
     </script>
 
