@@ -489,6 +489,11 @@ class StudentController extends AppController
     {
     }
 
+    //一問一答結果画面
+    public function qaaResult(){
+
+    }
+
     //一問一答出題画面
     public function qaaQuestion()
     {
@@ -506,7 +511,8 @@ class StudentController extends AppController
             //指定したジャンルのクエリを取得する
             $question=$this->MfQes->find()
                 ->contain(['MfExa','MfFie'])
-                ->WHERE(['MfQes.fienum IN'=>$getGenre])
+//                ->WHERE(['MfQes.fienum IN'=>$getGenre])
+                    ->WHERE(['MfQes.choice1' == ""])
                 ->ORDER(['RAND()'])
                 //何行飛ばすか
                 ->OFFSET($qNum)

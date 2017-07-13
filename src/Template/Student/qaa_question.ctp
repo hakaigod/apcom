@@ -59,9 +59,15 @@ Student
                 <div id="qaa-title">
                     一問一答
                 </div>
-                <div id="qaa-detail">
-                    [<a onclick=" " data-toggle="modal" data-target="#myModal"> 詳細 </a>]
-                </div>
+                <?php if($qNum != 1):?>
+                    <div id="qaa-detail">
+                        [<a onclick=" " data-toggle="modal" data-target="#myModal"> 詳細 </a>]
+                    </div>
+                <?php else:?>
+                    <div id="qaa-detail">
+                        <strike>[ 詳細 ]</strike>
+                    </div>
+                <?php endif;?>
                 <!--モーダルウィンドウの中身 -->
                 <div class="modal fade" id="myModal">
                     <div class="modal-dialog">
@@ -200,17 +206,27 @@ Student
             </div>
         </div>
     <?php endif;?>
-    <!--送信ボタン-->
     <div class="col-md-12">
-        <div class="row">
-            <div class="qaa-next">
-                <form action="" method="post">
-                    <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
-                    <?php for($i=0;$i<count($getGenre);$i++):?>
-                        <input type="hidden" name="genre[]" value="<?= $getGenre[$i]?>">
-                    <?php endfor;?>
-                </form>
-            </div>
+        <div class="row" id="btn-row">
+            <ul>
+                <li>
+                    <div class="qaa-complete">
+                        <!--一問一答終了ボタン-->
+                        <a href= "<?= $this->url->build(['action'=>'qaaResult'])?>" class="btn btn-danger">終了する</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="qaa-next">
+                        <!--送信ボタン-->
+                        <form action="" method="post">
+                            <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
+                            <?php for($i=0;$i<count($getGenre);$i++):?>
+                                <input type="hidden" name="genre[]" value="<?= $getGenre[$i]?>">
+                            <?php endfor;?>
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

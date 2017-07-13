@@ -114,11 +114,18 @@
     margin: 20px;
 }
 
-/*次の問題ボタン*/
-.qaa-next{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    text-align: center;
+#btn-row ul{
+    list-style: none;
+    position: relative;
+    left: 45%;
+    float: left;
+}
+
+#btn-row li{
+    position: relative;
+    left: -50%;
+    float: left;
+    margin: 20px 30px 10px 30px;
 }
 
 /*プログレスバー*/

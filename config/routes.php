@@ -70,7 +70,17 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		'/qaaSelectGenre',
 		['controller' => 'student', 'action' => 'qaaSelectGenre']
 	);
-	
+
+    $routes->connect(
+        '/qaaAlert',
+        ['controller' => 'student', 'action' => 'qaaAlert']
+    );
+
+    $routes->connect(
+        '/qaaResult',
+        ['controller' => 'student', 'action' => 'qaaResult']
+    );
+
 	$routes->connect(
 		'/qaaQuestion/:question_num/',
 		['controller' => 'student', 'action' => 'qaaQuestion'],

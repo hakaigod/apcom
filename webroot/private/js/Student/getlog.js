@@ -26,55 +26,9 @@ $(function(){
         CountFalsehood(genreCorrectRate,JSON.parse(sessionStorage.getItem('num'+i)));
     }
     //モーダルに正誤情報を記載したプログレスバーを表示する
-    //テクノロジ
-    if(genreCorrectRate.technology[1] === 0) {
-        //該当ジャンルの問題が出題されていない場合、プログレスバーを表示しない
-        $('#technology-topic').html("");
-    } else {
-        let rate = CalculateAccRate(genreCorrectRate.technology[0],genreCorrectRate.technology[1]);
-        $('#progress-technology').append(
-            '<div class="progress-bar progress-bar-info" style="width:'+rate+'%;">' +
-            '<div class="accuracy-rate">'+
-            rate+'%</div></div>'
-        );
-        $('#progress-technology').append(
-            '<div class="progress-bar progress-bar-danger" style="width:'+(100-rate)+'%;">'+
-            '<div class="accuracy-rate">'+
-            (100-rate)+'%</div></div>'
-        );
-    }
-    //マネジメント
-    if(genreCorrectRate.management[1] === 0) {
-        $('#management-topic').html("");
-    } else {
-        let rate = CalculateAccRate(genreCorrectRate.management[0],genreCorrectRate.management[1]);
-        $('#progress-management').append(
-            '<div class="progress-bar progress-bar-success" style="width:'+rate+'%;">'+
-            '<div class="accuracy-rate">'+
-            rate+'%</div></div>'
-        );
-        $('#progress-management').append(
-            '<div class="progress-bar progress-bar-danger" style="width:'+(100-rate)+'%;">'+
-            '<div class="accuracy-rate">'+
-            (100-rate)+'%</div></div>'
-        );
-    }
-    //ストラテジ
-    if(genreCorrectRate.strategy[1] === 0) {
-        $('#strategy-topic').html("");
-    }else {
-        let rate = CalculateAccRate(genreCorrectRate.strategy[0],genreCorrectRate.strategy[1]);
-        $('#progress-strategy').append(
-            '<div class="progress-bar progress-bar" style="width:'+rate+'%;">'+
-            '<div class="accuracy-rate">'+
-            rate+'%</div></div>'
-        );
-        $('#progress-strategy').append(
-            '<div class="progress-bar progress-bar-danger" style="width:'+(100-rate)+'%;">'+
-            '<div class="accuracy-rate">'+
-            (100-rate)+'%</div></div>'
-        );
-    }
+    SetProgressBar("technology",genreCorrectRate.technology);
+    SetProgressBar("management",genreCorrectRate.management);
+    SetProgressBar("strategy",genreCorrectRate.strategy);
 });
 
 //各ジャンルごとの正答数と正解数をカウントして正答率を出す
@@ -109,5 +63,25 @@ function CalculateAccRate(accuracy,total) {
         return 0;
     }else{
         return Math.round(accuracy/total*100);
+    }
+}
+
+function SetProgressBar(selector,genreCorrectRate){
+    "use strict";
+    if(genreCorrectRate[1]===0) {
+        //該当ジャンルの問題が出題されていない場合、プログレスバーを表示しない
+        $('#'+selector+'-topic').html("");
+    } else {
+        let rate = CalculateAccRate(genreCorrectRate[0],genreCorrectRate[1]);
+        $('#progress-'+selector).append(
+            '<div class="progress-bar progress-bar-info" style="width:'+rate+'%;">'+
+            '<div class="accuracy-rate">'+
+            rate + '%</div></div>'
+        );
+        $('#progress-'+selector).append(
+            '<div class="progress-bar progress-bar-danger" style="width:'+(100-rate)+'%;">'+
+            '<div class="accuracy-rate">'+
+            (100 - rate)+'%</div></div>'
+        );
     }
 }
