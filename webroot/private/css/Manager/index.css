@@ -84,5 +84,7 @@
 /*その他*/
 .modal-dialog {
 	width: 80%;
-	padding: 10px;
+}
+.modal-content {
+	padding: 0 20px 0 20px;
 }
