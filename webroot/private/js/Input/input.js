@@ -44,8 +44,22 @@ $(function(){
     //TODO:なんとかする
     $('.answers-div > label').click(function ()  {
         console.log("clicked");
-        let name = $(this).attr("name");
-        console.log(name);
+        let clickedValue = $(this).children('input').eq(0).val();
+        console.log(clickedValue);
+        $(this)
+            .closest('tr')
+            .children('td').eq(3)
+            .find('input')
+            .each(function () {
+                let yetClicked = clickedValue === '0';
+                $(this).prop("disabled",yetClicked);
+                let isDisabled = $(this).closest('label').hasClass("disabled");
+                if (yetClicked && !(isDisabled)) {
+                    $(this).closest('label').addClass('disabled');
+                }else{
+                    $(this).closest('label').removeClass('disabled');
+                }
+            });
     });
     
     

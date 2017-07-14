@@ -7,3 +7,9 @@
 .table-striped>tbody>tr:nth-child(odd)>th {
 	background-color:#f1f1f1;
 }
+a.navbar-brand {
+    padding:10px;
+}
+/*div.container-fluid {*/
+    /*padding-left:0;*/
+/*}*/
