@@ -209,7 +209,7 @@ class StudentController extends AppController
 		if ( $this->readSession(['answers',$imicode]) === null ){
 			//過去入力した選択肢、自信度をDBから読み込む
 			$answersFromDB = $this->TfAns->find()
-				->where([ 'imicode' => $imicode, 'regnum' => $this->request->getParam("id")])
+				->where([ 'imicode' => $imicode, 'regnum' => $this->readSession(["userID"])])
 				->all();
 			foreach ($answersFromDB as $answer) {
 				if ($answer instanceof TfAn) {

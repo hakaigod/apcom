@@ -87,7 +87,7 @@ function json_safe_encode($data){
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">
-                        <div id="<?= "rejoinder_{$i}"?>" data-toggle="buttons">
+                        <div id="<?= "rejoinder_{$i}"?>" class="answers-div" data-toggle="buttons">
 							<?php
 							$ansChoices = ['ア','イ','ウ','エ','未記入'];
 							$answerTag = 'answer_' . $qNum;
@@ -100,9 +100,10 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
 								$active = $isChosen ? 'active ' :'';
 								$checked = $isChosen ? 'checked ':'';
+								$yet = $value==0 ? 'yet':"";
 //							$required = $x==0?"required=\"required\"":"";
-								echo "<label class=\"btn btn-info {$active}\">";
-								echo "<input type=\"radio\"  name=\"{$answerTag}\" "
+								echo "<label class=\"btn btn-info {$yet} {$active}\">";
+								echo "<input type=\"radio\" name=\"{$answerTag}\" "
 									.$checked ."autocomplete=\"off\" value=\"{$value}\">"
 									. $ansChoices[$x];
 								echo '</label>';
