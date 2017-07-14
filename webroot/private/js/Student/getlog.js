@@ -4,6 +4,7 @@ $(function(){
     "use strict";
     //モーダルに今までの問題の情報ログを表示する
     //正解総数と総回答数を格納["正解数",”総回答数”]
+    window.console.log("ルナだよ");
     let genreCorrectRate =
         {
             "technology":[0,0],
