@@ -491,7 +491,9 @@ class StudentController extends AppController
 
     //一問一答結果画面
     public function qaaResult(){
-
+        //ルートから番号の取得(回答した回数になる)
+        $qgNum=$this->request->getParam('pagination_num');
+        $this->set(compact('qgNum'));
     }
 
     //一問一答出題画面

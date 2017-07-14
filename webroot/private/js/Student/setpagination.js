@@ -1,7 +1,13 @@
 /* jshint esversion: 6 */
+//データの取得
+const $script = $('#script');
+const pgNum = JSON.parse($script.attr('pgNum'));
+
 //モーダルにsessionStorageの情報を表示させる
 $(function(){
     "use strict";
+    window.console.log(pgNum);
+
     //モーダルに今までの問題の情報ログを表示する
     //正解総数と総回答数を格納["正解数",”総回答数”]
     window.console.log("ルナだよ");
@@ -12,7 +18,10 @@ $(function(){
             "strategy":[0,0]
         };
     //テーブルに出題ログを追加する
-    for (let i = 1; i <= sessionStorage.length; i++) {
+    for (let i = pgNum; i <= pgNum*10; i++) {
+        if(i > sessionStorage.length){
+            break;
+        }
         let log = JSON.parse(sessionStorage.getItem('num'+i));
         //ログ情報1行分を追加
         $('#log-table').append(
@@ -26,18 +35,18 @@ $(function(){
         );
         CountFalsehood(genreCorrectRate,JSON.parse(sessionStorage.getItem('num'+i)));
     }
-    //モーダルに正誤情報を記載したプログレスバーを表示する
-    SetProgressBar("technology",genreCorrectRate.technology);
-    SetProgressBar("management",genreCorrectRate.management);
-    SetProgressBar("strategy",genreCorrectRate.strategy);
-
     //ページネーションの設定
     //ログ数が10以下の場合はページネーションを表示しない
-    if(sessionStorage.length < 11){
-        $('#qaa-pagination').html("");
+    if(sessionStorage.length < 0){
+        $('#qaa-pagination').css('display','none');
     } else {
         for (let i=0; i<sessionStorage.length/10; i++){
-
+            // 項目数
+            if(i===0){
+                $('#qaa-previous').after('<li id="pagination-num'+ i +'"><a href="">1</a></li>');
+            } else {
+                $('#pagination-num'+(i-1)).after('<li id="pagination-num'+ i +'"><a href="">'+(i*10)+'</a></li>');
+            }
         }
     }
 });

@@ -179,7 +179,7 @@ Student
                 <?php $selectArray = array('ア','イ','ウ','エ')?>
                 <tr class="select_tr" >
                     <td class="col-md-1">
-                        <input type="button" class="choice btn btn-embossed btn-primary full" value=<?php $select=$i?><?= $selectArray[$i-1] ?>>
+                        <input type="button" class="choice btn btn-embossed btn-primary full" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?>>
                     </td>
                     <td class="col-md-11">
                         <?php
@@ -211,15 +211,16 @@ Student
             <ul>
                 <li>
                     <div class="qaa-complete">
+                        <form action="" method="post">
                         <!--一問一答終了ボタン-->
-                        <a href= "<?= $this->url->build(['action'=>'qaaResult'])?>" class="btn btn-danger">終了する</a>
+                            <a href= "<?= $this->url->build(['action'=>'qaaResult','pagination_num'=>1])?>" class="btn btn-danger">終了する</a>
                     </div>
                 </li>
                 <li>
                     <div class="qaa-next">
                         <!--送信ボタン-->
                         <form action="" method="post">
-                            <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','value'=>$qNum,'formaction'=>$qNum + 1])?>
+                            <?= $this->Form->button('次の問題', ['type'=>'submit', 'class'=>'btn btn-warning','id'=>'qaa-next-btn', 'value'=>$qNum,'formaction'=>$qNum + 1])?>
                             <?php for($i=0;$i<count($getGenre);$i++):?>
                                 <input type="hidden" name="genre[]" value="<?= $getGenre[$i]?>">
                             <?php endfor;?>

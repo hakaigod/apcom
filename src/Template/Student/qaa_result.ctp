@@ -18,9 +18,13 @@
 Student
 <?= $this->end();?>
 <!-- jsセット -->
+<?php function json_safe_encode($data){
+    return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+}?>
 <?= $this->start('script');?>
-<?= $this->Html->script('/private/js/Student/getlog.js')?>
-<?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
+<script id="script" src="<?= $this->request->getAttribute('webroot') ;?>/private/js/Student/setpagination.js"
+        qgNum = '<?= json_safe_encode($qgNum); ?>'
+></script>
 <?= $this->end();?>
 <!-- 以下content -->
 <div class="container-fluid">
@@ -45,4 +49,36 @@ Student
         </tr>
         </thead>
     </table>
+    <!--ページネーション-->
+    <div id="qaa-pagination">
+        <ul class="pagination">
+            <!--ページ番号初期に戻る矢印の設定-->
+            <li class="previous" id="qaa-previous">
+                <a href="#" class="fui-arrow-left"></a>
+            </li>
+            <!--ページネーション番号の設定 ログの数によって番号数を増減する-->
+            <!-- Make dropdown appear above pagination -->
+            <li class="pagination-dropdown dropup">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fui-triangle-up"></i>
+                </a>
+                <!--ページを一気に移動する矢印の設定-->
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu">
+                    <!--10刻みで指定して番号に移動するドロップダウンメニュー-->
+                    <li>
+                        <!--問題番号の数で表示する項目数を変更する-->
+                        <a href="#">11-20</a>
+                        <a href="#">21-30</a>
+                        <a href="#">31-40</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="next">
+                <a href="#" class="fui-arrow-right"></a>
+            </li>
+        </ul>
+    </div>
+
 </div>
