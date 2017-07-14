@@ -41,7 +41,6 @@ $(function(){
         }
     });
     
-    //TODO:なんとかする
     $('.answers-div > label').click(function ()  {
         console.log("clicked");
         let clickedValue = $(this).children('input').eq(0).val();

@@ -92,8 +92,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 				                  'action'     => 'input',
 				                  'imicode'    => $imi[ 'imicode' ],
 				                  'linkNum'    => 1
-				                ],
-				                [ 'class' => 'text-danger ' ]
+				                ]
 			                );
 			                ?>
                     </u>
@@ -105,8 +104,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
             echo "<u>";
             echo $this->Html->link(
 	            "もっと見る",
-                "#imitation-list",
-                [ 'class' => 'text-primary' ]
+                "#imitation-list"
+//                [ 'class' => 'text-primary' ]
             );
             echo "</u>";
         }

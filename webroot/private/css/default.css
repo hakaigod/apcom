@@ -33,6 +33,7 @@
 }
 
 .btn-hm {
+	color: #d82732;
 	font-size: 25px;
 	padding: 15px 0 15px 10px;
 	background-color: transparent;
@@ -40,7 +41,7 @@
 .btn-hm:hover,
 .btn-hm:focus {
 	outline: none;
-	color: #aaaaaa;
+	color: #999;
 }
 /*サイドバー終わり*/
 
@@ -87,7 +88,6 @@ a {
 /*その他*/
 
 body {
-	background-color: #fcfefe;
 	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
 }
 
@@ -141,16 +141,21 @@ div.message.hidden {
     height: 0;
 }
 
+.container-fluid {
+	padding-left:0;
+	padding-right:0;
+}
 
 #activity-div{
-	width: calc(25vw);
+	background-color: #424448;
 	overflow: hidden;
 	white-space: nowrap;
 }
-#activity-text{
-	/*line-height: 0;*/
+#activity-text {
+	font-size:15px;
+	color: #fcfefe;
+	height: 1.4em;
+	font-weight: normal;
 	white-space: nowrap;
-	font-size:16px;
-	height:1em;
-	margin:0;
+	margin: 0;
 }

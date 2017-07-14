@@ -44,8 +44,8 @@
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         //TODO:IPアドレスをいい感じに設定
-        //        var socket = io('http://localhost:23000');
-        var socket = io('http://<?= $_SERVER['SERVER_ADDR']?>:3000');
+                var socket = io('http://localhost:23000');
+//        var socket = io('http://<?//= $_SERVER['SERVER_ADDR']?>//:3000');
         socket.on('messageFromPHP', function (data) {
             console.log(data);
             var activityText = $('#activity-text');
@@ -54,7 +54,7 @@
                     activityText.css({opacity:'1'});
                     activityText.text(data);
                     //右に完全に隠れた状態から出て来る
-                    activityText.css({paddingLeft:'28vw'});
+                    activityText.css({paddingLeft:'100vw'});
                     activityText.animate({paddingLeft:'0'},1700,"swing");
                 }
             );
@@ -74,8 +74,9 @@
         <div class="navbar-collapse collapse">
             <div class="nav navbar-nav navbar-right">
                 <li class="dropdown navbar-buttton ">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        <img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="font-weight: 500">
+<!--                        <img src="--><?//= $this->request->getAttribute("webroot") ?><!--private/img/identicons/--><?//=$userID?><!--.png" class="dropdown-img">-->
+                        <img src="<?= $this->request->getAttribute("webroot") ?>private/img/1312000.png" class="dropdown-img">
                         ようこそ、<?= $username?:"ERROR!"?>さん
                         <span class="caret"></span>
                     </a>
@@ -92,11 +93,12 @@
 </nav>
 
 
-<div class="col-xs-2" id="activity-div">
-    <div id="activity-text">aaaaaaaaaaaaa</div>
-</div>
+
 <div class="container-fluid all">
-    <div class="row">
+    <div class="container-fluid" id="activity-div" style="padding-left: calc(100vw/6  + 15px);padding-right: calc(100vw/6);" >
+        <div id="activity-text" >aaaaaaaaaaaaa</div>
+    </div>
+    <div class="row" style="padding-left: 15px;">
         <!-- サイドカラム -->
         <button class="btn btn-hm fui-list floating" id="list"></button>
         <div class="col-xs-2 floating" id="sidebar">

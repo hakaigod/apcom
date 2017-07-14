@@ -20,9 +20,9 @@
 /*.btn-info {*/
     /*background: skyblue;*/
 /*}*/
-.btn-info.active {
-    background: midnightblue;
-}
+/*.btn-info.active {*/
+    /*background: #d82732;*/
+/*}*/
 
 
 @media screen and (max-width: 991px) {

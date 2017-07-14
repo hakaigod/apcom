@@ -13,3 +13,8 @@ a.navbar-brand {
 /*div.container-fluid {*/
     /*padding-left:0;*/
 /*}*/
+
+.navbar-inverse .navbar-nav > .open > a:focus {
+	color: #d82732;
+	background-color: #fcfefe;
+}
