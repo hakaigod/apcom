@@ -154,6 +154,3 @@ div.message.hidden {
 	height:1em;
 	margin:0;
 }
-.active {
-	transform: translateX(25vw);
-}
