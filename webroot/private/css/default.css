@@ -33,7 +33,7 @@
 }
 
 .btn-hm {
-	color: #7f8c8d;
+	color: #424448;
 
 	font-size: 25px;
 	padding: 17px 20px 10px 20px;
@@ -112,7 +112,7 @@ div.message {
 }
 
 div.message:before {
-    line-height: 0px;
+    line-height: 0;
     font-size: 20px;
     height: 12px;
     width: 12px;
@@ -153,9 +153,9 @@ div.message.hidden {
 	white-space: nowrap;
 }
 #activity-text {
-	font-size:15px;
+	font-size:14px;
 	color: #fcfefe;
-	height: 1.4em;
+	height: 21px;
 	overflow: hidden;
 	font-weight: normal;
 	white-space: nowrap;
