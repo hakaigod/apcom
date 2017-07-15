@@ -14,24 +14,20 @@
 <?= "平成".$exams->jap_year . "年度". $exams->exaname ." 模擬試験" ?>
 <?php $this->end(); ?>
 
-
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Student/practiceexam.css') ?>
 <?php $this->end(); ?>
-
 
 <!-- jsセット -->
 <?php $this->start('script'); ?>
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-
 <!-- ユーザーネームセット -->
 <?php $this->start('username'); ?>
 managerrrrr
 <?php $this->end(); ?>
-
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
@@ -41,9 +37,6 @@ managerrrrr
 <tr><td><a>点数入力</a></td></tr>
 <tr><td><a>設定</a></td></tr>
 <?php $this->end(); ?>
-
-
-
 
 <!-- 以下content -->
 <div class = "container-fluid">
@@ -59,7 +52,6 @@ managerrrrr
 		</div>
 	</div>
 	
-	
 	<!--　出題問題表示　-->
 	<div class = "row">
 		<div class = "col-md-12">
@@ -69,7 +61,6 @@ managerrrrr
 			</div>
 		</div>
 	</div>
-	
 	
 	<div class="row">
 		<div class="col-md-12">
@@ -84,70 +75,110 @@ managerrrrr
 		</div>
 	</div>
 	
-<!--	-->
 	<!--  解答部分	-->
-	<form name="ansForm" method="post" >
-		<input type="hidden" value="<?= $this->request->getParam("exanum") ?>" name="exanum">
-	<div class="row" id="table" data-toggle="buttons">
-		<table class="table table-bordered">
-				<tbody>
-				<tr>
-					<td id="button" class="col-xs-1" >
-					<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
-<!--						<label class = "btn btn-embossed btn-primary full  --><?php //echo ($ansed[$qes->$qesnum]==1) ? ' active' : ''; ?><!--">-->
-						<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
-					<!--	      nameは変数名、valueはそれに入る値        -->
-							<input type = "radio"  id="aa" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
-						</label>
-					</td>
-					<td id="choice" class="col-xs-11">
-						<span class="select-choice" id="aa" >
-                            <?= $this->qaa->viewTextImg($qes->choice1)?>
-						</span>
-					</td>
-				</tr>
-				
-				<tr>
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
-							<input type = "radio"  id="aa"  name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice">
-                            <?= $this->qaa->viewTextImg($qes->choice2)?>
-						</span>
-					</td>
-				</tr>
-				<tr>
+	<!--    解答選択肢が1つの画像のみかどうかで表示方法を分岐	-->
+	<!--  通常の選択肢の場合	-->
+	<?php if(empty($qes->answer_pic)): ?>
+		<form name="ansForm" method="post" >
+			<input type="hidden" value="<?= $this->request->getParam("exanum") ?>" name="exanum">
+			<div class="row" id="table" data-toggle="buttons">
+				<table class="table table-bordered">
+					<tbody>
+					<tr>
+						<td id="button" class="col-xs-1" >
+							<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
+							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+								<!--	      nameは変数名、valueはそれに入る値        -->
+								<input type = "radio"  id="aa" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
+							</label>
+						</td>
+						<td id="choice" class="col-xs-11">
+							<span class="select-choice" id="aa" >
+	                            <?= $this->qaa->viewTextImg($qes->choice1)?>
+							</span>
+						</td>
+					</tr>
 					
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
-							<input type = "radio"  id="aa"  name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice">
-                            <?= $this->qaa->viewTextImg($qes->choice3)?>
-						</span>
-					</td>
-				</tr>
-				
-				<tr>
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
-							<input type = "radio"  id="aa"  name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice" >
-                            <?= $this->qaa->viewTextImg($qes->choice4)?>
-						</span>
-					</td>
-				</tr>
-				</tbody>
-		</table>
-	</div>
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+								<input type = "radio"  id="aa"  name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice">
+	                            <?= $this->qaa->viewTextImg($qes->choice2)?>
+							</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+								<input type = "radio"  id="aa"  name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice">
+	                            <?= $this->qaa->viewTextImg($qes->choice3)?>
+							</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-primary full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+								<input type = "radio"  id="aa"  name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice" >
+	                            <?= $this->qaa->viewTextImg($qes->choice4)?>
+							</span>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<!--  1つの画像の選択肢の場合	-->
+			<?php else:?>
+			<form name="ansForm" method="post" >
+				<input type="hidden" value="<?= $this->request->getParam("exanum") ?>" name="exanum">
+				<div class="row" id="table" data-toggle="buttons">
+					<table class="table table-bordered">
+						<tbody>
+						<tr>
+							<td  class="col-xs-1">
+								<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
+								<label id="button" class = "btn btn-embossed btn-primary full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+									<!--	      nameは変数名、valueはそれに入る値        -->
+									<input type = "radio" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
+								</label>
+								
+								<label id="button" class = "btn all-choice-btn btn-primary full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+									<input type = "radio" name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
+								</label>
+
+								<label id="button" class = "btn all-choice-btn btn-primary full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+									<input type = "radio" name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
+								</label>
+						
+								<label id="button" class = "btn all-choice-btn btn-primary full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+									<input type = "radio" name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
+								</label>
+							</td>
+							
+							<td class="col-xs-11">
+								<span class="all-choice-text">
+									<?= $this->qaa->viewTextImg($qes->answer_pic); ?>
+								</span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<?php endif;?>
 	
 	<!--  下部のボタン3種類	-->
 	
@@ -160,8 +191,7 @@ managerrrrr
 							['action' => 'practiceExam',
                                 'exanum' =>$exams->exanum,
                                 'qesnum' => $qes->qesnum-1],
-							[ 'class' => "btn btn-warning disabled" ]
-						);
+							[ 'class' => "btn btn-warning disabled" ]);
 						?>
 						<?php else: ?>
 						<?= $this->Form->button('<< 前の問題' ,
@@ -171,8 +201,7 @@ managerrrrr
 								'name' => 'into_ques',
 								'value' => 1,
 								'type' => 'submit'
-						]
-						);
+							]);
 						?>
 					<?php endif; ?>
 				</div>
@@ -188,9 +217,7 @@ managerrrrr
 								 'name' => 'into_ques',
 								 'value' => $qes->qesnum,
 								  'type' => 'submit'
-
-							 ]
-						 );
+							 ]);
 					?>
 				</div>
 			
@@ -201,8 +228,8 @@ managerrrrr
 							['action' => 'practiceExam',
                                 'exanum' =>$exams->exanum ,
                                 'qesnum' =>$qes->qesnum + 1 ],
-							[ 'class' => "btn btn-warning disabled" ]
-						);
+							[ 'class' => "btn btn-warning disabled"
+							]);
 						?>
 					<?php else: ?>
 							<?= $this->Form->button('次の問題 >>' ,

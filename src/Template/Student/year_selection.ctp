@@ -12,24 +12,20 @@
 試験年度選択
 <?php $this->end(); ?>
 
-
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Student/yearSelection.css') ?>
 <?php $this->end(); ?>
-
 
 <!-- jsセット -->
 <?php $this->start('script'); ?>
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-
 <!-- ユーザーネームセット -->
 <?php $this->start('username'); ?>
 managerrrrr
 <?php $this->end(); ?>
-
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
@@ -41,18 +37,17 @@ managerrrrr
 <?php $this->end(); ?>
 
 
-<div>
+<!-- 以下content -->
 
+<div>
     <!-- header -->
     <h1 class="exam-title">模擬試験</h1>
 	<br/>
     <p class="message">過去の午前問題が解けます。<br/>
         受けたい試験の年度を選択してください。
     </p>
-
-
+	
     <!-- テーブル   -->
-
     <div class="year-box">
         <div class="row">
             <div class="col-xs-12">

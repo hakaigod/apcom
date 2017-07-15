@@ -564,9 +564,6 @@ class StudentController extends AppController
 		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('exanum'));
 		
-		
-		$this->intoQes();
-		
 		//保持してるラジオボタンの値を1問分返す
 		$ansed = $this->readSession(['practiceAnswers'])[$exanum][$qesnum];
 		$this->set(compact('ansed'));
@@ -579,45 +576,47 @@ class StudentController extends AppController
 			->first();
 		$this->set(compact('exams'));
 		
-		
 		$qes = $this->MfQes->find()
 			->where(['MfQes.qesnum' => $qesnum, 'MfQes.exanum' => $exanum])
 			->first();
 		$this->set(compact('qes'));
 		
+		//スコア画面にデータを送る
 		$this->score();
+		//セッション処理関数にデータを送る
+		$this->intoQes();
 	}
 	
-	//全問試験用のセッション処理
+	//全問試験用のセッション処理関数
 	public function intoQes(){
-		//exanumは文字列
+		//exanumは文字列型
 		$exanum = $this->request->getParam("exanum");
-		//qesnumは整数
+		//qesnumは整数型
 		$qesnum = $this->request->getParam("qesnum");
 		//POSTされたラジオボタンの値
 		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('exanum'));
 		
-		
-		//空なら80個のnullを入れる
+		//セッションpracticeAnswersが空なら80個のnullを入れて初期化する
 		if(empty($this->readSession(['practiceAnswers']))){
 			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
-			// セッションであるpracticeAnswersの中にexanumの配列を作る
+			// practiceAnswersの中にexanumの配列を作る
 			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
 		}
 		
-		// セッションであるpracticeAnswersの中のexanumの中にqesnumの配列を作る
+		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
 	
 
 //結果画面
 	public function score(){
+		//セッション処理関数にデータを送る
 		$this->intoQes();
-		//exanumは文字列
+		//exanumは文字列型
 		$exanum = $this->request->getParam("exanum");
+		$this->set(compact('exanum'));
 		
-		$sum=0;
 		//実施された本番一覧を取得
 		$exams = $this->MfExa->find()
 			//テーブル内のexanumから抽出する
@@ -636,6 +635,7 @@ class StudentController extends AppController
 		$this->set(compact('practice'));
 		
 		//正答数をカウント
+		$sum=0;
 		foreach (range(1, 80) as $i ) {
 			if ($practice[$i] == $ansbox[$i - 1]->answer) {
 				$sum++;
@@ -646,7 +646,8 @@ class StudentController extends AppController
 		$sum=round($sum * 1.25,2) ;
 		$this->set(compact('sum'));
 		
-		
-		
+		//選択した答え等の判定に使用
+		$selectArrayPas=array('ア','イ','ウ','エ');
+		$this->set(compact('selectArrayPas'));
 	}
 }
