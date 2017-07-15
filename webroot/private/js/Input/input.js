@@ -52,8 +52,7 @@ $(function(){
             .each(function () {
                 let yetClicked = clickedValue === '0';
                 $(this).prop("disabled",yetClicked);
-                let isDisabled = $(this).closest('label').hasClass("disabled");
-                if (yetClicked && !(isDisabled)) {
+                if (yetClicked) {
                     $(this).closest('label').addClass('disabled');
                 }else{
                     $(this).closest('label').removeClass('disabled');

@@ -86,7 +86,7 @@ class TfImiTable extends Table
 
 
 //書いた
-	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1):TfImi{
+	public function getOneAndQes(int $imicode,int $limit = 10,int $page = 1){
 		$row =  $this->find()
 			->contain(['MfExa', 'MfExa.MfQes'=> function ($q) use ($limit, $page) {
 				return $q->select(['exanum','qesnum','question','answer','fienum'])
@@ -96,11 +96,8 @@ class TfImiTable extends Table
 			          ])
 			->where(['TfImi.imicode' => $imicode] )
 			->first();
-		if ($row instanceof TfImi) {
-			return $row;
-		}else{
-			return null;
-		}
+		return $row;
+		
 	}
 	//この試験がそれまでに実施された回数 (=何回目か)を取得する
 	public function getImplNum(int $imicode,int $exanum):int {

@@ -30,7 +30,7 @@ function drawLineChart() {
                 lineTension: 0
             }, {
                 //
-                label: '平均点',
+                label: '全体平均',
                 data: lineAverages,
                 fill: false,
                 borderWidth: 3,
@@ -69,7 +69,7 @@ function drawRadarChart() {
                 borderColor: "rgba(201,60,58,0.8)",
                 data: radarUser
             }, {
-                label: '受験者平均',
+                label: '全体平均',
                 backgroundColor: "rgba(2,63,138,0)",
                 borderColor: "rgba(2,63,138,0.8)",
                 data:radarAverages

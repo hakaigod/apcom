@@ -32,6 +32,8 @@ a.navbar-brand {
 	background-color: #424448;
 	padding:0;
 }
+
+
 .navbar-inverse .navbar-nav > .open > .dropdown-menu > li > a:hover {
 	background-color: #d82732;
 	color: #fcfefe;

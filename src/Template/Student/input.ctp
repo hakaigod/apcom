@@ -126,9 +126,10 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 								$checked = $isChosen ? 'checked':'';
 								$active = $isChosen ? 'active':'';
+								$disabled = $inputtedAns === '0' ? 'disabled':'';
 //							$required = $y==0?"required=\"required\"":"";
-								echo "<label class=\"btn btn-info {$active}\" >";
-								echo "<input type=\"radio\"  name=\"{$confTag}\" "
+								echo "<label class=\"btn btn-info {$disabled} {$active}\" >";
+								echo "<input type=\"radio\" {$disabled} name=\"{$confTag}\" "
 									."autocomplete=\"off\" {$checked} value=\"{$value}\">";
 								echo $this->Html->image($confChoices[$y] . ".svg", ['alt' => $confChoices[$y]]);
 								echo '</label>';

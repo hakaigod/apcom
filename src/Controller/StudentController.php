@@ -258,21 +258,40 @@ class StudentController extends AppController
 			//POSTされた回答と自信度を取得
 			$answer = h($request->getData("answer_{$qNum}"));
 			//値のチェック
-			if ( ctype_digit($answer) && 0 <= $answer && $answer <= 4) {
-				//解答と自信度をセッションに書き込む
+			if ($this->validateAns($answer) != -1){
 				$this->writeSession([ 'answers', $imicode, $qNum ], $answer);
 			}else{
 				$validationFailed = true;
 			}
 			$confidence = h($this->request->getData("confidence_{$qNum}"));
-			if(ctype_digit($confidence) && 1 <= $confidence && $confidence <= 3) {
-				$this->writeSession([ 'confidences', $imicode, $qNum ], $confidence);
+			//未解答の時、自信度を無くす
+			$validatedConf = $this->validateConf($answer, $confidence);
+			if ($validatedConf != -1) {
+				$this->writeSession([ 'confidences', $imicode, $qNum ], $validatedConf);
 			}else{
 				$validationFailed = true;
 			}
 		}
 		if ($validationFailed) $this->log("validation failed on " . $befNum);
 
+	}
+	private function validateAns($answer):int {
+		if ( ctype_digit($answer) && 0 <= $answer && $answer <= 4) {
+			return $answer;
+		}else{
+			return -1;
+			
+		}
+	}
+	
+	private function validateConf($answer, $confidence):int {
+		if (ctype_digit($answer) && $answer === '0') {
+			return 0;
+		}else if(ctype_digit($confidence) && 1 <= $confidence && $confidence <= 3){
+			return $confidence;
+		}else{
+			return -1;
+		}
 	}
 	//解答をDBに送信する
 	public function sendAll() {
@@ -487,7 +506,7 @@ class StudentController extends AppController
 				$qNum = $pageNum * Q_NUM_PER_PAGE + $lowNum;
 				$answer = $this->readSession(['answers',$imicode,$qNum]);
 				$conf = $this->readSession([ 'confidences', $imicode, $qNum ]);
-				if (!(isset($answer)) || !(isset($conf))) {
+				if ( !isset($answer) || ($answer != 0 && !isset($conf)) ) {
 					$notAnsedPages[$pageNum] = false;
 					break;
 				}
