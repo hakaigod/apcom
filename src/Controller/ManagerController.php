@@ -113,15 +113,13 @@ class ManagerController extends AppController
 		$this->set(compact('answers'));
 
 		// 問題情報取得
-		$questions = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
-		$questions->select(['exanum', 'qesnum', 'question', 'answer'])
-		->where(['exanum' => $exanum]);
+		$questions = $this->MfQes->find()->contain('MfExa')->where(['MfExa.exanum' => $exanum]);
+
 		if (!empty($this->request->getQuery('page'))) {
 			$questions->offset($this->request->getQuery('page') * 10 - 10);
 		}
 		$questions->order(['qesnum'])->limit(10);
-		$this->set(compact('questions'));
 
 		// 正答率
 		$questionsDetail = array();
@@ -148,6 +146,18 @@ class ManagerController extends AppController
 			}
 		}
 		$this->set(compact('questionsDetail'));
+
+		$selectAnswer = array();
+		foreach ($questionsDetail as $key) {
+			$selectAnswer += array($key['qesnum'] => array('answers' => array(0,0,0,0,0),'correct' => 0));
+			$selectAnswer[$key['qesnum']]['correct'] = $key['correct_answer'];
+			foreach ($key['answers'] as $value) {
+				$selectAnswer[$key['qesnum']]['answers'][$value]++;
+			}
+		}
+
+		$this->set(compact('selectAnswer'));
+		$this->set(compact('questions'));
 		// ここまで正答率
 
 		// 模擬試験一覧
@@ -176,32 +186,32 @@ class ManagerController extends AppController
 	}
 
 	// 問題詳細
-	public function questionDetail()
-	{
-		// レイアウト設定
-		// $this->viewBuilder()->layout('addmod');
-		$ex = $this->request->getQuery('ex');
-		$qn = $this->request->getQuery('qn');
-
-		$session = $this->request->session();
-		$reqestimicode = $session->read(['reqestimicode']);
-		$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
-		->where([
-			'imicode' => $reqestimicode,
-			'qesnum' => $qn
-		])
-		->toArray();
-		$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
-		foreach ($selectAnswerQuerry as $key) {
-			$selectAnswer['answers'][$key['rejoinder']]++;
-			$selectAnswer['correct'] = $key['correct_answer'];
-		}
-		$this->set(compact('selectAnswer'));
-
-		$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
-		$this->set(compact('ex'));
-		$this->set(compact('qn'));
-	}
+	// public function questionDetail()
+	// {
+	// 	// レイアウト設定
+	// 	// $this->viewBuilder()->layout('addmod');
+	// 	$ex = $this->request->getQuery('ex');
+	// 	$qn = $this->request->getQuery('qn');
+	//
+	// 	$session = $this->request->session();
+	// 	$reqestimicode = $session->read(['reqestimicode']);
+	// 	$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
+	// 	->where([
+	// 		'imicode' => $reqestimicode,
+	// 		'qesnum' => $qn
+	// 	])
+	// 	->toArray();
+	// 	$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
+	// 	foreach ($selectAnswerQuerry as $key) {
+	// 		$selectAnswer['answers'][$key['rejoinder']]++;
+	// 		$selectAnswer['correct'] = $key['correct_answer'];
+	// 	}
+	// 	$this->set(compact('selectAnswer'));
+	//
+	// 	$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
+	// 	$this->set(compact('ex'));
+	// 	$this->set(compact('qn'));
+	// }
 
 	// 学生管理
 	public function stuManager()

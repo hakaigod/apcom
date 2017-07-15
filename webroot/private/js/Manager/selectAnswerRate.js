@@ -1,4 +1,4 @@
-var $script = $('#script');
+var $script = $('#script' + num);
 var selectAnswer = JSON.parse($script.attr('data-select'));
 var correct = JSON.parse($script.attr('data-correct'));
 var blue = 'rgba(54, 162, 235, 0.2)';
@@ -11,7 +11,7 @@ var BoderC = [boderBlue,boderBlue,boderBlue,boderBlue,boderBlue];
 BackC[correct] = red;
 BoderC[correct] = boderRed;
 
-var ctx = document.getElementById("myChart").getContext('2d');
+var ctx = document.getElementById("myChart" + num).getContext('2d');
 var myChart = new Chart(ctx, {
 	type: 'horizontalBar',
 	data: {

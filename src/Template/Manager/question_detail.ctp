@@ -20,7 +20,9 @@
 
 <!-- 問題が出題された年度と問題番号 -->
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
 	<h4><?= $questionDetail->mf_exa->exam_detail . '　問' . $questionDetail->qesnum; ?></h4>
 </div>
 <div class="modal-body">
@@ -79,7 +81,7 @@
 		<canvas id="myChart" height="50"></canvas>
 
 		<script type="text/javascript" id="script"
-			src="<?= $this->request->getAttribute('webroot')?>/private/js/Manager/selectAnswerRate.js"
+			src="<?= $this->request->getAttribute('webroot')?>private/js/Manager/selectAnswerRate.js"
 			data-select = '<?= json_safe_encode($selectAnswer['answers']); ?>'
 			data-correct = '<?= json_safe_encode($selectAnswer['correct']); ?>'
 		></script>
