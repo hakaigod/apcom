@@ -33,15 +33,16 @@
 }
 
 .btn-hm {
-	color: #d82732;
+	color: #7f8c8d;
+
 	font-size: 25px;
-	padding: 15px 0 15px 10px;
+	padding: 17px 20px 10px 20px;
 	background-color: transparent;
 }
 .btn-hm:hover,
 .btn-hm:focus {
 	outline: none;
-	color: #999;
+	color: #d82732;
 }
 /*サイドバー終わり*/
 
@@ -142,8 +143,8 @@ div.message.hidden {
 }
 
 .container-fluid {
-	padding-left:0;
-	padding-right:0;
+	/*padding-left:0;*/
+	/*padding-right:0;*/
 }
 
 #activity-div{
@@ -155,7 +156,11 @@ div.message.hidden {
 	font-size:15px;
 	color: #fcfefe;
 	height: 1.4em;
+	overflow: hidden;
 	font-weight: normal;
 	white-space: nowrap;
-	margin: 0;
+	/*margin: 0;*/
+}
+#welcome-user{
+	margin-right: 0;
 }

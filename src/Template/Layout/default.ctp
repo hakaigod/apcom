@@ -43,39 +43,39 @@
 
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-        //TODO:IPアドレスをいい感じに設定
-                var socket = io('http://localhost:23000');
-//        var socket = io('http://<?//= $_SERVER['SERVER_ADDR']?>//:3000');
-        socket.on('messageFromPHP', function (data) {
-            console.log(data);
-            var activityText = $('#activity-text');
-            activityText.stop(true,false);
-            activityText.animate({opacity:'0'},500,"swing",function(){
-                    activityText.css({opacity:'1'});
-                    activityText.text(data);
-                    //右に完全に隠れた状態から出て来る
-                    activityText.css({paddingLeft:'100vw'});
-                    activityText.animate({paddingLeft:'0'},1700,"swing");
-                }
-            );
+		//TODO:IPアドレスをいい感じに設定
+		var socket = io('http://localhost:23000');
+		//        var socket = io('http://<?//= $_SERVER['SERVER_ADDR']?>//:3000');
+		socket.on('messageFromPHP', function (data) {
+			console.log(data);
+			var activityText = $('#activity-text');
+			activityText.stop(true,false);
+			activityText.animate({opacity:'0'},500,"swing",function(){
+					activityText.css({opacity:'1'});
+					activityText.text(data);
+					//右に完全に隠れた状態から出て来る
+					activityText.css({paddingLeft:'70vw'});
+					activityText.animate({paddingLeft:"15px"},2500,"swing");
+				}
+			);
 
-        });
+		});
     </script>
 
 </head>
 <body>
 <nav class=" navbar navbar-inverse navbar-fixed-top" id="navbar">
-    <div class="col-xs-offset-2 col-xs-8 container-fluid ">
+    <div class="col-xs-offset-2 col-xs-8 ">
         <div class=" navbar-header  navbar-left ">
             <a class="navbar-brand" href="<?= $this->Url->build($logoLink) ?>">
                 <img src="<?= $this->request->getAttribute("webroot") ?>img/logo.png" class="nabvar-img">
             </a>
         </div>
         <div class="navbar-collapse collapse">
-            <div class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right" id="welcome-user">
                 <li class="dropdown navbar-buttton ">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="font-weight: 500">
-<!--                        <img src="--><?//= $this->request->getAttribute("webroot") ?><!--private/img/identicons/--><?//=$userID?><!--.png" class="dropdown-img">-->
+                        <!--                        <img src="--><?//= $this->request->getAttribute("webroot") ?><!--private/img/identicons/--><?//=$userID?><!--.png" class="dropdown-img">-->
                         <img src="<?= $this->request->getAttribute("webroot") ?>private/img/1312000.png" class="dropdown-img">
                         ようこそ、<?= $username?:"ERROR!"?>さん
                         <span class="caret"></span>
@@ -89,43 +89,43 @@
         </div>
 
     </div>
-    
+
 </nav>
 
-
-
-<div class="container-fluid all">
-    <div class="container-fluid" id="activity-div" style="padding-left: calc(100vw/6  + 15px);padding-right: calc(100vw/6);" >
-        <div id="activity-text" >aaaaaaaaaaaaa</div>
+<div class="all">
+    <div id="activity-div" >
+        <div class="col-xs-offset-2 col-xs-8" id="activity-text" >aaaaaaaaaaaaa</div>
     </div>
-    <div class="row" style="padding-left: 15px;">
-        <!-- サイドカラム -->
-        <button class="btn btn-hm fui-list floating" id="list"></button>
-        <div class="col-xs-2 floating" id="sidebar">
-            <div class="row">
-                <button class="btn btn-hm fui-cross" id="cross"></button>
-            </div>
-            <div class="row">
-                <table class="table table-hover">
-					<?= $this->fetch('sidebar')?>
-                    <tr class="danger"><td><a href="#">ログアウト</a></td></tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- メインカラム -->
-        <div class="col-xs-8 col-xs-offset-2" id="col-main">
-			<?= $this->fetch('content') ?>
-        </div>
-        <!-- 右サイドカラム -->
-        <div class="col-xs-offset-1 col-xs-1">
-            <div class="row floating">
-                <div class="" id="reloadbutton">
-                    <button class="btn btn-success" onclick="location.reload();">更新</button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- サイドカラム -->
+            <button class="btn btn-hm fui-list floating" id="list"></button>
+            <div class="col-xs-2 floating" id="sidebar">
+                <div class="row">
+                    <button class="btn btn-hm fui-cross" id="cross"></button>
+                </div>
+                <div class="row">
+                    <table class="table table-hover">
+						<?= $this->fetch('sidebar')?>
+                        <tr class="danger"><td><a href="#">ログアウト</a></td></tr>
+                    </table>
                 </div>
             </div>
-        </div>
 
+            <!-- メインカラム -->
+            <div class="col-xs-8 col-xs-offset-2" id="col-main">
+				<?= $this->fetch('content') ?>
+            </div>
+            <!-- 右サイドカラム -->
+            <div class="col-xs-offset-1 col-xs-1">
+                <div class="row floating">
+                    <div class="" id="reloadbutton">
+                        <button class="btn btn-success" onclick="location.reload();">更新</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 </body>

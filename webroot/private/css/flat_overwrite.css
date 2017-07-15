@@ -1,6 +1,8 @@
 /*flat-ui 上書き用CSS*/
 .navbar-collapse .navbar-nav.navbar-right:last-child > .dropdown:last-child > a {
     border-radius: 0;
+	padding-left:10px;
+	padding-right:10px;
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td,
@@ -8,7 +10,8 @@
 	background-color:#f1f1f1;
 }
 a.navbar-brand {
-    padding:10px;
+    padding:10px 0 10px 0;
+	
 }
 /*div.container-fluid {*/
     /*padding-left:0;*/
@@ -17,4 +20,25 @@ a.navbar-brand {
 .navbar-inverse .navbar-nav > .open > a:focus {
 	color: #d82732;
 	background-color: #fcfefe;
+}
+.navbar-inverse .navbar-nav > .open > .dropdown-menu > li > a{
+	color: #fcfefe;
+}
+.navbar-inverse .navbar-nav > .open > .dropdown-menu {
+	background-color: #95a5a6;
+	padding:0;
+}
+.navbar-inverse .navbar-nav > .open > .dropdown-menu > li > a:hover {
+	background-color: #d82732;
+	color: #fcfefe;
+}
+
+.navbar-inverse .navbar-nav > li > a:focus {
+	color: #fcfefe;
+}
+.navbar-inverse .navbar-nav > li > a {
+	color: #fcfefe;
+}
+.navbar-inverse .navbar-nav > li > a:hover {
+	color: #bdc3c7;
 }
