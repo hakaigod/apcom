@@ -13,7 +13,12 @@
 .end-btn {
     margin-right: 0;
 }
-
+.sentence {
+    width: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 /*.btn-info:hover{*/
     /*background: lightskyblue;*/
 /*}*/

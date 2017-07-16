@@ -64,7 +64,7 @@ function json_safe_encode($data){
 		['controller' => 'student', 'action' => 'sendAll',
 		 'id' => $userID,'imicode' => $imicode]) ?>
 " method="post" id="answer-form">
-        <table id="input-table" class="table table-bordered table-striped table-hover">
+        <table id="input-table" class="table table-bordered table-striped table-hover" >
             <thead >
             <tr>
                 <th class ="center">番号</th>
@@ -82,8 +82,7 @@ function json_safe_encode($data){
                     </td>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class=" col-sm-12  col-md-3 sentence">
-						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
-                        ...
+						<?= strip_tags($questions[ $i - 1 ]['question']) ?>
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">
