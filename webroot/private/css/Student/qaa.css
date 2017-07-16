@@ -70,7 +70,6 @@
 
 /*問番号*/
 #qaa-question-no{
-    margin-top: 20px;
     font-size: 25px;
     font-weight: bold;
 }
@@ -78,7 +77,7 @@
 /*問題文*/
 .qaa-question{
     text-align: left;
-    margin: 20px;
+    margin: 10px;
 }
 
 /*正誤*/
@@ -90,10 +89,10 @@
 
 /*選択肢テーブル*/
 .qaa_select_table{
-    margin: 20px;
+    margin: 10px;
     /*word-break: keep-all;*/
 }
-.table-bordered > tbody > tr >td{
+#choice-table.table-bordered > tbody > tr >td{
     border: none;
     padding: 5px;
 }
@@ -115,14 +114,46 @@
     margin: 20px;
 }
 
-/*次の問題ボタン*/
-.qaa-next{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    text-align: center;
+#btn-row ul{
+    list-style: none;
+    position: relative;
+    left: 45%;
+    float: left;
+}
+
+#btn-row li{
+    position: relative;
+    left: -50%;
+    float: left;
+    margin: 20px 30px 10px 30px;
+}
+
+/*プログレスバー*/
+.progress{
+    height: 20px;
+    margin:3px 0 5px 0;
+}
+.progress-bar {
+    line-height: 0;
+}
+
+.accuracy-rate{
+    margin-top: 11px;
+}
+
+.progress-bar-danger{
+    background-color: darkgray;
+}
+
+/*エラー警告画面*/
+#qaa-alert{
+    margin: 20px;
 }
 
 /*テスト用 外枠表示*/
-/*#col-main * {*/
+    /*#col-main * {*/
     /*border: solid 1px black;*/
 /*}*/
+a {
+    cursor: pointer;
+}

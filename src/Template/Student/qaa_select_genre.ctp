@@ -12,6 +12,7 @@
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
 <?= $this->Html->script('/private/js/Student/check.js')?>
+<?= $this->Html->script('/private/js/Student/reset.js')?>
 <?= $this->end();?>
 
 <!-- ユーザーネームセット -->
@@ -67,18 +68,24 @@ Student
                     ];
                     //name配列と対応するoptionの選択
                     echo $this->Form->select
-                    //name
                     ('genre',
                         $options,
-                            ['multiple'=>'checkbox'
-                            ,'data-toggle'=>"checkbox",]
-                    )
-                    ?>
+                        [
+                            'multiple'=>'checkbox',
+                            'data-toggle'=>"checkbox"
+                        ]
+                    ) ?>
                 </div>
                 <!--決定ボタン-->
                 <div class="center">
-                    <?= $this->Form->button('問題開始',array('type'=>'submit',
-                        'class'=>'btn btn-info'));?>
+                    <?= $this->Form->button
+                    ('問題開始',
+                        array(
+                            'type'=>'submit',
+                            'class'=>'btn btn-info',
+                            'id'=>'form1'
+                        )
+                    );?>
                     <?= $this->Form->end();?>
                 </div>
             </div>

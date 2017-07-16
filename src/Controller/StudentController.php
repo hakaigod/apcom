@@ -54,7 +54,7 @@ class StudentController extends AppController
 		$this->loadModel('MfExa');
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
-		
+
 //		$this->writeSession(['userID'], "13120023");
 //		$this->writeSession(['username'], "おでん");
 //		$this->writeSession(['role'], "student");
@@ -273,7 +273,7 @@ class StudentController extends AppController
 			}
 		}
 		if ($validationFailed) $this->log("validation failed on " . $befNum);
-
+		
 	}
 	private function validateAns($answer):int {
 		if ( ctype_digit($answer) && 0 <= $answer && $answer <= 4) {
@@ -477,24 +477,24 @@ class StudentController extends AppController
 	
 	private function getCorrectRates( int $imicode, int $imipepnum ): array
 	{
-			//誰も受験していないとき、空の配列を返す
-			if ( $imipepnum == 0 ) return [];
-			//問題ごとに何人正解したか
-			//ただし0は出ない
-			$correctRatesNonZero = $this->TfAns->find()
-				->select([ 'subQesnum' => 'qesnum',
-				           'rate'      => "count(*) / {$imipepnum}" ])
-				->where([ 'rejoinder = correct_answer', 'imicode' => $imicode ])
-				->group([ 'qesnum' ])
-				->toArray();
-			$this->set(compact('correctRatesNonZero'));
-			//無い問題番号を0で埋める
-			$resultAndZero = array_fill(0, Q_TOTAL_NUM, 0);
-			foreach ( $correctRatesNonZero as $rate ) {
-				$resultAndZero[ $rate[ 'subQesnum' ] - 1 ] = $rate[ 'rate' ];
-			}
-			
-			return $resultAndZero;
+		//誰も受験していないとき、空の配列を返す
+		if ( $imipepnum == 0 ) return [];
+		//問題ごとに何人正解したか
+		//ただし0は出ない
+		$correctRatesNonZero = $this->TfAns->find()
+			->select([ 'subQesnum' => 'qesnum',
+			           'rate'      => "count(*) / {$imipepnum}" ])
+			->where([ 'rejoinder = correct_answer', 'imicode' => $imicode ])
+			->group([ 'qesnum' ])
+			->toArray();
+		$this->set(compact('correctRatesNonZero'));
+		//無い問題番号を0で埋める
+		$resultAndZero = array_fill(0, Q_TOTAL_NUM, 0);
+		foreach ( $correctRatesNonZero as $rate ) {
+			$resultAndZero[ $rate[ 'subQesnum' ] - 1 ] = $rate[ 'rate' ];
+		}
+		
+		return $resultAndZero;
 	}
 	//入力されていないページ一覧を取得
 	private function getNotAnsed (int $imicode):array{
@@ -543,31 +543,42 @@ class StudentController extends AppController
 	public function qaaSelectGenre()
 	{
 	}
+	//一問一答結果画面
+	public function qaaResult(){
+		//ルートから番号の取得(回答した回数になる)
+		$qgNum=$this->request->getParam('pagination_num');
+		$this->set(compact('qgNum'));
+	}
+	
 	
 	//一問一答出題画面
 	public function qaaQuestion()
 	{
 		//qaaSelectGenre 選択したジャンルの取得
 		$getGenre=$this->request->getData('genre');
-		//ctpに送る
-		$this->set('getGenre',$getGenre);
-		//ルートから番号の取得(回答した回数になる)
-		$qNum=$this->request->getParam('question_num');
-		$this->set('qNum',$qNum);
-		//指定したジャンルのクエリを取得する
-		$question = $this->MfQes->find()
-			->contain(['MfExa','MfFie'])
-			->WHERE(['MfQes.fienum IN' => $getGenre])
-			->ORDER(['qesnum' => 'ASC'])
-			//何行飛ばすか
-			->OFFSET($qNum)
-			//1行だけ出力する
-			->first();
-//        print_r($question);
-		//問題内容の表示
-		$this->set('question',$question);
+		//取得ジャンルが正しく受け取れていない場合、エラー表示を行い、ジャンル選択画面に遷移させる
+		if(empty($getGenre)){
+			$this->render('qaa_alert');
+		} else {
+			//ctpに送る
+			$this->set(compact('getGenre'));
+			//ルートから番号の取得(回答した回数になる)
+			$qNum=$this->request->getParam('question_num');
+			$this->set('qNum',$qNum);
+			//指定したジャンルのクエリを取得する
+			$question=$this->MfQes->find()
+				->contain(['MfExa','MfFie'])
+//                ->WHERE(['MfQes.fienum IN'=>$getGenre])
+				->WHERE(['MfQes.choice1' == ""])
+				->ORDER(['RAND()'])
+				//何行飛ばすか
+				->OFFSET($qNum)
+				//1行だけ出力する
+				->first();
+			//問題内容の表示
+			$this->set(compact('question'));
+		}
 	}
-	
 	
 	//年度選択画面
 	public function yearSelection()
@@ -607,8 +618,8 @@ class StudentController extends AppController
 		//各年度の全国合格率(チンパン)
 		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
 		$this->set(compact('passRate'));
-		
-		
+
+
 //	    結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
 //      残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
 		$this->removeSession(['practiceAnswers']);
@@ -668,7 +679,7 @@ class StudentController extends AppController
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
-	
+
 
 //結果画面
 	public function score(){
@@ -716,7 +727,7 @@ class StudentController extends AppController
 	{
 		global $redis;
 		if ( !( isset($redis) ) ) {
-		
+			
 			$redis = new \Redis;
 			try {
 				$redis->connect('127.0.0.1', '6379');
@@ -730,5 +741,19 @@ class StudentController extends AppController
 		}catch (\Exception $exception){
 		
 		}
+	}
+	// 年度と問題番号の紐づけを行う
+	public function posAns(){
+//    	$this->practiceExam($exanum);
+		//$ansSelectを呼び出せるようにする
+		$ansSelect = $this->request->getData('ansSelect');
+		$this->set(compact('ansSelect'));
+		//POSTで送られたデータをセッションに書き込む
+		$this->writeSession(['answers'],$ansSelect);
+//		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
+		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
+		//$sesAnsを呼び出せるようにする
+		$sesAns=$this->readSession(['answers']);
+		$this->set(compact('sesAns'));
 	}
 }
