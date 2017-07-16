@@ -51,7 +51,6 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 //		 8桁の数字に制限、0始まりに対応
 		['id' => '\d{8}']
 	);
-	
 	$routes->connect(
 		'/updatePassword',
 		['controller' => 'student', 'action'=> 'updatePass']
@@ -87,11 +86,19 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
 	
+	
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
 		['controller' => 'student', 'action' => 'practiceExam'],
 		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
 	);
+	
+	$routes->connect(
+		'/score/:exanum/',
+		['controller' => 'student', 'action' => 'score'],
+		['exanum' => '\d{1,3}']
+	);
+	
 });
 Router::scope("/manager", function ( RouteBuilder $routes ) {
 	$routes->connect(

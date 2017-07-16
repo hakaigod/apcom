@@ -567,13 +567,16 @@ class StudentController extends AppController
 		//問題内容の表示
 		$this->set('question',$question);
 	}
+	
+	
+	//年度選択画面
 	public function yearSelection()
 	{
-		
 		//実施された本番一覧を取得
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
 		$imitations=$this->TfImi->find()->toArray();
+		
 		//本番試験番号がキー、その平均点がバリューの要素を追加していく
 		$averages=[];
 		//本番1つにつき、授業模擬はゼロから複数回実施されているので、
@@ -587,8 +590,8 @@ class StudentController extends AppController
 				if (($exam_value->exanum) == ($imi_value->exanum)) {   //試験回番号が一致した場合
 					//合計人数を更新
 					$people_sum += $imi_value->imipepnum;
-					//合計点数を更新
-					$point_sum += $imi_value->imisum;
+					//合計点数(3つの分野の合計点数を加算)を更新
+					$point_sum += $imi_value->strategy_imisum + $imi_value->technology_imisum + $imi_value->management_imisum;
 				}
 			}
 			//0で割るとエラーになるため
@@ -600,15 +603,32 @@ class StudentController extends AppController
 			}
 		}
 		$this->set(compact('averages'));
+		
+		//各年度の全国合格率(チンパン)
+		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
+		$this->set(compact('passRate'));
+		
+		
+//	    結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
+//      残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
+		$this->removeSession(['practiceAnswers']);
 	}
 	
-	
+	//解答画面
 	public function practiceExam()
 	{
+		//exanumは文字列
 		$exanum = $this->request->getParam("exanum");
+		//qesnumは整数
 		$qesnum = $this->request->getParam("qesnum");
-		
+		//POSTされたラジオボタンの値
+		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('exanum'));
+		
+		//保持してるラジオボタンの値を1問分返す
+		$ansed = $this->readSession(['practiceAnswers'])[$exanum][$qesnum];
+		$this->set(compact('ansed'));
+		
 		//実施された本番一覧を取得
 		$exams = $this->MfExa->find()
 			//テーブル内のexanumから抽出する
@@ -622,38 +642,74 @@ class StudentController extends AppController
 			->first();
 		$this->set(compact('qes'));
 		
-		//posAnsを呼び出せるようにする
-		$this->posAns();
-//	    $this->posAns($qes->$qesnum,$qes->$exanum);
-
-//	    if (isset($_POST['ansSelect']) == true) {
-//	    }
+		//スコア画面にデータを送る
+		$this->score();
+		//セッション処理関数にデータを送る
+		$this->intoQes();
 	}
 	
-	
-	// 年度と問題番号の紐づけを行う
-	public function posAns(){
-//    	$this->practiceExam($exanum);
-		
-		
-		//$ansSelectを呼び出せるようにする
-		
+	//全問試験用のセッション処理関数
+	public function intoQes(){
+		//exanumは文字列型
+		$exanum = $this->request->getParam("exanum");
+		//qesnumは整数型
+		$qesnum = $this->request->getParam("qesnum");
+		//POSTされたラジオボタンの値
 		$ansSelect = $this->request->getData('ansSelect');
-		$this->set(compact('ansSelect'));
-		//POSTで送られたデータをセッションに書き込む
-		$this->writeSession(['answers'],$ansSelect);
-//		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
+		$this->set(compact('exanum'));
 		
-		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
-		//$sesAnsを呼び出せるようにする
-		$sesAns=$this->readSession(['answers']);
-		$this->set(compact('sesAns'));
+		//セッションpracticeAnswersが空なら80個のnullを入れて初期化する
+		if(empty($this->readSession(['practiceAnswers']))){
+			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
+			// practiceAnswersの中にexanumの配列を作る
+			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
+		}
 		
+		// practiceAnswersの中のexanumの中にqesnumの配列を作る
+		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
 	
-	public function score()
-	{
-	
+
+//結果画面
+	public function score(){
+		//セッション処理関数にデータを送る
+		$this->intoQes();
+		//exanumは文字列型
+		$exanum = $this->request->getParam("exanum");
+		$this->set(compact('exanum'));
+		
+		//実施された本番一覧を取得
+		$exams = $this->MfExa->find()
+			//テーブル内のexanumから抽出する
+			->where(['MfExa.exanum' => $exanum])
+			//配列として返されるので単数として受け取る
+			->first();
+		$this->set(compact('exams'));
+		
+		//解答
+		$ansbox = $this->MfQes->find()
+			->where(['MfQes.exanum' => $exanum])->toArray();
+		$this->set(compact('ansbox'));
+		
+		//保持しているラジオボタンの値を全て返す
+		$practice = $this->readSession(['practiceAnswers'])[$exanum];
+		$this->set(compact('practice'));
+		
+		//正答数をカウント
+		$sum=0;
+		foreach (range(1, 80) as $i ) {
+			if ($practice[$i] == $ansbox[$i - 1]->answer) {
+				$sum++;
+			}
+		}
+		
+		//正答数を1.25倍し、100点満点の点数を出す
+		$sum=round($sum * 1.25,2) ;
+		$this->set(compact('sum'));
+		
+		//選択した答え等の判定に使用
+		$selectArrayPas=array('ア','イ','ウ','エ');
+		$this->set(compact('selectArrayPas'));
 	}
 	
 	public function emitMessage( string $message )

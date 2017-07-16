@@ -1,0 +1,155 @@
+/*　年度タイトル　*/
+#exam-title{
+	font-size: 30px;
+	border-bottom: 1px solid #148d75;
+}
+
+/* スコアの枠調整 */
+.score-box{
+	background-color: rgba(182, 237, 245, 0.27);
+	padding: 20px 0px 10px 0px;
+}
+
+/*  スコアの調整  */
+.score{
+	font-size: 50px;
+}
+
+/*  スコア強調用  */
+#score-opt {
+	color: #faad08;
+	text-shadow:
+			-1px -1px 0px #5c5c5c,
+			1px -1px 0px #5c5c5c,
+			1px 1px 0px #5c5c5c,
+			-1px 1px 0px #5c5c5c;
+}
+/*  メッセージ調整  */
+.message{
+	margin-bottom: 20px;
+}
+
+/* テーブルの枠線調整 */
+.ans-table{
+	border: solid;
+}
+/* テーブルの空白調整 */
+#ans-table.table{
+	margin: 0px 0px 0px 0px;
+}
+
+
+/* テーブルの空白調整 */
+.table{
+	margin-top: 80px;
+}
+
+/* テーブル上部の調整 */
+.table-title{
+	border-top: solid;
+}
+
+/*  テーブル列のタイトル  */
+th{
+	text-align: center;
+}
+
+/*  問題No.の調整  */
+#qes-no{
+	/*background-color: #3498db;*/
+	/*text-align: center;*/
+}
+/* 問題No.ボタンの調整 */
+.select-btn{
+width: 4em;
+}
+
+/* //////////////////////////////モータルウィンドウ///////////////////////////  */
+/* 全項目に共通の調整 */
+.modal-all{
+	text-align: left;
+}
+
+/*#modal-content{*/
+	/*!*追加分*!*/
+	/*z-index:2;*/
+/*}*/
+
+/* 問題番号の調整 */
+.modal-qesnum{
+	margin-bottom: 4px;
+	font-weight: bold;
+}
+
+/* 問題文の調整 */
+.modal-qes-text{
+}
+
+/* テーブルの位置調整 */
+.modal-table{
+	margin: 20px 0px 30px 0px;
+}
+
+.modal-ans{
+	margin-right: 5px;
+}
+
+/* 自分の解答の調整 */
+#you-ans{
+	background: linear-gradient(transparent 15%, #ffff66 15%);
+}
+
+/* 答えの調整 */
+#pass{
+	background: linear-gradient(transparent 15%, #ff99ff 15%);
+}
+
+/* //////////////////////////////モータルウィンドウ///////////////////////////  */
+.qes-text{
+	/* 表示領域を指定 */
+	width: calc(100vw / 6);
+	/* 改行禁止 */
+	white-space: nowrap;
+	/* 表示領域外非表示 */
+	overflow: hidden;
+	/* 末尾「...」表示 */
+	text-overflow: ellipsis;
+}
+
+/* 正解解答文の調整 */
+/*.ans-text{*/
+	/*!* 表示領域を指定 *!*/
+	/*width: calc(100vw / 20);*/
+	/*!* 改行禁止 *!*/
+	/*white-space: nowrap;*/
+	/*!* 表示領域外非表示 *!*/
+	/*overflow: hidden;*/
+	/*!* 末尾「...」表示 *!*/
+	/*text-overflow: ellipsis;*/
+	/*display: inline-block;*/
+/*}*/
+
+/*    ○×セルの調整 　 */
+.ans-check{
+	text-align: center;
+	margin-bottom: 0;
+}
+
+.ans{
+	text-align: center;
+}
+
+p{
+	margin: 3px 0px 3px 0px;
+}
+
+
+/*  TOPボタンの調整   */
+.top-btn{
+	width: 10em;
+	text-align: center;
+}
+
+ .btn-warning{
+	color: #e7e7e7;
+}
