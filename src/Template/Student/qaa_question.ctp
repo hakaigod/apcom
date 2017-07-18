@@ -211,9 +211,11 @@ Student
             <ul>
                 <li>
                     <div class="qaa-complete">
-                        <form action="" method="post">
                         <!--一問一答終了ボタン-->
-                            <a href= "<?= $this->url->build(['action'=>'qaaResult','pagination_num'=>1])?>" class="btn btn-danger">終了する</a>
+                        <?= $this->Form->create('',['type'=>'post','url'=>['action'=>'qaaResult','pagination_num'=>1]])?>
+                        <?= $this->Form->button('終了する', array('type'=>'submit', 'class'=>'btn btn-danger','id'=>'resultbtn'));?>
+                        <input type="hidden" name ="qNum" value="<?= $qNum ?>">
+                        <?= $this->Form->end();?>
                     </div>
                 </li>
                 <li>
