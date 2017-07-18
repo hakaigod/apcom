@@ -67,11 +67,11 @@ managerrrrr
 					</p>
 				</caption>
 				<tr class="table-title">
-					<th class="col-xs-1">No.</th>
-					<th class="col-xs-5">問題文</th>
-					<th class="col-xs-2">正否</th>
-					<th class="col-xs-2">アナタの解答</th>
-					<th class="col-xs-2">答え</th>
+					<th class="table-project col-xs-1">No.</th>
+					<th class="table-project col-xs-5">問題文</th>
+					<th class="table-project col-xs-2">正否</th>
+					<th class="table-project col-xs-2">アナタの解答</th>
+					<th class="table-project col-xs-2">答え</th>
 				</tr>
 				<tbody>
 				<!--   行の要素   -->
@@ -89,14 +89,26 @@ managerrrrr
 											      <div class="modal-body">
 													<p class="modal-all modal-qesnum"><?= "[ 問 ".$i." ]" ?></p>
 													<p class="modal-all modal-qes-text"><?= $this->qaa->viewTextImg($ansbox[$i-1]->question) ?></p>
-													<table class="modal-all table modal-table table-bordered  full">
+													<table class="modal-all table modal-table table-bordered  full" >
 														<!--	解答選択肢が共通の画像かどうかの判定	-->
 														<!--    それぞれ個別に画像がある場合　	-->
 														<?php if(empty($ansbox[$i - 1]->answer_pic)): ?>
-															<tr><td class="col-xs-1 center">ア</td><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice1) ?></td><tr>
-															<tr><td class="col-xs-1 center">イ</td><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice2) ?></td><tr>
-															<tr><td class="col-xs-1 center">ウ</td><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice3) ?></td><tr>
-															<tr><td class="col-xs-1 center">エ</td><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice4) ?></td><tr>
+															<tr>
+																<td class="col-xs-1 center">ア</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice1) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">イ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice2) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">ウ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice3) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">エ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice4) ?></td>
+															</tr>
 														<!--	共通の画像がある場合	-->
 														<?php else: ?>
 															<tr><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->answer_pic); ?></td></tr>
@@ -165,7 +177,7 @@ managerrrrr
 	//年度選択画面へのリンクを生成
 	$this->Html->link( "TOPへ戻る" ,
 		['action' => 'yearSelection'],
-		[ 'class'=>"btn btn-warning top-btn full   col-xs-offset-5 col-xs-2" ]
+		[ 'class'=>"btn btn-warning top-btn full col-xs-offset-5 col-xs-2" ]
 	)
 	?>
 </div>
