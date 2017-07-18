@@ -68,7 +68,7 @@ managerrrrr
 				<!--問題文-->
 				<div>
 					<!-- 問題文の画像表示 -->
-					<?= $this->qaa->viewTextImg($qes->question) ?>
+					<?= $this->Qaa->viewTextImg($qes->question) ?>
 				</div>
 				<br/>
 			</div>
@@ -94,7 +94,7 @@ managerrrrr
 						</td>
 						<td id="choice" class="col-xs-11">
 							<span class="select-choice" id="aa" >
-	                            <?= $this->qaa->viewTextImg($qes->choice1)?>
+	                            <?= $this->Qaa->viewTextImg($qes->choice1)?>
 							</span>
 						</td>
 					</tr>
@@ -107,7 +107,7 @@ managerrrrr
 						</td>
 						<td id="choice">
 							<span class="select-choice">
-	                            <?= $this->qaa->viewTextImg($qes->choice2)?>
+	                            <?= $this->Qaa->viewTextImg($qes->choice2)?>
 							</span>
 						</td>
 					</tr>
@@ -120,7 +120,7 @@ managerrrrr
 						</td>
 						<td id="choice">
 							<span class="select-choice">
-	                            <?= $this->qaa->viewTextImg($qes->choice3)?>
+	                            <?= $this->Qaa->viewTextImg($qes->choice3)?>
 							</span>
 						</td>
 					</tr>
@@ -133,7 +133,7 @@ managerrrrr
 						</td>
 						<td id="choice">
 							<span class="select-choice" >
-	                            <?= $this->qaa->viewTextImg($qes->choice4)?>
+	                            <?= $this->Qaa->viewTextImg($qes->choice4)?>
 							</span>
 						</td>
 					</tr>
@@ -171,7 +171,7 @@ managerrrrr
 							
 							<td class="col-xs-11">
 								<span class="all-choice-text">
-									<?= $this->qaa->viewTextImg($qes->answer_pic); ?>
+									<?= $this->Qaa->viewTextImg($qes->answer_pic); ?>
 								</span>
 							</td>
 						</tr>

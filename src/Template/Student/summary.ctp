@@ -75,30 +75,32 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
         </div>
         <ul  style="list-style:none;">
 			<?php
-			$current = 0;
+            $count = 0;
 			$max = 3;
-			for( ; $current < count($imiDetails) && $current < $max;$current++): ?>
+			foreach($imiDetails as $imi): ?>
 				<?php
-				$imi = $imiDetails[$current];
 				if($imi['score'] === null):?>
                     <li >
 							<?php
-							$imiTitle ="{$imi['date']} {$imi['name']}";
-							
-							echo $this->Html->link(
-								$imiTitle,
-								[ 'controller' => 'student',
-								  'action'     => 'input',
-								  'imicode'    => $imi[ 'imicode' ],
-								  'linkNum'    => 1
-								]
-							);
+                            if ($count < $max) {
+	                            $imiTitle = "{$imi['date']} {$imi['name']}";
+	
+	                            echo $this->Html->link(
+		                            $imiTitle,
+		                            [ 'controller' => 'student',
+		                              'action'     => 'input',
+		                              'imicode'    => $imi[ 'imicode' ],
+		                              'linkNum'    => 1
+		                            ]
+	                            );
+                            }
+							$count++;
 							?>
                     </li>
 				<?php endif;?>
-			<?php endfor;?>
+			<?php endforeach;?>
 			<?php
-			if ($current < count($imiDetails)) {
+			if ( $count >= $max ) {
 			    echo "<u>";
 				echo $this->Html->link(
 					"もっと見る",

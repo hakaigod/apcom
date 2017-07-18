@@ -99,24 +99,54 @@ class StudentController extends AppController
 
 	//パスワード更新
 	public function updatePass(){
-
+		
+		
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
 			$session = $this->request->session();
 			$id = $session->read('userID');
-			$oldPass = $this->MfAdm->get($this->request->getData($id))->toArray()['stupass'];
-			if ($this->pasCheck($this->request->getData('old-pass'), $oldPass)) {
-				$updatePassQuery = $this->MfAdm->query()->update()
-				->set(['stupass' => $this->passHash($this->request->getData('new-pass'))])
-				->where(['admnum' => $this->request->getData($id)]);
+			
+			
+			//入力された古いパスワード
+			$inputtedOldPass = h($this->request->getData('old-pass'));
+			//入力された新しいパスワード
+			$newPass= h($this->request->getData('new-pass'));
+			//入力された新しいパスワードの確認
+			$verify = h($this->request->getData('verify'));
+			
+			if( !(ctype_alnum($inputtedOldPass)) ||
+				!(ctype_alnum($newPass)) ||
+				!(ctype_alnum($verify)) ) {
+				//入力された値が英数字でない
+				$this->Flash->error('英数字で入力してください。');
+				return;
+			}
+			
+			if ($newPass !== $verify) {
+				//確認したはずのパスワードが一致していない
+				$this->Flash->error('パスワードが一致していません。');
+				return;
+			}
+			
+			//データベース上の古いパスワード
+			$recordedOldPass = $this->MfStu->get($id)->toArray()['stupass'];
+			
+			if ($this->pasCheck($inputtedOldPass, $recordedOldPass )) {
+				
+				$updatePassQuery = $this->MfStu
+					->query()
+					->update()
+					->set([ 'stupass' => $this->passHash($newPass) ])
+					->where(['regnum' => $id]);
+				
 				try {
-					$queryAdmPassUpdate->execute();
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing');
+					$updatePassQuery->execute();
+					$this->Flash->success('パスワードが変更されました。');
+				} catch (\Exception $e) {
+					$this->Flash->error('更新に失敗しました。時間を置いて再度お試しください。');
 				}
 			} else {
-				$this->Flash->error('古いパスワードが違います');
+				$this->Flash->error('現在のパスワードが間違っています。');
 			}
 		}
 	}
@@ -785,8 +815,4 @@ class StudentController extends AppController
 		
 	}
 	
-	public function score()
-	{
-	
-	}
 }

@@ -129,13 +129,13 @@ div.message:before {
 }
 
 div.message.error {
-    background-color: #C3232D;
-    color: #FFF;
+    background-color: #f7bc1a;
+    color: #444;
 }
 
 div.message.error:before {
     padding: 11px 16px 14px 7px;
-    color: #C3232D;
+    color: #444;
     content: "x";
 }
 div.message.hidden {

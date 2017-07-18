@@ -32,14 +32,16 @@
 <tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <?php $this->end(); ?>
+
+<?= $this->Flash->render();?>
 <br>
-<div class="col-md-offset-2">
-    <h5>パスワード変更</h5>
+<h5>パスワード変更</h5>
+<div class="col-md-offset-1">
     ログインに使用するパスワードを変更することが出来ます。<br>
     パスワードを共有することや推測されやすいパスワードは避けてください。
 </div>
 <div class="col-md-offset-3 col-md-6">
-    <form action="" method="post" id="change-pass">
+    <form name="http://localhost:27780/apcom/student/updatePassword" action="updatePassword" method="post" id="change-pass">
         <br>
         現在のパスワード
         <input type="password" name="old-pass" id="old-pass" class="form-control pass-form" placeholder="現在のパスワード"
@@ -61,7 +63,7 @@
         <br>
         <div class="full buttons">
             <button type="button" onclick="history.back()" class="col-xs-5 btn btn-warning">キャンセル</button>
-            <button type="button" id="register-button" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
+            <button type="button" id="register-button"  class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
         </div>
     </form>
 </div>

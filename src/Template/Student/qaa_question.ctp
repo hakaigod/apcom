@@ -159,7 +159,7 @@ Student
                 <!--問題文-->
                 <div>
                     <!-- ヘルパー使用 -->
-                    <?= $this->qaa->viewTextImg($question->question)?>
+                    <?= $this->Qaa->viewTextImg($question->question)?>
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@ Student
                     <td class="col-md-11">
                         <?php
                         $choice = 'choice'.$i;
-                        echo $this->qaa->viewTextImg($question->$choice);
+                        echo $this->Qaa->viewTextImg($question->$choice);
                         ?>
                     </td>
                 </tr>
@@ -194,7 +194,7 @@ Student
         <!--選択肢がない場合は該当する画像があるので文章無しのボタン表示-->
         <div class=row>
             <div class="ans-img col-md-12">
-                <?= $this->qaa->viewTextImg($question->answer_pic)?>
+                <?= $this->Qaa->viewTextImg($question->answer_pic)?>
             </div>
         </div>
         <div class="row">

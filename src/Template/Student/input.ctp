@@ -82,7 +82,9 @@ function json_safe_encode($data){
                     </td>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class=" col-sm-12  col-md-3 sentence">
-						<?= strip_tags($questions[ $i - 1 ]['question']) ?>
+                        <span>
+						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>
+                            </span>
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">

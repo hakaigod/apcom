@@ -13,12 +13,27 @@
 .end-btn {
     margin-right: 0;
 }
-.sentence {
-    width: 25px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+/*.sentence {*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*display: table-cell;*/
+/*}*/
+/*.table .sentence {*/
+    /*position: relative;*/
+/*}*/
+/*table .sentence span {*/
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*right: 0;*/
+/*}*/
+/*.text:before {*/
+    /*content: '';*/
+    /*display: inline-block;*/
+/*}*/
 /*.btn-info:hover{*/
     /*background: lightskyblue;*/
 /*}*/

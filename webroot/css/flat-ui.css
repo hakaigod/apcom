@@ -1,5 +1,4 @@
-extend ' .clearfix' has no matches
-extend ' .clearfix' has no matches
+
 @font-face {
   font-family: 'Lato';
   src: url('../font/lato/lato-black.eot');
@@ -1285,7 +1284,7 @@ label {
 .form-control,
 .select2-search input[type="text"] {
   border: 2px solid #bdc3c7;
-  color: #d82732;
+  /*color: #d82732;*/
   font-family: "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
   font-size: 15px;
   line-height: 1.467;
