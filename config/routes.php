@@ -82,7 +82,7 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
     );
 
     $routes->connect(
-        '/qaaResult',
+        '/qaaResult/:pagination_num/',
         ['controller' => 'student', 'action' => 'qaaResult'],
         ['pagination_num' => '\d+',]
     );

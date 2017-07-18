@@ -4,7 +4,6 @@ $(function(){
     "use strict";
     //モーダルに今までの問題の情報ログを表示する
     //正解総数と総回答数を格納["正解数",”総回答数”]
-    window.console.log("ルナだよ");
     let genreCorrectRate =
         {
             "technology":[0,0],
@@ -18,8 +17,7 @@ $(function(){
         $('#log-table').append(
             '<tr>'+
             '<td>'+log.qNum+'</td>'+
-            '<td>'+log.quesnum+'</td>'+
-            '<td>'+log.detail+'</td>'+
+            '<td>'+log.detail+ ' 第' +log.quesnum + '問目' +'</td>'+
             '<td>'+log.field+'</td>'+
             '<td>'+log.falsehood+'</td>'+
             '</tr>'
@@ -30,16 +28,6 @@ $(function(){
     SetProgressBar("technology",genreCorrectRate.technology);
     SetProgressBar("management",genreCorrectRate.management);
     SetProgressBar("strategy",genreCorrectRate.strategy);
-
-    //ページネーションの設定
-    //ログ数が10以下の場合はページネーションを表示しない
-    if(sessionStorage.length < 11){
-        $('#qaa-pagination').html("");
-    } else {
-        for (let i=0; i<sessionStorage.length/10; i++){
-
-        }
-    }
 });
 
 //各ジャンルごとの正答数と正解数をカウントして正答率を出す
