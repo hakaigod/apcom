@@ -6,48 +6,31 @@ const pgNum = JSON.parse($script.attr('pgNum'));
 //モーダルにsessionStorageの情報を表示させる
 $(function(){
     "use strict";
-    window.console.log(pgNum);
-
     //モーダルに今までの問題の情報ログを表示する
     //正解総数と総回答数を格納["正解数",”総回答数”]
-    window.console.log("ルナだよ");
     let genreCorrectRate =
         {
             "technology":[0,0],
             "management":[0,0],
             "strategy":[0,0]
         };
-    //テーブルに出題ログを追加する
-    for (let i = pgNum; i <= pgNum*10; i++) {
+    for (let i = pgNum; i <= pgNum+10; i++) {
         if(i > sessionStorage.length){
             break;
         }
         let log = JSON.parse(sessionStorage.getItem('num'+i));
-        //ログ情報1行分を追加
+        window.console.log(pgNum);
+        window.console.log(log);
+        //ログ情報1行表示
         $('#log-table').append(
             '<tr>'+
             '<td>'+log.qNum+'</td>'+
-            '<td>'+log.quesnum+'</td>'+
-            '<td>'+log.detail+'</td>'+
+            '<td>'+log.detail+ ' 第' +log.quesnum + '問目' +'</td>'+
             '<td>'+log.field+'</td>'+
             '<td>'+log.falsehood+'</td>'+
             '</tr>'
         );
         CountFalsehood(genreCorrectRate,JSON.parse(sessionStorage.getItem('num'+i)));
-    }
-    //ページネーションの設定
-    //ログ数が10以下の場合はページネーションを表示しない
-    if(sessionStorage.length < 0){
-        $('#qaa-pagination').css('display','none');
-    } else {
-        for (let i=0; i<sessionStorage.length/10; i++){
-            // 項目数
-            if(i===0){
-                $('#qaa-previous').after('<li id="pagination-num'+ i +'"><a href="">1</a></li>');
-            } else {
-                $('#pagination-num'+(i-1)).after('<li id="pagination-num'+ i +'"><a href="">'+(i*10)+'</a></li>');
-            }
-        }
     }
 });
 

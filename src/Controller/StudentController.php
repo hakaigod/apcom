@@ -142,6 +142,7 @@ class StudentController extends AppController
         }
         return $sum;
     }
+
     //レーダーチャートに合わせるため100分率に変換
     public function calcGenreAvg( array $sum):array
     {
@@ -241,8 +242,8 @@ class StudentController extends AppController
             }
         }
         if ($validationFailed) $this->log("validation failed on " . $befNum);
-
     }
+
     //解答をDBに送信する
     public function sendAll() {
         //回答入力時
@@ -436,6 +437,7 @@ class StudentController extends AppController
 
         return $resultAndZero;
     }
+
     //入力されていないページ一覧を取得
     private function getNotAnsed (int $imicode):array{
         $notAnsedPages = array_fill(0,MAX_PAGE_NUM,true);
@@ -525,6 +527,7 @@ class StudentController extends AppController
             $this->set(compact('question'));
         }
     }
+
     public function yearSelection()
     {
 
@@ -559,7 +562,6 @@ class StudentController extends AppController
         }
         $this->set(compact('averages'));
     }
-
 
     public function practiceExam()
     {

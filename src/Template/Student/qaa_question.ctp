@@ -115,7 +115,6 @@ Student
                                             <thead>
                                             <tr>
                                                 <th>回答番数</th>
-                                                <th>問題番号</th>
                                                 <th>出典</th>
                                                 <th>ジャンル</th>
                                                 <th>正誤</th>
