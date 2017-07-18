@@ -598,14 +598,18 @@ class StudentController extends AppController
 	public function qaaSelectGenre()
 	{
 	}
+	//遷移失敗時の警告画面
+	public function qaaAlert()
+	{
+	}
 	//一問一答結果画面
 	public function qaaResult(){
 		//ルートから番号の取得(回答した回数になる)
-		$qgNum=$this->request->getParam('pagination_num');
-		$this->set(compact('qgNum'));
+		$pgNum=$this->request->getParam('pagination_num');
+		$this->set(compact('pgNum'));
+		$qNum=$this->request->getData('qNum');
+		$this->set(compact('qNum'));
 	}
-	
-	
 	//一問一答出題画面
 	public function qaaQuestion()
 	{
@@ -623,8 +627,7 @@ class StudentController extends AppController
 			//指定したジャンルのクエリを取得する
 			$question=$this->MfQes->find()
 				->contain(['MfExa','MfFie'])
-//                ->WHERE(['MfQes.fienum IN'=>$getGenre])
-				->WHERE(['MfQes.choice1' == ""])
+				->WHERE(['MfQes.fienum IN'=>$getGenre])
 				->ORDER(['RAND()'])
 				//何行飛ばすか
 				->OFFSET($qNum)
@@ -634,6 +637,7 @@ class StudentController extends AppController
 			$this->set(compact('question'));
 		}
 	}
+	
 	public function yearSelection()
 	{
 		
