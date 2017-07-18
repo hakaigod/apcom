@@ -3,10 +3,10 @@
 	max-width: 20%;
 }
 #AMresult table thead tr .stusum {
-	max-width: 10%;
+	max-width: 12%;
 }
 #AMresult table thead tr #ques {
-	min-width: 7%;
+	min-width: 6.8%;
 	text-align: center;
 }
 #AMresult table thead tr td{
@@ -82,3 +82,9 @@
 	font-weight: 500;
 }
 /*その他*/
+.modal-dialog {
+	width: 80%;
+}
+.modal-content {
+	padding: 0 20px 0 20px;
+}

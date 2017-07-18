@@ -6,7 +6,6 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 
-// use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use \Exception;
 use \SplFileObject;
@@ -15,9 +14,8 @@ class ManagerController extends AppController
 {
 	public function initialize(){
 		parent::initialize();
-
 		$this->set("logoLink", ["controller" => "manager","action" => "index"]);
-		
+
 		$this->loadComponent('Paginator');
 
 		$this->loadmodel('MfDep');
@@ -28,24 +26,33 @@ class ManagerController extends AppController
 		$this->loadmodel('MfExa');
 		$this->loadmodel('TfImi');
 		$this->loadmodel('MfQes');
-		
+
 		$session = $this->request->session();
-		$this->set("username",$session->read("username"));
-		
-		$this->set("userID",$session->read("userID"));
+		// セッション情報取得
+		if (!empty($session->read('username'))) {
+			if ($session->read('role') == 'student') {
+				$this->redirect(['controller' => 'student', 'action' => 'summary','id' => $session->read('userID')]);
+			} else {
+				$this->set("userID", $session->read('userID'));
+				$this->set("username", $session->read('username'));
+			}
+		} else {
+			$this->redirect(['controller' => 'Login', 'action' => 'index']);
+		}
 	}
+
 	// ページネーター
 	public $paginate = [
 		'order' => ['TfAns.qesnum']
 	];
 
 	// パスワードハッシュ値返却
-	private function passhash($pass){
+	private function passHash($pass){
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->hash($pass);
 	}
 	// パスワードチェック
-	private function passcheck($inputPass, $databasePass) {
+	private function pasCheck($inputPass, $databasePass) {
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->check($inputPass, $databasePass);
 	}
@@ -57,11 +64,13 @@ class ManagerController extends AppController
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
 
 		//直近の模擬コード取得
-		if (!empty($_GET['id'])) {
-			$reqestimicode = $_GET['id'];
+		if (!empty($this->request->getQuery('id'))) {
+			$reqestimicode = $this->request->getQuery('id');
 		} else {
 			$reqestimicode = $nearimi;
 		}
+		$session = $this->request->session();
+		$session->write('reqestimicode',$reqestimicode);
 
 		// 受験者平均点
 		$queryAvg = $this->TfImi->find()
@@ -69,11 +78,11 @@ class ManagerController extends AppController
 		->where(['imicode' => $reqestimicode])->first()->toArray();
 		// 模擬試験の受験員人数
 		$imipepnum = $queryAvg['imipepnum'];
-		$avg = 0;
+		$average = 0;
 		if ($imipepnum != 0) {
-			$avg = $queryAvg['imisum'] / $queryAvg['imipepnum'];
+			$average = $queryAvg['imisum'] / $queryAvg['imipepnum'];
 		}
-		$this->set('average', $avg);
+		$this->set(compact('average'));
 
 		// 模擬試験ごとの回答データ取得
 		$ans = $this->TfAns->find()->contain(['MfStu'])
@@ -81,8 +90,8 @@ class ManagerController extends AppController
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
 		->order(['qesnum', 'TfAns.regnum' =>'DESC'])
 		->limit(($imipepnum * 10));
-		if (!empty($_GET['page'])) {
-			$ans->offset($_GET['page'] * 10 - 10);
+		if (!empty($this->request->getQuery('page'))) {
+			$ans->offset($this->request->getQuery('page') * 10 - 10);
 		}
 		// ページネーターセット
 		$this->paginate['limit'] = $imipepnum * 10;
@@ -101,18 +110,16 @@ class ManagerController extends AppController
 				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
 			}
 		}
-		$this->set('answers', $answers);
+		$this->set(compact('answers'));
 
 		// 問題情報取得
-		$questions = $this->MfQes->find();
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
-		$questions->select(['exanum', 'qesnum', 'question', 'answer'])
-		->where(['exanum' => $exanum]);
-		if (!empty($_GET['page'])) {
-			$questions->offset($_GET['page'] * 10 - 10);
+		$questions = $this->MfQes->find()->contain('MfExa')->where(['MfExa.exanum' => $exanum]);
+
+		if (!empty($this->request->getQuery('page'))) {
+			$questions->offset($this->request->getQuery('page') * 10 - 10);
 		}
 		$questions->order(['qesnum'])->limit(10);
-		$this->set('questions', $questions);
 
 		// 正答率
 		$questionsDetail = array();
@@ -138,7 +145,19 @@ class ManagerController extends AppController
 				$questionsDetail[$key['qesnum']]['corrects'] /= $imipepnum;
 			}
 		}
-		$this->set('questionsdetail', $questionsDetail);
+		$this->set(compact('questionsDetail'));
+
+		$selectAnswer = array();
+		foreach ($questionsDetail as $key) {
+			$selectAnswer += array($key['qesnum'] => array('answers' => array(0,0,0,0,0),'correct' => 0));
+			$selectAnswer[$key['qesnum']]['correct'] = $key['correct_answer'];
+			foreach ($key['answers'] as $value) {
+				$selectAnswer[$key['qesnum']]['answers'][$value]++;
+			}
+		}
+
+		$this->set(compact('selectAnswer'));
+		$this->set(compact('questions'));
 		// ここまで正答率
 
 		// 模擬試験一覧
@@ -158,21 +177,41 @@ class ManagerController extends AppController
 		$this->set('imidata', $arrayimis);
 
 		// タイトルセット
-		if (empty($_GET['id']) || $_GET['id'] == $nearimi) {
+		if (empty($this->request->getQuery('id')) || $this->request->getQuery('id') == $nearimi) {
 			$this->set('detailExamName', '直近一回分');
 		} else {
 			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
+
 	}
 
 	// 問題詳細
-	public function questionDetail()
-	{
-		// レイアウト設定
-		$this->viewBuilder()->layout('addmod');
-
-		$this->set('questionDetail', $this->MfQes->get([$_GET['qn'], $_GET['ex']],['contain' => ['MfExa']]));
-	}
+	// public function questionDetail()
+	// {
+	// 	// レイアウト設定
+	// 	// $this->viewBuilder()->layout('addmod');
+	// 	$ex = $this->request->getQuery('ex');
+	// 	$qn = $this->request->getQuery('qn');
+	//
+	// 	$session = $this->request->session();
+	// 	$reqestimicode = $session->read(['reqestimicode']);
+	// 	$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
+	// 	->where([
+	// 		'imicode' => $reqestimicode,
+	// 		'qesnum' => $qn
+	// 	])
+	// 	->toArray();
+	// 	$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
+	// 	foreach ($selectAnswerQuerry as $key) {
+	// 		$selectAnswer['answers'][$key['rejoinder']]++;
+	// 		$selectAnswer['correct'] = $key['correct_answer'];
+	// 	}
+	// 	$this->set(compact('selectAnswer'));
+	//
+	// 	$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
+	// 	$this->set(compact('ex'));
+	// 	$this->set(compact('qn'));
+	// }
 
 	// 学生管理
 	public function stuManager()
@@ -185,23 +224,23 @@ class ManagerController extends AppController
 		->order(['regnum' => 'DESC']);
 
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['regnum'])) {
-				$queryStudens->where(['regnum' => $_POST['regnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('regnum'))) {
+				$queryStudens->where(['regnum' => $this->request->getData('regnum')]);
 			} else {
-				if (!empty($_POST['stuname'])) {
-					$queryStudens->where(['stuname LIKE' => '%'.$_POST['stuname'].'%']);
+				if (!empty($this->request->getData('stuname'))) {
+					$queryStudens->where(['stuname LIKE' => '%'.$this->request->getData('stuname').'%']);
 				}
-				if ($_POST['depnum'] != '0'){
-					$queryStudens->where(['MfStu.depnum' => $_POST['depnum']]);
+				if ($this->request->getData('depnum') != '0'){
+					$queryStudens->where(['MfStu.depnum' => $this->request->getData('depnum')]);
 				}
-				if ($_POST['stuyear'] != '0') {
-					$queryStudens->where(['stuyear' => $_POST['stuyear']]);
+				if ($this->request->getData('stuyear') != '0') {
+					$queryStudens->where(['stuyear' => $this->request->getData('stuyear')]);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryStudens->where(['MfStu.deleted_flg' => FALSE]);
 				}
-				if (empty($_POST['graduate_flg'])) {
+				if (empty($this->request->getData('graduate_flg'))) {
 					$queryStudens->where(['graduate_flg' => FALSE]);
 				}
 			}
@@ -221,27 +260,31 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
 		// 個別追加
-		if (!empty($_POST)) {
-			$queryAddStu = $this->MfStu->query()
-			->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
-			->values([
-				'regnum' => $_POST['stunum'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'stupass' => $this->passhash($_POST['stunum'])
-			]);
-			try {
-				$queryAddStu->execute();
-				$identiconComponent->makeImage($_POST['stunum']);
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing' . $e->getMessage());
+		if (!empty($this->request->getData('stunum'))) {
+			if (empty($this->request->getData('stunum')) || empty($this->request->getData('stuname'))) {
+				$this->Flash->error('必須項目が未入力です');
+			} else {
+				$queryAddStu = $this->MfStu->query()
+				->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass'])
+				->values([
+					'regnum' => $this->request->getData('stunum'),
+					'stuname' => $this->request->getData('stuname'),
+					'stuyear' => $this->request->getData('old'),
+					'depnum' => $this->request->getData('depnum'),
+					'stupass' => $this->passHash($this->request->getData('stunum'))
+				]);
+				try {
+					$queryAddStu->execute();
+					$identiconComponent->makeImage($this->request->getData('stunum'));
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing' . '個別');
+				}
 			}
 		}
 		// 一括追加
 		if (!empty($_FILES)) {
-			if ($_FILES["studata"]["name"] == 'addstu') {
+			if ($_FILES["studata"]["name"] == 'addstu.csv') {
 				// 読み込んだSJISのデータをUTF-8に変換して保存
 				file_put_contents($_FILES["studata"]["tmp_name"], mb_convert_encoding(file_get_contents($_FILES["studata"]["tmp_name"]), 'UTF-8', 'SJIS'));
 				// UTF-8に変換したデータをSplFileObjectでCSVとして読み込み
@@ -265,7 +308,7 @@ class ManagerController extends AppController
 							'stuname' => $key[1],
 							'stuyear' => $key[3],
 							'depnum' => $depnum,
-							'stupass' => $this->passhash($key[0])
+							'stupass' => $this->passHash($key[0])
 						]);
 					}
 				}
@@ -273,7 +316,7 @@ class ManagerController extends AppController
 					$querystu->execute();
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			} else {
 				$this->Flash->error('専用テンプレートを使用してください');
@@ -287,7 +330,7 @@ class ManagerController extends AppController
 
 		// 学生情報
 		try {
-			$this->set('regnum', $this->MfStu->get($_GET['id']));
+			$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 		} catch (Exception $e) {
 			// 学籍番号更新後、画面更新せずに編集ボタンを押した場合エラーが起きる
 			die('Student Not Found.');
@@ -297,28 +340,32 @@ class ManagerController extends AppController
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
-			$queryStuUpdate = $this->MfStu->query()->update()
-			->set([
-				'regnum' => $_POST['stunum'],
-				'stuname' => $_POST['stuname'],
-				'stuyear' => $_POST['old'],
-				'depnum' => $_POST['depnum'],
-				'deleted_flg' => !empty($_POST['deleted_flg']),
-				'graduate_flg' => !empty($_POST['graduate_flg'])
-			])
-			->where(['regnum' => $_GET['id']]);
-			try {
-				$queryStuUpdate->execute();
-				if ($_POST['stunum'] != $_GET['id']) {
-					// 学籍番号が変更されたら、画像の名前を変更
-					rename('private/img/identicons/' . $_GET['id'] . '.png', 'private/img/identicons/' . $_POST['stunum'] . '.png');
+		if ($this->request->is('POST')) {
+			if (empty($this->request->getData('stunum')) || empty($this->request->getData('stuname'))) {
+				$this->Flash->error('必須項目が未入力です');
+			} else {
+				$queryStuUpdate = $this->MfStu->query()->update()
+				->set([
+					'regnum' => $this->request->getData('stunum'),
+					'stuname' => $this->request->getData('stuname'),
+					'stuyear' => $this->request->getData('old'),
+					'depnum' => $this->request->getData('depnum'),
+					'deleted_flg' => !empty($this->request->getData('deleted_flg')),
+					'graduate_flg' => !empty($this->request->getData('graduate_flg'))
+				])
+				->where(['regnum' => $this->request->getQuery('id')]);
+				try {
+					$queryStuUpdate->execute();
+					if ($this->request->getData('stunum') != $this->request->getQuery('id')) {
+						// 学籍番号が変更されたら、画像の名前を変更
+						rename('private/img/identicons/' . $this->request->getQuery('id') . '.png', 'private/img/identicons/' . $this->request->getData('stunum') . '.png');
+					}
+					$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $this->request->getData('stunum')]);
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing');
+					$this->set('regnum', $this->MfStu->get($this->request->getQuery('id')));
 				}
-				$this->redirect(['controller' => 'Manager', 'action' => 'modstu' ,'id' => $_POST['stunum']]);
-				$this->Flash->success('success');
-			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
-				$this->set('regnum', $this->MfStu->get($_GET['id']));
 			}
 		}
 	}
@@ -329,14 +376,14 @@ class ManagerController extends AppController
 		// 管理者一覧
 		$queryAdmins = $this->MfAdm->find();
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['admnum'])) {
-				$queryAdmins->where(['admnum' => $_POST['admnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('admnum'))) {
+				$queryAdmins->where(['admnum' => $this->request->getData('admnum')]);
 			} else {
-				if (!empty($_POST['admname'])) {
-					$queryAdmins->where(['admname LIKE' => '%' . $_POST['admname'] . '%']);
+				if (!empty($this->request->getData('admname'))) {
+					$queryAdmins->where(['admname LIKE' => '%' . $this->request->getData('admname') . '%']);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryAdmins->where(['deleted_flg' => FALSE]);
 				}
 			}
@@ -346,6 +393,7 @@ class ManagerController extends AppController
 
 		$this->set('admins', $queryAdmins);
 	}
+
 	public function addadmin()
 	{
 		// レイアウト設定
@@ -353,25 +401,25 @@ class ManagerController extends AppController
 		$identiconComponent = $this->loadComponent("Identicon");
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
-			if (empty($_POST['admname']) || empty($_POST['admpass'])) {
-				// 学生番号か名前が未入力の場合
+		if ($this->request->is('POST')) {
+			if (empty($this->request->getData('admname')) || empty($this->request->getData('admpass'))) {
+				// 管理者連番か名前が未入力の場合
 				$this->Flash->error('missing');
 			} else {
 				$queryAdminInsert = $this->MfAdm->query()
 				->insert(['admnum', 'admname', 'admpass'])
 				->values([
 					'admnum' => NULL,
-					'admname' => $_POST['admname'],
-					'admpass' => $this->passhash($_POST['admpass'])
+					'admname' => $this->request->getData('admname'),
+					'admpass' => $this->request->getData('admpass')
 				]);
 				try {
 					$queryAdminInsert->execute();
-					$admnum = $this->MfAdm->find()->select('admnum')->where(['admname like' => '%' . $_POST['admname'] . '%'])->first()->toArray()['admnum'];
+					$admnum = $this->MfAdm->find()->select('admnum')->where(['admname like' => '%' . $this->request->getData('admname') . '%'])->first()->toArray()['admnum'];
 					$identiconComponent->makeImage($admnum);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			}
 		}
@@ -382,23 +430,26 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// 管理者情報
-		$this->set('admnum', $this->MfAdm->get($_GET['id']));
+		$this->set('admnum', $this->MfAdm->get($this->request->getQuery('id')));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryAdminUpdate = $this->MfAdm->query()
 			->update()
 			->set([
-				'admname' => $_POST['admname'],
-				'deleted_flg' => !empty($_POST['deleted_flg'])
+				'admname' => $this->request->getData('admname'),
+				'deleted_flg' => !empty($this->request->getData('deleted_flg')),
+
+				//　消す
+				'admpass' => $this->passHash($this->request->getData('admpass'))
 			])
-			->where(['admnum' => $_GET['id']]);
+			->where(['admnum' => $this->request->getQuery('id')]);
 			try {
 				$queryAdminUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
-				$this->set('admnum', $this->MfAdm->get($_GET['id']));
+				$this->Flash->error('missing');
+				$this->set('admnum', $this->MfAdm->get($this->request->getQuery('id')));
 			}
 		}
 	}
@@ -409,17 +460,17 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
-			$oldPass = $this->MfAdm->get($_POST['admnum'])->toArray()['admpass'];
-			if ($this->passcheck($_POST['admOldPass'], $oldPass)) {
+		if ($this->request->is('POST')) {
+			$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
+			if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
 				$queryAdmPassUpdate = $this->MfAdm->query()->update()
-				->set(['admpass' => $this->passhash($_POST['admNewPass'])])
-				->where(['admnum' => $_POST['admnum']]);
+				->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
+				->where(['admnum' => $this->request->getData('admnum')]);
 				try {
 					$queryAdmPassUpdate->execute();
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing ' . $e->getMessage());
+					$this->Flash->error('missing');
 				}
 			} else {
 				$this->Flash->error('古いパスワードが違います');
@@ -433,18 +484,18 @@ class ManagerController extends AppController
 		$this->set('exams', $this->MfExa->find());
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryImiCodeIssueInsert = $this->TfImi->query()
 			->insert(['imicode', 'exanum'])
 			->values([
 				'imicode' => NULL,
-				'exanum' => $_POST['exanum']
+				'exanum' => $this->request->getData('exanum')
 			]);
 			try {
 				$queryImiCodeIssueInsert->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
 		$this->render('imicodeissue','addmod');
@@ -452,35 +503,35 @@ class ManagerController extends AppController
 	// 学生パスワード再発行画面
 	public function reIssueStuPass()
 	{
-
 		// POSTリクエストがあれば実行
-		if (!empty($_POST['stunum'])) {
-			$queryReIssueStuPassUpdate = $this->MfStu->query()
-			->update()
-			->set(['stupass' => $this->passhash($_POST['stunum'])])
-			->where(['regnum' => $_POST['stunum']]);
+		if (!empty($this->request->getData('stunum'))) {
 			try {
+				$this->MfStu->get($this->request->getData('stunum'));
+				$queryReIssueStuPassUpdate = $this->MfStu->query()
+				->update()
+				->set(['stupass' => $this->passHash($this->request->getData('stunum'))])
+				->where(['regnum' => $this->request->getData('stunum')]);
 				$queryReIssueStuPassUpdate->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
-		
+
 		$this->render('reissuestupass','addmod');
 	}
 	// 学科管理画面
 	public function depManager() {
 		$queryDep = $this->MfDep->find();
 		// where
-		if (!empty($_POST)) {
-			if (!empty($_POST['depnum'])) {
-				$queryDep->where(['depnum' => $_POST['depnum']]);
+		if ($this->request->is('POST')) {
+			if (!empty($this->request->getData('depnum'))) {
+				$queryDep->where(['depnum' => $this->request->getData('depnum')]);
 			} else {
-				if (!empty($_POST['admname'])) {
-					$queryDep->where(['admname LIKE' => '%' . $_POST['depnum'] . '%']);
+				if (!empty($this->request->getData('admname'))) {
+					$queryDep->where(['admname LIKE' => '%' . $this->request->getData('depnum') . '%']);
 				}
-				if (empty($_POST['deleted_flg'])) {
+				if (empty($this->request->getData('deleted_flg'))) {
 					$queryDep->where(['deleted_flg' => FALSE]);
 				}
 			}
@@ -497,18 +548,18 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryDepInsert = $this->MfDep->query()
 			->insert(['depnum', 'depname'])
 			->values([
 				'depnum' => NULL,
-				'depname' => $_POST['depname']
+				'depname' => $this->request->getData('depname')
 			]);
 			try {
 				$queryDepInsert->execute();
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 			}
 		}
 	}
@@ -518,23 +569,23 @@ class ManagerController extends AppController
 		$this->viewBuilder()->layout('addmod');
 
 		// 学科情報
-		$this->set('dep', $this->MfDep->get($_GET['id']));
+		$this->set('dep', $this->MfDep->get($this->request->getQuery('id')));
 
 		// POSTリクエストがあれば実行
-		if (!empty($_POST)) {
+		if ($this->request->is('POST')) {
 			$queryDepUpdate = $this->MfDep->query()->update()
 			->set([
-				'depname' => $_POST['depname'],
-				'deleted_flg' => !empty($_POST['deleted_flg'])
+				'depname' => $this->request->getData('depname'),
+				'deleted_flg' => !empty($this->request->getData('deleted_flg'))
 			])
-			->where(['depnum' => $_POST['depnum']]);
+			->where(['depnum' => $this->request->getData('depnum')]);
 			try {
 				$queryDepUpdate->execute();
 				//直前のページにリダイレクト
 				$this->redirect($this->referer());
 				$this->Flash->success('success');
 			} catch (Exception $e) {
-				$this->Flash->error('missing ' . $e->getMessage());
+				$this->Flash->error('missing');
 				$this->redirect($this->referer());
 			}
 		}

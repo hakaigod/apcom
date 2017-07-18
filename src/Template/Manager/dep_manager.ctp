@@ -2,10 +2,6 @@
 <?= $this->start('title'); ?>
 学科管理
 <?= $this->end(); ?>
-<!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-managerrrrr
-<?= $this->end(); ?>
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
@@ -61,7 +57,7 @@ managerrrrr
 				<td class="col-xs-8"><?= $dep->depname; ?></td>
 				<td class="col-xs-1"><?= $dep->deleted_flg ? "済" : ""; ?></td>
 				<td class="col-xs-1 center">
-					<button class="btn btn-primary" onclick="window.open('moddep?id=<?= $dep->depnum; ?>','学科情報修正','width=500,height=450');">
+					<button class="btn btn-primary" onclick="window.open('<?= $this->Url->build(['action' => 'moddep','id' => $dep->depnum])?>','学科情報修正','width=500,height=450');">
 						修正
 					</button>
 				</td>

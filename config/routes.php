@@ -51,6 +51,7 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 //		 8桁の数字に制限、0始まりに対応
 		['id' => '\d{8}']
 	);
+	
 	$routes->connect(
 		'/updatePassword',
 		['controller' => 'student', 'action'=> 'updatePass']
@@ -96,7 +97,6 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
-	
 	
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
@@ -147,6 +147,10 @@ Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
 		'/departments/add',
 		['controller' => 'manager', 'action' => 'adddep']
 	);
+	$routes->connect(
+		'/departments/mod',
+		['controller' => 'manager', 'action' => 'moddep']
+	);
 	//管理者管理
 	$routes->connect(
 		'/admins',
@@ -157,8 +161,16 @@ Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
 		['controller' => 'manager', 'action' => 'addadmin']
 	);
 	$routes->connect(
+		'/admins/mod',
+		['controller' => 'manager', 'action' => 'modadmin']
+	);
+	$routes->connect(
 		'/admins/reset',
 		['controller' => 'manager', 'action' => 'resetAdmPass']
+	);
+	$routes->connect(
+		'/question_detail',
+		['controller' => 'manager', 'action' => 'question_detail']
 	);
 });
 
@@ -192,9 +204,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 });
 
 /**
-<<<<<<< HEAD
- * Load all plugin routes.  See the Plugin documentation on
-=======
+
  * Load all plugin routes. See the Plugin documentation on
 >>>>>>> 06f60cc757dd0b5aa0de321dad87b35ae62b5ec7
  * how to customize the loading of plugin routes.

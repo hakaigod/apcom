@@ -19,28 +19,29 @@
     <title><?= $this->fetch('title')?></title>
 	
 	<?= $this->Html->meta('icon') ?>
-	
+
 	<?= $this->fetch('meta') ?>
-	
+
 	<?= $this->Html->css('bootstrap.min.css') ?>
 	<?= $this->Html->css('flat-ui.css') ?>
 
-    <!-- 自作CSS -->
+	<!-- 自作CSS -->
 	<?= $this->Html->css('/private/css/default.css') ?>
 	<?= $this->Html->css('/private/css/flat_overwrite.css') ?>
-	
+
 	<?= $this->fetch('css') ?>
-	
+
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
 	<?= $this->Html->script('application.js') ?>
 	<?= $this->Html->script('prettify.js') ?>
 
-    <!-- 自作JS -->
+	<!-- 自作JS -->
 	<?= $this->Html->script('/private/js/index.js') ?>
-	
-	<?= $this->fetch('script') ?>
+	<?= $this->Html->script('/private/js/selectInput.js') ?>
 
+	<?= $this->fetch('script') ?>
+    
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
 		//TODO:IPアドレスをいい感じに設定

@@ -1,10 +1,6 @@
 <!-- タイトルセット -->
 <?= $this->start('title'); ?>
-学生管理
-<?= $this->end(); ?>
-<!-- ユーザーネームセット -->
-<?= $this->start('username'); ?>
-managerrrrr
+	学生管理
 <?= $this->end(); ?>
 
 <!-- CSSセット -->

@@ -63,6 +63,5 @@
             <button type="button" onclick="history.back()" class="col-xs-5 btn btn-warning">キャンセル</button>
             <button type="button" id="register-button" class="col-xs-offset-2 col-xs-5 btn btn-success">登録</button>
         </div>
-
     </form>
 </div>

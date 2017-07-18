@@ -1,0 +1,23 @@
+.col-md-12{
+	text-align: center;
+}
+
+.checkbox {
+	float: right;
+}
+
+.col-lg-4{
+	border: solid 1px;
+}
+
+.row1{
+	padding: 20px 20px 20px 20px;
+}
+
+.col-lg-6{
+	border: solid;
+}
+
+#errormessage {
+	color: red;
+}

@@ -1,0 +1,12 @@
+body {
+	min-height: 100vh;
+}
+/*#question {
+	min-height: 20vh;
+}
+#choice {
+	min-height: 20vh;
+}*/
+.buttons {
+	margin: 20px 0;
+}

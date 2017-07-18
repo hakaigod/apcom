@@ -5,9 +5,9 @@
 	<?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->fetch('title')?></title>
-	
+
 	<?= $this->Html->meta('icon') ?>
-	
+
 	<?= $this->fetch('meta') ?>
 
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -16,22 +16,25 @@
     <!-- 自作CSS -->
 	<?= $this->Html->css('/private/css/default.css') ?>
 	<?= $this->Html->css('/private/css/flat_overwrite.css') ?>
-	<?= $this->Html->css('/private/css/login/login.css') ?>
-	
+	<?= $this->Html->css('/private/css/Login/login.css') ?>
+
+
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
 	<?= $this->Html->script('application.js') ?>
 	<?= $this->Html->script('prettify.js') ?>
 
+	<?= $this->Html->script('/private/js/selectInput.js') ?>
+
     <!-- 自作JS -->
-	
-	
+
+
 	<?= $this->fetch('meta') ?>
 	<?= $this->fetch('css') ?>
 	<?= $this->fetch('script') ?>
 
     <!-- login   -->
-	
+
 	<?= $this->Html->script('/private/js/login/login.js') ?>
 
 </head>
@@ -64,8 +67,10 @@
                             <input type="password" id="password" name="password" value="" placeholder="パスワードを入力" class="form-control">
                             <span id="errormessage"><?php if(!empty($this->viewVars['errorMessage'])){echo  $this->viewVars['errorMessage'];}?></span>
                             <div class="checkbox">
-                                <input type="checkbox" id="checkbox" name="checkbox" value="管理者"  >　<span id="text2">管理者</span> <br>
-
+								<label class="checkbox">
+									<input type="checkbox" data-toggle="checkbox" name="checkbox" id="checkbox" value="管理者">
+									管理者
+								</label>
                             </div>
                             <div class="col-md-12">
                                 <input type="submit" id="login" name="login"  class="btn btn-embossed btn-primary" onclick="" value=" 　ログイン　" ><br>    <br>

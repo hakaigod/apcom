@@ -1,10 +1,7 @@
 <?php
 namespace App\Model\Table;
-
-
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
 /**
  * TfSum Model
  *
@@ -30,7 +27,6 @@ class TfSumTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('tf_sum');
         $this->setDisplayField('regnum');
         $this->setPrimaryKey(['regnum', 'imicode']);
@@ -38,7 +34,6 @@ class TfSumTable extends Table
 	    $this->belongsTo('TfImi')->setForeignKey('imicode');
 	    $this->belongsTo('MfStu')->setForeignKey('regnum');
     }
-
     /**
      * Default validation rules.
      *
@@ -49,26 +44,21 @@ class TfSumTable extends Table
     {
         $validator
             ->allowEmpty('regnum', 'create');
-
         $validator
             ->integer('imicode')
             ->allowEmpty('imicode', 'create');
-
         $validator
             ->integer('strategy_sum')
             ->requirePresence('strategy_sum', 'create')
             ->notEmpty('strategy_sum');
-
         $validator
             ->integer('technology_sum')
             ->requirePresence('technology_sum', 'create')
             ->notEmpty('technology_sum');
-
         $validator
             ->integer('management_sum')
             ->requirePresence('management_sum', 'create')
             ->notEmpty('management_sum');
-
         return $validator;
     }
     public function getRank(int $imicode, int $sum):int {

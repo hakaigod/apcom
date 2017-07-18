@@ -12,7 +12,7 @@ use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Query;
-
+use Cake\Auth\DefaultPasswordHasher;
 
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
@@ -55,10 +55,6 @@ class StudentController extends AppController
 		//管理者モデル読み込み
 		$this->loadModel('MfAdm');
 
-//		$this->writeSession(['userID'], "13120023");
-//		$this->writeSession(['username'], "おでん");
-//		$this->writeSession(['role'], "student");
-		
 		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
 		$roleFromSsn = $this->readSession(['role']);
@@ -90,10 +86,39 @@ class StudentController extends AppController
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
 	}
-	
+	// パスワードハッシュ値返却
+	private function passHash($pass){
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->hash($pass);
+	}
+	// パスワードチェック
+	private function pasCheck($inputPass, $databasePass) {
+		$hasher = new DefaultPasswordHasher();
+		return $hasher->check($inputPass, $databasePass);
+	}
+
 	//パスワード更新
-	public function updatePass(  ){
-	
+	public function updatePass(){
+
+		// POSTリクエストがあれば実行
+		if ($this->request->is('POST')) {
+			$session = $this->request->session();
+			$id = $session->read('userID');
+			$oldPass = $this->MfAdm->get($this->request->getData($id))->toArray()['stupass'];
+			if ($this->pasCheck($this->request->getData('old-pass'), $oldPass)) {
+				$updatePassQuery = $this->MfAdm->query()->update()
+				->set(['stupass' => $this->passHash($this->request->getData('new-pass'))])
+				->where(['admnum' => $this->request->getData($id)]);
+				try {
+					$queryAdmPassUpdate->execute();
+					$this->Flash->success('success');
+				} catch (Exception $e) {
+					$this->Flash->error('missing');
+				}
+			} else {
+				$this->Flash->error('古いパスワードが違います');
+			}
+		}
 	}
 	
 	//ユーザマイページに表示される画面
@@ -579,15 +604,13 @@ class StudentController extends AppController
 			$this->set(compact('question'));
 		}
 	}
-	
-	//年度選択画面
 	public function yearSelection()
 	{
+		
 		//実施された本番一覧を取得
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
 		$imitations=$this->TfImi->find()->toArray();
-		
 		//本番試験番号がキー、その平均点がバリューの要素を追加していく
 		$averages=[];
 		//本番1つにつき、授業模擬はゼロから複数回実施されているので、
@@ -745,15 +768,25 @@ class StudentController extends AppController
 	// 年度と問題番号の紐づけを行う
 	public function posAns(){
 //    	$this->practiceExam($exanum);
+		
+		
 		//$ansSelectを呼び出せるようにする
+		
 		$ansSelect = $this->request->getData('ansSelect');
 		$this->set(compact('ansSelect'));
 		//POSTで送られたデータをセッションに書き込む
 		$this->writeSession(['answers'],$ansSelect);
 //		$this->writeSession(['answers.ansS.exaN.qesN'],$ansSelect,$exanum,$qesnum);
+		
 		//配列に入れた後、呼び出し元の問題番号に合うように指定すること
 		//$sesAnsを呼び出せるようにする
 		$sesAns=$this->readSession(['answers']);
 		$this->set(compact('sesAns'));
+		
+	}
+	
+	public function score()
+	{
+	
 	}
 }
