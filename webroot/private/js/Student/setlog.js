@@ -6,6 +6,8 @@ const quesnum = JSON.parse($script.attr('quesnum'));
 const answer = JSON.parse($script.attr('answer'));
 const field = JSON.parse($script.attr('field'));
 const detail = JSON.parse($script.attr('detail'));
+const exanum = JSON.parse($script.attr('exanum'));
+const quenum = JSON.parse($script.attr('quenum'));
 $(function() {
     "use strict";
     let falsehood = "未回答";
@@ -33,7 +35,9 @@ $(function() {
                 'answer':answer,
                 'field':field,
                 'detail':detail,
-                'falsehood':falsehood
+                'falsehood':falsehood,
+                'exanum':exanum,
+                'quenum':quenum
             };
 
             let list = JSON.stringify(answerLog);

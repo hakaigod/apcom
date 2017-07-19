@@ -39,6 +39,8 @@
         answer = '<?= json_safe_encode($question->answer); ?>'
         field = '<?= json_safe_encode($question->mf_fie['fiename']); ?>'
         detail = '<?= json_safe_encode($question->mf_exa->exam_detail); ?>'
+        exanum = '<?= json_safe_encode($question->exanum); ?>'
+        quenum = '<?= json_safe_encode($question->qesnum); ?>'
 ></script>
 <?= $this->end();?>
 <!-- ユーザーネームセット -->
@@ -211,9 +213,8 @@ Student
                 <li>
                     <div class="qaa-complete">
                         <!--一問一答終了ボタン-->
-                        <?= $this->Form->create('',['type'=>'post','url'=>['action'=>'qaaResult','pagination_num'=>1]])?>
+                        <?= $this->Form->create('',['type'=>'post','id'=>'post-result','url'=>['action'=>'qaaResult','pagination_num'=>1]])?>
                         <?= $this->Form->button('終了する', array('type'=>'submit', 'class'=>'btn btn-danger','id'=>'resultbtn'));?>
-                        <input type="hidden" name ="qNum" value="<?= $qNum ?>">
                         <?= $this->Form->end();?>
                     </div>
                 </li>

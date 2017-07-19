@@ -41,7 +41,7 @@
     left: 0;
     padding: 0px 20px;
     font-size: inherit;
-    background-color: ghostwhite;
+    background-color: transparent;
     transform: translateY(-35%) translateX(1em);
     font-weight: bold;
 }

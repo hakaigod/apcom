@@ -22,9 +22,7 @@ Student
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }?>
 <?= $this->start('script');?>
-<script id="script" src="<?= $this->request->getAttribute('webroot') ;?>/private/js/Student/setpagination.js"
-        pgNum = '<?= json_safe_encode($pgNum); ?>'
-></script>
+<?= $this->Html->script('/private/js/Student/setpagination.js')?>
 <?= $this->end();?>
 <!-- 以下content -->
 <div class="container-fluid">

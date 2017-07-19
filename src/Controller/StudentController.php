@@ -10,6 +10,7 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
+use Cake\Network\Exception\BadRequestException;
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
 const MAX_PAGE_NUM = Q_TOTAL_NUM / Q_NUM_PER_PAGE;
@@ -496,8 +497,19 @@ class StudentController extends AppController
         //ルートから番号の取得(回答した回数になる)
         $pgNum=$this->request->getParam('pagination_num');
         $this->set(compact('pgNum'));
-        $qNum=$this->request->getData('qNum');
-        $this->set(compact('qNum'));
+
+        //ajaxで受信できてるか
+        if($this->request->is("ajax")) {
+            $logArray=$this->request->getData("logArray");
+            $question=$this->MfExa->find()
+                ->WHERE(['MfExa.exanum'=>$logArray[1],'MfExa.qesnum'=>$logArray[2]])
+                //1行だけ出力する
+                ->first();
+            //問題内容の表示
+            $this->set(compact('question'));
+        }
+
+
     }
 
     //一問一答出題画面
