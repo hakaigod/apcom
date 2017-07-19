@@ -515,6 +515,17 @@ class StudentController extends AppController
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
 		$imitations=$this->TfImi->find()->toArray();
+		//セッションのUserIDを取得
+		$user = $this->readSession(['userID']);
+		$this->set(compact('user'));
+		
+		//校内での模擬試験の前回の点数
+		$exanumLastScore=[];
+		
+		
+		
+		
+		
 		
 		//本番試験番号がキー、その平均点がバリューの要素を追加していく
 		$averages=[];
@@ -613,7 +624,7 @@ class StudentController extends AppController
 	public function score(){
 		//セッション処理関数にデータを送る
 		$this->intoQes();
-		//exanumは文字列型
+		//今年度の点数を送る
 		$exanum = $this->request->getParam("exanum");
 		$this->set(compact('exanum'));
 		
@@ -645,6 +656,7 @@ class StudentController extends AppController
 		//正答数を1.25倍し、100点満点の点数を出す
 		$sum=round($sum * 1.25,2) ;
 		$this->set(compact('sum'));
+		
 		
 		//選択した答え等の判定に使用
 		$selectArrayPas=array('ア','イ','ウ','エ');

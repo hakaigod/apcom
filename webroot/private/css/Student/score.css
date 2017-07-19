@@ -4,6 +4,11 @@
 	border-bottom: 1px solid #148d75;
 }
 
+/* テーブルのスコアの大枠線調整 */
+.score-table{
+	border: solid;
+}
+
 /* スコアの枠調整 */
 .score-box{
 	background-color: rgba(182, 237, 245, 0.27);
@@ -30,10 +35,7 @@
 	margin-bottom: 20px;
 }
 
-/* テーブルの枠線調整 */
-.ans-table{
-	border: solid;
-}
+
 /* テーブルの空白調整 */
 #ans-table.table{
 	margin: 0px 0px 0px 0px;
@@ -41,12 +43,12 @@
 
 
 /* テーブルの空白調整 */
-.table{
+#ans-table{
 	margin-top: 80px;
 }
 
 /* テーブル行の色調整 */
-.table tr:nth-child(odd)  {
+#ans-table tr:nth-child(odd)  {
 	background-color: #EAF6FD;
 }
 
@@ -107,8 +109,9 @@ width: 4em;
 	background-color: #EAF6FD;
 }
 
+/* 解答の位置調整 */
 .modal-ans{
-	margin-right: 5px;
+	padding: 7px 10px 0px 0px;
 }
 
 /* 自分の解答の調整 */
@@ -150,7 +153,14 @@ width: 4em;
 .ans-check{
 	text-align: center;
 	margin-bottom: 0;
+	font-size: 1.1em;
 }
+
+/* 〇の色調整 */
+#correct{
+	color: #f50000;
+}
+
 
 .ans{
 	text-align: center;
@@ -167,8 +177,5 @@ p{
 	text-align: center;
 }
 
- .btn-warning a{
-	 color: #e7e7e7;
- }
 
  

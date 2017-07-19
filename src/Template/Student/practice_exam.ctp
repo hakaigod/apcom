@@ -87,7 +87,7 @@ managerrrrr
 					<tr>
 						<td id="button" class="col-xs-1" >
 							<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
-							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
 								<!--	      nameは変数名、valueはそれに入る値        -->
 								<input type = "radio"  id="aa" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
 							</label>
@@ -101,7 +101,7 @@ managerrrrr
 					
 					<tr>
 						<td id="button">
-							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
 								<input type = "radio"  id="aa"  name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
 							</label>
 						</td>
@@ -114,7 +114,7 @@ managerrrrr
 					
 					<tr>
 						<td id="button">
-							<label class = "btn btn-embossed btn-primary full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
 								<input type = "radio"  id="aa"  name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
 							</label>
 						</td>
@@ -127,7 +127,7 @@ managerrrrr
 					
 					<tr>
 						<td id="button">
-							<label class = "btn btn-embossed btn-primary full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+							<label class = "btn btn-embossed btn-success full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
 								<input type = "radio"  id="aa"  name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
 							</label>
 						</td>
@@ -151,20 +151,20 @@ managerrrrr
 						<tr>
 							<td  class="col-xs-1">
 								<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
-								<label id="button" class = "btn btn-embossed btn-primary full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+								<label id="button" class = "btn  btn-embossed btn-success full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
 									<!--	      nameは変数名、valueはそれに入る値        -->
 									<input type = "radio" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
 								</label>
 								
-								<label id="button" class = "btn all-choice-btn btn-primary full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+								<label id="button" class = "btn all-choice-btn btn-success full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
 									<input type = "radio" name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
 								</label>
 
-								<label id="button" class = "btn all-choice-btn btn-primary full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+								<label id="button" class = "btn all-choice-btn btn-success full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
 									<input type = "radio" name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
 								</label>
 						
-								<label id="button" class = "btn all-choice-btn btn-primary full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+								<label id="button" class = "btn all-choice-btn btn-success full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
 									<input type = "radio" name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
 								</label>
 							</td>
@@ -206,11 +206,21 @@ managerrrrr
 					<?php endif; ?>
 				</div>
 			
-				<!--	解答を終了するボタン	-->
+			
+			<script language="JavaScript">
+                function cfm() {
+                   var flag = confirm("結果画面に移ります。" +
+	                              "本当に解答を終了しますか？");
+                   return flag;
+                }
+			</script>
+			
+			<!--	解答を終了するボタン	-->
 				<div  class="qaa-score">
 					<?=
 						 $this->Form->button("解答を終了する" ,
 							 [
+								 'onclick'=>'return cfm()', //確認ダイアログに遷移
 								 'class' => 'btn btn-info',
 								 'formaction'=> $this->Url->build(['action' =>'score',
 									                                'exanum' => $exams->exanum]),

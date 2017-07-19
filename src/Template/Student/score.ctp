@@ -56,14 +56,14 @@ managerrrrr
 </p>
 <br/><br/>
 
-<div class="ans-table" >
+<div class="score-table" >
 	<div class="row">
 		<div class="col-xs-12">
 			<table class="table table-bordered row" id="ans-table">
 				<!--	テーブル上部に点数表示	-->
 				<caption  class="score-box">
 					<p>
-						<b class="score" id="score-opt" ><?= $sum ?></b>/100<b class="score">点でした!</b>
+						<b class="score" id="score-opt" ><?= $sum ?></b>/100<b class="score">点でした！</b>
 					</p>
 				</caption>
 				<tr class="table-title">
@@ -141,9 +141,9 @@ managerrrrr
 						<!--	正否判定		-->
 						<td class="col-xs-2">
 							<?php if($practice[$i] == $ansbox[$i - 1]->answer):  ?>
-								<p class="ans-check">〇</p>
+								<p class="ans-check" id="correct">〇</p>
 							<?php else :?>
-								<p class="ans-check">×</p>
+								<p class="ans-check" >×</p>
 							<?php endif; ?>
 						</td>
 							
@@ -175,7 +175,7 @@ managerrrrr
 <div>
 	<?=
 	//年度選択画面へのリンクを生成
-	$this->Html->link( "TOPへ戻る" ,
+	$this->Html->link( "年度選択へ戻る" ,
 		['action' => 'yearSelection'],
 		[ 'class'=>"btn btn-warning top-btn full col-xs-offset-5 col-xs-2" ]
 	)
