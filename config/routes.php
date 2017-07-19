@@ -185,7 +185,6 @@ Router::scope('/', function (RouteBuilder $routes) {
 //    $routes->fallbacks(DashedRoute::class);
 });
 
-// Router::connect('*', array('controller' => 'error', 'action' => 'beforeRender'));
 /**
 
  * Load all plugin routes. See the Plugin documentation on
