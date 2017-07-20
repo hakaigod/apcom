@@ -202,7 +202,7 @@ Student
             <div class="select-answer">
                 <?php for ($i=1;$i<5;$i++):?>
                     <?php $selectArray = array('ア','イ','ウ','エ')?>
-                    <input type="submit" class="choice btn btn-embossed btn-primary" value=<?php $select=$i?><?= $selectArray[$i-1] ?> >
+                    <input type="submit" class="choice btn btn-embossed btn-primary" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?> >
                 <?php endfor; ?>
             </div>
         </div>

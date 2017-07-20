@@ -150,6 +150,28 @@
     margin: 20px;
 }
 
+/*qaaResult*/
+#log-table{
+    margin-top: 20px;
+}
+#result-table{
+    margin-top: 20px;
+}
+#qaa-answerpic{
+    margin: 10px;
+    text-align: center;
+}
+#log-yourans{
+    background: linear-gradient(transparent 15%, #ffff66);
+    vertical-align: middle;
+    text-align: right;
+}
+#log-ans{
+    background: linear-gradient(transparent 15%, #ff99ff);
+    vertical-align: middle;
+    text-align: right;
+    margin-bottom: 10px;
+}
 /*テスト用 外枠表示*/
     /*#col-main * {*/
     /*border: solid 1px black;*/

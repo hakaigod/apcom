@@ -46,6 +46,51 @@ Student
         </tr>
         </thead>
     </table>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        <!-- ここに出題番号 出典を表示  -->
+                        <div id="question-title"></div>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" id="result-contents">
+                        <!-- 問題を表示 -->
+                        <div id="question-sentence"></div>
+                        <!--選択肢が画像の場合に表示 -->
+                        <div id="qaa-answerpic"></div>
+                        <!-- 選択肢を表示 -->
+                        <table class="table table-bordered table-striped" id="result-table">
+                            <tr>
+                                <td>ア</td>
+                                <td><div id="question-choice1"></div></td>
+                            </tr>
+                            <tr>
+                                <td>イ</td>
+                                <td><div id="question-choice2"></div></td>
+                            </tr>
+                            <tr>
+                                <td>ウ</td>
+                                <td><div id="question-choice3"></div></td>
+                            </tr>
+                            <tr>
+                                <td>エ</td>
+                                <td><div id="question-choice4"></div></td>
+                            </tr>
+                        </table>
+                        <div id="log-yourans"></div>
+                        <div id="log-ans"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary full" data-dismiss="modal">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-md-12">
         <div class="row">
             <div class="">
