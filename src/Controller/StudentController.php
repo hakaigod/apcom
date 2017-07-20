@@ -546,29 +546,6 @@ class StudentController extends AppController
 			}
 		}
 		$this->set(compact('exanumLastScore'));
-
-//		foreach ($exams as $exam_value) {   //年度別
-//			foreach ($sums as $sum_value){      //ログインしている人の個人データ
-//				foreach ($imitations as $imi_value){    //模擬試験テーブル
-//					//ユーザーが授業で模擬試験を解いたかどうか
-//					if($sum_value->imicode==$imi_value->imicode){  //模擬試験の番号(ログイン中の人の個人データ)==模擬試験の番号(授業のデータ)
-//						//その模擬試験の年度を絞り込み
-//						if ($exam_value->exanum == $imi_value->exanum){
-////							if(empty($exanumLastScore[intval( $exam_value->exanum)])) {  //nullなら代入
-//								//個人の年度別の点数(3つの分野の合計点数)を更新
-//								$exanumLastScore[$exam_value->exanum] = $sum_value->strategy_sum + $sum_value->technology_sum + $sum_value->management_sum;
-////							}
-//						}
-//					}
-//				}
-//			}
-//			if (empty($exam_value->exanum == $imi_value->exanum)){
-//				$exanumLastScore[$exam_value->exanum]='[授業で未実施]';
-//			}
-//		}
-		
-		
-		
 		
 		//本番試験番号がキー、その平均点がバリューの要素を追加していく
 		$averages=[];
@@ -601,7 +578,9 @@ class StudentController extends AppController
 		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
 		$this->set(compact('passRate'));
 		
-		
+		//年度選択画面→解答画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
+		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
+		$this->removeSession(['practiceAnswers']);
 	}
 	
 	//解答画面
@@ -632,8 +611,6 @@ class StudentController extends AppController
 			->first();
 		$this->set(compact('qes'));
 		
-		//スコア画面にデータを送る
-		$this->score();
 		//セッション処理関数にデータを送る
 		$this->intoQes();
 	}
@@ -659,7 +636,6 @@ class StudentController extends AppController
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
 	
-
 //結果画面
 	public function score(){
 		//セッション処理関数にデータを送る
@@ -698,7 +674,6 @@ class StudentController extends AppController
 		$sum=round($sum * 1.25,2) ;
 		$this->set(compact('sum'));
 		
-		
 		//選択した答え等の判定に使用
 		$selectArrayPas=array('ア','イ','ウ','エ');
 		$this->set(compact('selectArrayPas'));
@@ -706,6 +681,5 @@ class StudentController extends AppController
 		//結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
 		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
 		$this->removeSession(['practiceAnswers']);
-		
 	}
 }

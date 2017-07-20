@@ -8,6 +8,10 @@
  */
 ?>
 
+<!-- タイトルセット -->
+<?php $this->start('title'); ?>
+過去問題
+<?php $this->end(); ?>
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
@@ -17,11 +21,6 @@
 <!-- jsセット -->
 <?php $this->start('script'); ?>
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
-<?php $this->end(); ?>
-
-<!-- ユーザーネームセット -->
-<?php $this->start('username'); ?>
-managerrrrr
 <?php $this->end(); ?>
 
 <!-- サイドバーセット -->
@@ -204,8 +203,8 @@ managerrrrr
 			
 			<script language="JavaScript">
                 function cfm() {
-                   var flag = confirm("結果画面に移ります。" +
-	                              "本当に解答を終了しますか？");
+                   var flag = confirm("結果画面に移ります。\n" +
+	                                  "本当に解答を終了しますか？");
                    return flag;
                 }
 			</script>
