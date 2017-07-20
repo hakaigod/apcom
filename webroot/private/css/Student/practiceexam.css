@@ -31,14 +31,28 @@
     margin: 5px 0px 0px 8px;
 }
 
-/* テーブル内のボタンをラジオボタン化 */
+    /*background-color: #53cd5c;*/
+/*}*/
 
+/* テーブル内のボタンをラジオボタン化 */
 [data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=radio],
 [data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=checkbox]{
     position: absolute;
     z-index: -1;
     filter: alpha(opacity=0);
     opacity: 0;
+}
+
+/* 解答選択ボタンの調整 */
+.all-choice-btn{
+    margin: 21px 0px 0px 8px;
+    box-shadow: inset 0px -2px 0px rgba(0,0,0,0.15);
+}
+
+
+/* 解答選択肢が共通の画像の場合の位置調整 */
+.all-choice-text{
+    margin-left: 50px;
 }
 
 /* テーブルの空白調整 */
@@ -74,6 +88,3 @@
 .qaa-score a:hover{
     background-color: #3d8bd4;
 }
-
-
-

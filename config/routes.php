@@ -44,14 +44,14 @@ use Cake\Routing\Route\DashedRoute;
 Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope("/student", function ( RouteBuilder $routes ) {
-
+	
 	$routes->connect(
 		'/:id',
 		['controller' => 'student', 'action'=> 'summary'],
 //		 8桁の数字に制限、0始まりに対応
 		['id' => '\d{8}']
 	);
-
+	
 	$routes->connect(
 		'/updatePassword',
 		['controller' => 'student', 'action'=> 'updatePass']
@@ -76,21 +76,40 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		['controller' => 'student', 'action' => 'qaaSelectGenre']
 	);
 
+    $routes->connect(
+        '/qaaAlert',
+        ['controller' => 'student', 'action' => 'qaaAlert']
+    );
+
+    $routes->connect(
+        '/qaaResult/:pagination_num/',
+        ['controller' => 'student', 'action' => 'qaaResult'],
+        ['pagination_num' => '\d+',]
+    );
+
 	$routes->connect(
 		'/qaaQuestion/:question_num/',
 		['controller' => 'student', 'action' => 'qaaQuestion'],
 		['question_num' => '\d+',]
 	);
-
+	
 	$routes->connect(
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
+	
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
 		['controller' => 'student', 'action' => 'practiceExam'],
 		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
 	);
+	
+	$routes->connect(
+		'/score/:exanum/',
+		['controller' => 'student', 'action' => 'score'],
+		['exanum' => '\d{1,3}']
+	);
+	
 });
 Router::scope("/manager", function ( RouteBuilder $routes ) {
 	$routes->connect(
@@ -99,7 +118,6 @@ Router::scope("/manager", function ( RouteBuilder $routes ) {
 	$routes->connect(
 		'/imitation/register',
 		['controller' => 'manager', 'action'=> 'imiCodeIssue']);
-
 });
 //学生、学科、管理者の管理
 Router::scope("/manager/maintenance", function ( RouteBuilder $routes ) {
@@ -165,7 +183,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
 	$routes->connect('', ['controller' => 'Login', 'action' => 'index']);
 	$routes->connect('login', ['controller' => 'Login', 'action' => 'index']);
-
+	
     /**
      * Connect catchall routes for all controllers.
      *
@@ -188,6 +206,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 /**
 
  * Load all plugin routes. See the Plugin documentation on
+>>>>>>> 06f60cc757dd0b5aa0de321dad87b35ae62b5ec7
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();

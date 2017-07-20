@@ -33,14 +33,16 @@
 }
 
 .btn-hm {
+	color: #424448;
+
 	font-size: 25px;
-	padding: 15px 0 15px 10px;
+	padding: 17px 20px 10px 20px;
 	background-color: transparent;
 }
 .btn-hm:hover,
 .btn-hm:focus {
 	outline: none;
-	color: #aaaaaa;
+	color: #d82732;
 }
 /*サイドバー終わり*/
 
@@ -87,7 +89,6 @@ a {
 /*その他*/
 
 body {
-	background-color: #fdf9f9;
 	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
 }
 
@@ -111,7 +112,7 @@ div.message {
 }
 
 div.message:before {
-    line-height: 0px;
+    line-height: 0;
     font-size: 20px;
     height: 12px;
     width: 12px;
@@ -128,15 +129,38 @@ div.message:before {
 }
 
 div.message.error {
-    background-color: #C3232D;
-    color: #FFF;
+    background-color: #f7bc1a;
+    color: #444;
 }
 
 div.message.error:before {
     padding: 11px 16px 14px 7px;
-    color: #C3232D;
+    color: #444;
     content: "x";
 }
 div.message.hidden {
     height: 0;
+}
+
+.container-fluid {
+	/*padding-left:0;*/
+	/*padding-right:0;*/
+}
+
+#activity-div{
+	background-color: #424448;
+	overflow: hidden;
+	white-space: nowrap;
+}
+#activity-text {
+	font-size:14px;
+	color: #fcfefe;
+	height: 21px;
+	overflow: hidden;
+	font-weight: normal;
+	white-space: nowrap;
+	/*margin: 0;*/
+}
+#welcome-user{
+	margin-right: 0;
 }

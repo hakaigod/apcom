@@ -33,7 +33,7 @@
 <!--canvasにグラフを設定するスクリプト-->
 <script id="check-script"
 	<?php
-    echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"';
+	echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/summary.js"';
 	echo " user-name = \"{$studentName}さん\"";
 	$dates = array_column($imiDetails,'date');
 	krsort($dates);
@@ -41,8 +41,8 @@
 	$conv = function (array &$array):array {
 		krsort($array);
 		foreach ($array as &$value) { isset($value) ? $value *= 1.25 : null; }
-        return $array;
-    };
+		return $array;
+	};
 	$scores = array_column($imiDetails,'score');
 	$scores = $conv($scores);
 	echo " line-student-score = " . json_safe_encode( array_values($scores) );
@@ -69,50 +69,49 @@
 //score列にnullを含む場合
 //3番目のtrueは型を比較するか(==か===かの違い)
 if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' ):?>
-<div class="panel panel-danger ">
-    <div class="panel-heading">
-        まだ入力されていない模擬試験があります
+    <div class="panel panel-danger ">
+        <div class="panel-heading">
+            まだ入力されていない模擬試験があります
+        </div>
+        <ul  style="list-style:none;">
+			<?php
+            $count = 0;
+			$max = 3;
+			foreach($imiDetails as $imi): ?>
+				<?php
+				if($imi['score'] === null):?>
+                    <li >
+							<?php
+                            if ($count < $max) {
+	                            $imiTitle = "{$imi['date']} {$imi['name']}";
+	
+	                            echo $this->Html->link(
+		                            $imiTitle,
+		                            [ 'controller' => 'student',
+		                              'action'     => 'input',
+		                              'imicode'    => $imi[ 'imicode' ],
+		                              'linkNum'    => 1
+		                            ]
+	                            );
+                            }
+							$count++;
+							?>
+                    </li>
+				<?php endif;?>
+			<?php endforeach;?>
+			<?php
+			if ( $count >= $max ) {
+			    echo "<u>";
+				echo $this->Html->link(
+					"もっと見る",
+					"#imitation-list"
+//                [ 'class' => 'text-primary' ]
+				);
+				echo "</u>";
+			}
+			?>
+        </ul>
     </div>
-    <ul  style="list-style:none;">
-	    <?php
-        $current = 0;
-        $max = 3;
-        for( ; $current < count($imiDetails) && $current < $max;$current++): ?>
-            <?php
-            $imi = $imiDetails[$current];
-            if($imi['score'] === null):?>
-                <li class="text-danger">
-                    <u>
-			                <?php
-                            $imiTitle ="{$imi['date']} {$imi['name']}";
-			
-			                echo $this->Html->link(
-				                $imiTitle,
-				                [ 'controller' => 'student',
-				                  'action'     => 'input',
-				                  'imicode'    => $imi[ 'imicode' ],
-				                  'linkNum'    => 1
-				                ],
-				                [ 'class' => 'text-danger ' ]
-			                );
-			                ?>
-                    </u>
-                </li>
-		    <?php endif;?>
-		<?php endfor;?>
-        <?php
-        if ($current < count($imiDetails)) {
-            echo "<u>";
-            echo $this->Html->link(
-	            "もっと見る",
-                "#imitation-list",
-                [ 'class' => 'text-primary' ]
-            );
-            echo "</u>";
-        }
-        ?>
-    </ul>
-</div>
 <?php endif;?>
 
 <!--グラフを表示する要素-->
@@ -146,43 +145,43 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
         <tr>
             <td data-label="実施日" class="center col-sm-12 col-md-2"><?= $imi['date']?></td>
             <td class="col-sm-12 col-md-6">
-	            <?php if($imi['score'] === null):?>
+				<?php if($imi['score'] === null):?>
                     <span class="label label-danger">未</span>
-	            <?php else:?>
+				<?php else:?>
                     <span class="label label-success">済</span>
-                <?php endif;?>
-	            <?php
-                $titleArray = ['controller' => 'student', 'imicode' => $imi['imicode']];
-                if ($imi['score'] === null) {
-                    $titleArray['action'] = 'input';
-                    $titleArray['linkNum'] = 1;
-                }else{
-                    $titleArray['action'] = 'result';
-                    $titleArray['id'] = $studentID;
-                }
-                if ($role == 'manager' && !(isset($imi['score']))) {
-                    echo $imi[ 'name' ];
-                }else {
-	                echo $this->Html->link($imi[ 'name' ], $titleArray);
-                }
-	            ?>
+				<?php endif;?>
+				<?php
+				$titleArray = ['controller' => 'student', 'imicode' => $imi['imicode']];
+				if ($imi['score'] === null) {
+					$titleArray['action'] = 'input';
+					$titleArray['linkNum'] = 1;
+				}else{
+					$titleArray['action'] = 'result';
+					$titleArray['id'] = $studentID;
+				}
+				if ($role == 'manager' && !(isset($imi['score']))) {
+					echo $imi[ 'name' ];
+				}else {
+					echo $this->Html->link($imi[ 'name' ], $titleArray);
+				}
+				?>
                 &nbsp;
-	            <?php
-                if ($imi['score'] !== null && $role != 'manager') {
-	                echo $this->Html->link("[編集]",
-	                                  [ 'controller'  => 'student',
-	                                    'action'      => 'input',
-	                                    'imicode'     => $imi[ 'imicode' ],
-                                        'linkNum' => 1 ],
-	                                  [ 'class' => 'text-muted' ]);
-                }
-	            ?>
+				<?php
+				if ($imi['score'] !== null && $role != 'manager') {
+					echo $this->Html->link("[編集]",
+					                       [ 'controller'  => 'student',
+					                         'action'      => 'input',
+					                         'imicode'     => $imi[ 'imicode' ],
+					                         'linkNum' => 1 ],
+					                       [ 'class' => 'text-muted' ]);
+				}
+				?>
             </td>
             <td data-label="平均" class="center col-sm-12 col-md-1"><?= round($imi['avg'] * 1.25,1)?></td>
             <td data-label="点数" class="center col-sm-12 col-md-1"><?= ($imi['score'] !== null)? round($imi['score'] * 1.25,1):"　"?></td>
             <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $imi['rank'] :"　" ?> </td>
-           
-            
+
+
         </tr>
 	<?php endforeach; ?>
     </tbody>

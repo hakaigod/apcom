@@ -70,11 +70,14 @@ $(function(){
 			}
 		});
 		if (validate_success) {
+			console.log("waaa");
+
 			if ($("#new-pass").val() !== $("#verify").val()) {
 				window.alert(INCONSISTENT);
 				return false;
 			}
-			$(this).submit();
+			console.log("aa");
+			$("#change-pass").submit();
 		}
 	});
 	function checkText(text) {

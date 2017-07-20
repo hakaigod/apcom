@@ -59,6 +59,12 @@
 <tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <?php $this->end(); ?>
 
+<?php
+
+
+?>
+
+
 <?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum)) || !(isset($average))):?>
     <br><br>
     <div class="alert alert-danger" role="alert">

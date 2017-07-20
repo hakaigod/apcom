@@ -13,16 +13,36 @@
 .end-btn {
     margin-right: 0;
 }
-
+/*.sentence {*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*display: table-cell;*/
+/*}*/
+/*.table .sentence {*/
+    /*position: relative;*/
+/*}*/
+/*table .sentence span {*/
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*right: 0;*/
+/*}*/
+/*.text:before {*/
+    /*content: '';*/
+    /*display: inline-block;*/
+/*}*/
 /*.btn-info:hover{*/
     /*background: lightskyblue;*/
 /*}*/
 /*.btn-info {*/
     /*background: skyblue;*/
 /*}*/
-.btn-info.active {
-    background: midnightblue;
-}
+/*.btn-info.active {*/
+    /*background: #d82732;*/
+/*}*/
 
 
 @media screen and (max-width: 991px) {

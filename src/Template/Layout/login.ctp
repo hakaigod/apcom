@@ -20,7 +20,6 @@
 
 
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
-	<?= $this->Html->script('video.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
 	<?= $this->Html->script('application.js') ?>
 	<?= $this->Html->script('prettify.js') ?>

@@ -64,7 +64,7 @@ function json_safe_encode($data){
 		['controller' => 'student', 'action' => 'sendAll',
 		 'id' => $userID,'imicode' => $imicode]) ?>
 " method="post" id="answer-form">
-        <table id="input-table" class="table table-bordered table-striped table-hover">
+        <table id="input-table" class="table table-bordered table-striped table-hover" >
             <thead >
             <tr>
                 <th class ="center">番号</th>
@@ -82,12 +82,13 @@ function json_safe_encode($data){
                     </td>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class=" col-sm-12  col-md-3 sentence">
-						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']), 0, 10) ?>
-                        ...
+                        <span>
+						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>
+                            </span>
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">
-                        <div id="<?= "rejoinder_{$i}"?>" data-toggle="buttons">
+                        <div id="<?= "rejoinder_{$i}"?>" class="answers-div" data-toggle="buttons">
 							<?php
 							$ansChoices = ['ア','イ','ウ','エ','未記入'];
 							$answerTag = 'answer_' . $qNum;
@@ -100,9 +101,10 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedAns)) && $inputtedAns == $value;
 								$active = $isChosen ? 'active ' :'';
 								$checked = $isChosen ? 'checked ':'';
+								$yet = $value==0 ? 'yet':"";
 //							$required = $x==0?"required=\"required\"":"";
-								echo "<label class=\"btn btn-info {$active}\">";
-								echo "<input type=\"radio\"  name=\"{$answerTag}\" "
+								echo "<label class=\"btn btn-info {$yet} {$active}\">";
+								echo "<input type=\"radio\" name=\"{$answerTag}\" "
 									.$checked ."autocomplete=\"off\" value=\"{$value}\">"
 									. $ansChoices[$x];
 								echo '</label>';
@@ -125,9 +127,10 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 								$checked = $isChosen ? 'checked':'';
 								$active = $isChosen ? 'active':'';
+								$disabled = $inputtedAns === '0' ? 'disabled':'';
 //							$required = $y==0?"required=\"required\"":"";
-								echo "<label class=\"btn btn-info {$active}\" >";
-								echo "<input type=\"radio\"  name=\"{$confTag}\" "
+								echo "<label class=\"btn btn-info {$disabled} {$active}\" >";
+								echo "<input type=\"radio\" {$disabled} name=\"{$confTag}\" "
 									."autocomplete=\"off\" {$checked} value=\"{$value}\">";
 								echo $this->Html->image($confChoices[$y] . ".svg", ['alt' => $confChoices[$y]]);
 								echo '</label>';

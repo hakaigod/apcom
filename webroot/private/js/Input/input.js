@@ -40,4 +40,25 @@ $(function(){
             return false;
         }
     });
+    
+    $('.answers-div > label').click(function ()  {
+        console.log("clicked");
+        let clickedValue = $(this).children('input').eq(0).val();
+        console.log(clickedValue);
+        $(this)
+            .closest('tr')
+            .children('td').eq(3)
+            .find('input')
+            .each(function () {
+                let yetClicked = clickedValue === '0';
+                $(this).prop("disabled",yetClicked);
+                if (yetClicked) {
+                    $(this).closest('label').addClass('disabled');
+                }else{
+                    $(this).closest('label').removeClass('disabled');
+                }
+            });
+    });
+    
+    
 });

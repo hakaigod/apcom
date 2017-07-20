@@ -2,34 +2,26 @@
 /**
  * @var \App\Model\Entity\MfExa $exams
  * @var \App\Model\Entity\MfQe $qes
- *  * @var \App\Model\Entity\MfQe $sesAns
+ *  * @var \App\Controller\StudentController $ansed
+ 
+ 
  */
 ?>
 
-
 <!-- タイトルセット -->
 <?php $this->start('title'); ?>
-<?= "平成".$exams->jap_year . "年度". $exams->exaname ." 模擬試験" ?>
+過去問題
 <?php $this->end(); ?>
-
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Student/practiceexam.css') ?>
 <?php $this->end(); ?>
 
-
 <!-- jsセット -->
 <?php $this->start('script'); ?>
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
-
-
-<!-- ユーザーネームセット -->
-<?php $this->start('username'); ?>
-managerrrrr
-<?php $this->end(); ?>
-
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
@@ -40,9 +32,6 @@ managerrrrr
 <tr><td><a>設定</a></td></tr>
 <?php $this->end(); ?>
 
-
-
-
 <!-- 以下content -->
 <div class = "container-fluid">
 	<!--header-->
@@ -51,12 +40,11 @@ managerrrrr
 			<div class = col-md-12>
 				<br/>
 				<div id = "exam-title">
-					<?= "平成".$exams->jap_year . "年度 ". $exams->exaname ?>
+					<?= $exams->_getExamDetail();?>
 				</div>
 			</div>
 		</div>
 	</div>
-	
 	
 	<!--　出題問題表示　-->
 	<div class = "row">
@@ -68,82 +56,123 @@ managerrrrr
 		</div>
 	</div>
 	
-	
 	<div class="row">
 		<div class="col-md-12">
 			<div class = "qaa-question">
 				<!--問題文-->
 				<div>
-					<?=  ($qes -> question) ?>
+					<!-- 問題文の画像表示 -->
+					<?= $this->Qaa->viewTextImg($qes->question) ?>
 				</div>
 				<br/>
 			</div>
 		</div>
 	</div>
 	
-<!--	-->
 	<!--  解答部分	-->
-	<form name="ansForm" method="post">
-		
-	<div class="row" id="table" data-toggle="buttons">
-		<table class="table table-bordered">
-				<tbody>
-				<tr>
-					<td id="button" class="col-xs-1" >
-						<label class = "btn btn-embossed btn-primary full">
-					<!--	      nameは変数名、valueはそれに入る値        -->
-							<input type = "radio"  id="aa" name="ansSelect" value="1"
-							<?php echo ($sesAns==1) ? ' checked' : ''; ?>>ア
-						</label>
-					</td>
-					<td id="choice" class="col-xs-11">
-						<span class="select-choice" id="aa" >
-							<?= ($qes -> choice1); ?>
-						</span>
-					</td>
-				</tr>
-				
-				<tr>
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect"  value="2">イ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice">
-							<?= ($qes -> choice2); ?>
-						</span>
-					</td>
-				</tr>
-				<tr>
+	<!--    解答選択肢が1つの画像のみかどうかで表示方法を分岐	-->
+	<!--  通常の選択肢の場合	-->
+	<?php if(empty($qes->answer_pic)): ?>
+		<form name="ansForm" method="post" >
+			<input type="hidden" value="<?= $this->request->getParam("exanum") ?>" name="exanum">
+			<div class="row" id="table" data-toggle="buttons">
+				<table class="table table-bordered">
+					<tbody>
+					<tr>
+						<td id="button" class="col-xs-1" >
+							<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+								<!--	      nameは変数名、valueはそれに入る値        -->
+								<input type = "radio"  id="aa" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
+							</label>
+						</td>
+						<td id="choice" class="col-xs-11">
+							<span class="select-choice" id="aa" >
+	                            <?= $this->Qaa->viewTextImg($qes->choice1)?>
+							</span>
+						</td>
+					</tr>
 					
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect" value="3">ウ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice">
-							<?= ($qes -> choice3); ?>
-						</span>
-					</td>
-				</tr>
-				
-				<tr>
-					<td id="button">
-						<label class = "btn btn-embossed btn-primary full">
-							<input type = "radio"  id="aa"  name="ansSelect" value="4">エ
-						</label>
-					</td>
-					<td id="choice">
-						<span class="select-choice" >
-							<?= ($qes -> choice4); ?>
-						</span>
-					</td>
-				</tr>
-				</tbody>
-		</table>
-	</div>
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+								<input type = "radio"  id="aa"  name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice">
+	                            <?= $this->Qaa->viewTextImg($qes->choice2)?>
+							</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-success full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+								<input type = "radio"  id="aa"  name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice">
+	                            <?= $this->Qaa->viewTextImg($qes->choice3)?>
+							</span>
+						</td>
+					</tr>
+					
+					<tr>
+						<td id="button">
+							<label class = "btn btn-embossed btn-success full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+								<input type = "radio"  id="aa"  name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
+							</label>
+						</td>
+						<td id="choice">
+							<span class="select-choice" >
+	                            <?= $this->Qaa->viewTextImg($qes->choice4)?>
+							</span>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<!--  1つの画像の選択肢の場合	-->
+			<?php else:?>
+			<form name="ansForm" method="post" >
+				<input type="hidden" value="<?= $this->request->getParam("exanum") ?>" name="exanum">
+				<div class="row" id="table" data-toggle="buttons">
+					<table class="table table-bordered">
+						<tbody>
+						<tr>
+							<td  class="col-xs-1">
+								<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
+								<label id="button" class = "btn  btn-embossed btn-success full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+									<!--	      nameは変数名、valueはそれに入る値        -->
+									<input type = "radio" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
+								</label>
+								
+								<label id="button" class = "btn all-choice-btn btn-success full  <?php echo ($ansed==2) ? ' active' : ''; ?>">
+									<input type = "radio" name="ansSelect" value="2" <?php echo ($ansed==2) ? ' checked ' : ''; ?> >イ
+								</label>
+
+								<label id="button" class = "btn all-choice-btn btn-success full  <?php echo ($ansed==3) ? ' active' : ''; ?>">
+									<input type = "radio" name="ansSelect" value="3" <?php echo ($ansed==3) ? ' checked ' : ''; ?> >ウ
+								</label>
+						
+								<label id="button" class = "btn all-choice-btn btn-success full <?php echo ($ansed==4) ? ' active ' : ''; ?>" >
+									<input type = "radio" name="ansSelect" value="4" <?php echo ($ansed==4) ? ' checked ' : ''; ?>>エ
+								</label>
+							</td>
+							
+							<td class="col-xs-11">
+								<span class="all-choice-text">
+									<?= $this->Qaa->viewTextImg($qes->answer_pic); ?>
+								</span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<?php endif;?>
 	
 	<!--  下部のボタン3種類	-->
 	
@@ -156,37 +185,45 @@ managerrrrr
 							['action' => 'practiceExam',
                                 'exanum' =>$exams->exanum,
                                 'qesnum' => $qes->qesnum-1],
-							[ 'class' => "btn btn-warning disabled" ]
-						);
+							[ 'class' => "btn btn-warning disabled" ]);
 						?>
 						<?php else: ?>
 						<?= $this->Form->button('<< 前の問題' ,
 							[
 								'class' => 'btn btn-warning',
 								'formaction' =>   $qes->qesnum - 1 ,
+								'name' => 'into_ques',
+								'value' => 1,
 								'type' => 'submit'
-//								'value' => 'ansSelect'
-						]
-						);
+							]);
 						?>
 					<?php endif; ?>
 				</div>
 			
 			
-				<!--	解答を終了するボタン	-->
+			<script language="JavaScript">
+                function cfm() {
+                   var flag = confirm("結果画面に移ります。\n" +
+	                                  "本当に解答を終了しますか？");
+                   return flag;
+                }
+			</script>
+			
+			<!--	解答を終了するボタン	-->
 				<div  class="qaa-score">
 					<?=
 						 $this->Form->button("解答を終了する" ,
 							 [
+								 'onclick'=>'return cfm()', //確認ダイアログに遷移
 								 'class' => 'btn btn-info',
-								 'formaction' =>  '../../score',
-								 'type' => 'submit',
-								 'value' => '' ]
-						 );
+								 'formaction'=> $this->Url->build(['action' =>'score',
+									                                'exanum' => $exams->exanum]),
+								 'name' => 'into_ques',
+								 'value' => $qes->qesnum,
+								  'type' => 'submit'
+							 ]);
 					?>
 				</div>
-			
-			
 			
 			<!--	次の問題ボタン	-->
 				<div  class="qaa-next">
@@ -195,22 +232,20 @@ managerrrrr
 							['action' => 'practiceExam',
                                 'exanum' =>$exams->exanum ,
                                 'qesnum' =>$qes->qesnum + 1 ],
-							[ 'class' => "btn btn-warning disabled" ]
-						);
+							[ 'class' => "btn btn-warning disabled"
+							]);
 						?>
-					<?PHP else: ?>
+					<?php else: ?>
 							<?= $this->Form->button('次の問題 >>' ,
 								[
 									'class' => 'btn btn-warning',
 									'formaction' =>   $qes->qesnum + 1 ,
+									'name' => 'into_ques',
+									'value' => -1,
 									'type' => 'submit'
-//									'value' => $ansnum
 								]);
 							?>
-							
-							
 					<?PHP endif;  ?>
 				</div>
 			</div>
-	
 	</form>
