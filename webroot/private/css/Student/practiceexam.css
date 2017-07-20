@@ -31,6 +31,9 @@
     margin: 5px 0px 0px 8px;
 }
 
+    /*background-color: #53cd5c;*/
+/*}*/
+
 /* テーブル内のボタンをラジオボタン化 */
 [data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=radio],
 [data-toggle=buttons]>table>tbody>tr>td>.btn>input[type=checkbox]{
@@ -45,6 +48,7 @@
     margin: 21px 0px 0px 8px;
     box-shadow: inset 0px -2px 0px rgba(0,0,0,0.15);
 }
+
 
 /* 解答選択肢が共通の画像の場合の位置調整 */
 .all-choice-text{

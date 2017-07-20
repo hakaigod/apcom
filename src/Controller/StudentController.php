@@ -37,6 +37,7 @@ class StudentController extends AppController
 	
 	public function initialize(){
 		parent::initialize();
+		$this->set('headerlink', $this->request->webroot . 'Manager');
 		
 		//回答テーブル
 		$this->loadModel('TfAns');
@@ -645,6 +646,38 @@ class StudentController extends AppController
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
 		$imitations=$this->TfImi->find()->toArray();
+		//セッションのUserIDを取得
+		$user = $this->readSession(['userID']);
+		$this->set(compact('user'));
+		$sums=$this->TfSum->find()
+			->where(['TfSum.regnum' => $user]) 	//テーブル内のregnumから現在操作している人のUserIDと合致するデータを抽出する
+			->toArray();
+		$this->set(compact('sums'));
+		
+		$imis = $this->TfImi->find()
+			//テーブル内のexanumから抽出する
+			->where(['TfImi.imicode IN' => array_column($sums,'imicode'),
+				'TfImi.exanum IN' => array_column($exams,'exanum')])
+			->toArray();
+		$this->set(compact('imis'));
+		
+		$score=array();
+		foreach ($sums as $sum_value){
+			$score += array($sum_value['imicode'] => $sum_value['strategy_sum'] + $sum_value['technology_sum'] + $sum_value['management_sum']);
+		}
+		
+		//校内での模擬試験の前回の点数計算
+		$exanumLastScore=array();    //模擬試験の前回の点数代入
+		foreach ($exams as $exam_value) {   //年度別
+			$exanumLastScore += array($exam_value->exanum => array('exa_sum' => '[授業で未実施]'));
+			foreach ($imis as $imi_value) {
+				if ($exam_value->exanum == $imi_value->exanum) {
+					$exanumLastScore[$exam_value->exanum]['exa_sum'] =  $score[$imi_value['imicode']];    //模擬試験の前回の点数代入
+				}
+			}
+		}
+		$this->set(compact('exanumLastScore'));
+		
 		//本番試験番号がキー、その平均点がバリューの要素を追加していく
 		$averages=[];
 		//本番1つにつき、授業模擬はゼロから複数回実施されているので、
@@ -664,7 +697,7 @@ class StudentController extends AppController
 			}
 			//0で割るとエラーになるため
 			if ($people_sum == 0) {
-				$averages[$exam_value->exanum] = '[まだ受験者がいません]';
+				$averages[$exam_value->exanum] = '[授業で未実施]';
 			} else {
 				//小数点を切り捨てるためにfloor関数を使う
 				$averages[$exam_value->exanum] = floor(intval($point_sum) / $people_sum);
@@ -675,10 +708,9 @@ class StudentController extends AppController
 		//各年度の全国合格率(チンパン)
 		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
 		$this->set(compact('passRate'));
-
-
-//	    結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
-//      残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
+		
+		//年度選択画面→解答画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
+		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
 		$this->removeSession(['practiceAnswers']);
 	}
 	
@@ -710,8 +742,6 @@ class StudentController extends AppController
 			->first();
 		$this->set(compact('qes'));
 		
-		//スコア画面にデータを送る
-		$this->score();
 		//セッション処理関数にデータを送る
 		$this->intoQes();
 	}
@@ -736,13 +766,14 @@ class StudentController extends AppController
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
-
+	
 
 //結果画面
 	public function score(){
 		//セッション処理関数にデータを送る
 		$this->intoQes();
-		//exanumは文字列型
+		
+		//今年度の点数を送る
 		$exanum = $this->request->getParam("exanum");
 		$this->set(compact('exanum'));
 		
@@ -778,6 +809,10 @@ class StudentController extends AppController
 		//選択した答え等の判定に使用
 		$selectArrayPas=array('ア','イ','ウ','エ');
 		$this->set(compact('selectArrayPas'));
+		
+		//結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
+		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
+		$this->removeSession(['practiceAnswers']);
 	}
 	
 	public function emitMessage( string $message )

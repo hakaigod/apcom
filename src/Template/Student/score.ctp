@@ -22,11 +22,6 @@
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-<!-- ユーザーネームセット -->
-<?php $this->start('username'); ?>
-managerrrrr
-<?php $this->end(); ?>
-
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a>トップページ</a></td></tr>
@@ -56,22 +51,22 @@ managerrrrr
 </p>
 <br/><br/>
 
-<div class="ans-table" >
+<div class="score-table" >
 	<div class="row">
 		<div class="col-xs-12">
 			<table class="table table-bordered row" id="ans-table">
 				<!--	テーブル上部に点数表示	-->
 				<caption  class="score-box">
 					<p>
-						<b class="score" id="score-opt" ><?= $sum ?></b>/100<b class="score">点でした!</b>
+						<b class="score" id="score-opt" ><?= $sum ?></b>/100<b class="score">点でした！</b>
 					</p>
 				</caption>
 				<tr class="table-title">
-					<th class="col-xs-1">No.</th>
-					<th class="col-xs-5">問題文</th>
-					<th class="col-xs-2">正否</th>
-					<th class="col-xs-2">アナタの解答</th>
-					<th class="col-xs-2">答え</th>
+					<th class="table-project col-xs-1">No.</th>
+					<th class="table-project col-xs-5">問題文</th>
+					<th class="table-project col-xs-2">正否</th>
+					<th class="table-project col-xs-2">アナタの解答</th>
+					<th class="table-project col-xs-2">答え</th>
 				</tr>
 				<tbody>
 				<!--   行の要素   -->
@@ -88,18 +83,30 @@ managerrrrr
 												        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 											      <div class="modal-body">
 													<p class="modal-all modal-qesnum"><?= "[ 問 ".$i." ]" ?></p>
-													<p class="modal-all modal-qes-text"><?= $this->Qaa->viewTextImg($ansbox[$i-1]->question) ?></p>
-													<table class="modal-all table modal-table table-bordered  full">
+													<p class="modal-all modal-qes-text"><?= $this->qaa->viewTextImg($ansbox[$i-1]->question) ?></p>
+													<table class="modal-all table modal-table table-bordered  full" >
 														<!--	解答選択肢が共通の画像かどうかの判定	-->
 														<!--    それぞれ個別に画像がある場合　	-->
 														<?php if(empty($ansbox[$i - 1]->answer_pic)): ?>
-															<tr><td class="col-xs-1 center">ア</td><td><?= $this->Qaa->viewTextImg($ansbox[$i - 1]->choice1) ?></td><tr>
-															<tr><td class="col-xs-1 center">イ</td><td><?= $this->Qaa->viewTextImg($ansbox[$i - 1]->choice2) ?></td><tr>
-															<tr><td class="col-xs-1 center">ウ</td><td><?= $this->Qaa->viewTextImg($ansbox[$i - 1]->choice3) ?></td><tr>
-															<tr><td class="col-xs-1 center">エ</td><td><?= $this->Qaa->viewTextImg($ansbox[$i - 1]->choice4) ?></td><tr>
+															<tr>
+																<td class="col-xs-1 center">ア</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice1) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">イ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice2) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">ウ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice3) ?></td>
+															</tr>
+															<tr>
+																<td class="col-xs-1 center">エ</td>
+																<td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->choice4) ?></td>
+															</tr>
 														<!--	共通の画像がある場合	-->
 														<?php else: ?>
-															<tr><td><?= $this->Qaa->viewTextImg($ansbox[$i - 1]->answer_pic); ?></td></tr>
+															<tr><td><?= $this->qaa->viewTextImg($ansbox[$i - 1]->answer_pic); ?></td></tr>
 														<?php endif ?>
 													</table>
 												<div>
@@ -123,15 +130,15 @@ managerrrrr
 						<!--    問題文    -->
 						<td class="col-xs-5 qes-text" >
 							<!--						mb_strimwidthにより、40文字以上の文章は「...」により省略する -->
-							<?= mb_strimwidth( $this->Qaa->viewTextImg($ansbox[$i-1]->question),0,40,"...") ?>
+							<?= mb_strimwidth( $this->qaa->viewTextImg($ansbox[$i-1]->question),0,40,"...") ?>
 						</td>
 						
 						<!--	正否判定		-->
 						<td class="col-xs-2">
 							<?php if($practice[$i] == $ansbox[$i - 1]->answer):  ?>
-								<p class="ans-check">〇</p>
+								<p class="ans-check" id="correct">〇</p>
 							<?php else :?>
-								<p class="ans-check">×</p>
+								<p class="ans-check" >×</p>
 							<?php endif; ?>
 						</td>
 							
@@ -163,9 +170,9 @@ managerrrrr
 <div>
 	<?=
 	//年度選択画面へのリンクを生成
-	$this->Html->link( "TOPへ戻る" ,
+	$this->Html->link( "年度選択へ戻る" ,
 		['action' => 'yearSelection'],
-		[ 'class'=>"btn btn-warning top-btn full   col-xs-offset-5 col-xs-2" ]
+		[ 'class'=>"btn btn-warning top-btn full col-xs-offset-5 col-xs-2" ]
 	)
 	?>
 </div>

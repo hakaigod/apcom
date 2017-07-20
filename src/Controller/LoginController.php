@@ -18,7 +18,7 @@ class LoginController extends AppController
 
         $db['host'] = "localhost";  // DBサーバのURL
         $db['user'] = "root";  // ユーザー名
-        $db['pass'] = "high01";  // ユーザー名のパスワード
+        $db['pass'] = "";  // ユーザー名のパスワード
         $db['dbname'] = "apcom";  // データベース名
 
 // エラーメッセージの初期化

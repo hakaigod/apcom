@@ -15,8 +15,14 @@
     margin: 2px 50px 0px 10px;
 }
 
-/* テーブル項目の位置調整 */
-.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,.table>thead:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,.table>thead:first-child>tr:first-child>td {
+/* テーブル行の色調整 */
+.year-box tr:nth-child(odd)  {
+    background-color: #EAF6FD;
+}
+
+/* テーブル項目の調整 */
+.tableTitle{
+    background-color: #fdf9f9;
     text-align: center;
 }
 
