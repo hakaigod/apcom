@@ -94,7 +94,8 @@
 <div>
 	<?= $this->Html->link("TOPへ戻る" ,
 		[
-			'action' =>$user
+			'action' => "summary",
+            "id" => $user
 		],
 		[
 			'class' =>'btn btn-warning col-xs-offset-5 col-xs-2'
