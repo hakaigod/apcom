@@ -147,6 +147,7 @@ class ManagerController extends AppController
 		}
 		$this->set(compact('questionsDetail'));
 
+		// モーダル用
 		$selectAnswer = array();
 		foreach ($questionsDetail as $key) {
 			$selectAnswer += array($key['qesnum'] => array('answers' => array(0,0,0,0,0),'correct' => 0));
