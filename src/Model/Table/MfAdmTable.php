@@ -44,13 +44,14 @@ class MfAdmTable extends Table
     {
         $validator
             ->integer('admnum')
-            ->allowEmpty('admnum', 'create');
+            ->notEmpty('admnum', '管理者番号が入力されていません。');
 
         $validator
             ->allowEmpty('admname');
 
         $validator
-            ->allowEmpty('admpass');
+            ->notEmpty('admpass','パスワードが入力されていません。')
+            ->lengthBetween('admpass',[8,20],'パスワードは文字以上20文字未満です。');
 
         $validator
             ->boolean('deleted_flg')
@@ -59,4 +60,11 @@ class MfAdmTable extends Table
 
         return $validator;
     }
+    public function findAuth($query, array $options)
+    {
+        $query->where(['mf_adm.deleted_flg' => 0]);
+
+        return $query;
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -29,8 +30,16 @@ class MfStu extends Entity
      *
      * @var array
      */
+
+
     protected $_accessible = [
         '*' => true,
         'regnum' => false
     ];
+    protected function _setPassword($password)
+    {
+        if (strlen($password) > 0) {
+            return (new DefaultPasswordHasher)->hash($password);
+        }
+    }
 }

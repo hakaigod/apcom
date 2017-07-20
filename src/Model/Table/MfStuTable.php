@@ -45,7 +45,8 @@ class MfStuTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->allowEmpty('regnum', 'create');
+            ->notEmpty('regnum', '学籍番号が入力されていません。')
+            ->lengthBetween('regnum',[8,8],'学籍番号は8文字です。');
 
         $validator
             ->allowEmpty('stuname');
@@ -55,7 +56,8 @@ class MfStuTable extends Table
             ->allowEmpty('stuyear');
 
         $validator
-            ->allowEmpty('stupass');
+            ->notEmpty('stupass','パスワードが入力されていません。')
+            ->lengthBetween('stupass',[4,20],'パスワードは4文字以上20文字未満です。');
 
         $validator
             ->integer('depnum')
@@ -77,5 +79,11 @@ class MfStuTable extends Table
             ->notEmpty('deleted_flg');
 
         return $validator;
+    }
+    public function findAuth($query, array $options)
+    {
+        $query->where(['mf_stu.deleted_flg' => 0, 'mf_stu.graduate_flg' => 0]);
+
+        return $query;
     }
 }

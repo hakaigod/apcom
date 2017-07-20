@@ -48,7 +48,7 @@
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu" role="menu">
-					<li><a href="#">ログアウト</a></li>
+					<li><a href="/apcom/logout">ログアウト</a></li>
 				</ul>
 			</li>
 		</div>
@@ -67,7 +67,7 @@
 		<div class="row">
 			<table class="table table-hover">
 				<?= $this->fetch('sidebar')?>
-				<tr class="danger"><td><a href="#">ログアウト</a></td></tr>
+				<tr class="danger"><td><a href="/apcom/logout">ログアウト</a></td></tr>
 			</table>
 		</div>
 	</div>
