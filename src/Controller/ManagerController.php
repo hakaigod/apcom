@@ -18,6 +18,8 @@ class ManagerController extends AppController
 
 		$this->loadComponent('Paginator');
 
+		// throw new NotFoundException();
+
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
 		$this->loadmodel('MfAdm');
@@ -147,6 +149,7 @@ class ManagerController extends AppController
 		}
 		$this->set(compact('questionsDetail'));
 
+		// 問題詳細
 		$selectAnswer = array();
 		foreach ($questionsDetail as $key) {
 			$selectAnswer += array($key['qesnum'] => array('answers' => array(0,0,0,0,0),'correct' => 0));
@@ -184,34 +187,6 @@ class ManagerController extends AppController
 		}
 
 	}
-
-	// 問題詳細
-	// public function questionDetail()
-	// {
-	// 	// レイアウト設定
-	// 	// $this->viewBuilder()->layout('addmod');
-	// 	$ex = $this->request->getQuery('ex');
-	// 	$qn = $this->request->getQuery('qn');
-	//
-	// 	$session = $this->request->session();
-	// 	$reqestimicode = $session->read(['reqestimicode']);
-	// 	$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
-	// 	->where([
-	// 		'imicode' => $reqestimicode,
-	// 		'qesnum' => $qn
-	// 	])
-	// 	->toArray();
-	// 	$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
-	// 	foreach ($selectAnswerQuerry as $key) {
-	// 		$selectAnswer['answers'][$key['rejoinder']]++;
-	// 		$selectAnswer['correct'] = $key['correct_answer'];
-	// 	}
-	// 	$this->set(compact('selectAnswer'));
-	//
-	// 	$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
-	// 	$this->set(compact('ex'));
-	// 	$this->set(compact('qn'));
-	// }
 
 	// 学生管理
 	public function stuManager()
