@@ -9,11 +9,6 @@
 ?>
 
 
-<!-- タイトルセット -->
-<?php $this->start('title'); ?>
-<?= "平成".$exams->jap_year . "年度". $exams->exaname ." 模擬試験" ?>
-<?php $this->end(); ?>
-
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
 <?= $this->Html->css('/private/css/Student/practiceexam.css') ?>

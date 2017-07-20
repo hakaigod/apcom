@@ -22,11 +22,6 @@
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-<!-- ユーザーネームセット -->
-<?php $this->start('username'); ?>
-managerrrrr
-<?php $this->end(); ?>
-
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a>トップページ</a></td></tr>

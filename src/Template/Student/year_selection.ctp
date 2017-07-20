@@ -22,11 +22,6 @@
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
 
-<!-- ユーザーネームセット -->
-<?php $this->start('username'); ?>
-managerrrrr
-<?php $this->end(); ?>
-
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><a>トップページ</a></td></tr>
@@ -54,8 +49,8 @@ managerrrrr
                 <table class="table table-bordered ">
                     <tr><th class="tableTitle col-xs-4">試験年度</th>
 	                    <th class="tableTitle col-xs-2">全国合格率</th>
-	                    <th class="tableTitle col-xs-2">前回の点数</th>
-	                    <th class="tableTitle col-xs-4">全体の平均点</th></tr>
+	                    <th class="tableTitle col-xs-3">前回の点数</th>
+	                    <th class="tableTitle col-xs-3">全体の平均点</th></tr>
                     <tbody>
 
                     <!--   行の要素   -->
@@ -81,7 +76,7 @@ managerrrrr
 							<!--	  全国合格率        -->
                             <td><?= number_format($passRate[$exam->exanum-1],1)."%" ?></td>
 	                        <!--	          -->
-	                        <td>77</td>
+	                        <td><?= $exanumLastScore[$exam->exanum]['exa_sum'] ?></td>
                             <!-- 各回の平均点-->
                             <td><?= $averages[$exam->exanum]; ?></td>
                         </tr>
