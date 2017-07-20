@@ -425,9 +425,9 @@ class StudentController extends AppController
 		$this->set(compact('average'));
 		//全体のジャンルごとの平均
 		$wholeAvg = [
-			round($imiQesAns[TfImiTable::TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
-			round($imiQesAns[TfImiTable::MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
-			round($imiQesAns[TfImiTable::STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
+			round($imiQesAns[TfImiTable::$TECH_NAME] / $imiQesAns->imipepnum * TECH_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$MAN_NAME] / $imiQesAns->imipepnum * MAN_WEIGHT,1),
+			round($imiQesAns[TfImiTable::$STR_NAME] / $imiQesAns->imipepnum * STR_WEIGHT,1)
 		];
 		$this->set(compact('wholeAvg'));
 		//問題:$questions
@@ -442,9 +442,9 @@ class StudentController extends AppController
 			->first();
 		//レーダーチャートに表示する、ユーザのジャンルごとの合計点:$userScore
 		$userScore = [
-			$score[TfSumTable::TECH_NAME] * TECH_WEIGHT,
-			$score[TfSumTable::MAN_NAME] * MAN_WEIGHT,
-			$score[TfSumTable::STR_NAME] * STR_WEIGHT];
+			$score[TfSumTable::$TECH_NAME] * TECH_WEIGHT,
+			$score[TfSumTable::$MAN_NAME] * MAN_WEIGHT,
+			$score[TfSumTable::$STR_NAME] * STR_WEIGHT];
 		$this->set(compact('userScore'));
 		if ( isset($score) && $score instanceof TfSum ) {
 			$score = $score->_getStudentSum();
@@ -460,9 +460,9 @@ class StudentController extends AppController
 		//ジャンルごとの分布:$barNumbers
 		$barNumNonZero = $this->TfSum->find()->select(
 			[ 'score_floor' => "TRUNCATE(("
-				. TfSumTable::TECH_NAME . "+"
-				. TfSumTable::MAN_NAME . "+"
-				. TfSumTable::STR_NAME . " ) * 1.25,-1)  ",
+				. TfSumTable::$TECH_NAME . "+"
+				. TfSumTable::$MAN_NAME . "+"
+				. TfSumTable::$STR_NAME . " ) * 1.25,-1)  ",
 			  'score_number' => 'count(*)' ])
 			->where(['imicode' => $imicode])
 			->group([ 'score_floor' ])->toArray();
