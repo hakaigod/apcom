@@ -17,8 +17,8 @@ class LoginController extends AppController
 
 
         $db['host'] = "localhost";  // DBサーバのURL
-        $db['user'] = "cakephp";  // ユーザー名
-        $db['pass'] = "pass";  // ユーザー名のパスワード
+        $db['user'] = "root";  // ユーザー名
+        $db['pass'] = "high01";  // ユーザー名のパスワード
         $db['dbname'] = "apcom";  // データベース名
 
 // エラーメッセージの初期化
