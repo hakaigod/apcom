@@ -33,6 +33,14 @@
 
 <!-- 以下content -->
 
+<?php if( !(isset($exams->exanum))):?>
+<br><br>
+<div class="alert alert-danger" role="alert">
+	※この模擬試験は実施されていません
+</div>
+<?php else: ?>
+
+
 <!--header-->
 <div class = "row">
 	<div class = "col-md-12">
@@ -137,6 +145,8 @@
 						<td class="col-xs-2">
 							<?php if($practice[$i] == $ansbox[$i - 1]->answer):  ?>
 								<p class="ans-check" id="correct">〇</p>
+							<?php elseif(!isset($practice[$i])): ?>
+								<p class="ans-check" >×</p>
 							<?php else :?>
 								<p class="ans-check" >×</p>
 							<?php endif; ?>
@@ -178,6 +188,7 @@
 </div>
 
 <br/><br/><br/>
+<?php endif; ?>
 
 
 

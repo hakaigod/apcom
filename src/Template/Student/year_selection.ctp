@@ -49,7 +49,7 @@
                 <table class="table table-bordered ">
                     <tr><th class="tableTitle col-xs-4">試験年度</th>
 	                    <th class="tableTitle col-xs-2">全国合格率</th>
-	                    <th class="tableTitle col-xs-3">前回の点数</th>
+	                    <th class="tableTitle col-xs-3">前回の模試の点数</th>
 	                    <th class="tableTitle col-xs-3">全体の平均点</th></tr>
                     <tbody>
 
