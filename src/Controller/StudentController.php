@@ -613,15 +613,18 @@ class StudentController extends AppController
 			$this->autoRender=FALSE;
 			$exaNum=$this->request->getData("exanum");
 			$queNum=$this->request->getData("quenum");
-			$question=$this->MfQes->find()
-				->contain(['MfExa','MfFie'])
-				->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
-				//1行だけ出力する
-				->first();
-			$question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
-			$question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
-			//問題内容の表示
-			$this->response->Body(json_encode($question));
+			if(ctype_digit($exaNum) && ctype_digit($queNum)){
+                $question=$this->MfQes->find()
+                    ->contain(['MfExa','MfFie'])
+                    ->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
+                    //1行だけ出力する
+                    ->first();
+                $question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
+                $question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
+                //問題内容の表示
+                $this->response->Body(json_encode($question));
+            }
+
 		}
 	}
 	//一問一答出題画面
