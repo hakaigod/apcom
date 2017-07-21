@@ -36,7 +36,7 @@
 <?php if( !(isset($exams->exanum))):?>
 <br><br>
 <div class="alert alert-danger" role="alert">
-	※この模擬試験は実施されていません
+	この模擬試験は実施されていません
 </div>
 <?php else: ?>
 

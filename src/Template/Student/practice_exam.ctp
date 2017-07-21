@@ -35,12 +35,12 @@
 <?php if( !(isset($exams->exanum))):?>
 	<br><br>
 	<div class="alert alert-danger" role="alert">
-		※この模擬試験は実施されていません
+		この模擬試験は実施されていません
 	</div>
 <?php elseif(!(isset($qes->qesnum))) :?>
 	<br><br>
 	<div class="alert alert-danger" role="alert">
-		※この問題は実施されていません
+		この問題は実施されていません
 	</div>
 <?php else: ?>
 	

@@ -637,7 +637,7 @@ class StudentController extends AppController
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
 	
-//結果画面
+	//結果画面
 	public function score(){
 		//セッション処理関数にデータを送る
 		$this->intoQes();
