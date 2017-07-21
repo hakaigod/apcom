@@ -1,0 +1,115 @@
+/*サイドバー*/
+#sidebar {
+    display: none;
+}
+
+@media (min-width: 300px) {
+    #sidebar {
+        width: 100vw;
+        height: auto;
+        background-color: ghostwhite;
+    }
+    #sidebar div table tr td a {
+        padding: 2px 0 2px 10px;
+    }
+    #sidebar div table {
+        margin: 0;
+    }
+}
+@media (min-width: 1000px) {
+    #sidebar {
+        width: calc(100% / 12 * 2);
+        height: auto;
+        background-color: transparent;
+    }
+    #sidebar div table tr td a {
+        padding: 10px 0 10px 10px;
+    }
+}
+
+
+#sidebar div *{
+
+}
+#sidebar div table tr td a {
+    display: block;
+}
+#list {
+    display: block;
+}
+
+.btn-hm {
+    font-size: 25px;
+    padding: 15px 0 15px 10px;
+    background-color: transparent;
+}
+.btn-hm:hover,
+.btn-hm:focus {
+    outline: none;
+    color: #aaaaaa;
+}
+/*サイドバー終わり*/
+
+/*ヘッダーナビゲーション*/
+.dropdown-img {
+    height: 25px;
+    width: 25px;
+    border-radius: 3px;
+}
+.navbar-text {
+    margin-left: 5px
+}
+/*ヘッダーナビゲーション終わり*/
+
+/*その他*/
+.center{
+    text-align: center;
+}
+.full {
+    width: 100%;
+}
+.floating {
+    position: fixed;
+    z-index: 1;
+}
+.all {
+    padding-top: 53px;
+}
+
+body {
+    /*font-size: 100%;*/
+    background-color: ghostwhite;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+}
+.col-md-12{
+    text-align: center ;
+}
+
+.checkbox{
+    text-align: right;
+}
+
+.col-lg-4{
+    border: solid 1px;
+}
+.row1{
+    padding: 20px 20px 20px 20px;
+}
+.col-lg-6{
+    border: solid;
+}
+#errormessage{
+
+}
+.col-lg-12{
+    margin: auto;
+
+}
+.waku{
+    border: 1px solid #aaa;
+    color: red;
+    text-align:center;
+}
+.pon{
+    font-size: 80%;
+}

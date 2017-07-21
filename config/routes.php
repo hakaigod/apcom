@@ -51,7 +51,6 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 //		 8桁の数字に制限、0始まりに対応
 		['id' => '\d{8}']
 	);
-	
 	$routes->connect(
 		'/updatePassword',
 		['controller' => 'student', 'action'=> 'updatePass']
@@ -97,6 +96,7 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
+	
 	
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
@@ -181,6 +181,15 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
+	 $routes->connect('/', ['controller' => 'Login', 'action' => 'index']);
+//	$routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
+
+    /**
+     * ...and connect the rest of 'Pages' controller's URLs.
+     */
+    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
 	$routes->connect('', ['controller' => 'Login', 'action' => 'index']);
 	$routes->connect('login', ['controller' => 'Login', 'action' => 'index']);
 	
@@ -204,7 +213,9 @@ Router::scope('/', function (RouteBuilder $routes) {
 });
 
 /**
-
+<<<<<<< HEAD
+ * Load all plugin routes.  See the Plugin documentation on
+=======
  * Load all plugin routes. See the Plugin documentation on
 >>>>>>> 06f60cc757dd0b5aa0de321dad87b35ae62b5ec7
  * how to customize the loading of plugin routes.
