@@ -16,7 +16,7 @@
     <!-- 自作CSS -->
     <?= $this->Html->css('/private/css/default.css') ?>
     <?= $this->Html->css('/private/css/flat_overwrite.css') ?>
-    <?= $this->Html->css('/private/css/Login/login.css') ?>
+    <?= $this->Html->css('/private/css/Login/Login.css') ?>
 
     <?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
     <?= $this->Html->script('video.js') ?>
