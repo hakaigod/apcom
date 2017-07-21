@@ -86,7 +86,6 @@ class StudentController extends AppController
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
-		
 	}
 	// パスワードハッシュ値返却
 	private function passHash($pass){
@@ -832,6 +831,9 @@ class StudentController extends AppController
 	
 	public function emitMessage( string $message )
 	{
+		if (!(in_array("redis",get_loaded_extensions(),TRUE))) {
+			return;
+		}
 		global $redis;
 		if ( !( isset($redis) ) ) {
 			
