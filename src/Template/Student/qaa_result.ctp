@@ -24,6 +24,8 @@ Student
 <?= $this->start('script');?>
 <script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setpagination.js"
         pgNum = '<?= json_safe_encode($pgNum); ?>'
+        server-addr = '<?= json_safe_encode($_SERVER['SERVER_ADDR']); ?>'
+        server-port = '<?= json_safe_encode($_SERVER['SERVER_PORT']); ?>'
 ></script>
 <?= $this->end();?>
 <!-- 以下content -->

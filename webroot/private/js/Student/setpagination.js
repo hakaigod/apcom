@@ -2,6 +2,8 @@
 //sessionStorageの情報を表示
 const $script = $('#script');
 const pgNum = JSON.parse($script.attr('pgNum'));
+const serverAddr = JSON.parse($script.attr('server-addr'));
+const serverPort = JSON.parse($script.attr('server-port'));
 
 $(function(){
 	"use strict";
@@ -43,7 +45,7 @@ $(function(){
 		let log =  JSON.parse(sessionStorage.getItem('num' + qBtnId));
 		// //値を送信
 		$.ajax({
-			url: "http://localhost:8080/apcom/student/qaaResult/1",
+			url: "http://" + serverAddr + ":"+ serverPort + "/apcom/student/qaaResult/1",
 			type: "POST",
 			data: {"exanum": log.exanum, "quenum": log.quesnum},
 			dataType: "json",

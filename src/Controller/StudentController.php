@@ -86,6 +86,7 @@ class StudentController extends AppController
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
+		
 	}
 	// パスワードハッシュ値返却
 	private function passHash($pass){
@@ -608,8 +609,21 @@ class StudentController extends AppController
 		//ルートから番号の取得(回答した回数になる)
 		$pgNum=$this->request->getParam('pagination_num');
 		$this->set(compact('pgNum'));
-		$qNum=$this->request->getData('qNum');
-		$this->set(compact('qNum'));
+		//ajaxで受信できてるか
+		if($this->request->is("ajax")) {
+			$this->autoRender=FALSE;
+			$exaNum=$this->request->getData("exanum");
+			$queNum=$this->request->getData("quenum");
+			$question=$this->MfQes->find()
+				->contain(['MfExa','MfFie'])
+				->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
+				//1行だけ出力する
+				->first();
+			$question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
+			$question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
+			//問題内容の表示
+			$this->response->Body(json_encode($question));
+		}
 	}
 	//一問一答出題画面
 	public function qaaQuestion()
