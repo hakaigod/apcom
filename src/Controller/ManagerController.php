@@ -62,6 +62,11 @@ class ManagerController extends AppController
 	// マネージャートップ画面
 	public function index()
 	{
+		// getのpageの値にマイナス値が入力されたら
+		if ($this->request->getQuery('page') < 0) {
+			$this->redirect(['action' => 'index']);
+		}
+
 		$query = $this->TfImi->find();
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
 

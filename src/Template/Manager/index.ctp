@@ -53,7 +53,7 @@
 			<tr>
 				<td class="col-xs-3" id="name">名前</td><td class="stusum">合計</td>
 				<?php for ($i = 0; $i < 10; $i++): ?>
-					<td id="ques">問<?= empty($_GET['page']) ? $i + 1 : $i + $_GET['page'] * 10 - 10; ?></td>
+					<td id="ques">問<?= empty($this->request->getQuery('page')) ? $i + 1 : $i + $_GET['page'] * 10 - 9; ?></td>
 				<?php endfor; ?>
 			</tr>
 			</thead>
@@ -72,7 +72,7 @@
 				<td><?= $average != 0 ? number_format($average * 1.25 ,2) . '点' : 0 . '点'; ?></td>
 
 				<?php for ($i = 0; $i < 10; $i++): ?>
-					<td>
+					<td class="right">
 						<?= number_format($questionsDetail[empty($_GET['page']) ? $i + 1 : $i + $_GET['page'] * 10 - 10]['corrects'] * 100, 0) . '%'; ?>
 					</td>
 				<?php endfor; ?>
@@ -83,23 +83,28 @@
 	</div>
 	<!-- ページネーター -->
 	<div class="center">
-		<?= $this->Paginator->counter(['format' => '{{page}} / {{pages}}']); ?>
 		<ul class="pagination-plain">
 			<!-- 最初,前へ　ボタン設置 -->
 			<?= $this->Paginator->first('<<'); ?>
-			<?= $this->Paginator->prev('<') ?>
+			<?php if (!empty($this->request->getQuery('page'))) echo $this->Paginator->prev('<'); ?>
 			<!-- 途中ページ　ボタン設置 -->
 			<?= $this->Paginator->numbers(); ?>
 			<!-- 次へ,最後　ボタン設置 -->
-			<?= $this->Paginator->next('>') ?>
+			<?php if ($this->request->getQuery('page') != 8) echo $this->Paginator->next('>'); ?>
 			<?= $this->Paginator->last('>>'); ?>
 		</ul>
 	</div>
 </div>
 <div class="row" id="correctRate">
 	<div class="col-xs-12">
-		<h6>正答率</h6>
-		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+		<h6 id="questionsDetailTitle">各問詳細</h6>
+		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+			<ol class="carousel-indicators">
+				<li class="active" data-target="#Carousel" data-slide-to="0"></li>
+				<?php for ($i = 1; $i < 8; $i++): ?>
+					<li data-target="#Carousel" data-slide-to="<?= $i?>"></li>
+				<?php endfor;?>
+			</ol>
 			<div class="carousel-inner" role="listbox">
 			<?php for ($j = 0; $j < 8; $j++): ?>
 				<?php if ($j == 0): ?>
@@ -117,14 +122,14 @@
 				</div>
 			<?php endfor;?>
 			</div>
-			<!-- <a class="left carousel-control" href="#Carousel" role="button" data-slide="prev">
+			<a class="left carousel-control" href="#Carousel" role="button" data-slide="prev">
 				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 				<span class="sr-only">前へ</span>
 			</a>
 			<a class="right carousel-control" href="#Carousel" role="button" data-slide="next">
 				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 				<span class="sr-only">次へ</span>
-			</a> -->
+			</a>
 		</div>
 	</div>
 </div>

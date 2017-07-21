@@ -88,3 +88,36 @@
 .modal-content {
 	padding: 0 20px 0 20px;
 }
+/*カルーセル*/
+.carousel-control {
+	top:50%;
+	bottom:50%;
+	text-shadow:0;
+	width:3%;
+	color: #2a6496;
+}
+#Carousel {
+	margin: 0 3%;
+}
+.carousel-control:hover,.carousel-control:focus {
+	color:#d82732;
+}
+
+.carousel-control.left {
+	left: -3%;
+}
+.carousel-control.right {
+	right:-3%;
+	left:auto;
+}
+.carousel-indicators li {
+	border:1px solid #2a6496;
+}
+.carousel-indicators .active {
+	border:1px solid #d82732;
+	background-color:#d82732
+}
+.carousel-indicators {
+	top: -12%;
+}
+/*カルーセル*/
