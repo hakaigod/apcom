@@ -639,9 +639,9 @@ class StudentController extends AppController
 		}
 	}
 	
+	//年度選択画面
 	public function yearSelection()
 	{
-		
 		//実施された本番一覧を取得
 		$exams=$this->MfExa->find()->toArray();
 		$this->set(compact('exams'));
@@ -657,7 +657,7 @@ class StudentController extends AppController
 		$imis = $this->TfImi->find()
 			//テーブル内のexanumから抽出する
 			->where(['TfImi.imicode IN' => array_column($sums,'imicode'),
-				'TfImi.exanum IN' => array_column($exams,'exanum')])
+			         'TfImi.exanum IN' => array_column($exams,'exanum')])
 			->toArray();
 		$this->set(compact('imis'));
 		
@@ -708,10 +708,6 @@ class StudentController extends AppController
 		//各年度の全国合格率(チンパン)
 		$passRate=[22.7,20.5,19.2,18.5,20.1,20.2,19.0,23.4,20.5,21.4];
 		$this->set(compact('passRate'));
-		
-		//年度選択画面→解答画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
-		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
-		$this->removeSession(['practiceAnswers']);
 	}
 	
 	//解答画面
@@ -719,17 +715,21 @@ class StudentController extends AppController
 	{
 		//exanumは文字列
 		$exanum = $this->request->getParam("exanum");
+		$this->set(compact('exanum'));
 		//qesnumは整数
 		$qesnum = $this->request->getParam("qesnum");
-		//POSTされたラジオボタンの値
-		$ansSelect = $this->request->getData('ansSelect');
-		$this->set(compact('exanum'));
 		
-		//保持してるラジオボタンの値を1問分返す
-		$ansed = $this->readSession(['practiceAnswers'])[$exanum][$qesnum];
-		$this->set(compact('ansed'));
 		
-		//実施された本番一覧を取得
+		//セッション処理関数にデータを送る
+		$this->intoQes();
+		if((1<=$qesnum and 80>=$qesnum)and(1<=$exanum and 10>=$exanum)) {
+			//保持してるラジオボタンの値を1問分返す
+			$ansed = $this->readSession(['practiceAnswers'])[$exanum][$qesnum];
+			$this->set(compact('ansed'));
+		}else{
+			return;
+		}
+		//実施された本番を取得
 		$exams = $this->MfExa->find()
 			//テーブル内のexanumから抽出する
 			->where(['MfExa.exanum' => $exanum])
@@ -741,9 +741,6 @@ class StudentController extends AppController
 			->where(['MfQes.qesnum' => $qesnum, 'MfQes.exanum' => $exanum])
 			->first();
 		$this->set(compact('qes'));
-		
-		//セッション処理関数にデータを送る
-		$this->intoQes();
 	}
 	
 	//全問試験用のセッション処理関数
@@ -757,18 +754,16 @@ class StudentController extends AppController
 		$this->set(compact('exanum'));
 		
 		//セッションpracticeAnswersが空なら80個のnullを入れて初期化する
-		if(empty($this->readSession(['practiceAnswers']))){
+		if(empty($this->readSession(['practiceAnswers', $exanum]))){
 			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
 			// practiceAnswersの中にexanumの配列を作る
 			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
 		}
-		
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
 	}
 	
-
-//結果画面
+	//結果画面
 	public function score(){
 		//セッション処理関数にデータを送る
 		$this->intoQes();
@@ -790,9 +785,13 @@ class StudentController extends AppController
 			->where(['MfQes.exanum' => $exanum])->toArray();
 		$this->set(compact('ansbox'));
 		
-		//保持しているラジオボタンの値を全て返す
-		$practice = $this->readSession(['practiceAnswers'])[$exanum];
-		$this->set(compact('practice'));
+		if(1<=$exanum and 10>=$exanum) {
+			//保持しているラジオボタンの値を全て返す
+			$practice = $this->readSession(['practiceAnswers'])[$exanum];
+			$this->set(compact('practice'));
+		}else{
+			return;
+		}
 		
 		//正答数をカウント
 		$sum=0;
@@ -812,7 +811,9 @@ class StudentController extends AppController
 		
 		//結果画面→年度選択画面に戻り、今度は別の年度の問題を解こうとした際に
 		//残ったセッションが影響し、正答数カウントの無限ループが行われたため、セッションを削除
-		$this->removeSession(['practiceAnswers']);
+		//※複数のタブで違う年度の問題を解く場合、結果画面で全ての年度のセッションを削除しないように
+		//　$exanumを入れて結果画面に遷移した年度のセッションのみ削除
+		$this->removeSession(['practiceAnswers', $exanum]);
 	}
 	
 	public function emitMessage( string $message )
