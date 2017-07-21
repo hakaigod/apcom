@@ -81,7 +81,7 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">ログアウト</a></li>
+                        <li><a href="/apcom/logout">ログアウト</a></li>
                     </ul>
                 </li>
             </div>

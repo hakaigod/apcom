@@ -71,7 +71,7 @@
 				<td>平均</td>
 				<td><?= $average != 0 ? number_format($average * 1.25 ,2) . '点' : 0 . '点'; ?></td>
 				<?php foreach ($questionsDetail as $par): ?>
-					<td>
+					<td class="right">
 						<?= number_format($par['corrects'] * 100, 0) . '%'; ?>
 					</td>
 				<?php endforeach; ?>
