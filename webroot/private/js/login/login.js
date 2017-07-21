@@ -35,22 +35,26 @@ $(function() {
 
         var defaultsrc = $('#img').attr('src');
         var imgurl = $('#regnum').val();
-
+        window.alert("pkoiouytrd");
         if(imgurl.length === 8 && imgurl.length === (imgurl.replace(/[^0-9]+/)).length) {
-            $('#img').attr('src', $('#img').attr('src').replace(/[0-9]+/, imgurl));
+            window.alert("45845");
+           var nextimg = $('#img').attr('src').replace(/[0-9]+/, imgurl);
 
+
+            var $interval =3000;
+            setInterval(function(){
+                    $("#img").fadeOut("slow",function() {
+                        $('#img').attr("src",nextimg);
+                        $('#img').fadeIn();
+                    });
+            },$interval);
+           // $('#img').attr('src', nextimg);
+            window.alert("a");
             $('#img').error(function() {
                 //置換処理
                 $('#img').attr('src',defaultsrc);
             });
         }
-    });
-
-
-
-    $('#forget').click(function(){
-        window.alert("先生に聞いてねはーと");
-        return false;
     });
 
 });
