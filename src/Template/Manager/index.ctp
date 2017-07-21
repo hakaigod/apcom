@@ -52,9 +52,9 @@
 			<thead>
 			<tr>
 				<td class="col-xs-3" id="name">名前</td><td class="stusum">合計</td>
-				<?php foreach ($questions as $key): ?>
-					<td id="ques"><?= "問" . $key['qesnum']; ?></td>
-				<?php endforeach; ?>
+				<?php for ($i = 0; $i < 10; $i++): ?>
+					<td id="ques">問<?= empty($_GET['page']) ? $i + 1 : $i + $_GET['page'] * 10 - 10; ?></td>
+				<?php endfor; ?>
 			</tr>
 			</thead>
 			<tbody>
@@ -70,11 +70,13 @@
 			<tr>
 				<td>平均</td>
 				<td><?= $average != 0 ? number_format($average * 1.25 ,2) . '点' : 0 . '点'; ?></td>
-				<?php foreach ($questionsDetail as $par): ?>
+
+				<?php for ($i = 0; $i < 10; $i++): ?>
 					<td>
-						<?= number_format($par['corrects'] * 100, 0) . '%'; ?>
+						<?= number_format($questionsDetail[empty($_GET['page']) ? $i + 1 : $i + $_GET['page'] * 10 - 10]['corrects'] * 100, 0) . '%'; ?>
 					</td>
-				<?php endforeach; ?>
+				<?php endfor; ?>
+
 			</tr>
 			</tbody>
 		</table>
@@ -97,13 +99,33 @@
 <div class="row" id="correctRate">
 	<div class="col-xs-12">
 		<h6>正答率</h6>
-		<?php $i = 0; foreach ($questionsDetail as $key): ?>
-			<div class="col-par-5" id="<?= 'q' . $i?>">
-				<div class="qno"><a data-toggle="modal" data-target="#myModal<?= $i ?>">問 <?= $key['qesnum']; ?></a></div>
-				<div id="question"><?= mb_strimwidth(strip_tags($key['question']), 0, 40, "..."); ?></div>
-				<div class="par"><b class="parnum"><?= number_format($key['corrects'] * 100, 1); ?></b>%</div>
+		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+			<div class="carousel-inner" role="listbox">
+			<?php for ($j = 0; $j < 8; $j++): ?>
+				<?php if ($j == 0): ?>
+					<div class="item active">
+				<?php else: ?>
+					<div class="item">
+				<?php endif; ?>
+				<?php for ($i = 1; $i <= 10; $i++): ?>
+					<div class="col-par-5" id="<?= 'q' . $i?>">
+						<div class="qno"><a data-toggle="modal" data-target="#myModal<?= $j * 10 + $i ?>">問 <?= $questionsDetail[$j * 10 + $i]['qesnum']; ?></a></div>
+						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 40, "..."); ?></div>
+						<div class="par"><b class="parnum"><?= number_format($questionsDetail[$j * 10 + $i]['corrects'] * 100, 1); ?></b>%</div>
+					</div>
+				<?php endfor;?>
+				</div>
+			<?php endfor;?>
 			</div>
-		<?php $i++;endforeach; ?>
+			<!-- <a class="left carousel-control" href="#Carousel" role="button" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				<span class="sr-only">前へ</span>
+			</a>
+			<a class="right carousel-control" href="#Carousel" role="button" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				<span class="sr-only">次へ</span>
+			</a> -->
+		</div>
 	</div>
 </div>
 
@@ -130,7 +152,7 @@
 	</div>
 </div>
 
-<?php $i = 0; foreach ($questions as $key):?>
+<?php $i = 1; foreach ($questions as $key):?>
 	<!-- モーダル -->
 	<div class="modal fade" id="myModal<?= $i ?>">
 		<div class="modal-dialog">

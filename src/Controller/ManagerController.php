@@ -90,38 +90,17 @@ class ManagerController extends AppController
 		$ans = $this->TfAns->find()->contain(['MfStu'])
 		->where(['imicode' => $reqestimicode])
 		->group(['imicode', 'qesnum', 'TfAns.regnum'])
-		->order(['qesnum', 'TfAns.regnum' =>'DESC'])
-		->limit(($imipepnum * 10));
-		if (!empty($this->request->getQuery('page'))) {
-			$ans->offset($this->request->getQuery('page') * 10 - 10);
-		}
-		// ページネーターセット
-		$this->paginate['limit'] = $imipepnum * 10;
-		$this->paginate($ans);
+		->order(['qesnum', 'TfAns.regnum' =>'DESC']);
 
-		// 回答データを連想配列に格納
-		$answers = array();
-		$work = null;
-		$i = 0;
-		$ansJa = ['', 'ア', 'イ', 'ウ', 'エ'];
-		foreach ($ans as $key) {
-			if(isset($answers[$key->regnum])){
-				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa[$key->rejoinder]);
-			} else {
-				$query = $this->TfSum->get([$key->regnum, $reqestimicode]);
-				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
-			}
-		}
-		$this->set(compact('answers'));
 
 		// 問題情報取得
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
 		$questions = $this->MfQes->find()->contain('MfExa')->where(['MfExa.exanum' => $exanum]);
 
-		if (!empty($this->request->getQuery('page'))) {
-			$questions->offset($this->request->getQuery('page') * 10 - 10);
-		}
-		$questions->order(['qesnum'])->limit(10);
+		// if (!empty($this->request->getQuery('page'))) {
+		// 	$questions->offset($this->request->getQuery('page') * 10 - 10);
+		// }
+		// $questions->order(['qesnum'])->limit(10);
 
 		// 正答率
 		$questionsDetail = array();
@@ -162,6 +141,29 @@ class ManagerController extends AppController
 		$this->set(compact('selectAnswer'));
 		$this->set(compact('questions'));
 		// ここまで正答率
+
+		$ans->limit(($imipepnum * 10));
+		if (!empty($this->request->getQuery('page'))) {
+			$ans->offset($this->request->getQuery('page') * 10 - 10);
+		}
+		// ページネーターセット
+		$this->paginate['limit'] = $imipepnum * 10;
+		$this->paginate($ans);
+
+		// 回答データを連想配列に格納
+		$answers = array();
+		$work = null;
+		$i = 0;
+		$ansJa = ['', 'ア', 'イ', 'ウ', 'エ'];
+		foreach ($ans as $key) {
+			if(isset($answers[$key->regnum])){
+				$answers[$key->regnum]['answers'] += array('ans'. $i++ => $ansJa[$key->rejoinder]);
+			} else {
+				$query = $this->TfSum->get([$key->regnum, $reqestimicode]);
+				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
+			}
+		}
+		$this->set(compact('answers'));
 
 		// 模擬試験一覧
 		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
