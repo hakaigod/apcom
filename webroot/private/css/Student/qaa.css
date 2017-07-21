@@ -172,6 +172,20 @@
     text-align: right;
     margin-bottom: 10px;
 }
+
+.pagination-plain{
+    text-align: center;
+}
+
+.pagination-plain li{
+    display: inline;
+    margin: 5px;
+}
+
+.return-selectgenre{
+    text-align: center;
+}
+
 /*テスト用 外枠表示*/
     /*#col-main * {*/
     /*border: solid 1px black;*/
