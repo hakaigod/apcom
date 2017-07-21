@@ -5,8 +5,6 @@ const webroot = $script.attr('webroot');
 $(function () {
     "use strict";
     let count=4;
-    // location.href = webroot;
-
     setInterval(function () {
         //1秒ごとにカウントダウンのため画面の更新を行う
         $('#countdown').text(count);

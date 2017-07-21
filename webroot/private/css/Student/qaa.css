@@ -41,7 +41,7 @@
     left: 0;
     padding: 0px 20px;
     font-size: inherit;
-    background-color: ghostwhite;
+    background-color: transparent;
     transform: translateY(-35%) translateX(1em);
     font-weight: bold;
 }
@@ -148,6 +148,42 @@
 /*エラー警告画面*/
 #qaa-alert{
     margin: 20px;
+}
+
+/*qaaResult*/
+#log-table{
+    margin-top: 20px;
+}
+#result-table{
+    margin-top: 20px;
+}
+#qaa-answerpic{
+    margin: 10px;
+    text-align: center;
+}
+#log-yourans{
+    background: linear-gradient(transparent 15%, #ffff66);
+    vertical-align: middle;
+    text-align: right;
+}
+#log-ans{
+    background: linear-gradient(transparent 15%, #ff99ff);
+    vertical-align: middle;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.pagination-plain{
+    text-align: center;
+}
+
+.pagination-plain li{
+    display: inline;
+    margin: 5px;
+}
+
+.return-selectgenre{
+    text-align: center;
 }
 
 /*テスト用 外枠表示*/

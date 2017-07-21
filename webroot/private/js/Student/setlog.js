@@ -6,9 +6,12 @@ const quesnum = JSON.parse($script.attr('quesnum'));
 const answer = JSON.parse($script.attr('answer'));
 const field = JSON.parse($script.attr('field'));
 const detail = JSON.parse($script.attr('detail'));
+const exanum = JSON.parse($script.attr('exanum'));
+const quenum = JSON.parse($script.attr('quenum'));
 $(function() {
     "use strict";
     let falsehood = "未回答";
+    let yourSelect = "未回答";
     //正誤処理
     $('.choice').click(function (){
         //全てのボタンの無効化
@@ -22,6 +25,7 @@ $(function() {
             document.getElementById("qaa-falsehood").innerHTML = "不正解"+"<br>"+"正解："+ans[answer-1];
             falsehood = "不正解";
         }
+	        yourSelect = $(this).val();
     });
     //セッションへの保存処理
     $('form').submit(function() {
@@ -33,9 +37,10 @@ $(function() {
                 'answer':answer,
                 'field':field,
                 'detail':detail,
-                'falsehood':falsehood
+                'falsehood':falsehood,
+                'exanum':exanum,
+                'yourSelect':yourSelect
             };
-
             let list = JSON.stringify(answerLog);
             sessionStorage.setItem("num" + qnum,list);
         }

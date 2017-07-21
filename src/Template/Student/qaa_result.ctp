@@ -22,7 +22,7 @@ Student
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }?>
 <?= $this->start('script');?>
-<script id="script" src="<?= $this->request->getAttribute('webroot') ;?>/private/js/Student/setpagination.js"
+<script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setpagination.js"
         pgNum = '<?= json_safe_encode($pgNum); ?>'
 ></script>
 <?= $this->end();?>
@@ -48,9 +48,65 @@ Student
         </tr>
         </thead>
     </table>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        <!-- ここに出題番号 出典を表示  -->
+                        <div id="question-title"></div>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" id="result-contents">
+                        <!-- 問題を表示 -->
+                        <div id="question-sentence"></div>
+                        <!--選択肢が画像の場合に表示 -->
+                        <div id="qaa-answerpic"></div>
+                        <!-- 選択肢を表示 -->
+                        <table class="table table-bordered table-striped" id="result-table">
+                            <tr>
+                                <td>ア</td>
+                                <td><div id="question-choice1"></div></td>
+                            </tr>
+                            <tr>
+                                <td>イ</td>
+                                <td><div id="question-choice2"></div></td>
+                            </tr>
+                            <tr>
+                                <td>ウ</td>
+                                <td><div id="question-choice3"></div></td>
+                            </tr>
+                            <tr>
+                                <td>エ</td>
+                                <td><div id="question-choice4"></div></td>
+                            </tr>
+                        </table>
+                        <div id="log-yourans"></div>
+                        <div id="log-ans"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary full" data-dismiss="modal">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ページネーター -->
     <div class="col-md-12">
         <div class="row">
-            <div class="">
+            <ul class="pagination-plain">
+                <li id="pagination-number">
+                    <form method="post" id="form-pgnation">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="return-selectgenre">
                 <?= $this->HTML->Link('ジャンル選択に戻る',['class'=>'button','action'=>'qaaSelectGenre'])?>
             </div>
         </div>
