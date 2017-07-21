@@ -107,7 +107,7 @@
                 <div class="row">
                     <table class="table table-hover">
 						<?= $this->fetch('sidebar')?>
-                        <tr class="danger"><td><a href="#">ログアウト</a></td></tr>
+                        <tr class="danger"><td><a href="/apcom/logout">ログアウト</a></td></tr>
                     </table>
                 </div>
             </div>

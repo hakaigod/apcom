@@ -18,8 +18,9 @@ class LogoutController extends AppController
     public function initialize(){
         parent::initialize();
         $this->viewBuilder()->layout('logout');
-
-
+	
+	
+	    
 
     }
     public function logout(){
@@ -33,6 +34,9 @@ class LogoutController extends AppController
     public function index()
     {
         $session = $this->request->session();
+	    if(empty($session->read('username') ) || empty($session->read('role')) || empty($session->read('userID'))){
+		    $this->redirect([ 'controller' => 'Login','action' => 'index']);
+	    }
         $session->destroy();
     }
 

@@ -16,7 +16,7 @@
     <!-- 自作CSS -->
     <?= $this->Html->css('/private/css/default.css') ?>
     <?= $this->Html->css('/private/css/flat_overwrite.css') ?>
-    <?= $this->Html->css('/private/css/logout/logout.css') ?>
+    <?= $this->Html->css('/private/css/Logout/logout.css') ?>
 
     <?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
     <?= $this->Html->script('video.js') ?>
@@ -33,7 +33,7 @@
 
     <!-- login   -->
 
-    <?= $this->Html->script('/private/js/logout/logout.js') ?>
+    <?= $this->Html->script('/private/js/Logout/logout.js') ?>
 
 </head>
 <body>
