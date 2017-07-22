@@ -38,7 +38,7 @@
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
-    <div class="container-fluid">
+    <div class="col-xs-12">
         <div class="navbar-header">
             <a class="navbar-brand" href="">
                 <img src="<?= $this->request->webroot ?>img/logo.png" class="nabvar-img">

@@ -18,10 +18,7 @@ class LogoutController extends AppController
     public function initialize(){
         parent::initialize();
         $this->viewBuilder()->layout('logout');
-	
-	
 	    
-
     }
     public function logout(){
 

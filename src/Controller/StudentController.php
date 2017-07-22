@@ -11,6 +11,7 @@ use App\Model\Table\TfImiTable;
 use App\Model\Table\TfSumTable;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\ConnectionManager;
+use Cake\Network\Exception\ForbiddenException;
 use Cake\ORM\Query;
 use Cake\Auth\DefaultPasswordHasher;
 
@@ -49,26 +50,24 @@ class StudentController extends AppController
 		$this->loadModel('TfSum');
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
-		//分野モデル読み込み
-		$this->loadModel('MfFie');
 		//試験モデル読み込み
 		$this->loadModel('MfExa');
-		//管理者モデル読み込み
-		$this->loadModel('MfAdm');
+		
 
-		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
-		$roleFromSsn = $this->readSession(['role']);
 		if ($idFromSsn == null) {
 			//セッションにIDが無いとき
-			$this->log("Any regnum is found in session");
 			$this->redirect([ 'controller' => 'Login', 'action' => 'index']);
 			return;
-		}else if ($regnumFromReq != null && $roleFromSsn != 'manager' && $regnumFromReq != $idFromSsn) {
-			//セッションの学籍番号とURLの学籍番号が違うとき、セッションの方にリダイレクト
-			$this->log("The required regnum is not your regnum in session");
-			$this->redirect([ 'controller' => 'student', 'action' => 'summary', 'id' => $idFromSsn ]);
-			return;
+		}
+		$roleFromSsn = $this->readSession(['role']);
+		if ($roleFromSsn ==='manager' && !(in_array($this->request->getParam("action"),["summary","result"]))) {
+			throw new ForbiddenException();
+		}
+		$regnumFromReq = $this->request->getParam('id');
+		if ($regnumFromReq != null && $roleFromSsn === 'student' && $regnumFromReq != $idFromSsn) {
+			//セッションの学籍番号とURLの学籍番号が違うとき Forbidden
+			throw new ForbiddenException();
 		}
 		$username = $this->readSession([ 'username' ]);
 		$this->set('username',$username);
@@ -76,12 +75,22 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
+			//グラフに表示するための生徒名
 			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
+			//ロゴのリンク
 			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
+			//ハンバーガーメニュー(トップはlogLinkを流用、ログアウトはdefault.ctp)
+			$this->set("hamMenu", [
+				"学生情報管理" =>["controller" => "manager","action" => "stuManager"],
+				"学科管理" =>["controller" => "manager","action" => "depManager"],
+				"管理者管理" =>["controller" => "manager","action" => "adminManager"] ]);
 		}else{
 			$this->set("studentName", $username);
 			$this->set("logoLink", ["controller" => "student","action" => "summary","id" => $idFromSsn]);
-			
+			$this->set("hamMenu", [
+				                    "過去問演習" =>["action" => "yearSelection"],
+				                    "一問一答" =>["action" => "qaaSelectGenre"],
+				                    "パスワード更新" => ["action" => "updatePass"]]);
 		}
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
@@ -101,6 +110,9 @@ class StudentController extends AppController
 	//パスワード更新
 	public function updatePass(){
 		
+		if ($this->request->session()->read('role') ==="manager" ) {
+			$this->redirect(["controller" => "Manager", "action" => "index"] );
+		}
 		
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
@@ -169,7 +181,6 @@ class StudentController extends AppController
 		$userAvg = $wholeAvg = [ "count" => 0, "tech" => 0, "man" => 0, "str" => 0 ];
 		foreach ($imitations as $imi) {
 			if ( !( $imi instanceof TfImi) ) {
-				$this->log('$imi is not instanceof TfImi');
 				return;
 			}
 			$imicode = $imi->imicode;
@@ -179,7 +190,6 @@ class StudentController extends AppController
 			if ((count($imi['tf_sum']) === 1) ) {
 				$tfSumEntity = $imi['tf_sum'][0];
 				if ( !($tfSumEntity instanceof TfSum)) {
-					$this->log('$tfSumEntity is not instanceof TfSum');
 					return;
 				}
 				$score = $tfSumEntity->_getStudentSum();
@@ -249,7 +259,6 @@ class StudentController extends AppController
 		//模擬試験コードから試験実施年度と季節,問題を取得
 		$imitation = $this->TfImi->getOneAndQes($imicode,Q_NUM_PER_PAGE,$curNum);
 		if (!isset($imitation) || !($imitation instanceof TfImi)) {
-			$this->log('failed to get an imitation entity');
 			return;
 		}
 		$imiName = $imitation->_getName($this->TfImi);
@@ -302,7 +311,6 @@ class StudentController extends AppController
 		$befNum = $request->getData("curNum");
 		//模擬試験コードか遷移元のページ番号がセットされていない場合何もしない
 		if (!isset($imicode) or !isset($befNum)) {
-			$this->log("imicode or befNum are not set");
 			return;
 		}
 		//すでに書いたページ番号にtrueを設定
@@ -369,14 +377,12 @@ class StudentController extends AppController
 		//もし一つでも未入力の場合は何もしない
 		if ( !($this->isAnsweredAll($this->getNotAnsed($imicode))) ) {
 			$this->set('answeredAll',false);
-			$this->log('All rejoinders should be inputted.');
 			return;
 		}
 		$this->set('answeredAll',true);
 		$corrects = $this->TfImi->getOneAndQes($imicode,Q_TOTAL_NUM);
 		if ($corrects === null) {
 			$this->set('imicodeInRange',false);
-			$this->log('imicode is out of range.');
 			return;
 		}
 		$this->set('imicodeInRange',true);
@@ -428,11 +434,9 @@ class StudentController extends AppController
 			$result = $connection->transactional(function ( $connection ) use ( $insertAnsQuery, $insertSumQuery ) {
 				$insertSumQuery->execute();
 				$insertAnsQuery->execute();
-				$this->log("transaction is successfully executed");
 				return true;
 			});
 		}catch (\PDOException $e) {
-			$this->log($e->getMessage());
 		}
 		$this->set(compact('result'));
 		//結果画面にリダイレクト
@@ -460,7 +464,6 @@ class StudentController extends AppController
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
 		if ( $imiQesAns === null ) {
-			$this->log("imicode is out of range");
 			return;
 		}
 		//本番試験コード
@@ -605,6 +608,8 @@ class StudentController extends AppController
 	}
 	//一問一答結果画面
 	public function qaaResult(){
+		//分野モデル読み込み
+		$this->loadModel('MfFie');
 		//ルートから番号の取得(回答した回数になる)
 		$pgNum=$this->request->getParam('pagination_num');
 		$this->set(compact('pgNum'));
@@ -627,6 +632,8 @@ class StudentController extends AppController
 	//一問一答出題画面
 	public function qaaQuestion()
 	{
+		//分野モデル読み込み
+		$this->loadModel('MfFie');
 		//qaaSelectGenre 選択したジャンルの取得
 		$getGenre=$this->request->getData('genre');
 		//取得ジャンルが正しく受け取れていない場合、エラー表示を行い、ジャンル選択画面に遷移させる
