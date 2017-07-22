@@ -5,7 +5,6 @@
 
 <!-- CSSセット -->
 <?= $this->start('css'); ?>
-<?= $this->Html->css('/private/css/ap.css') ?>
 <?= $this->Html->css('/private/css/Manager/index.css') ?>
 <?= $this->end(); ?>
 
@@ -14,11 +13,6 @@
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?= $this->Html->script('/private/js/Manager/autoload.js') ?>
 <?= $this->end(); ?>
-<?php
-	function json_safe_encode($data){
-	    return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-	}
-?>
 
 
 <!-- サイドバーセット -->
@@ -28,9 +22,9 @@
 <tr><td><?= $this->Html->link("学科管理",["action" => "depManager"]);?></td></tr>
 <tr><td><?= $this->Html->link("管理者管理",["action" => "adminManager"]);?></td></tr>
 <tr><td>
-		<a onclick="window.open( '<?=$this->Url->build(['action'=>'imiCodeIssue'])?>'
-		,'模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a>
-	</td></tr>
+	<a onclick="window.open( '<?=$this->Url->build(['action'=>'imiCodeIssue'])?>'
+	,'模擬試験コード発行','width=500,height=400');">模擬試験コード発行</a>
+</td></tr>
 <?= $this->end(); ?>
 
 <!-- 以下content -->
@@ -98,7 +92,7 @@
 <div class="row" id="correctRate">
 	<div class="col-xs-12">
 		<h6 id="questionsDetailTitle">各問詳細</h6>
-		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="6000">
 			<ol class="carousel-indicators">
 				<li class="active" data-target="#Carousel" data-slide-to="0"></li>
 				<?php for ($i = 1; $i < 8; $i++): ?>
@@ -114,9 +108,13 @@
 				<?php endif; ?>
 				<?php for ($i = 1; $i <= 10; $i++): ?>
 					<div class="col-par-5" id="<?= 'q' . $i?>">
-						<div class="qno"><a data-toggle="modal" data-target="#myModal<?= $j * 10 + $i ?>">問 <?= $questionsDetail[$j * 10 + $i]['qesnum']; ?></a></div>
+						<div class="qno">
+							<a href="<?= $this->Url->build(['action' => 'question_detail', 'ex'=> $questionsDetail[$j * 10 + $i]['exanum'], 'qn' => $questionsDetail[$j * 10 + $i]['qesnum']])?>" data-toggle="modal" data-target="#myModal<?= $j * 10 + $i ?>">
+								問 <?= $questionsDetail[$j * 10 + $i]['qesnum']; ?>
+							</a>
+						</div>
 						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 40, "..."); ?></div>
-						<div class="par"><b class="parnum"><?= number_format($questionsDetail[$j * 10 + $i]['corrects'] * 100, 1); ?></b>%</div>
+						<div class="par right"><b class="parnum"><?= number_format($questionsDetail[$j * 10 + $i]['corrects'] * 100, 1); ?></b>%</div>
 					</div>
 				<?php endfor;?>
 				</div>
@@ -140,7 +138,10 @@
 		<table class="table table-bordered table-striped">
 			<thead>
 			<tr>
-				<td class="col-xs-2">回数</td><td class="col-xs-4">試験名</td><td class="col-xs-3">受験者数</td><td class="col-xs-3">平均点</td>
+				<td class="col-xs-2">回数</td>
+				<td class="col-xs-4">試験名</td>
+				<td class="col-xs-3">受験者数</td>
+				<td class="col-xs-3">平均点</td>
 			</tr>
 			</thead>
 			<tbody>
@@ -157,86 +158,12 @@
 	</div>
 </div>
 
-<?php $i = 1; foreach ($questions as $key):?>
+<?php for ($i = 0; $i < 80; $i++): ?>
 	<!-- モーダル -->
-	<div class="modal fade" id="myModal<?= $i ?>">
+	<div class="modal fade" id="myModal<?= $i + 1 ?>">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" ><?= $key->mf_exa->exam_detail . '　問' . $key->qesnum; ?></h4>
-				</div>
-				<div class="modal-body">
-					<!-- 問題文 -->
-					<!-- 問題画像があれば表示される -->
-					<div class="row" id="question">
-						<?= $this->qaa->viewTextImg($key->question)?>
-					</div>
-
-					<?php if(empty($key->answer_pic)): ?>
-						<!-- 選択肢が画像ではない場合 -->
-						<div class="row" id="choice">
-							<table class="table table-bordered">
-								<tbody>
-									<tr>
-										<td class="col-xs-1">ア</td>
-										<td><?= $this->qaa->viewTextImg($key->choice1)?></td>
-									</tr>
-									<tr>
-										<td class="col-xs-1">イ</td>
-										<td><?= $this->qaa->viewTextImg($key->choice2)?></td>
-									</tr>
-									<tr>
-										<td class="col-xs-1">ウ</td>
-										<td><?= $this->qaa->viewTextImg($key->choice3)?></td>
-									</tr>
-									<tr>
-										<td class="col-xs-1">エ</td>
-										<td><?= $this->qaa->viewTextImg($key->choice4)?></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					<?php else:?>
-						<!-- 選択肢が画像の場合 -->
-						<div class="row" id="choice">
-							<div class="center">
-								<?= $this->qaa->viewTextImg($key->answer_pic)?>
-							</div>
-						</div>
-					<?php endif;?>
-
-					<div class="row">
-						<p>正解 :
-							<?php switch ($selectAnswer[$key['qesnum']]['correct']) {
-								case 1: echo "ア"; break;
-								case 2: echo "イ"; break;
-								case 3: echo "ウ"; break;
-								default: echo "エ"; break;
-							}?>
-						</p>
-					</div>
-
-					<!-- 各選択肢の選択率グラフ -->
-					<div class="row">
-						<canvas id="myChart<?= $i ?>" height="50"></canvas>
-
-						<script type="text/javascript">
-							var num = <?= $i?>;
-						</script>
-						<script type="text/javascript" id="script<?= $i ?>"
-							src="<?= $this->request->getAttribute('webroot')?>private/js/Manager/selectAnswerRate.js"
-							data-select = '<?= json_safe_encode($selectAnswer[$key['qesnum']]['answers']); ?>'
-							data-correct = '<?= json_safe_encode($selectAnswer[$key['qesnum']]['correct']); ?>'
-						></script>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
 			</div>
 		</div>
 	</div>
-<?php $i++; endforeach;?>
+<?php endfor;?>

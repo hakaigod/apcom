@@ -171,7 +171,7 @@ class ManagerController extends AppController
 		$this->set(compact('answers'));
 
 		// 模擬試験一覧
-		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode'])->toArray();
 		$arrayimis = array();
 		$work = null;
 		// 模擬試験の回数を数える
@@ -183,16 +183,43 @@ class ManagerController extends AppController
 			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->strategy_imisum + $key->technology_imisum + $key->management_imisum));
 			$work = $key->exanum;
 		}
-		array_multisort($arrayimis, SORT_DESC);
-		$this->set('imidata', $arrayimis);
-
 		// タイトルセット
 		if (empty($this->request->getQuery('id')) || $this->request->getQuery('id') == $nearimi) {
 			$this->set('detailExamName', '直近一回分');
 		} else {
 			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
+		array_multisort($arrayimis, SORT_DESC);
+		$this->set('imidata', $arrayimis);
+		
+	}
 
+	// 問題詳細
+	public function questionDetail()
+	{
+		// レイアウト設定
+		// $this->viewBuilder()->layout('addmod');
+		$ex = $this->request->getQuery('ex');
+		$qn = $this->request->getQuery('qn');
+
+		$session = $this->request->session();
+		$reqestimicode = $session->read(['reqestimicode']);
+		$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
+		->where([
+			'imicode' => $reqestimicode,
+			'qesnum' => $qn
+		])
+		->toArray();
+		$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
+		foreach ($selectAnswerQuerry as $key) {
+			$selectAnswer['answers'][$key['rejoinder']]++;
+			$selectAnswer['correct'] = $key['correct_answer'];
+		}
+		$this->set(compact('selectAnswer'));
+
+		$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
+		$this->set(compact('ex'));
+		$this->set(compact('qn'));
 	}
 
 	// 学生管理

@@ -1,3 +1,6 @@
+#col-main {
+	margin-bottom: 25vh;
+}
 /*結果表示部分*/
 #AMresult table thead tr #name {
 	max-width: 20%;
@@ -118,6 +121,7 @@
 	background-color:#d82732
 }
 .carousel-indicators {
+	bottom: auto;
 	top: -12%;
 }
 /*カルーセル*/
