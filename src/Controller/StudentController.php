@@ -95,7 +95,9 @@ class StudentController extends AppController
 		//リンクを生成するための学籍番号:$studentID
 		$this->set("studentID",$regnumFromReq);
 		$this->set("role", $roleFromSsn);
+//		$this->emitMessage("試験演習を終えました");
 	}
+	
 	// パスワードハッシュ値返却
 	private function passHash($pass){
 		$hasher = new DefaultPasswordHasher();
@@ -218,8 +220,6 @@ class StudentController extends AppController
 		//全体のジャンルごとの平均:$wholeAvg
 		$this->set(compact('wholeAvg'));
 		
-		$this->emitMessage($this->readSession(['username']) . "さんがトップページに来ました");
-//		$this->emitMessage(rand(0,100));
 	}
 	
 	//ジャンルごとの合計をとる
@@ -778,6 +778,8 @@ class StudentController extends AppController
 			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
 			// practiceAnswersの中にexanumの配列を作る
 			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
+			
+			$this->emitMessage("試験演習を始めました");
 		}
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);
@@ -834,10 +836,14 @@ class StudentController extends AppController
 		//※複数のタブで違う年度の問題を解く場合、結果画面で全ての年度のセッションを削除しないように
 		//　$exanumを入れて結果画面に遷移した年度のセッションのみ削除
 		$this->removeSession(['practiceAnswers', $exanum]);
+		
+		$this->emitMessage("試験演習を終えました");
 	}
 	
 	public function emitMessage( string $message )
 	{
+		
+		$message = $this->readSession(['username']) . "さんが" . $message;
 		if (!(in_array("redis",get_loaded_extensions(),TRUE))) {
 			return;
 		}

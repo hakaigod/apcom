@@ -83,9 +83,7 @@ function json_safe_encode($data){
                     </td>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class=" col-sm-12  col-md-3 sentence">
-                        <span>
-						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>
-                            </span>
+						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>...
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">
@@ -201,4 +199,4 @@ function json_safe_encode($data){
         </div>
     </form>
 <?php endif;?>
-<br><br><br><br><br><br><br><br>
+<br><br>
