@@ -13,12 +13,13 @@ use \SplFileObject;
 class ManagerController extends AppController
 {
 	public function initialize(){
+		// throw new FaitalException();
+		// throw new ForbiddenException();
+		// throw new NotfoundException();
 		parent::initialize();
 		$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 
 		$this->loadComponent('Paginator');
-
-		// throw new FaitalException();
 
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
@@ -224,6 +225,7 @@ class ManagerController extends AppController
 	// 学生管理
 	public function stuManager()
 	{
+		throw new NotfoundException();
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 

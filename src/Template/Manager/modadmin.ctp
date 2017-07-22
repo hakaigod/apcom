@@ -16,7 +16,7 @@
 		<input type="text" name="admname" class="form-control" placeholder="氏名" value="<?= $admnum->admname; ?>">
 
 		<!-- 消す -->
-		<input type="text" name="admpass" class="form-control" placeholder="pass">
+		<!-- <input type="text" name="admpass" class="form-control" placeholder="pass"> -->
 		<label class="checkbox">
 			削除
 			<input type="checkbox" data-toggle="checkbox" name="deleted_flg" <?= $admnum->deleted_flg ? 'checked="checked"' : ""; ?>>

@@ -74,15 +74,17 @@
 </nav>
 <div class="all">
 	<div class="container-fluid center">
-		<div id="container">
-			<div id="content">
-				<?= $this->Flash->render() ?>
+		<div class="row">
+			<div class="col-xs-offset-2 col-xs-8">
+				<div id="content">
+					<?= $this->Flash->render() ?>
 
-				<?= $this->fetch('content') ?>
+					<?= $this->fetch('content') ?>
+				</div>
 			</div>
-			<div id="footer">
-				<?= $this->Html->link(__('前のページに戻る'), 'javascript:history.back()', ['class' => 'btn btn-info']) ?>
-			</div>
+		</div>
+		<div class="row">
+			<?= $this->Html->link(__('前のページに戻る'), 'javascript:history.back()', ['class' => 'btn btn-info']) ?>
 		</div>
 	</div>
 </div>

@@ -1,8 +1,6 @@
 <?php
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
-
-$this->layout = 'error';
 ?>
 <!-- 以下content -->
 <h1><span class="fui-alert-circle"></span> 500 Fatal Error</h1>

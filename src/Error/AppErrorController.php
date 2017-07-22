@@ -24,7 +24,9 @@ class AppErrorController extends ErrorController {
 
     public function beforeRender(Event $event)
     {
-      //Templateファイルのあるパスを指定(src/Template/Error/)
-      $this->viewBuilder()->templatePath('Error');
+		$this->viewBuilder()->layout('error');
+
+		//Templateファイルのあるパスを指定(src/Template/Error/)
+		$this->viewBuilder()->templatePath('Error');
     }
 }
