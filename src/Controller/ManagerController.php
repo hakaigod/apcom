@@ -225,7 +225,6 @@ class ManagerController extends AppController
 	// 学生管理
 	public function stuManager()
 	{
-		throw new NotfoundException();
 		// 学科一覧
 		$this->set('deps', $this->MfDep->find()->where(['deleted_flg' => FALSE]));
 
