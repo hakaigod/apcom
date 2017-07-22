@@ -18,7 +18,7 @@ class ManagerController extends AppController
 
 		$this->loadComponent('Paginator');
 
-		// throw new NotFoundException();
+		// throw new FaitalException();
 
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
@@ -62,14 +62,18 @@ class ManagerController extends AppController
 	// マネージャートップ画面
 	public function index()
 	{
+		$page = $this->request->getQuery('page');
+		if (empty($page)) {
+			$page = 1;
+		}
+		$this->set(compact('page'));
 		// getのpageの値にマイナス値が入力されたら
-		if ($this->request->getQuery('page') < 0) {
+		if ($page <= 0) {
 			$this->redirect(['action' => 'index']);
 		}
 
 		$query = $this->TfImi->find();
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
-
 		//直近の模擬コード取得
 		if (!empty($this->request->getQuery('id'))) {
 			$reqestimicode = $this->request->getQuery('id');
@@ -101,11 +105,6 @@ class ManagerController extends AppController
 		// 問題情報取得
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
 		$questions = $this->MfQes->find()->contain('MfExa')->where(['MfExa.exanum' => $exanum]);
-
-		// if (!empty($this->request->getQuery('page'))) {
-		// 	$questions->offset($this->request->getQuery('page') * 10 - 10);
-		// }
-		// $questions->order(['qesnum'])->limit(10);
 
 		// 正答率
 		$questionsDetail = array();
@@ -149,7 +148,7 @@ class ManagerController extends AppController
 
 		$ans->limit(($imipepnum * 10));
 		if (!empty($this->request->getQuery('page'))) {
-			$ans->offset($this->request->getQuery('page') * 10 - 10);
+			$ans->offset($page * 10 - 10);
 		}
 		// ページネーターセット
 		$this->paginate['limit'] = $imipepnum * 10;
@@ -191,7 +190,7 @@ class ManagerController extends AppController
 		}
 		array_multisort($arrayimis, SORT_DESC);
 		$this->set('imidata', $arrayimis);
-		
+
 	}
 
 	// 問題詳細

@@ -47,7 +47,7 @@
 			<tr>
 				<td class="col-xs-3" id="name">名前</td><td class="stusum">合計</td>
 				<?php for ($i = 0; $i < 10; $i++): ?>
-					<td id="ques">問<?= empty($this->request->getQuery('page')) ? $i + 1 : $i + $_GET['page'] * 10 - 9; ?></td>
+					<td id="ques">問<?= $i + $page * 10 - 9 ?></td>
 				<?php endfor; ?>
 			</tr>
 			</thead>
@@ -80,11 +80,11 @@
 		<ul class="pagination-plain">
 			<!-- 最初,前へ　ボタン設置 -->
 			<?= $this->Paginator->first('<<'); ?>
-			<?php if (!empty($this->request->getQuery('page'))) echo $this->Paginator->prev('<'); ?>
+			<?php if ($page != 1) echo $this->Paginator->prev('<'); ?>
 			<!-- 途中ページ　ボタン設置 -->
 			<?= $this->Paginator->numbers(); ?>
 			<!-- 次へ,最後　ボタン設置 -->
-			<?php if ($this->request->getQuery('page') != 8) echo $this->Paginator->next('>'); ?>
+			<?php if (!empty($answers) && $page != 8) echo $this->Paginator->next('>'); ?>
 			<?= $this->Paginator->last('>>'); ?>
 		</ul>
 	</div>
@@ -94,14 +94,17 @@
 		<h6 id="questionsDetailTitle">各問詳細</h6>
 		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="6000">
 			<ol class="carousel-indicators">
-				<li class="active" data-target="#Carousel" data-slide-to="0"></li>
-				<?php for ($i = 1; $i < 8; $i++): ?>
-					<li data-target="#Carousel" data-slide-to="<?= $i?>"></li>
+				<?php for ($i = 0; $i < 8; $i++): ?>
+					<?php if ($i + 1 == $page): ?>
+						<li class="active" data-target="#Carousel" data-slide-to="<?= $i;?>"></li>
+					<?php else: ?>
+						<li data-target="#Carousel" data-slide-to="<?= $i;?>"></li>
+					<?php endif; ?>
 				<?php endfor;?>
 			</ol>
 			<div class="carousel-inner" role="listbox">
 			<?php for ($j = 0; $j < 8; $j++): ?>
-				<?php if ($j == 0): ?>
+				<?php if ($j + 1 == $page): ?>
 					<div class="item active">
 				<?php else: ?>
 					<div class="item">

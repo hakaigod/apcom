@@ -5,5 +5,6 @@ use Cake\Error\Debugger;
 $this->layout = 'error';
 
 ?>
-
-<h5>404 Not Found</h5>
+<!-- 以下content -->
+<h1><span class="fui-question-circle"></span> 404 Not Found</h1>
+<p>お探しのURLは存在しませ。</p>
