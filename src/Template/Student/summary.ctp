@@ -179,7 +179,7 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
             </td>
             <td data-label="平均" class="center col-sm-12 col-md-1"><?= round($imi['avg'] * 1.25,1)?></td>
             <td data-label="点数" class="center col-sm-12 col-md-1 <?=$this->ScoreColor->getClass($imi['score'])?>"><?= ($imi['score'] !== null)? round($imi['score'] * 1.25,1):"　"?></td>
-            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $imi['rank'] :"　" ?> </td>
+            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $this->ScoreMedal->getImage($imi['rank']) :"　" ?> </td>
 
 
         </tr>

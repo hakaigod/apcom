@@ -447,7 +447,7 @@ class StudentController extends AppController
 			$name = $this->readSession([ 'username' ]);
 			$examname = $this->TfImi->find()->where(["imicode" => $imicode])->contain(['MfExa'])->first()->_getName($this->TfImi);
 			$total = array_sum($scores);
-			$this->emitMessage("{$name}さんが{$examname}で{$total}点を獲得しました。");
+			$this->emitMessage("{$examname}で{$total}点を獲得しました。");
 			$this->redirect([ 'controller' => 'student', 'action' => 'result',
 			                  'id'         => $regnum, 'imicode' => $imicode ]);
 		}
@@ -627,6 +627,9 @@ class StudentController extends AppController
 			$question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
 			//問題内容の表示
 			$this->response->Body(json_encode($question));
+		}else{
+			$this->emitMessage("一問一答を終えました");
+			
 		}
 	}
 	//一問一答出題画面
@@ -779,7 +782,6 @@ class StudentController extends AppController
 			// practiceAnswersの中にexanumの配列を作る
 			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
 			
-			$this->emitMessage("試験演習を始めました");
 		}
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);

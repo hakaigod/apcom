@@ -11,12 +11,12 @@ $(function(){
     "use strict";
     //完了ボタンが押されたとき
     $("#end_answer").click(function () {
-        if (isAnsed && isFinite(pageNum)) {
+	    if (isAnsed && isFinite(pageNum)) {
             //1や11,21など一番最初の問題番号が入る
             let firstNum = (pageNum - 1) *10 + 1;
             //最後の10問がすべて選択されているかどうか
             for (let qNum = firstNum; qNum < firstNum + 10; qNum++) {
-	            //各解答ラジオボタングループにcheckedクラスを持つものがあるか
+	            //各解答ラジオボタングループのchecked
                 let selectedAns = $(`input[name=answer_${qNum}]:checked`);
                 //各自信度ラジオボタングループにcheckedクラスを持つものがあるか
                 let confIsSelected = $(`input[name=confidence_${qNum}]`).is(':checked');
@@ -35,7 +35,7 @@ $(function(){
                 }).appendTo('#finish-answer');
                 $("#answer-form").submit();
             }
-        }else {
+        } else {
             window.alert("未解答の問題ページがあります");
             return false;
         }

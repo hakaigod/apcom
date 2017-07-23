@@ -94,7 +94,7 @@
     <div class="col-xs-offset-2 col-xs-8 ">
         <div class=" navbar-header  navbar-left ">
             <a class="navbar-brand" href="<?= $this->Url->build($logoLink) ?>">
-                <img src="<?= $this->request->getAttribute("webroot") ?>img/logo.png" class="nabvar-img">
+                <img src="<?= $this->request->getAttribute("base") ?>/img/logo.png" class="nabvar-img">
             </a>
         </div>
         <div class="navbar-collapse collapse">

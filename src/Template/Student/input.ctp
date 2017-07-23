@@ -62,8 +62,7 @@ function json_safe_encode($data){
 <?php else:?>
     <h3><?= $imiName ?></h3>
     <form name="ansForm" action="<?= $this->Html->Url->build(
-		['controller' => 'student', 'action' => 'sendAll',
-		 'id' => $userID,'imicode' => $imicode]) ?>
+		['controller' => 'student', 'action' => 'sendAll', 'imicode' => $imicode]) ?>
 " method="post" id="answer-form">
         <table id="input-table" class="table table-bordered table-striped table-hover" >
             <thead >
@@ -126,7 +125,7 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 								$checked = $isChosen ? 'checked':'';
 								$active = $isChosen ? 'active':'';
-								$disabled = $inputtedAns === '0' ? 'disabled':'';
+								$disabled = ($inputtedAns === 0 || $inputtedAns === "0") ? 'disabled':'';
 //							$required = $y==0?"required=\"required\"":"";
 								echo "<label class=\"btn btn-info {$disabled} {$active}\" >";
 								echo "<input type=\"radio\" {$disabled} name=\"{$confTag}\" "

@@ -5,3 +5,7 @@
 /.idea/*
 /webroot/private/image/*
 /webroot/private/img/*
+/webroot/img/first.svg
+/webroot/img/second.svg
+/webroot/img/third.svg
+
