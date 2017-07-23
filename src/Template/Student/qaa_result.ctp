@@ -94,8 +94,6 @@ Student
                                 <td><div id="question-choice4"></div></td>
                             </tr>
                         </table>
-                        <div id="log-yourans"></div>
-                        <div id="log-ans"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary full" data-dismiss="modal">閉じる</button>
