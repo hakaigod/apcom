@@ -163,7 +163,7 @@
 
 <?php for ($i = 0; $i < 80; $i++): ?>
 	<!-- モーダル -->
-	<div class="modal fade" id="myModal<?= $i + 1 ?>">
+	<div class="modal fade" id="myModal<?= $i + 1 ?>" data-keyboard="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 			</div>

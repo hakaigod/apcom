@@ -28,7 +28,7 @@
 	<div class="row" id="question">
 		<?= $this->qaa->viewTextImg($questionDetail->question)?>
 	</div>
-
+	<br>
 	<?php if(empty($questionDetail->answer_pic)): ?>
 		<!-- 選択肢が画像ではない場合 -->
 		<div class="row" id="choice">

@@ -468,21 +468,29 @@ class ManagerController extends AppController
 		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
+		// 管理者番号をセッションから取得
+		$session = $this->request->session();
+		$this->set('admnum', $session->read('userID'));
+
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
-			$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
-			if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
-				$queryAdmPassUpdate = $this->MfAdm->query()->update()
-				->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
-				->where(['admnum' => $this->request->getData('admnum')]);
-				try {
-					$queryAdmPassUpdate->execute();
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing');
-				}
+			if (empty($this->request->getData('admNewPass')) || empty($this->request->getData('admOldPass'))) {
+				$this->Flash->error('いずれかの項目が未入力です。');
 			} else {
-				$this->Flash->error('古いパスワードが違います');
+				$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
+				if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
+					$queryAdmPassUpdate = $this->MfAdm->query()->update()
+					->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
+					->where(['admnum' => $this->request->getData('admnum')]);
+					try {
+						$queryAdmPassUpdate->execute();
+						$this->Flash->success('success');
+					} catch (Exception $e) {
+						$this->Flash->error('missing');
+					}
+				} else {
+					$this->Flash->error('古いパスワードが違います');
+				}
 			}
 		}
 	}
