@@ -168,6 +168,13 @@ class ManagerController extends AppController
 				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
 			}
 		}
+		if (!empty($answers)) {
+			// 合計点を基準に降順に並べ替え
+			foreach($answers as $key => $value){
+				$imisum[$key] = $value['imisum'];
+			}
+			array_multisort($imisum, SORT_DESC, $answers);
+		}
 		$this->set(compact('answers'));
 
 		// 模擬試験一覧

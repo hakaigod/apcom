@@ -123,14 +123,19 @@
 }
 
 /*カルーセル*/
-.bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-default:before {
-  border-color: #fff;
-  background-color: #e6777e;
+
+
+.bootstrap-switch-primary {
+  color: #fff;
 }
-.bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-primary {
-  box-shadow: inset 0 0 transparent, -16px 0 0 #d82732;
+.bootstrap-switch-primary ~ .bootstrap-switch-handle-off:before {
+  background-color: #424448;
 }
-.bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-primary:before {
-  border-color: #d82732;
-  background-color: #bdc3c7;
+/*.bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-default:before {
+  border-color: #bdc3c7;
+  background-color: #d82732;
 }
+.bootstrap-switch-default {
+  color: white;
+  background-color: #424448;
+}*/
