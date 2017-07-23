@@ -25,13 +25,13 @@
 
 	<?= $this->fetch('meta') ?>
 
-	<?= $this->Html->css('bootstrap.min.css') ?>
-	<?= $this->Html->css('flat-ui.css') ?>
+	<link rel="stylesheet" href="<?= $this->Url->build("/")?>css/bootstrap.min.css" />
+	<link rel="stylesheet" href="<?= $this->Url->build("/")?>css/flat-ui.css" />
 
 	<!-- 自作CSS -->
-	<?= $this->Html->css('../private/css/default.css') ?>
-	<?= $this->Html->css('../private/css/flat_overwrite.css') ?>
-	<?= $this->Html->css('../private/css/Error/error.css') ?>
+	<link rel="stylesheet" href="<?= $this->Url->build("/")?>private/css/default.css" />
+	<link rel="stylesheet" href="<?= $this->Url->build("/")?>private/css/flat_overwrite.css" />
+	<link rel="stylesheet" href="<?= $this->Url->build("/")?>private/css/Error/error.css" />
 
 	<?= $this->fetch('css') ?>
 
@@ -41,8 +41,6 @@
 	<?= $this->Html->script('prettify.js') ?>
 
 	<!-- 自作JS -->
-	<?= $this->Html->script('/private/js/index.js') ?>
-	<?= $this->Html->script('/private/js/selectInput.js') ?>
 
 	<?= $this->fetch('script') ?>
 
@@ -52,14 +50,14 @@
     <div class="col-xs-offset-2 col-xs-8 ">
         <div class=" navbar-header  navbar-left ">
             <a class="navbar-brand" href="<?= $this->Url->build($logoLink) ?>">
-                <img src="<?= $this->request->getAttribute("webroot") ?>img/logo.png" class="nabvar-img">
+                <img src="<?= $this->Url->build("/")?>img/logo.png" class="nabvar-img">
             </a>
         </div>
         <div class="navbar-collapse collapse">
             <div class="nav navbar-nav navbar-right" id="welcome-user">
                 <li class="dropdown navbar-buttton ">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="font-weight: 500">
-                        <img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
+                        <img src="<?= $this->Url->build("/")?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
                         ようこそ、<?= $username ?>さん
                         <span class="caret"></span>
                     </a>
