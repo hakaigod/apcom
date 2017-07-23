@@ -61,8 +61,17 @@ class StudentController extends AppController
 			return;
 		}
 		$roleFromSsn = $this->readSession(['role']);
-		if ($roleFromSsn ==='manager' && !(in_array($this->request->getParam("action"),["summary","result"]))) {
-			throw new ForbiddenException();
+		//ユーザが管理者
+		if ($roleFromSsn ==='manager') {
+			//ルーティングされたアクション
+			$reqAct = $this->request->getParam("action");
+			//トップ画面もしくは試験詳細へのアクセスである
+			$isAllowed = in_array($reqAct,["summary","result"]);
+			//qaaResultへの問題文などへのAjaxによるアクセスである
+			$isAjax = $reqAct === "qaaResult" && $this->request->is("ajax");
+			if (!($isAllowed || $isAjax)) {
+				throw new ForbiddenException();
+			}
 		}
 		$regnumFromReq = $this->request->getParam('id');
 		if ($regnumFromReq != null && $roleFromSsn === 'student' && $regnumFromReq != $idFromSsn) {
@@ -75,15 +84,17 @@ class StudentController extends AppController
 		$this->set("userID",$idFromSsn);
 		//チャート等に表示するための生徒名:$studentName
 		if ($roleFromSsn == 'manager'){
-			//グラフに表示するための生徒名
-			$this->set("studentName", $this->MfStu->find()->where(['regnum' =>$regnumFromReq])->first()->stuname);
-			//ロゴのリンク
-			$this->set("logoLink", ["controller" => "manager","action" => "index"]);
-			//ハンバーガーメニュー(トップはlogLinkを流用、ログアウトはdefault.ctp)
-			$this->set("hamMenu", [
-				"学生情報管理" =>["controller" => "manager","action" => "stuManager"],
-				"学科管理" =>["controller" => "manager","action" => "depManager"],
-				"管理者管理" =>["controller" => "manager","action" => "adminManager"] ]);
+			if (!($this->request->is("ajax"))) {
+				//グラフに表示するための生徒名
+				$this->set("studentName", $this->MfStu->find()->where([ 'regnum' => $regnumFromReq ])->first()->stuname);
+				//ロゴのリンク
+				$this->set("logoLink", [ "controller" => "manager", "action" => "index" ]);
+				//ハンバーガーメニュー(トップはlogLinkを流用、ログアウトはdefault.ctp)
+				$this->set("hamMenu", [
+					"学生情報管理" => [ "controller" => "manager", "action" => "stuManager" ],
+					"学科管理"   => [ "controller" => "manager", "action" => "depManager" ],
+					"管理者管理"  => [ "controller" => "manager", "action" => "adminManager" ] ]);
+			}
 		}else{
 			$this->set("studentName", $username);
 			$this->set("logoLink", ["controller" => "student","action" => "summary","id" => $idFromSsn]);
