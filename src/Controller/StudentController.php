@@ -468,12 +468,9 @@ class StudentController extends AppController
 		}
 		//本番試験コード
 		$exanum = $imiQesAns->exanum;
+		$this->set(compact('exanum'));
 		//試験名:$exaname
 		$this->set('exaname', $imiQesAns->_getName($this->TfImi));
-		//年度:$year
-		$this->set('year', $imiQesAns[ 'mf_exa' ]->jap_year);
-		//季節:$season
-		$this->set('season', $imiQesAns[ 'mf_exa' ]->exaname);
 		//同じ本番試験が模擬試験として実施された回数
 		$implNum = $this->TfImi->getImplNum($imicode, $exanum) + 1;
 		$this->set(compact('implNum'));

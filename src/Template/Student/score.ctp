@@ -13,8 +13,8 @@
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/score.css') ?>
 <?= $this->Html->css('/private/css/ap.css') ?>
+<?= $this->Html->css('/private/css/Student/score.css') ?>
 <?php $this->end(); ?>
 
 <!-- jsセット -->

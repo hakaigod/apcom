@@ -10,6 +10,7 @@
 <?= $this->end();?>
 <!-- CSSセット -->
 <?= $this->start('css');?>
+<?= $this->Html->css('/private/css/ap.css') ?>
 <?= $this->Html->css('/private/css/Student/qaa.css')?>
 <?= $this->end();?>
 
@@ -24,8 +25,8 @@ Student
 <?= $this->start('script');?>
 <script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setpagination.js"
         pgNum = '<?= json_safe_encode($pgNum); ?>'
-        server-addr = '<?= json_safe_encode($_SERVER['SERVER_ADDR']); ?>'
-        server-port = '<?= json_safe_encode($_SERVER['SERVER_PORT']); ?>'
+        server-addr = '<?= json_safe_encode("localhost"); ?>'
+        server-port = '<?= json_safe_encode("27780"); ?>'
 ></script>
 <?= $this->end();?>
 
