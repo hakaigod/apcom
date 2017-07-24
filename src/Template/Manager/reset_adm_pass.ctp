@@ -14,7 +14,7 @@
 	</div>
 	<form action="" method="post" id="resetpass">
 		<!-- 管理者番号 -->
-		<input type="text" name="admnum" class="form-control" placeholder="管理者連番">
+		<input type="text" name="admnum" class="form-control" placeholder="管理者連番" value="<?= $admnum ?>" readonly>
 		<input type="password" name="admOldPass" class="form-control" placeholder="古いパスワード">
 		<input type="password" name="admNewPass" id="new" class="form-control" placeholder="新しいパスワード">
 		<input type="password" name="admNewPass" id="renew" class="form-control" placeholder="新しいパスワード再入力">

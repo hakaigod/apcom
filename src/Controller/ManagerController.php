@@ -13,12 +13,13 @@ use \SplFileObject;
 class ManagerController extends AppController
 {
 	public function initialize(){
+		// throw new FaitalException();
+		// throw new ForbiddenException();
+		// throw new NotfoundException();
 		parent::initialize();
 		$this->set("logoLink", ["controller" => "manager","action" => "index"]);
 
 		$this->loadComponent('Paginator');
-
-		// throw new NotFoundException();
 
 		$this->loadmodel('MfDep');
 		$this->loadmodel('MfStu');
@@ -62,9 +63,18 @@ class ManagerController extends AppController
 	// マネージャートップ画面
 	public function index()
 	{
+		$page = $this->request->getQuery('page');
+		if (empty($page)) {
+			$page = 1;
+		}
+		$this->set(compact('page'));
+		// getのpageの値にマイナス値が入力されたら
+		if ($page <= 0) {
+			$this->redirect(['action' => 'index']);
+		}
+
 		$query = $this->TfImi->find();
 		$nearimi = $query->select(['max' => $query->func()->max('imicode')])->first()->toArray()['max'];
-
 		//直近の模擬コード取得
 		if (!empty($this->request->getQuery('id'))) {
 			$reqestimicode = $this->request->getQuery('id');
@@ -96,11 +106,6 @@ class ManagerController extends AppController
 		// 問題情報取得
 		$exanum = $this->TfImi->find()->select('exanum')->where(['imicode' => $reqestimicode])->first()->toArray()['exanum'];
 		$questions = $this->MfQes->find()->contain('MfExa')->where(['MfExa.exanum' => $exanum]);
-
-		// if (!empty($this->request->getQuery('page'))) {
-		// 	$questions->offset($this->request->getQuery('page') * 10 - 10);
-		// }
-		// $questions->order(['qesnum'])->limit(10);
 
 		// 正答率
 		$questionsDetail = array();
@@ -144,7 +149,7 @@ class ManagerController extends AppController
 
 		$ans->limit(($imipepnum * 10));
 		if (!empty($this->request->getQuery('page'))) {
-			$ans->offset($this->request->getQuery('page') * 10 - 10);
+			$ans->offset($page * 10 - 10);
 		}
 		// ページネーターセット
 		$this->paginate['limit'] = $imipepnum * 10;
@@ -163,10 +168,17 @@ class ManagerController extends AppController
 				$answers += array($key->regnum => array('regnum' => $key->regnum, 'stuname' =>$key->mf_stu['stuname'],  'imisum' => $query->strategy_sum + $query->technology_sum + $query->management_sum, 'answers'=> array('ans'. $i++ => $ansJa[$key->rejoinder])));
 			}
 		}
+		if (!empty($answers)) {
+			// 合計点を基準に降順に並べ替え
+			foreach($answers as $key => $value){
+				$imisum[$key] = $value['imisum'];
+			}
+			array_multisort($imisum, SORT_DESC, $answers);
+		}
 		$this->set(compact('answers'));
 
 		// 模擬試験一覧
-		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode']);
+		$imidata = $this->TfImi->find()->contain(['MfExa'])->order(['TfImi.exanum','imicode'])->toArray();
 		$arrayimis = array();
 		$work = null;
 		// 模擬試験の回数を数える
@@ -178,16 +190,43 @@ class ManagerController extends AppController
 			$arrayimis += array($key->imicode => array('imi' => $key->imicode, 'name' => $exam , 'num' => ++$i, 'imipepnum' => $key->imipepnum, 'imisum' => $key->strategy_imisum + $key->technology_imisum + $key->management_imisum));
 			$work = $key->exanum;
 		}
-		array_multisort($arrayimis, SORT_DESC);
-		$this->set('imidata', $arrayimis);
-
 		// タイトルセット
 		if (empty($this->request->getQuery('id')) || $this->request->getQuery('id') == $nearimi) {
 			$this->set('detailExamName', '直近一回分');
 		} else {
 			$this->set('detailExamName', $arrayimis[$reqestimicode]['name'] . ' ' . $arrayimis[$reqestimicode]['num']  . '回目');
 		}
+		array_multisort($arrayimis, SORT_DESC);
+		$this->set('imidata', $arrayimis);
 
+	}
+
+	// 問題詳細
+	public function questionDetail()
+	{
+		// レイアウト設定
+		// $this->viewBuilder()->layout('addmod');
+		$ex = $this->request->getQuery('ex');
+		$qn = $this->request->getQuery('qn');
+
+		$session = $this->request->session();
+		$reqestimicode = $session->read(['reqestimicode']);
+		$selectAnswerQuerry = $this->TfAns->find()->select(['rejoinder','correct_answer'])
+		->where([
+			'imicode' => $reqestimicode,
+			'qesnum' => $qn
+		])
+		->toArray();
+		$selectAnswer = array('answers' => array(0,0,0,0,0),'correct' => 0);
+		foreach ($selectAnswerQuerry as $key) {
+			$selectAnswer['answers'][$key['rejoinder']]++;
+			$selectAnswer['correct'] = $key['correct_answer'];
+		}
+		$this->set(compact('selectAnswer'));
+
+		$this->set('questionDetail', $this->MfQes->get([$qn, $ex],['contain' => ['MfExa']]));
+		$this->set(compact('ex'));
+		$this->set(compact('qn'));
 	}
 
 	// 学生管理
@@ -436,21 +475,29 @@ class ManagerController extends AppController
 		// レイアウト設定
 		$this->viewBuilder()->layout('addmod');
 
+		// 管理者番号をセッションから取得
+		$session = $this->request->session();
+		$this->set('admnum', $session->read('userID'));
+
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
-			$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
-			if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
-				$queryAdmPassUpdate = $this->MfAdm->query()->update()
-				->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
-				->where(['admnum' => $this->request->getData('admnum')]);
-				try {
-					$queryAdmPassUpdate->execute();
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing');
-				}
+			if (empty($this->request->getData('admNewPass')) || empty($this->request->getData('admOldPass'))) {
+				$this->Flash->error('いずれかの項目が未入力です。');
 			} else {
-				$this->Flash->error('古いパスワードが違います');
+				$oldPass = $this->MfAdm->get($this->request->getData('admnum'))->toArray()['admpass'];
+				if ($this->pasCheck($this->request->getData('admOldPass'), $oldPass)) {
+					$queryAdmPassUpdate = $this->MfAdm->query()->update()
+					->set(['admpass' => $this->passHash($this->request->getData('admNewPass'))])
+					->where(['admnum' => $this->request->getData('admnum')]);
+					try {
+						$queryAdmPassUpdate->execute();
+						$this->Flash->success('success');
+					} catch (Exception $e) {
+						$this->Flash->error('missing');
+					}
+				} else {
+					$this->Flash->error('古いパスワードが違います');
+				}
 			}
 		}
 	}

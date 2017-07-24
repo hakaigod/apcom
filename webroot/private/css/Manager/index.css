@@ -83,8 +83,59 @@
 }
 /*その他*/
 .modal-dialog {
-	width: 80%;
+	width: 60%;
 }
 .modal-content {
 	padding: 0 20px 0 20px;
 }
+/*カルーセル*/
+.carousel-control {
+	top:50%;
+	bottom:50%;
+	text-shadow:0;
+	width:3%;
+	color: #2a6496;
+}
+#Carousel {
+	margin: 0 3%;
+}
+.carousel-control:hover,.carousel-control:focus {
+	color:#d82732;
+}
+
+.carousel-control.left {
+	left: -3%;
+}
+.carousel-control.right {
+	right:-3%;
+	left:auto;
+}
+.carousel-indicators li {
+	border:1px solid #2a6496;
+}
+.carousel-indicators .active {
+	border:1px solid #d82732;
+	background-color:#d82732
+}
+.carousel-indicators {
+	bottom: auto;
+	top: -12%;
+}
+
+/*カルーセル*/
+
+
+.bootstrap-switch-primary {
+  color: #fff;
+}
+.bootstrap-switch-primary ~ .bootstrap-switch-handle-off:before {
+  background-color: #424448;
+}
+/*.bootstrap-switch-off .bootstrap-switch-handle-on ~ .bootstrap-switch-handle-off.bootstrap-switch-default:before {
+  border-color: #bdc3c7;
+  background-color: #d82732;
+}
+.bootstrap-switch-default {
+  color: white;
+  background-color: #424448;
+}*/

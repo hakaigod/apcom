@@ -16,11 +16,12 @@ class AppExceptionRenderer extends ExceptionRenderer
 
 	protected function _template(Exception $exception, $method, $code)
 	{
-		//ＰＣ用とモバイル用のTemplateを切り替える
 		//「src/Template/Error/」の下にあるTemplateファイルを参照している
 		$template = 'error500';
-		if ($code < 500) {
-			$template = 'error400';
+		if ($code == 403) {
+			$template = 'error403';
+		} elseif ($code < 500) {
+			$template = 'error404';
 		}
 		return $this->template = $template;
 	}

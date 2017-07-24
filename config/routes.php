@@ -44,7 +44,7 @@ use Cake\Routing\Route\DashedRoute;
 Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope("/student", function ( RouteBuilder $routes ) {
-	
+
 	$routes->connect(
 		'/:id',
 		['controller' => 'student', 'action'=> 'summary'],
@@ -91,25 +91,25 @@ Router::scope("/student", function ( RouteBuilder $routes ) {
 		['controller' => 'student', 'action' => 'qaaQuestion'],
 		['question_num' => '\d+',]
 	);
-	
+
 	$routes->connect(
 		'/yearSelection',
 		['controller' => 'student', 'action' => 'yearSelection']
 	);
-	
-	
+
+
 	$routes->connect(
 		'/practiceExam/:exanum/:qesnum/',
 		['controller' => 'student', 'action' => 'practiceExam'],
 		['exanum' => '\d{1,3}','qesnum'=>'\d{1,2}']
 	);
-	
+
 	$routes->connect(
 		'/score/:exanum/',
 		['controller' => 'student', 'action' => 'score'],
 		['exanum' => '\d{1,3}']
 	);
-	
+
 });
 Router::scope("/manager", function ( RouteBuilder $routes ) {
 	$routes->connect(
@@ -193,7 +193,6 @@ Router::scope('/', function (RouteBuilder $routes) {
 
 	$routes->connect('', ['controller' => 'Login', 'action' => 'index']);
 	$routes->connect('login', ['controller' => 'Login', 'action' => 'index']);
-	
     /**
      * Connect catchall routes for all controllers.
      *
@@ -212,6 +211,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
 //    $routes->fallbacks(DashedRoute::class);
 });
+
+
 
 /**
 <<<<<<< HEAD
