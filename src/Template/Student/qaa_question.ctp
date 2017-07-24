@@ -48,11 +48,13 @@
 Student
 <?= $this->end();?>
 <!-- サイドバーセット -->
-<?= $this->start('sidebar');?>
-<tr class="info"><td> 点数入力画面 </td></tr>
-<tr><td> 一問一答画面 </td></tr>
-<tr><td> 模擬試験画面 </td></tr>
-<?= $this->end();?>
+<?php $this->start('sidebar'); ?>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
+<?php $this->end(); ?>
+<br>
 <!-- 以下content -->
 <div class="container-fluid">
     <div class="row">
@@ -127,7 +129,7 @@ Student
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+                                <button type="button" class="btn btn-success" data-dismiss="modal">閉じる</button>
                             </div>
                         </div>
                     </div>
@@ -180,7 +182,7 @@ Student
                 <?php $selectArray = array('ア','イ','ウ','エ')?>
                 <tr class="select_tr" >
                     <td class="col-md-1">
-                        <input type="button" class="choice btn btn-embossed btn-primary full" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?>>
+                        <input type="button" class="choice btn btn-info full" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?>>
                     </td>
                     <td class="col-md-11">
                         <?php
@@ -202,7 +204,7 @@ Student
             <div class="select-answer">
                 <?php for ($i=1;$i<5;$i++):?>
                     <?php $selectArray = array('ア','イ','ウ','エ')?>
-                    <input type="submit" class="choice btn btn-embossed btn-primary" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?> >
+                    <input type="submit" class="choice btn btn-info" id="choice<?= $i?>" value=<?php $select=$i?><?= $selectArray[$i-1] ?> >
                 <?php endfor; ?>
             </div>
         </div>

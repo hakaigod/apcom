@@ -50,13 +50,18 @@ class StudentController extends AppController
 		$this->loadModel('TfSum');
 		//生徒モデル読み込み
 		$this->loadModel('MfStu');
+		//分野モデル読み込み
+		$this->loadModel('MfFie');
 		//試験モデル読み込み
 		$this->loadModel('MfExa');
 		
 
+		$regnumFromReq = $this->request->getParam('id');
 		$idFromSsn = $this->readSession(['userID']);
+		$roleFromSsn = $this->readSession(['role']);
 		if ($idFromSsn == null) {
 			//セッションにIDが無いとき
+			$this->log("Any regnum is found in session");
 			$this->redirect([ 'controller' => 'Login', 'action' => 'index']);
 			return;
 		}
@@ -475,6 +480,7 @@ class StudentController extends AppController
 		$imiQesAns = $this->TfImi->getOneAndQes($imicode, Q_TOTAL_NUM);
 		//もし実施されていない模擬試験ならば変数をセットしない
 		if ( $imiQesAns === null ) {
+			$this->log("imicode is out of range");
 			return;
 		}
 		//本番試験コード
@@ -626,18 +632,18 @@ class StudentController extends AppController
 			$this->autoRender=FALSE;
 			$exaNum=$this->request->getData("exanum");
 			$queNum=$this->request->getData("quenum");
-			$question=$this->MfQes->find()
-				->contain(['MfExa','MfFie'])
-				->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
-				//1行だけ出力する
-				->first();
-			$question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
-			$question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
-			//問題内容の表示
-			$this->response->Body(json_encode($question));
-		}else{
-			$this->emitMessage("一問一答を終えました");
-			
+			if(ctype_digit($exaNum) && ctype_digit($queNum)){
+                $question=$this->MfQes->find()
+                    ->contain(['MfExa','MfFie'])
+                    ->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
+                    //1行だけ出力する
+                    ->first();
+                $question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
+                $question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
+                //問題内容の表示
+                $this->response->Body(json_encode($question));
+            }
+
 		}
 	}
 	//一問一答出題画面
@@ -789,7 +795,6 @@ class StudentController extends AppController
 			$practiceLog['answers'] = array_fill(1, Q_TOTAL_NUM, null);
 			// practiceAnswersの中にexanumの配列を作る
 			$this->writeSession(['practiceAnswers', $exanum], $practiceLog['answers']);
-			
 		}
 		// practiceAnswersの中のexanumの中にqesnumの配列を作る
 		$this->writeSession(['practiceAnswers', $exanum, $qesnum + $this->request->getData('into_ques')], $ansSelect);

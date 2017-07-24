@@ -28,24 +28,25 @@ $(function(){
 		//問題数11未満の場合はページネーター表示しない
 		$('.pagination-plain').hide();
 	}else{
-		$('#form-pgnation').append(`<li class="pgtop"><button type="submit" class="pgnation-btn btn btn-embossed btn-primary" id="pgtop" value="1" formaction="1"><<</button></li>`);
+		$('#form-pgnation').append(`<li class="pgtop"><button type="submit" class="pgnation-btn btn btn-success" id="pgtop" value="1" formaction="1"><<</button></li>`);
 		for(let i=1;i<=(sessionStorage.length-1)/10+1 ; i++) {
 			if(i == pgNum){
-				$('#form-pgnation').append(`<li><button type="submit" class="pgnation-btn btn btn-embossed btn-primary" id="pagination-btn${i}" value="${i}" formaction="${i}" disabled = disabled>${i}</button></li>`);
+				$('#form-pgnation').append(`<li><button type="submit" class="pgnation-btn btn btn-success" id="pagination-btn${i}" value="${i}" formaction="${i}" disabled = disabled>${i}</button></li>`);
 			} else {
-				$('#form-pgnation').append(`<li><button type="submit" class="pgnation-btn btn btn-embossed btn-primary" id="pagination-btn${i}" value="${i}" formaction="${i}">${i}</button></li>`);
+				$('#form-pgnation').append(`<li><button type="submit" class="pgnation-btn btn btn-success" id="pagination-btn${i}" value="${i}" formaction="${i}">${i}</button></li>`);
 			}
 		}
-		$('#form-pgnation').append(`<li class="pgbottom"><button type="submit" class="pgnation-btn btn btn-embossed btn-primary" id="pgbottom" value="${Math.floor((sessionStorage.length-1)/10+1)}" formaction="${Math.floor((sessionStorage.length-1)/10+1)}">>></button></li>`);
+		$('#form-pgnation').append(`<li class="pgbottom"><button type="submit" class="pgnation-btn btn btn-success" id="pgbottom" value="${Math.floor((sessionStorage.length-1)/10+1)}" formaction="${Math.floor((sessionStorage.length-1)/10+1)}">>></button></li>`);
 	}
 	
 	//作成したボタンをクリックした時モーダル表示 ＋ ajaxでコントローラーに値を渡す
 	$('.btn-detail').click(function(){
 		let qBtnId = $(this).attr("id");
 		let log =  JSON.parse(sessionStorage.getItem('num' + qBtnId));
-		// //値を送信
+		//値を送信
 		$.ajax({
-			url: "http://" + serverAddr + ":"+ serverPort + "/apcom/student/qaaResult/1",
+			url: "http://localhost:"+ serverPort + "/apcom/student/qaaResult/1",
+			// url: "http://" + serverAddr + ":"+ serverPort + "/apcom/student/qaaResult/1",
 			type: "POST",
 			data: {"exanum": log.exanum, "quenum": log.quesnum},
 			dataType: "json",

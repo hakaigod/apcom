@@ -41,7 +41,7 @@
     left: 0;
     padding: 0px 20px;
     font-size: inherit;
-    background-color: transparent;
+    background-color: #fcfefe;
     transform: translateY(-35%) translateX(1em);
     font-weight: bold;
 }
@@ -192,4 +192,21 @@
 /*}*/
 a {
     cursor: pointer;
+}
+
+/*ボタンのdisableついているやつに適応*/
+.btn-info[disabled].active-disabled {
+    background-color: #d82732;
+}
+
+.btn-info:focus, .open > .dropdown-toggle.btn-info {
+    color: white;
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+}
+
+.btn-info:hover, .btn-info.hover,.open > .dropdown-toggle.btn-info {
+    color: white;
+    background-color: #d82732;
+    border-color: #95a5a6;
 }
