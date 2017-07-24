@@ -41,6 +41,13 @@
     box-shadow: inset 0px -2px 0px rgba(0,0,0,0.15);
 }
 
+/*　ボタンのホバー時の色調整　*/
+.btn-info:hover, .btn-info.hover,.open > .dropdown-toggle.btn-info {
+    color: white;
+    background-color: #d82732;
+    border-color: #95a5a6;
+}
+
 /* 解答選択肢が共通の画像の場合の最上部[ア]のボタン位置調整 */
 .btn-top{
     margin-left: 8px;
