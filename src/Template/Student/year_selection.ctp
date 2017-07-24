@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\MfExa[] $exams
  * @var array $averages
@@ -24,16 +23,13 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a>トップページ</a></td></tr>
-<tr><td><a>一問一答</a></td></tr>
-<tr><td><a>結果閲覧</a></td></tr>
-<tr><td><a>点数入力</a></td></tr>
-<tr><td><a>設定</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
 <?php $this->end(); ?>
 
 
 <!-- 以下content -->
-
 <div>
     <!-- header -->
     <h1 class="exam-title">過去問題演習</h1>
