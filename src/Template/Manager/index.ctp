@@ -116,7 +116,7 @@
 								問 <?= $questionsDetail[$j * 10 + $i]['qesnum']; ?>
 							</a>
 						</div>
-						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 40, "..."); ?></div>
+						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 36, "..."); ?></div>
 						<div class="par right"><b class="parnum"><?= number_format($questionsDetail[$j * 10 + $i]['corrects'] * 100, 1); ?></b>%</div>
 					</div>
 				<?php endfor;?>
