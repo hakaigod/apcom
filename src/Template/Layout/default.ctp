@@ -141,14 +141,17 @@
             <div class="col-xs-8 col-xs-offset-2" id="col-main">
 				<?= $this->fetch('content') ?>
             </div>
-            <!-- 右サイドカラム -->
-            <div class="col-xs-offset-1 col-xs-1">
-                <div class="row floating">
-                    <div class="" id="reloadbutton">
-                        <button class="btn btn-success" onclick="location.reload();">更新</button>
+            
+            <?php if ($this->name == 'Manager'): ?>
+                <!-- 右サイドカラム -->
+                <div class="col-xs-offset-1 col-xs-1">
+                    <div class="row floating">
+                        <div class="" id="reloadbutton">
+                            <button class="btn btn-success" onclick="location.reload();">更新</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif;?>
 
         </div>
     </div>
