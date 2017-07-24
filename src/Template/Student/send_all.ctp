@@ -26,25 +26,27 @@
 
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 <br>
 <?php
 $title = '自動的にページが移動しない場合はこちらをクリックしてください';
 $link = null;
 $linkArray = [
-	'controller' => 'student',
-	'id'         => $userID];
+	'controller' => 'student'];
 if ($answeredAll) {
 	if ($imicodeInRange) {
 		if ( $result ) {
 			$link = $this->Html->link($title,$linkArray + ['action' => 'result' ,'imicode'    => $imicode]);
 		} else {
 			echo '解答の送信に失敗しました。時間を置いて再度お試しください。';
-			$link = $this->Html->link($title, $linkArray + ['action' => 'summary']);
+			$link = $this->Html->link($title, $linkArray + ['action' => 'summary',"id" => $userID]);
 		}
 	}else{
 		echo '実施されていない模擬試験です。';
-		$link = $this->Html->link($title, $linkArray + ['action' => 'summary']);
+		$link = $this->Html->link($title, $linkArray + ['action' => 'summary',"id" => $userID]);
 	}
 } else{
 	echo 'すべての解答が入力されていません。';

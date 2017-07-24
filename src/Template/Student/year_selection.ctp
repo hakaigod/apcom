@@ -24,11 +24,10 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a>トップページ</a></td></tr>
-<tr><td><a>一問一答</a></td></tr>
-<tr><td><a>結果閲覧</a></td></tr>
-<tr><td><a>点数入力</a></td></tr>
-<tr><td><a>設定</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 
 
@@ -75,7 +74,7 @@
                             </td>
 							<!--	  全国合格率        -->
                             <td><?= number_format($passRate[$exam->exanum-1],1)."%" ?></td>
-	                        <!--	          -->
+	                        <!--	 前回の模擬試験の点数    -->
 	                        <td><?= $exanumLastScore[$exam->exanum]['exa_sum'] ?></td>
                             <!-- 各回の平均点-->
                             <td><?= $averages[$exam->exanum]; ?></td>

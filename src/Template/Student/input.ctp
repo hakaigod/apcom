@@ -50,8 +50,9 @@ function json_safe_encode($data){
 
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
-<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
-<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+<tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 <?php if( !(isset($imiName))):?>
     <br><br>
@@ -61,8 +62,7 @@ function json_safe_encode($data){
 <?php else:?>
     <h3><?= $imiName ?></h3>
     <form name="ansForm" action="<?= $this->Html->Url->build(
-		['controller' => 'student', 'action' => 'sendAll',
-		 'id' => $userID,'imicode' => $imicode]) ?>
+		['controller' => 'student', 'action' => 'sendAll', 'imicode' => $imicode]) ?>
 " method="post" id="answer-form">
         <table id="input-table" class="table table-bordered table-striped table-hover" >
             <thead >
@@ -82,9 +82,7 @@ function json_safe_encode($data){
                     </td>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class=" col-sm-12  col-md-3 sentence">
-                        <span>
-						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>
-                            </span>
+						<?= mb_substr(strip_tags($questions[ $i - 1 ]['question']),0,10) ?>...
                     </td>
                     <!--                解答-->
                     <td class=" col-sm-12  col-md-5 center">
@@ -127,7 +125,7 @@ function json_safe_encode($data){
 								$isChosen = !(is_null($inputtedConf)) &&  $inputtedConf == $value ;
 								$checked = $isChosen ? 'checked':'';
 								$active = $isChosen ? 'active':'';
-								$disabled = $inputtedAns === '0' ? 'disabled':'';
+								$disabled = ($inputtedAns === 0 || $inputtedAns === "0") ? 'disabled':'';
 //							$required = $y==0?"required=\"required\"":"";
 								echo "<label class=\"btn btn-info {$disabled} {$active}\" >";
 								echo "<input type=\"radio\" {$disabled} name=\"{$confTag}\" "
@@ -200,4 +198,4 @@ function json_safe_encode($data){
         </div>
     </form>
 <?php endif;?>
-<br><br><br><br><br><br><br><br>
+<br><br>

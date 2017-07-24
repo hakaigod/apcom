@@ -167,6 +167,12 @@ div.message.hidden {
 #welcome-user{
 	margin-right: 0;
 }
+.checkbox input[type="checkbox"].custom-checkbox:checked + .icons .icon-checked,
+.radio input[type="checkbox"].custom-checkbox:checked + .icons .icon-checked,
+.checkbox input[type="radio"].custom-radio:checked + .icons .icon-checked,
+.radio input[type="radio"].custom-radio:checked + .icons .icon-checked {
+	color: #d82732;
+}
 .form-control::-moz-placeholder,
 .select2-search input[type="text"]::-moz-placeholder {
 	color: #aaa;

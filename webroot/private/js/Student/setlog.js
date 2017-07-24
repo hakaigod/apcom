@@ -16,6 +16,7 @@ $(function() {
     $('.choice').click(function (){
         //全てのボタンの無効化
         $('.choice').prop('disabled', true);
+	    $(this).toggleClass('active-disabled');
         //正誤判定
         let ans = new Array("ア","イ","ウ","エ");
         if ($(this).val() == ans[answer-1]) {

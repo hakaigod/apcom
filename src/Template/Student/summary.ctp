@@ -59,9 +59,9 @@
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
-<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
-<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
-<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 <br>
 
@@ -178,8 +178,8 @@ if(in_array(null,array_column($imiDetails, 'score'),true) && $role == 'student' 
 				?>
             </td>
             <td data-label="平均" class="center col-sm-12 col-md-1"><?= round($imi['avg'] * 1.25,1)?></td>
-            <td data-label="点数" class="center col-sm-12 col-md-1"><?= ($imi['score'] !== null)? round($imi['score'] * 1.25,1):"　"?></td>
-            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $imi['rank'] :"　" ?> </td>
+            <td data-label="点数" class="center col-sm-12 col-md-1 <?=$this->ScoreColor->getClass($imi['score'])?>"><?= ($imi['score'] !== null)? round($imi['score'] * 1.25,1):"　"?></td>
+            <td data-label="順位" class="center col-sm-12 col-md-1"><?= ($imi['rank'] !== null)? $this->ScoreMedal->getImage($imi['rank']) :"　" ?> </td>
 
 
         </tr>
@@ -191,6 +191,4 @@ function json_safe_encode($data){
 	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }
 ?>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
+<br><br>

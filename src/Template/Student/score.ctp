@@ -1,7 +1,6 @@
 <?php
 /**
  * @var \App\Model\Entity\MfExa $exams
- *
  */
 ?>
 
@@ -13,8 +12,8 @@
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/score.css') ?>
 <?= $this->Html->css('/private/css/ap.css') ?>
+<?= $this->Html->css('/private/css/Student/score.css') ?>
 <?php $this->end(); ?>
 
 <!-- jsセット -->
@@ -24,11 +23,10 @@
 
 <!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><a>トップページ</a></td></tr>
-<tr><td><a>一問一答</a></td></tr>
-<tr><td><a>結果閲覧</a></td></tr>
-<tr><td><a>点数入力</a></td></tr>
-<tr><td><a>設定</a></td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 
 <!-- 以下content -->
@@ -128,7 +126,7 @@
 											</div>
 											
 											<div class="modal-footer">
-												<button type="button" class="btn btn-success full" data-dismiss="modal">閉じる</button>
+												<button type="button" class="btn btn-info full" data-dismiss="modal">閉じる</button>
 											</div>
 										</div>
 									</div>

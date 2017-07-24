@@ -75,3 +75,4 @@ function drawBarChart() {
 }
 drawRadarChart();
 drawBarChart();
+

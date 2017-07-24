@@ -81,7 +81,7 @@
 			var num = <?= $qn?>;
 		</script>
 		<script type="text/javascript" id="script<?= $qn ?>"
-			src="<?= $this->request->getAttribute('webroot')?>private/js/Manager/selectAnswerRate.js"
+			src="<?= $this->Url->build("/")?>private/js/Manager/selectAnswerRate.js"
 			data-select = '<?= json_safe_encode($selectAnswer['answers']); ?>'
 			data-correct = '<?= json_safe_encode($selectAnswer['correct']); ?>'
 		></script>

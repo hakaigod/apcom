@@ -7,12 +7,14 @@
 * Time: 10:42
 */
 namespace App\View\Helper;
+use Cake\Routing\Router;
 use Cake\View\Helper;
+
 class QaaHelper extends Helper
 {
     function viewTextImg(string $content):string
     {
         return str_replace('<?= $this->request->webroot ?>',
-            $this->request->getAttribute("webroot") ,$content);
+                           Router::url("/",true) ,$content);
     }
 }

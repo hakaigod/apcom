@@ -36,6 +36,8 @@
 <?php $this->end(); ?>
 
 <?php $this->start('css'); ?>
+<?= $this->Html->css('/private/css/Student/qaa.css')?>
+
 <?= $this->Html->css('/private/css/Input/input.css') ?>
 <?php $this->end(); ?>
 <!-- jsセット -->
@@ -52,11 +54,19 @@
 	?>
         defer>
 </script>
+<script id="modal-script"
+	<?php
+	echo ' src="' . $this->request-> getAttribute('webroot') . 'private/js/Input/modal.js"';
+	echo " exanum = \"$exanum\"";
+	?>
+        defer>
+</script>
 <?php $this->end(); ?>
 <?php $this->start('sidebar'); ?>
 <tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
-<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
-<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?php $this->end(); ?>
 
 <?php
@@ -65,7 +75,7 @@
 ?>
 
 
-<?php if( !(isset($year))|| !(isset($season)) || !(isset($implNum)) || !(isset($average))):?>
+<?php if( !(isset($exaname)) || !(isset($average))):?>
     <br><br>
     <div class="alert alert-danger" role="alert">
         この模擬試験は実施されていません
@@ -106,7 +116,7 @@
 			<?php foreach (range(1, 80) as $i ): ?>
                 <tr>
                     <th class="col-xs-1 center">
-						<?= $i?>
+                        <button class="btn-detail btn btn-info full" data-toggle="modal" data-target="#myModal" value="<?= $i?>" id="log-detail<?= $i?>">問:<?= $i?></button>
                     </th>
                     <!--                問題文(最初の10文字のみ)-->
                     <td class="col-xs-5">
@@ -140,6 +150,53 @@
         </table>
 	<?php endif; ?>
 <?php endif; ?>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    <!-- ここに出題番号 出典を表示  -->
+                    <div id="question-title"></div>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid" id="result-contents">
+                    <!-- 問題を表示 -->
+                    <div id="question-sentence"></div>
+                    <!--選択肢が画像の場合に表示 -->
+                    <div id="qaa-answerpic"></div>
+                    <!-- 選択肢を表示 -->
+                    <table class="table table-bordered table-striped" id="result-table">
+                        <tr>
+                            <td>ア</td>
+                            <td><div id="question-choice1"></div></td>
+                        </tr>
+                        <tr>
+                            <td>イ</td>
+                            <td><div id="question-choice2"></div></td>
+                        </tr>
+                        <tr>
+                            <td>ウ</td>
+                            <td><div id="question-choice3"></div></td>
+                        </tr>
+                        <tr>
+                            <td>エ</td>
+                            <td><div id="question-choice4"></div></td>
+                        </tr>
+                    </table>
+                    <div id="log-yourans"></div>
+                    <div id="log-ans"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary full" data-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 function json_safe_encode($data){
 	return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);

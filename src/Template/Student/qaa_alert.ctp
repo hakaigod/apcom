@@ -15,8 +15,8 @@
 <?= $this->end();?>
 <!-- jsセット -->
 <?= $this->start('script');?>
-<script id="script" src="<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/interval.js"
-         webroot="<?= $this->request->getAttribute('webroot'); ?>/student/qaaSelectGenre" ></script>
+<script id="script" src="<?= $this->Url->build("/"); ?>/private/js/Student/interval.js"
+         webroot="<?= $this->Url->build("/"); ?>/student/qaaSelectGenre" ></script>
 <?= $this->end();?>
 <!-- ユーザーネームセット -->
 <?= $this->start('username');?>

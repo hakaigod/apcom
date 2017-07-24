@@ -22,9 +22,10 @@ Student
 
 <!-- サイドバーセット -->
 <?= $this->start('sidebar');?>
-<tr class="info"><td> 点数入力画面 </td></tr>
-<tr><td> 一問一答画面 </td></tr>
-<tr><td> 模擬試験画面 </td></tr>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<?php foreach($hamMenu as $hamName => $hamLink):?>
+    <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
+<?php endforeach; ?>
 <?= $this->end();?>
 
 <!-- 以下content -->
@@ -82,7 +83,7 @@ Student
                     ('問題開始',
                         array(
                             'type'=>'submit',
-                            'class'=>'btn btn-info',
+                            'class'=>'btn btn-success',
                             'id'=>'form1'
                         )
                     );?>
