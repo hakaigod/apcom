@@ -311,11 +311,10 @@ class ManagerController extends AppController
 					$records[] = $line;
 				}
 
-				$querystu = $this->MfStu->query();
-				$querystu->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
-
 				foreach ($records as $key) {
 					if (!empty($key[0]) && $key[0] != '学籍番号'){
+						$querystu = $this->MfStu->query();
+						$querystu->insert(['regnum', 'stuname', 'stuyear', 'depnum', 'stupass']);
 						$querydep = $this->MfDep->find();
 						$depnum = $querydep->select('depnum')->where(['depname LIKE' => '%' . $key[2] . '%']);
 
@@ -326,14 +325,16 @@ class ManagerController extends AppController
 							'depnum' => $depnum,
 							'stupass' => $this->passHash($key[0])
 						]);
+						try {
+							$querystu->execute();
+							$identiconComponent->makeImage($key[0]);
+							$this->Flash->success('success');
+						} catch (Exception $e) {
+							$this->Flash->error('missing' . $key[0]);
+						}
 					}
 				}
-				try {
-					$querystu->execute();
-					$this->Flash->success('success');
-				} catch (Exception $e) {
-					$this->Flash->error('missing');
-				}
+
 			} else {
 				$this->Flash->error('専用テンプレートを使用してください');
 			}
