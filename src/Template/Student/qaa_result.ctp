@@ -119,7 +119,7 @@ Student
     <div class="col-md-12">
         <div class="row">
             <div class="return-selectgenre">
-                <?= $this->HTML->Link('ジャンル選択に戻る',['class'=>'button','action'=>'qaaSelectGenre'])?>
+                <?= $this->HTML->Link('ジャンル選択に戻る',['action'=>'qaaSelectGenre'])?>
             </div>
         </div>
     </div>
