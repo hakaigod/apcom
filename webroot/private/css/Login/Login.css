@@ -78,7 +78,7 @@
 
 }
 #admin :after{
-     border-color: red;
+    border-color: red;
 }
 
 #admin :before{
