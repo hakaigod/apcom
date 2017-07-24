@@ -20,13 +20,17 @@
 <?php $this->start('script'); ?>
 <?php $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js') ?>
 <?php $this->end(); ?>
+	
+	<!-- サイドバーセット -->
 
-<!-- サイドバーセット -->
 <?php $this->start('sidebar'); ?>
 	<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 	<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
 	<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+	<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
 <?php $this->end(); ?>
+	
+	<br>
 <?php if(!(isset($exams->exanum))):?>
 	<br><br>
 	<div class="alert alert-danger" role="alert">

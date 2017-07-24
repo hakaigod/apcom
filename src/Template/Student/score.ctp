@@ -22,12 +22,15 @@
 <?php $this->end(); ?>
 
 <!-- サイドバーセット -->
+
 <?php $this->start('sidebar'); ?>
-<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
-<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
-<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+	<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+	<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+	<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+	<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
 <?php $this->end(); ?>
 
+<br>
 <!-- 以下content -->
 <?php if( !(isset($exams->exanum))):?>
 <br><br>
