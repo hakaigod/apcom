@@ -17,6 +17,16 @@
 <?= $this->start('username');?>
 Student
 <?= $this->end();?>
+
+<!-- サイドバーセット -->
+<?php $this->start('sidebar'); ?>
+<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
+<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
+<tr><td><?= $this->Html->link('一問一答',["action" => "qaaSelectGenre"])?></td></tr>
+<tr><td><?= $this->Html->link('パスワード更新',["action" => "updatePass"])?></td></tr>
+<?php $this->end(); ?>
+<br>
+
 <!-- jsセット -->
 <?php function json_safe_encode($data){
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
@@ -89,7 +99,7 @@ Student
                         <div id="log-ans"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary full" data-dismiss="modal">閉じる</button>
+                        <button type="button" class="btn btn-success full" data-dismiss="modal">閉じる</button>
                     </div>
                 </div>
             </div>
