@@ -74,7 +74,14 @@ th{
 }
 /* 問題No.ボタンの調整 */
 .select-btn{
-width: 4em;
+	width: 4em;
+}
+
+/*　ボタンのホバー時の色調整　*/
+.btn-info:hover, .btn-info.hover,.open > .dropdown-toggle.btn-info {
+	color: white;
+	background-color: #d82732;
+	border-color: #95a5a6;
 }
 
 /* //////////////////////////////モータルウィンドウ///////////////////////////  */
@@ -133,15 +140,15 @@ width: 4em;
 
 /* 正解解答文の調整 */
 /*.ans-text{*/
-	/*!* 表示領域を指定 *!*/
-	/*width: calc(100vw / 20);*/
-	/*!* 改行禁止 *!*/
-	/*white-space: nowrap;*/
-	/*!* 表示領域外非表示 *!*/
-	/*overflow: hidden;*/
-	/*!* 末尾「...」表示 *!*/
-	/*text-overflow: ellipsis;*/
-	/*display: inline-block;*/
+/*!* 表示領域を指定 *!*/
+/*width: calc(100vw / 20);*/
+/*!* 改行禁止 *!*/
+/*white-space: nowrap;*/
+/*!* 表示領域外非表示 *!*/
+/*overflow: hidden;*/
+/*!* 末尾「...」表示 *!*/
+/*text-overflow: ellipsis;*/
+/*display: inline-block;*/
 /*}*/
 
 /*    ○×セルの調整 　 */
