@@ -152,7 +152,7 @@
 							<tr>
 								<td  class="col-xs-1">
 									<!-- class内にactiveを入れることで、ラジオボタンの見た目を選択状態にする(Bootstrapの特性)　-->
-									<label id="button" class = "btn  btn-embossed btn-info full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
+									<label id="button" class = "btn btn-top btn-embossed btn-info full  <?php echo ($ansed==1) ? ' active' : ''; ?>">
 										<!--	      nameは変数名、valueはそれに入る値        -->
 										<input type = "radio" name="ansSelect" value="1" <?php echo ($ansed==1) ? ' checked ' : ''; ?> >ア
 									</label>
