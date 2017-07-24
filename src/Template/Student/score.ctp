@@ -22,7 +22,6 @@
 <?php $this->end(); ?>
 
 <!-- サイドバーセット -->
-
 <?php $this->start('sidebar'); ?>
 	<tr class="info"><td><?= $this->Html->link('トップページ',$logoLink)?></td></tr>
 	<tr><td><?= $this->Html->link('過去問題演習',["action" => "yearSelection"])?></td></tr>
