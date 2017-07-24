@@ -1,7 +1,6 @@
 <?php
 /**
  * @var \App\Model\Entity\MfExa $exams
- *
  */
 ?>
 
@@ -127,7 +126,7 @@
 											</div>
 											
 											<div class="modal-footer">
-												<button type="button" class="btn btn-success full" data-dismiss="modal">閉じる</button>
+												<button type="button" class="btn btn-info full" data-dismiss="modal">閉じる</button>
 											</div>
 										</div>
 									</div>

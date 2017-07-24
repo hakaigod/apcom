@@ -74,7 +74,7 @@
                             </td>
 							<!--	  全国合格率        -->
                             <td><?= number_format($passRate[$exam->exanum-1],1)."%" ?></td>
-	                        <!--	          -->
+	                        <!--	 前回の模擬試験の点数    -->
 	                        <td><?= $exanumLastScore[$exam->exanum]['exa_sum'] ?></td>
                             <!-- 各回の平均点-->
                             <td><?= $averages[$exam->exanum]; ?></td>

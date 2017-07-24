@@ -691,12 +691,14 @@ class StudentController extends AppController
 			->toArray();
 		$this->set(compact('sums'));
 		
-		$imis = $this->TfImi->find()
-			//テーブル内のexanumから抽出する
-			->where(['TfImi.imicode IN' => array_column($sums,'imicode'),
-			         'TfImi.exanum IN' => array_column($exams,'exanum')])
-			->toArray();
-		$this->set(compact('imis'));
+		if(!empty($sums)) {
+			$imis = $this->TfImi->find()
+				//テーブル内のexanumから抽出する
+				->where(['TfImi.imicode IN' => array_column($sums, 'imicode'),
+					'TfImi.exanum IN' => array_column($exams, 'exanum')])
+				->toArray();
+			$this->set(compact('imis'));
+		}
 		
 		$score=array();
 		foreach ($sums as $sum_value){
@@ -707,9 +709,11 @@ class StudentController extends AppController
 		$exanumLastScore=array();    //模擬試験の前回の点数代入
 		foreach ($exams as $exam_value) {   //年度別
 			$exanumLastScore += array($exam_value->exanum => array('exa_sum' => '[授業で未実施]'));
-			foreach ($imis as $imi_value) {
+			if(!empty($sums)) {
+				foreach ($imis as $imi_value) {
 				if ($exam_value->exanum == $imi_value->exanum) {
 					$exanumLastScore[$exam_value->exanum]['exa_sum'] =  $score[$imi_value['imicode']];    //模擬試験の前回の点数代入
+				}
 				}
 			}
 		}
@@ -898,5 +902,4 @@ class StudentController extends AppController
 		$this->set(compact('sesAns'));
 		
 	}
-	
 }
