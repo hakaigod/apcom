@@ -35,9 +35,7 @@ $(function() {
 
         var defaultsrc = $('#img').attr('src');
         var imgurl = $('#regnum').val();
-        window.alert("pkoiouytrd");
         if(imgurl.length === 8 && imgurl.length === (imgurl.replace(/[^0-9]+/)).length) {
-            window.alert("45845");
            var nextimg = $('#img').attr('src').replace(/[0-9]+/, imgurl);
 
 
@@ -49,7 +47,6 @@ $(function() {
                     });
             },$interval);
            // $('#img').attr('src', nextimg);
-            window.alert("a");
             $('#img').error(function() {
                 //置換処理
                 $('#img').attr('src',defaultsrc);
