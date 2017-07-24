@@ -45,7 +45,7 @@ $(function(){
 		let log =  JSON.parse(sessionStorage.getItem('num' + qBtnId));
 		//値を送信
 		$.ajax({
-			url: "http://localhost:"+ serverPort + "/apcom/student/qaaResult/1",
+			url: "http://localhost/apcom/student/qaaResult/1",
 			// url: "http://" + serverAddr + ":"+ serverPort + "/apcom/student/qaaResult/1",
 			type: "POST",
 			data: {"exanum": log.exanum, "quenum": log.quesnum},
