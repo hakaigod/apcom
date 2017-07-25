@@ -84,6 +84,13 @@ th{
 	border-color: #95a5a6;
 }
 
+/*　ボタンのホバー時の色調整　*/
+.btn-info:hover, .btn-info.hover,.open > .dropdown-toggle.btn-info {
+	color: white;
+	background-color: #d82732;
+	border-color: #95a5a6;
+}
+
 /* //////////////////////////////モータルウィンドウ///////////////////////////  */
 /* 全項目に共通の調整 */
 .modal-all{

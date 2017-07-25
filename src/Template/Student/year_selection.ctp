@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\MfExa[] $exams
  * @var array $averages
@@ -30,9 +29,9 @@
 <?php endforeach; ?>
 <?php $this->end(); ?>
 
+<br>
 
 <!-- 以下content -->
-
 <div>
     <!-- header -->
     <h1 class="exam-title">過去問題演習</h1>
