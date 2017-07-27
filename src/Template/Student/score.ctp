@@ -29,8 +29,8 @@
 <?php endforeach; ?>
 <?php $this->end(); ?>
 
+<br>
 <!-- 以下content -->
-
 <?php if( !(isset($exams->exanum))):?>
 <br><br>
 <div class="alert alert-danger" role="alert">

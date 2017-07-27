@@ -92,7 +92,7 @@
 <div class="row" id="correctRate">
 	<div class="col-xs-12">
 		<h6 id="questionsDetailTitle">各問詳細</h6>
-		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+		<div id="Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
 			<ol class="carousel-indicators">
 				<?php for ($i = 0; $i < 8; $i++): ?>
 					<?php if ($i + 1 == $page): ?>
@@ -116,7 +116,7 @@
 								問 <?= $questionsDetail[$j * 10 + $i]['qesnum']; ?>
 							</a>
 						</div>
-						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 36, "..."); ?></div>
+						<div id="question"><?= mb_strimwidth(strip_tags($questionsDetail[$j * 10 + $i]['question']), 0, 40, "..."); ?></div>
 						<div class="par right"><b class="parnum"><?= number_format($questionsDetail[$j * 10 + $i]['corrects'] * 100, 1); ?></b>%</div>
 					</div>
 				<?php endfor;?>

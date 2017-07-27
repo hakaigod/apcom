@@ -171,6 +171,17 @@ div.message.hidden {
 .radio input[type="checkbox"].custom-checkbox:checked + .icons .icon-checked,
 .checkbox input[type="radio"].custom-radio:checked + .icons .icon-checked,
 .radio input[type="radio"].custom-radio:checked + .icons .icon-checked {
-
 	color: #d82732;
+}
+.form-control::-moz-placeholder,
+.select2-search input[type="text"]::-moz-placeholder {
+	color: #aaa;
+}
+.form-control:-ms-input-placeholder,
+.select2-search input[type="text"]:-ms-input-placeholder {
+	color: #aaa;
+}
+.form-control::-webkit-input-placeholder,
+.select2-search input[type="text"]::-webkit-input-placeholder {
+	color: #aaa;
 }

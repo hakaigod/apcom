@@ -33,7 +33,7 @@
 <?= $this->start('script');?>
 <?= $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js')?>
 <?= $this->Html->script('/private/js/Student/getlog.js')?>
-<script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setlog.js"
+<script id="script" src = "<?= $this->Url->build("/"); ?>/private/js/Student/setlog.js"
         qnum = '<?= json_safe_encode($qNum); ?>'
         quesnum = '<?= json_safe_encode($question->qesnum); ?>'
         answer = '<?= json_safe_encode($question->answer); ?>'

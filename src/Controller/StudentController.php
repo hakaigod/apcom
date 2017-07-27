@@ -14,6 +14,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Network\Exception\ForbiddenException;
 use Cake\ORM\Query;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Routing\Router;
 
 const Q_TOTAL_NUM = 80;
 const Q_NUM_PER_PAGE = 10;
@@ -638,8 +639,8 @@ class StudentController extends AppController
                     ->WHERE(['MfExa.exanum'=>$exaNum,'MfQes.qesnum'=>$queNum])
                     //1行だけ出力する
                     ->first();
-                $question->question = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->question);
-                $question->answer_pic = str_replace('<?= $this->request->webroot ?>', $this->request->getAttribute("webroot") ,$question->answer_pic);
+                $question->question = str_replace('<?= $this->request->webroot ?>',Router::url("/",true) ,$question->question);
+                $question->answer_pic = str_replace('<?= $this->request->webroot ?>', Router::url("/",true) ,$question->answer_pic);
                 //問題内容の表示
                 $this->response->Body(json_encode($question));
             }

@@ -45,7 +45,7 @@ $(function(){
 		let log =  JSON.parse(sessionStorage.getItem('num' + qBtnId));
 		//値を送信
 		$.ajax({
-			url: "http://localhost:"+ serverPort + "/apcom/student/qaaResult/1",
+			url: "http://"+ location.host +"/apcom/student/qaaResult/1",
 			// url: "http://" + serverAddr + ":"+ serverPort + "/apcom/student/qaaResult/1",
 			type: "POST",
 			data: {"exanum": log.exanum, "quenum": log.quesnum},
@@ -69,6 +69,7 @@ $(function(){
 				if(data.answer_pic !== "") {
 					$('#result-table').hide();
 				}
+				console.log(log.yourSelect);
 				$('#log-yourans').html(`あなたの回答：<b>${log.yourSelect}</b>`);
 				$('#log-ans').html(`正解：<b>${ansArray[data.answer - 1]}</b>`);
 			},

@@ -30,28 +30,62 @@ $(function() {
     });
     changeadm();
 
-
     $('#regnum').on('input', function(){
+        var ch =$('#admin').prop('checked');
+        //チェックが入ったら
+        var defaultsrc = "/apcom/webroot/private/img/identicons/99999999.png";
+        var imgurl;
+        var nextimg;
 
-        var defaultsrc = $('#img').attr('src');
-        var imgurl = $('#regnum').val();
-        if(imgurl.length === 8 && imgurl.length === (imgurl.replace(/[^0-9]+/)).length) {
-            var nextimg = $('#img').attr('src').replace(/[0-9]+/, imgurl);
+        if (ch) {
+            imgurl = $('#admnum').val();
+            nextimg = $('#img').attr('src').replace(/[0-9]+/, imgurl);
+            if ((imgurl.length === 1 || imgurl.length === 2) && imgurl.length === (imgurl.replace(/[^0-9]/)).length) {
 
-
-            var $interval =3000;
-            setInterval(function(){
-                $("#img").fadeOut("slow",function() {
-                    $('#img').attr("src",nextimg);
+                $("#img").fadeOut("slow", function () {
                     $('#img').fadeIn();
+                    $('#img').attr("src", nextimg).error(function () {
+                        $('#img').attr('src', defaultsrc);
+                    });
+                    $('#img').load(function () {
+                        $('#img').fadeIn();
+                    });
                 });
-            },$interval);
-            // $('#img').attr('src', nextimg);
-            $('#img').error(function() {
-                //置換処理
-                $('#img').attr('src',defaultsrc);
-            });
+
+            }else{
+                if ( $('#img').attr('src') !== defaultsrc) {
+                    $("#img").fadeOut("slow", function () {
+                        $('#img').attr('src', defaultsrc);
+                        $('#img').fadeIn();
+                    });
+                }
+            }
+        }else{
+            imgurl = $('#regnum').val();
+            nextimg = $('#img').attr('src').replace(/[0-9]+/, imgurl);
+            if (imgurl.length === 8 && imgurl.length === (imgurl.replace(/[^0-9]+/)).length) {
+
+                $("#img").fadeOut("slow", function () {
+                    $('#img').fadeIn();
+                    $('#img').attr("src", nextimg).error(function () {
+                        $('#img').attr('src', defaultsrc);
+                    });
+                    $('#img').load(function () {
+                        $('#img').fadeIn();
+                    });
+                });
+
+            }else{
+                if ($('#img').attr('src') !== defaultsrc) {
+                    $("#img").fadeOut("slow", function () {
+                        $('#img').attr('src', defaultsrc);
+                        $('#img').fadeIn();
+                    });
+                }
+            }
+
         }
     });
+
 
 });

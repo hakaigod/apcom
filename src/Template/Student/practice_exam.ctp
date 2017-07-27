@@ -28,6 +28,8 @@
     <tr><td><?= $this->Html->link($hamName,$hamLink)?></td></tr>
 <?php endforeach; ?>
 <?php $this->end(); ?>
+	
+	<br>
 <?php if(!(isset($exams->exanum))):?>
 	<br><br>
 	<div class="alert alert-danger" role="alert">

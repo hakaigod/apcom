@@ -19,7 +19,6 @@
 	<?= $this->Html->css('/private/css/Login/Login.css') ?>
 	
 	<?= $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ?>
-	<?= $this->Html->script('video.js') ?>
 	<?= $this->Html->script('flat-ui.min.js') ?>
 	<?= $this->Html->script('application.js') ?>
 	<?= $this->Html->script('prettify.js') ?>
@@ -76,7 +75,7 @@
         <div class="col-sm-6 col-md-4 col-md-offset-4">
             <h1 class="text-center login-title"></h1>
             <div class="account-wall">
-                <img class="profile-img" id="img" name="imgurl" src="<?= $this->request->webroot ?>private/img/00000000.png" alt="">
+                <img class="profile-img" id="img" name="imgurl" src="<?= $this->Url->build("/") ?>private/img/identicons/99999999.png" alt="">
                 <form class="form-signin" id="loginform" name="loginform" action="" method="post">
                     <input type="text" class="form-control" placeholder="Number"  name="regnum" id="regnum"
                            value="<?php if(!empty($_POST)){if(empty($_POST['admin'])){echo $_POST["regnum"];}else{echo $_POST["admnum"];}}?>">

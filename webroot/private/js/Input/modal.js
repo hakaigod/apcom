@@ -10,7 +10,7 @@ $(function() {
 		let qBtnVal = $(this).val();
 		// //値を送信
 		$.ajax({
-			url: "http://localhost:27780/apcom/student/qaaResult/1",
+			url: "http://"+ location.host +"/apcom/student/qaaResult/1",
 			type: "POST",
 			data: {"exanum": exanum, "quenum": qBtnVal},
 			dataType: "json",

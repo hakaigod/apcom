@@ -45,7 +45,9 @@
     <script src="/nodejs/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         var lastTime = Date.now();
-		var socket = io('http://localhost:23000');
+        var iodest = 'http://' + location.hostname + ':3000';
+		console.log(iodest);
+		var socket = io(iodest);
 //		        var socket = io('http://<?//= $_SERVER['SERVER_ADDR']?>//:3000');
 		socket.on('messageFromPHP', function (data) {
 			var now = Date.now();
@@ -65,27 +67,27 @@
 		});
     </script>
 
-    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon.ico">
-    <link rel="icon" type="image/vnd.microsoft.icon" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon.ico">
-    <link rel="apple-touch-icon" sizes="57x57" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= $this->request->getAttribute("webroot") ?>favicons/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="<?= $this->request->getAttribute("webroot") ?>favicons/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-160x160.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-196x196.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->request->getAttribute("webroot") ?>favicons/favicon-32x32.png">
-    <link rel="manifest" href="<?= $this->request->getAttribute("webroot") ?>favicons/manifest.json">
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="<?= $this->Url->build("/") ?>favicons/favicon.ico">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="<?= $this->Url->build("/") ?>favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $this->Url->build("/") ?>favicons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= $this->Url->build("/") ?>favicons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="<?= $this->Url->build("/") ?>favicons/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->Url->build("/") ?>favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->Url->build("/") ?>favicons/favicon-160x160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?= $this->Url->build("/") ?>favicons/favicon-196x196.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $this->Url->build("/") ?>favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->Url->build("/") ?>favicons/favicon-32x32.png">
+    <link rel="manifest" href="<?= $this->Url->build("/") ?>favicons/manifest.json">
     <meta name="msapplication-TileColor" content="#2d88ef">
-    <meta name="msapplication-TileImage" content="<?= $this->request->getAttribute("webroot") ?>favicons/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="<?= $this->Url->build("/") ?>favicons/mstile-144x144.png">
 
 
 </head>
@@ -101,7 +103,7 @@
             <div class="nav navbar-nav navbar-right" id="welcome-user">
                 <li class="dropdown navbar-buttton ">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="font-weight: 500">
-                                                <img src="<?= $this->request->getAttribute("webroot") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
+                                                <img src="<?= $this->Url->build("/") ?>private/img/identicons/<?=$userID?>.png" class="dropdown-img">
                         ようこそ、<?= $username?:"ERROR!"?>さん
                         <span class="caret"></span>
                     </a>
@@ -119,7 +121,7 @@
 
 <div class="all">
     <div id="activity-div" >
-        <div class="col-xs-offset-2 col-xs-8" id="activity-text" >aaaaaaaaaaaaa</div>
+        <div class="col-xs-offset-2 col-xs-8" id="activity-text" ></div>
     </div>
     <div class="container-fluid">
         <div class="row">
@@ -141,17 +143,17 @@
             <div class="col-xs-8 col-xs-offset-2" id="col-main">
 				<?= $this->fetch('content') ?>
             </div>
-
-			<?php if ($this->name == 'Manager'): ?>
-				<!-- 右サイドカラム -->
-	            <div class="col-xs-offset-1 col-xs-1">
-	                <div class="row floating">
-	                    <div class="" id="reloadbutton">
-	                        <button class="btn btn-success" onclick="location.reload();">更新</button>
-	                    </div>
-	                </div>
-	            </div>
-			<?php endif; ?>
+            
+            <?php if ($this->name == 'Manager'): ?>
+                <!-- 右サイドカラム -->
+                <div class="col-xs-offset-1 col-xs-1">
+                    <div class="row floating">
+                        <div class="" id="reloadbutton">
+                            <button class="btn btn-success" onclick="location.reload();">更新</button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif;?>
 
         </div>
     </div>

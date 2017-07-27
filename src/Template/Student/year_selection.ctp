@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\MfExa[] $exams
  * @var array $averages
@@ -14,7 +13,7 @@
 
 <!-- CSSセット -->
 <?php $this->start('css'); ?>
-<?= $this->Html->css('/private/css/Student/yearSelection.css') ?>
+<?= $this->Html->css('/private/css/Student/yearselection.css') ?>
 <?php $this->end(); ?>
 
 <!-- jsセット -->
@@ -30,9 +29,9 @@
 <?php endforeach; ?>
 <?php $this->end(); ?>
 
+<br>
 
 <!-- 以下content -->
-
 <div>
     <!-- header -->
     <h1 class="exam-title">過去問題演習</h1>

@@ -17,3 +17,16 @@ label {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+.form-control::-moz-placeholder,
+.select2-search input[type="text"]::-moz-placeholder {
+	color: #aaa;
+}
+.form-control:-ms-input-placeholder,
+.select2-search input[type="text"]:-ms-input-placeholder {
+	color: #aaa;
+}
+.form-control::-webkit-input-placeholder,
+.select2-search input[type="text"]::-webkit-input-placeholder {
+	color: #aaa;
+}

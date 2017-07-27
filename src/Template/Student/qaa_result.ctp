@@ -33,7 +33,7 @@ Student
     return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 }?>
 <?= $this->start('script');?>
-<script id="script" src = "<?= $this->request->getAttribute('webroot'); ?>/private/js/Student/setpagination.js"
+<script id="script" src = "<?= $this->Url->build("/"); ?>/private/js/Student/setpagination.js"
         pgNum = '<?= json_safe_encode($pgNum); ?>'
         server-addr = '<?= json_safe_encode("localhost"); ?>'
         server-port = '<?= json_safe_encode("27780"); ?>'
@@ -104,6 +104,8 @@ Student
                                 <td><div id="question-choice4"></div></td>
                             </tr>
                         </table>
+                        <div id="log-yourans"></div>
+						<div id="log-ans"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success full" data-dismiss="modal">閉じる</button>
@@ -126,7 +128,7 @@ Student
     <div class="col-md-12">
         <div class="row">
             <div class="return-selectgenre">
-                <?= $this->HTML->Link('ジャンル選択に戻る',['class'=>'button','action'=>'qaaSelectGenre'])?>
+                <?= $this->HTML->Link('ジャンル選択に戻る',['action'=>'qaaSelectGenre'])?>
             </div>
         </div>
     </div>
