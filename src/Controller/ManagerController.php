@@ -419,7 +419,7 @@ class ManagerController extends AppController
 
 		// POSTリクエストがあれば実行
 		if ($this->request->is('POST')) {
-			if (empty($this->request->getData('admname')) || empty($this->request->getData('admpass'))) {
+			if (empty($this->request->getData('admname')) || empty($this->request->getData('admNewPass'))) {
 				// 管理者連番か名前が未入力の場合
 				$this->Flash->error('missing');
 			} else {
@@ -428,7 +428,7 @@ class ManagerController extends AppController
 				->values([
 					'admnum' => NULL,
 					'admname' => $this->request->getData('admname'),
-					'admpass' => $this->request->getData('admpass')
+					'admpass' => $this->passHash($this->request->getData('admNewPass'))
 				]);
 				try {
 					$queryAdminInsert->execute();
@@ -436,7 +436,7 @@ class ManagerController extends AppController
 					$identiconComponent->makeImage($admnum);
 					$this->Flash->success('success');
 				} catch (Exception $e) {
-					$this->Flash->error('missing');
+					$this->Flash->error('missing' + $e);
 				}
 			}
 		}
@@ -458,7 +458,7 @@ class ManagerController extends AppController
 				'deleted_flg' => !empty($this->request->getData('deleted_flg')),
 
 				//　消す
-				'admpass' => $this->passHash($this->request->getData('admpass'))
+				// 'admpass' => $this->passHash($this->request->getData('admpass'))
 			])
 			->where(['admnum' => $this->request->getQuery('id')]);
 			try {
